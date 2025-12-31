@@ -1,0 +1,73 @@
+*{
+    margin:0%;
+    padding: 0%;
+    overscroll-behavior: none ;
+}
+
+.main-container{
+    height: 100vh;
+    width:100vw;
+    display:grid;
+    grid-template-columns: 5fr 1fr;
+    position: relative;
+}
+.container-1{
+    background-image:url("../assets/images/view-scary-cemetery-night-with-moonlight.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+.container-2{
+    background-color: aqua;
+    position: fixed;
+    right:0;
+    width:17vw;
+    height:100vh;
+}
+.container img{
+    object-view-box: cover;
+}
+h1{
+    color: antiquewhite;
+    display: inline-block;
+    background-color: gray;
+    padding: 15px;
+    margin:10px;
+}
+p{
+    padding-left: 10px;
+    width:40%;
+    color:brown;
+    position: relative;
+}
+p::after{
+    content: " ";
+    position:absolute;
+    height: 100%;
+    width: 1px;
+    background-color: white;
+    left: 5px;
+    top: 0;
+}
+p::before{
+    content:" ";
+    position : absolute;
+    height:100%;
+    width:100%;
+    background-image : linear-gradient(to right,rgba(117, 76, 76, 0.295),rgba(208, 208, 208, 0));
+}
+.card{
+    height : 20vh;
+    width : 20vw;
+    background-color: aliceblue;
+    margin-inline: auto;
+}
+.cards-container{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr ;
+    grid-template-rows: 1fr 1fr 1fr ;
+    gap : 15px;
+    align-items: center;
+    margin-block:15px;
+}
