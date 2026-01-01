@@ -62,13 +62,17 @@ export default function Aftermovie() {
           </div>
 
           <h1
-            className={`text-[60px] tracking-[0.1em] leading-[1.05] mb-8
-                        origin-left
-                        ${showTitle ? "animate-type-reveal" : "opacity-0"}`}
+            className="text-[60px] tracking-[0.1em] leading-[1.05] mb-8"
             style={{ fontFamily: "Impact" }}
           >
-            SPRING FEST <br /> 2025
+            <span
+              className={`inline-block overflow-hidden whitespace-nowrap
+                          ${showTitle ? "animate-type-reveal" : "opacity-0"}`}
+            >
+              SPRING FEST <br /> 2025
+            </span>
           </h1>
+
 
           <p
             className="text-[20px] tracking-[0.05em] text-gray-200 mb-6 animate-fade-up"
@@ -159,12 +163,17 @@ export default function Aftermovie() {
           </p>
 
           <h1
-            className={`text-[44px] tracking-[0.08em] leading-[1.05] mb-4
-                        ${showTitle ? "animate-type-reveal" : "opacity-0"}`}
+            className="text-[44px] tracking-[0.08em] leading-[1.05] mb-4"
             style={{ fontFamily: "Impact" }}
           >
-            SPRING FEST <br /> 2025
+            <span
+              className={`inline-block overflow-hidden whitespace-nowrap
+                          ${showTitle ? "animate-type-reveal" : "opacity-0"}`}
+            >
+              SPRING FEST <br /> 2025
+            </span>
           </h1>
+
 
           <p
             className="text-[16px] tracking-[0.05em] text-gray-200 mb-4 animate-fade-up"
