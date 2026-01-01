@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+/* Fonts */
+@import "@fontsource/holtwood-one-sc";
+@import "@fontsource/cinzel/600.css";
+@import "@fontsource/libre-baskerville/400.css";
+@import "@fontsource/space-grotesk/500.css";
+
+html,
+body,
+#root {
+  height: 100%;
+  background: black;
+}
+
+/* Fade up */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  opacity: 0;
+  animation: fadeUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Type reveal */
+@keyframes typeReveal {
+  from {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0);
+  }
+}
+
+.animate-type-reveal {
+  opacity: 0;
+  animation: typeReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Image reveal */
+@keyframes imageReveal {
+  from {
+    opacity: 0;
+    transform: translateX(40px) scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1.05);
+  }
+}
+
+.animate-image-reveal {
+  opacity: 0;
+  animation: imageReveal 1s ease-out forwards;
+}
