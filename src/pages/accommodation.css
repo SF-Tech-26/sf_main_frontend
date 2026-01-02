@@ -17,9 +17,7 @@
     background-position: center;
     background-size: cover;
     background-attachment: fixed;
-}
-.container-1{
-    
+    overflow: hidden;
 }
 .container-2{
     background-color: rgba(0, 0, 0, 0);
@@ -27,6 +25,7 @@
     right:0;
     width:17vw;
     height:100vh;
+    top:0;
 }
 .container-2 img{
     margin:5%;
@@ -82,6 +81,7 @@ h1{
     margin:auto;
     height:325px;
     width:160px;
+    transition: 1s;
 }
 .m-con h1{
     display:block;
@@ -148,7 +148,7 @@ h1{
 /*text color*/
 .heading span{
     background:linear-gradient(
-        to right,rgb(175, 175, 213),rgb(25, 25, 57),white
+        to right,rgb(175, 175, 213),rgb(109, 109, 213),white
     );
     background-clip:text;
     -webkit-background-clip: text;
@@ -237,7 +237,115 @@ h1{
     transform:rotateZ(-3deg);
 }
 
-@media(max-width:1200px){
+.m-con:hover{
+    scale:115%;
+}
+
+
+.card {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.m-con:hover {
+    transform: translateY(-5px);
+}
+
+
+/* The dark background overlay covering the whole screen */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Dark semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top of everything, including the sidebar */
+    backdrop-filter: blur(3px); /* Adds a nice blur effect to the background */
+    animation: fadeIn 0.3s ease;
+}
+
+/* The actual pop-up box */
+.modal-content {
+    background: linear-gradient(145deg, #1a1a1d, #2a2a2e);
+    border: 2px solid #4a4a5e;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px; /* Maximum width on large screens */
+    max-height: 80vh;
+    position: relative;
+    color: antiquewhite;
+    overflow-y: auto; 
+    animation: slideUp 0.3s ease;
+}
+
+/* Modal Heading */
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #852424;
+    padding-bottom: 10px;
+    color: #afafd5;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+/* Modal Body Text */
+.modal-body p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    white-space: pre-line; /* This ensures \n line breaks in your data are respected */
+}
+
+/* The Close Button (X) */
+.close-modal-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    color: #852424;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-modal-btn:hover {
+    color: red;
+}
+
+/* Simple animations for the modal appearing */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive adjustments for small screens */
+@media screen and (max-width: 600px) {
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+    .modal-content h2 {
+        font-size: 1.3rem;
+    }
+    .modal-body p {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (min-width:801px) and (max-width:1200px){
     .container-1{
         height:auto;
     }
@@ -261,8 +369,73 @@ h1{
     .cards-container{
         gap:0;
     }
+    .container-2{
+        width: 35%;
+        right:-8%;
+    }
 }
 @media(max-width:800px){
-    
+    .cards-container{
+        display:grid;
+        grid-template-columns: 1fr 1fr;
+        margin-top:0px;
+    }
+    .heading span{
+        position:absolute;
+        font-size:0.8rem;
+        top:0.25;
+    }
+    .heading{
+        height:10px;
+        position:relative;
+    }
+    .head-p{
+        width:auto;
+    }
+    .container-2{
+        position:static ;
+        height:auto;
+    }
+    .main-container{
+        grid-template-columns: 1fr;
+    }
+    .bnt-con .nav-btn{
+        position:static;
+        font-size: 0.8rem;
+    }
+    .container-2 .bnt-con{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+        width:100vw;
+        height:80px;
+        margin-top:25px;
+    }
+    .main-container{
+        overflow: hidden;
+    }
 }
-
+@media screen and (min-width:1500px) and (max-width:2099px) and(min-height:800px){
+    .m-con{
+        scale:150%;
+    }
+    .m-con:hover{
+        scale:155%;
+    }
+}
+@media screen and (min-width:2100px) and (min-height:900px){
+    .m-con{
+        scale:170%;
+    }
+    .m-con:hover{
+        scale:175%;
+    }
+}
+@media screen and (min-width:1200px) and (max-width:1499px) and(min-height:850px){
+    .m-con{
+        scale:125%;
+    }
+    .m-con:hover{
+        scale:130%;
+    }
+}
