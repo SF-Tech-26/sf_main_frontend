@@ -7,14 +7,22 @@ function Accommodation(){
         <StrictMode>
         <div className = "main-container">
             <div className="container-1">
-                <h1>HEADING</h1>
-                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aut amet voluptate maxime quas est hic, sit eos quae nulla consectetur nemo ab facilis veritatis! Ab, tempora! Repellat laudantium quas optio.</p>
+                <h1 className = "heading"><span>ACCOMMODATIONS</span>
+                    <button className="holder" id = "b1"></button>
+                    <button className="holder" id = "b2"></button>
+                    <button className="holder" id = "b3"></button>
+                    <button className="holder" id = "b4"></button>
+                </h1>
+                <p className= "head-p" >Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aut amet voluptate maxime quas est hic, sit eos quae nulla consectetur nemo ab facilis veritatis! Ab, tempora! Repellat laudantium quas optio.</p>
                 {/*loding cards */}
                 <div className="cards-container">
                         {cards.map((index,card)=>{
                         return (
                             <div className = "card" key={card.id}>
-                                hi
+                                <div className="m-con">
+                                    <h1>HEADING</h1>
+                                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Reiciendis veniam repellat labore, ipsa blanditiis reprehenderit aperiam ad praesentium saepe rem consequatur cum soluta nobis necessitatibus esse dignissimos voluptatem ab? Necessitatibus.</p>
+                                </div>
                             </div>
                         )
                     })}
@@ -22,8 +30,20 @@ function Accommodation(){
                 {/*ends */}
             </div>
             <div className="container-2">
-                <img
-                src = {navbar} />
+            <div className="bnt-con">
+            <button className="nav-btn" id="n1">
+                INFORMATION
+            </button>
+            <button className="nav-btn" id="n2">
+                FAQ
+            </button>
+            <button className="nav-btn" id="n3">
+                RULES
+            </button>
+            <button className="nav-btn" id="n4">
+                MAP
+            </button>
+            </div>
             </div>
         </div>
         </StrictMode>
