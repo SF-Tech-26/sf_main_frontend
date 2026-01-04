@@ -33,8 +33,25 @@ function Accommodation() {
     ];
 
     const rules = [
-        { id: 1, heading: "", content:"" },
-        { id: 2, heading: "", content: "." }
+        { id: 1, heading: "", content:"We care about our campus as much as you care about enjoying it to the fullest in Spring Fest. Let’s follow these simple rules to make this SF a memorable one and not a dreadful one just because of something you did wrong." },
+        { id: 2, heading: "", content: "At a time, the payment of maximum 1 participants can be done with the same transaction ID. The participant/team is requested to note down their transaction ID & accommodation ID and keep it with them for their convenience." },
+        {id:3,heading:"",content:"Participants from a college may have a maximum of 2 professors/faculty with their institute ID card. They will be charged and provided accommodation only on showing the ID card. The organising team will try their best to provide separate rooms to the faculty but it is not promised."},
+        {id:4,heading:"",content:"The accommodation charges and other necessary details regarding the payment will be available under the tab Accommodation Charges."},
+        {id:5,heading:"",content:"Accommodation tent will remain closed from 6 pm to 11 pm throughout the Starnights from 22nd to 25th January 2026. Any call/request for accommodation at that time will not be entertained. But in case you do visit the campus at this time, you may sit at Old Badminton Court, Gymkhana"},
+        {id:6,heading:"",content:"Accommodation will be provided to the participants from the check-in time to the check-out time as mentioned on the Accommodation Portal/Participant Slip. If the participant/team stays for more than the check-out time and refuses to vacate his allotted space, a fine of Rs. 500 per person will be levied on the participant/team."},
+        {id:7,heading:"",content:"Students are not permitted to eat in the hall mess. However, they are welcome to dine at hall canteens, food stalls, and other eateries available on campus."},
+        {id:8,heading:"",content:"Participants may be required to share mattresses as per the allotment guidelines."},
+        {id:9,heading:"",content:"Blankets can be obtained from the Accommodation tent with a security deposit of ₹100 per blanket. The deposit will be refunded upon return of the blanket in good condition."},
+        {id:10,heading:"",content:"Blankets should be submitted at the Accommodation tent while leaving the campus else the security deposit will not be returned. Refundable amount would be refunded only when the Accommodation slip is produced at the Finance tent along with the blankets on 26th and 29th January from 4pm-6:30pm & 11pm onwards"},
+        {id:11,heading:"",content:"Blankets should not be exchanged. Additionally, blankets and mattresses are not allowed to be taken outside the hall. If found misplaced or taken outside, the participant will incur a fine of ₹500 per mattress. Please adhere to these guidelines to avoid penalties."},
+        {id:12,heading:"",content:"Participants found littering anywhere within the Hall Premises shall be penalised as accordingly by Hall Authorities."},
+        {id:13,heading:"",content:"Smoking, alcoholism, or any form of substance abuse is strictly prohibited inside the hostel premises. The organizing committee reserves the right to fine or deport any participant or team found violating these rules. Such actions will be carried out at the full discretion of the Organizing Committee. Additionally, no refund will be issued in the case of deportation. Please ensure adherence to these rules to avoid any consequences."},
+        {id:14,heading:"",content:"Frisking of your belongings for security reasons may be conducted at any time if there is suspicion of possession of alcohol, drugs, or any prohibited substances. This will be done by security officials in your presence, and you are kindly requested to cooperate with them during the process."},
+        {id:15,heading:"",content:"Any form of molestation, theft, harm, or similar offenses will be treated as severe criminal offenses. The case will be immediately reported to the police station, and your college administration will also be informed. Such actions may result in suspension from your college or criminal charges."},
+        {id:16,heading:"",content:"In case of any complaint made against the behaviour of the participant which causes any discomfort to the hostel boarders or other participants, the Organizing Committee’s decision would be final and binding."},
+        {id:17,heading:"",content:"It is the responsibility of the participants to maintain the hostel property. In case of any damage to the hostel property, participants will be fined or deported based on the extent of the damage, as decided by the organizing committee."},
+        {id:18,heading:"",content:"Additionally, please ensure that you carry your institute ID card, institute medical book, and library card with you at all times to avoid any inconvenience."},
+        {id:19,heading:"",content:"All rooms have to be vacated by 28th January 2026 strictly by 2pm."},
     ];
 
     const map = [
@@ -81,10 +98,18 @@ function Accommodation() {
 
                     <div className="container-2">
                         <div className="bnt-con">
-                            <button className="nav-btn" id="n1" onClick={() => handleCategoryChange(info, "info")}>INFO</button>
-                            <button className="nav-btn" id="n2" onClick={() => handleCategoryChange(faq, "faq")}>FAQ</button>
-                            <button className="nav-btn" id="n3" onClick={() => handleCategoryChange(rules, "rules")}>RULES</button>
-                            <button className="nav-btn" id="n4" onClick={() => handleCategoryChange(map, "map")}>MAP</button>
+                            <button className="nav-btn" id="n1" onClick={() => handleCategoryChange(info, "info")}>
+                                <i className="fa-solid fa-circle-info"></i> INFO
+                            </button>
+                            <button className="nav-btn" id="n2" onClick={() => handleCategoryChange(faq, "faq")}>
+                                <i className="fa-solid fa-circle-question"></i> FAQ
+                            </button>
+                            <button className="nav-btn" id="n3" onClick={() => handleCategoryChange(rules, "rules")}>
+                                <i className="fa-solid fa-scroll"></i> RULES
+                            </button>
+                            <button className="nav-btn" id="n4" onClick={() => handleCategoryChange(map, "map")}>
+                                <i className="fa-solid fa-map-location-dot"></i> MAP
+                            </button>
                         </div>
                     </div>
 
@@ -101,17 +126,13 @@ function Accommodation() {
                     {/* --- NEW GOOGLE MAP SECTION --- */}
                     {activeTab === "map" && (
                         <div className="map-wrapper">
-                            <h2 style={{color: 'antiquewhite', textAlign: 'center', marginBottom: '15px'}}>IIT KHARAGPUR CAMPUS</h2>
+                            <h2 className="map-title">IIT KHARAGPUR CAMPUS</h2>
                             <iframe
                                 title="IIT Kharagpur Map"
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.602766601431!2d87.3079693753361!3d22.31193377967905!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1d440478160451%3A0x7d2873c9d7249e9!2sIndian%20Institute%20of%20Technology%20Kharagpur!5e0!3m2!1sen!2sin!4v1704149200000!5m2!1sen!2sin"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.0121115503096!2d87.30831207604474!3d22.316314742352882!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1d440447330757%3A0x10f0396558504533!2sIIT%20Kharagpur!5e0!3m2!1sen!2sin!4v1705000000000"
                                 width="100%"
-                                height="400"
-                                style={{ 
-                                    border: "2px solid #852424", 
-                                    borderRadius: "10px", 
-                                    filter: "invert(90%) hue-rotate(180deg) brightness(95%) contrast(90%)" 
-                                }}
+                                height="450"
+                                className="light-map-frame"
                                 allowFullScreen=""
                                 loading="lazy"
                             ></iframe>

@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap');
+
 *{
     margin:0%;
     padding: 0%;
     overscroll-behavior: none ;
+    font-family: 'Special Elite', serif;
 }
 
 ::-webkit-scrollbar{
@@ -18,6 +21,7 @@
     background-size: cover;
     background-attachment: fixed;
     overflow: hidden;
+    min-height: 100vh;
 }
 .container-2{
     background-color: rgba(0, 0, 0, 0);
@@ -27,24 +31,17 @@
     height:100vh;
     top:0;
 }
-.container-2 img{
-    margin:5%;
-    top:25%;
-    position:relative;
-}
 h1{
-    color: antiquewhite;
+    font-family: 'Creepster', cursive;
     display: inline-block;
-    background-color: gray;
+    color: #8a0303; /* Dried Blood Red */
     padding: 15px;
-    margin:10px;
-    margin-top:10%;
-    margin-left:3%;
 }
 .head-p{
     padding-left: 10px;
     width:40%;
-    color:brown;
+    color: #cfcfcf; /* Ghostly grey */
+    font-size: 1.1rem;
     position: relative;
     margin-left:3%;
     color: antiquewhite;
@@ -65,8 +62,8 @@ h1{
     width:100%;
     background-image : linear-gradient(
     to right,
-    rgba(22, 21, 23, 0.6),
-    rgba(50, 44, 45, 0));;
+    rgba(15, 15, 15, 0.7),
+    rgba(50, 44, 45, 0));
 }
 .card{
     display:grid;
@@ -76,27 +73,35 @@ h1{
 }
 .m-con{
     background: url("../assets/images/ChatGPT Image Jan 1, 2026, 12_56_48 PM.png");
-    background-position: center;
+    background-position: inset;
     background-repeat: no-repeat;
     margin:auto;
-    height:325px;
+    height:250px;
     width:160px;
-    transition: 1s;
+    transition: 0.2s;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 10px;
 }
 .m-con h1{
     display:block;
-    font-size: medium;
-    background:transparent;
+    font-size: 1.4rem;
     text-align: center;
     margin-top:25%;
+    margin-bottom: 0%;
+    margin-left: 10%;
 }
 .m-con p{
-    height: 40%;
+    height: auto;
     width:85%;
     overflow-y: auto;
     margin-inline:10%;
     padding:0;
     margin-top:0;
+    color: #111111;
+    font-size: 0.85rem;
+    margin-block:auto;
 }
 .cards-container{
     display:grid;
@@ -111,6 +116,9 @@ h1{
     position: relative;
     width:40%;
     z-index:0;
+     margin:10px;
+    margin-top:10%;
+    margin-left:3%;
 }
 .heading::after{
     content:" ";
@@ -147,12 +155,12 @@ h1{
 
 /*text color*/
 .heading span{
-    background:linear-gradient(
-        to right,rgb(175, 175, 213),rgb(109, 109, 213),white
-    );
+    font-family: 'Creepster', cursive;
+    background:linear-gradient(to right, #8a0303, #ff4d4d, #ffffff);
     background-clip:text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    font-size: 2.2rem;
 }
 
 .holder{
@@ -200,26 +208,29 @@ h1{
     #2a2e35,
     #1d2127
   );
+
     border-radius: 10px;
     border:2px solid rgb(0, 0, 0);
     outline: none;
-    color: whitesmoke;
+    color: #8a0303;
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.05), inset -1px -2px 3px rgba(0,0,0,0.6);
     font-size: x-large;
-    box-shadow:
-    inset 1px 1px 0 rgba(255,255,255,0.08),
-    inset -1px -2px 3px rgba(0,0,0,0.6);
     height:50%;
     margin-block:auto;
+    cursor: pointer;
+    letter-spacing: 1px;
 }
+.nav-btn:hover {
+    color: #ff0000;
+    text-shadow: 0 0 10px #ff0000;
+}
+
 .bnt-con{
     position:relative;
     height:50%;
     width: 100%;
     gap:5px;
-    box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.08),
-    inset 0 -2px 4px rgba(0,0,0,0.6),
-    0 6px 20px rgba(0,0,0,0.6);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
     display:grid;
     grid-template-rows: 1fr 1fr 1fr 1fr;
     top:20%;
@@ -237,60 +248,65 @@ h1{
     transform:rotateZ(-3deg);
 }
 
+.nav-btn i {
+    font-size: 1.3rem;
+    width: 25px;
+    text-align: center;
+}
+
 .m-con:hover{
     scale:115%;
 }
 
 
 .card {
-    cursor: pointer;
     transition: transform 0.2s ease;
 }
 
 .m-con:hover {
+    cursor: pointer;
     transform: translateY(-5px);
 }
 
 
 /* The dark background overlay covering the whole screen */
-.modal-overlay {
+    .modal-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.85); /* Dark semi-transparent background */
-    display: flex;
-    justify-content: center;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex; 
+    justify-content: center; 
     align-items: center;
-    z-index: 1000; /* Ensure it's on top of everything, including the sidebar */
-    backdrop-filter: blur(3px); /* Adds a nice blur effect to the background */
-    animation: fadeIn 0.3s ease;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
 }
+
 
 /* The actual pop-up box */
 .modal-content {
-    background: linear-gradient(145deg, #1a1a1d, #2a2a2e);
-    border: 2px solid #4a4a5e;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 10px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(145deg, #0a0a0a, #2b0000);
+    border: 2px solid #8a0303;
     padding: 30px;
     border-radius: 12px;
     width: 90%;
+    color: #d1d1d1;
+    text-align: center;
     max-width: 600px; /* Maximum width on large screens */
     max-height: 80vh;
     position: relative;
-    color: antiquewhite;
     overflow-y: auto; 
     animation: slideUp 0.3s ease;
 }
 
 /* Modal Heading */
 .modal-content h2 {
+    font-family: 'Creepster', cursive;
+    color: #ff0000;
+    font-size: 2.5rem;
     margin-top: 0;
     margin-bottom: 20px;
     border-bottom: 2px solid #852424;
     padding-bottom: 10px;
-    color: #afafd5;
     text-align: center;
     letter-spacing: 2px;
 }
@@ -318,6 +334,26 @@ h1{
 
 .close-modal-btn:hover {
     color: red;
+}
+
+.map-wrapper {
+    margin: 40px 3%;
+    padding-bottom: 50px;
+}
+
+.map-title {
+    color: antiquewhite;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Creepster';
+    letter-spacing: 2px;
+}
+
+.light-map-frame {
+    border: 5px solid #8a0303;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    /* Removed the inversion filter to keep it in Light Mode */
 }
 
 /* Simple animations for the modal appearing */
@@ -357,7 +393,7 @@ h1{
         margin-left:0;
     }
     .heading span{
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
     .head-p{
         max-height: 70px;
@@ -382,8 +418,8 @@ h1{
     }
     .heading span{
         position:absolute;
-        font-size:0.8rem;
-        top:0.25;
+        font-size:1.6rem;
+        top:10%;
     }
     .heading{
         height:10px;
