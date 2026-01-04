@@ -37,6 +37,9 @@ h1{
     color: #8a0303; /* Dried Blood Red */
     padding: 15px;
 }
+.heading{
+    color:#d1d1d1;
+}
 .head-p{
     padding-left: 10px;
     width:40%;
@@ -91,14 +94,19 @@ h1{
     margin-top:25%;
     margin-bottom: 0%;
     margin-left: 10%;
+    max-height:60%;
+    overflow-y: auto;
+    overflow-x:visible;
+    width:80%;
 }
 .m-con p{
     height: auto;
     width:85%;
     overflow-y: auto;
-    margin-inline:10%;
+    margin-left:15%;
     padding:0;
     margin-top:0;
+    flex:1;
     color: #111111;
     font-size: 0.85rem;
     margin-block:auto;
@@ -149,7 +157,7 @@ h1{
     border-radius:10px;
     filter:blur(8px);
     border-radius:10px;
-    display:none;
+    display:block;
 
 }
 
@@ -202,27 +210,62 @@ h1{
     background-color: aliceblue;
     border:1px solid black;
 }
-.container-2 .nav-btn{
-    background: linear-gradient(
-    to right,
-    #2a2e35,
-    #1d2127
-  );
-
+.nav-btn {
+    background: linear-gradient(to right, #2a2e35, #1d2127);
     border-radius: 10px;
-    border:2px solid rgb(0, 0, 0);
+    border: 2px solid rgb(0, 0, 0);
     outline: none;
     color: #8a0303;
     box-shadow: inset 1px 1px 0 rgba(255,255,255,0.05), inset -1px -2px 3px rgba(0,0,0,0.6);
     font-size: x-large;
-    height:50%;
-    margin-block:auto;
+    height: 50%;
+    margin-block: auto;
     cursor: pointer;
     letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
+.nav-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(16, 105, 157, 0.6); /* Blood red glow */
+    filter: blur(20px);
+    z-index: -1; /* Behind the button */
+    opacity: 0;
+    border-radius: 10px;
+    transition: opacity 0.4s ease;
+}
+
+.nav-btn:hover::before {
+    opacity: 1;
+}
+
 .nav-btn:hover {
     color: #ff0000;
     text-shadow: 0 0 10px #ff0000;
+    border-color: #8a0303;
+    transform: scale(1.05);
+}
+
+.nav-btn.active {
+    color: #ff4d4d;
+    border-color: #ff0000;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.4), inset 0 0 10px rgba(255, 0, 0, 0.2);
+    text-shadow: 0 0 15px #ff0000;
+}
+
+.nav-btn.active::before {
+    opacity: 0.8;
+    background: rgba(16, 105, 157, 0.6);
 }
 
 .bnt-con{
@@ -353,7 +396,6 @@ h1{
     border: 5px solid #8a0303;
     border-radius: 15px;
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    /* Removed the inversion filter to keep it in Light Mode */
 }
 
 /* Simple animations for the modal appearing */
@@ -391,6 +433,8 @@ h1{
     .heading{
         scale:0.8;
         margin-left:0;
+        font-size:1.8rem;
+        color:#d1d1d1
     }
     .heading span{
         font-size: 2rem;
@@ -417,13 +461,11 @@ h1{
         margin-top:0px;
     }
     .heading span{
-        position:absolute;
         font-size:1.6rem;
-        top:10%;
     }
     .heading{
-        height:10px;
         position:relative;
+        font-size: 1.2rem;
     }
     .head-p{
         width:auto;

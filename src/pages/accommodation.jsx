@@ -63,7 +63,7 @@ function Accommodation() {
     const [cards, setCard] = useState(info);
     const [showModal, setShowModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-    const [activeTab, setActiveTab] = useState("info");
+    const [activeTab, setActiveTab] = useState("Information");
 
    const handleCategoryChange = (categoryData, tabName) => {
         setCard(categoryData);
@@ -86,6 +86,7 @@ function Accommodation() {
                 <div className="container-1">
                     <h1 className="heading">
                         <span>ACCOMMODATIONS</span>
+                        <p>{activeTab}</p>
                         <div className="holder" id="b1"></div>
                         <div className="holder" id="b2"></div>
                         <div className="holder" id="b3"></div>
@@ -98,16 +99,32 @@ function Accommodation() {
 
                     <div className="container-2">
                         <div className="bnt-con">
-                            <button className="nav-btn" id="n1" onClick={() => handleCategoryChange(info, "info")}>
+                            <button 
+                                className={`nav-btn ${activeTab === "Information" ? "active" : ""}`} 
+                                id="n1" 
+                                onClick={() => handleCategoryChange(info, "Information")}
+                            >
                                 <i className="fa-solid fa-circle-info"></i> INFO
                             </button>
-                            <button className="nav-btn" id="n2" onClick={() => handleCategoryChange(faq, "faq")}>
+                            <button 
+                                className={`nav-btn ${activeTab === "FAQ's" ? "active" : ""}`} 
+                                id="n2" 
+                                onClick={() => handleCategoryChange(faq, "FAQ's")}
+                            >
                                 <i className="fa-solid fa-circle-question"></i> FAQ
                             </button>
-                            <button className="nav-btn" id="n3" onClick={() => handleCategoryChange(rules, "rules")}>
+                            <button 
+                                className={`nav-btn ${activeTab === "Rules" ? "active" : ""}`} 
+                                id="n3" 
+                                onClick={() => handleCategoryChange(rules, "Rules")}
+                            >
                                 <i className="fa-solid fa-scroll"></i> RULES
                             </button>
-                            <button className="nav-btn" id="n4" onClick={() => handleCategoryChange(map, "map")}>
+                            <button 
+                                className={`nav-btn ${activeTab === "MAP" ? "active" : ""}`} 
+                                id="n4" 
+                                onClick={() => handleCategoryChange(map, "MAP")}
+                            >
                                 <i className="fa-solid fa-map-location-dot"></i> MAP
                             </button>
                         </div>
@@ -124,7 +141,7 @@ function Accommodation() {
                         ))}
                     </div>
                     {/* --- NEW GOOGLE MAP SECTION --- */}
-                    {activeTab === "map" && (
+                    {activeTab === "MAP" && (
                         <div className="map-wrapper">
                             <h2 className="map-title">IIT KHARAGPUR CAMPUS</h2>
                             <iframe
