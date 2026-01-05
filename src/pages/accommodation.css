@@ -23,6 +23,12 @@
     overflow: hidden;
     min-height: 100vh;
 }
+
+.main-container img{
+    position:absolute;
+    left:-25%;
+    top:-25%;
+}
 .container-2{
     background-color: rgba(0, 0, 0, 0);
     position: fixed;
@@ -31,7 +37,7 @@
     height:100vh;
     top:0;
 }
-h1{
+ h1{
     font-family: 'Creepster', cursive;
     display: inline-block;
     color: #8a0303; /* Dried Blood Red */
@@ -76,7 +82,7 @@ h1{
 }
 .m-con{
     background: url("../assets/images/ChatGPT Image Jan 1, 2026, 12_56_48 PM.png");
-    background-position: inset;
+    background-position: bottom 0;
     background-repeat: no-repeat;
     margin:auto;
     height:250px;
@@ -85,7 +91,9 @@ h1{
     display: flex;
     flex-direction: column;
     text-align: center;
+    position:relative;
     padding: 10px;
+    overflow-x: visible;
 }
 .m-con h1{
     display:block;
@@ -96,7 +104,7 @@ h1{
     margin-left: 10%;
     max-height:60%;
     overflow-y: auto;
-    overflow-x:visible;
+    overflow-x:clip;
     width:80%;
 }
 .m-con p{
@@ -277,6 +285,7 @@ h1{
     display:grid;
     grid-template-rows: 1fr 1fr 1fr 1fr;
     top:20%;
+    margin-inline:3%;
 }
 #n1{
     transform:rotateZ(3deg);
@@ -398,6 +407,144 @@ h1{
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
+.spider {
+    position: fixed;
+    display: inline-block;
+    top: 0;
+    right:10vw;
+
+    /* 4. Animatie */
+    animation: swing 2s infinite;
+    transform-origin: top;
+    transition: 1s ease-in-out;
+    z-index:100;
+    scale:0.8;
+
+}
+/* .container-1:hover .spider {
+    top: -120%;
+} */
+
+.spider .spiderweb {
+    width: 2px;
+    height: 100px;
+    margin-left: 50%;
+    background: rgba(255,255,255, .7);
+}
+
+.spider .body {
+    width: 100px;
+    height: 80px;
+    background: #000;
+    position: relative;
+    border-radius: 50%;
+}
+
+.spider .body .eye {
+    width: 33px;
+    height: 33px;
+    position: absolute;
+    bottom: 20px;
+    background: #fff;
+    border-radius: 50%;
+}
+
+.spider .body .eye.left {
+    left: 15px;
+}
+
+.spider .body .eye.right {
+    right: 15px;
+}
+
+.spider .body .eye:after {
+    background: #000;
+    width: 7px;
+    height: 7px;
+    content: '';
+    display: block;
+    margin: 55%;
+    border-radius: 50%;
+
+    /* 3. Animatie */
+    animation: look 8s infinite;
+}
+
+.spider .legs .leg {
+    width: 80px;
+    height: 40px;
+    margin-top: -20px;
+    border: 5px solid transparent;
+    border-top-color: #000;
+    border-radius: 40px 40px 0 0;
+}
+
+.spider .legs {
+    position: absolute;
+    bottom: -10%;
+    z-index: -1;
+}
+
+.spider .legs.left {
+    left: -70%;
+}
+.spider .legs.right {
+    right: -60%;
+}
+
+
+.legs.left .leg:nth-child(1){
+    transform: rotate(10deg);
+    margin-left: 10px;
+}
+.legs.right .leg:nth-child(1){
+    transform: rotate(-10deg);
+    margin-left: -10px;
+}
+
+
+.legs.left .leg:nth-child(2){
+    transform: rotate(-20deg);
+    margin-left: 20px;
+}
+.legs.right .leg:nth-child(2){
+    transform: rotate(20deg);
+    margin-left: -20px;
+}
+
+
+.legs.left .leg:nth-child(3){
+    transform: rotate(-50deg);
+    margin-left: 30px;
+}
+.legs.right .leg:nth-child(3){
+    transform: rotate(50deg);
+    margin-left: -30px;
+}
+
+/* 1. Animatie */
+@keyframes look {
+    0%, 40%, 100% {
+        transform: translateX(0); 
+    }
+
+    45%, 95% {
+        transform: translateX(-110%);
+    }
+}
+
+
+/* 3. Animatie */
+@keyframes swing {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
 /* Simple animations for the modal appearing */
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -424,6 +571,13 @@ h1{
 }
 
 @media screen and (min-width:801px) and (max-width:1200px){
+    .main-container .heading{
+        margin-top: 100px;
+    }
+    .spider{
+        scale:0.6;
+        right:5vw;
+    }
     .container-1{
         height:auto;
     }
@@ -441,7 +595,7 @@ h1{
     }
     .head-p{
         max-height: 70px;
-        width:auto;
+        width:70vw;
     }
     .card{
         scale:1;
@@ -454,7 +608,14 @@ h1{
         right:-8%;
     }
 }
-@media(max-width:800px){
+@media screen and (max-width:801px) and (min-width:391px){
+    .main-container .heading{
+        margin-top: 100px;
+    }
+    .spider{
+        scale:0.5;
+        right:0;
+    }
     .cards-container{
         display:grid;
         grid-template-columns: 1fr 1fr;
@@ -493,7 +654,57 @@ h1{
         overflow: hidden;
     }
 }
-@media screen and (min-width:1500px) and (max-width:2099px) and(min-height:800px){
+@media screen and (max-width:391px){
+    .main-container .heading{
+        margin-top: 100px;
+        font-size: 1rem;
+    }
+    .light-map-frame{
+        height:250px;
+    }
+    .spider{
+        scale:0.5;
+        right:0;
+    }
+    .cards-container{
+        display:grid;
+        grid-template-columns: 1fr;
+        margin-top:0px;
+    }
+    .heading span{
+        font-size:1.2rem;
+    }
+    .heading{
+        position:relative;
+        font-size: 1.2rem;
+    }
+    .head-p{
+        width:auto;
+    }
+    .container-2{
+        position:static ;
+        height:auto;
+    }
+    .main-container{
+        grid-template-columns: 1fr;
+    }
+    .bnt-con .nav-btn{
+        position:static;
+        font-size: 0.8rem;
+    }
+    .container-2 .bnt-con{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+        width:100vw;
+        height:80px;
+        margin-top:25px;
+    }
+    .main-container{
+        overflow: hidden;
+    }
+}
+@media screen and (min-width:1500px) and (max-width:2100px) and(min-height:800px){
     .m-con{
         scale:150%;
     }
@@ -509,7 +720,7 @@ h1{
         scale:175%;
     }
 }
-@media screen and (min-width:1200px) and (max-width:1499px) and(min-height:850px){
+@media screen and (min-width:1200px) and (max-width:1500px) and(min-height:850px){
     .m-con{
         scale:125%;
     }
@@ -517,3 +728,53 @@ h1{
         scale:130%;
     }
 }
+
+.container {
+    position:absolute;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    scale:0.25;
+    left:-125px;
+    bottom:-100px;
+}
+
+.container2 {
+    position:absolute;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    scale:0.25;
+    right:-140px;
+    bottom:-100px;
+}
+
+ .shadow {
+    margin: 10% auto 0;
+    background: #000;
+    width: 230px;
+    height: 50px;
+    border-radius: 50%;
+    animation: anim 3s infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10%);
+    }
+  }
+
+  @keyframes anim {
+      0%, 100% {
+          transform: scale(1);
+      }
+
+      50% {
+          transform: scale(.8);
+      }
+  }
+
