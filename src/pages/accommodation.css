@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap');
 
-*{
+.acco-main-container{
     margin:0%;
     padding: 0%;
     overscroll-behavior: none ;
@@ -11,9 +11,9 @@
     display:none;
 }
 
-.main-container{
-    display:grid;
-    grid-template-columns: 5fr 1fr;
+.acco-main-container{
+    display: grid;
+    grid-template-columns: 7fr 2fr;
     position: relative;
     background-image:url("../assets/images/view-scary-cemetery-night-with-moonlight.jpg");
     background-repeat: no-repeat;
@@ -24,38 +24,35 @@
     min-height: 100vh;
 }
 
-.main-container img{
+.acco-main-container img{
     position:absolute;
     left:-25%;
     top:-25%;
 }
-.container-2{
+.acco-container-2{
     background-color: rgba(0, 0, 0, 0);
     position: fixed;
-    right:0;
-    width:17vw;
+    right:2vw;
+    width:20vw;
     height:100vh;
     top:0;
 }
- h1{
+.acco-head{
     font-family: 'Creepster', cursive;
     display: inline-block;
     color: #8a0303; /* Dried Blood Red */
     padding: 15px;
 }
-.heading{
-    color:#d1d1d1;
-}
-.head-p{
+.acco-head-p{
     padding-left: 10px;
-    width:40%;
+    width:80%;
     color: #cfcfcf; /* Ghostly grey */
     font-size: 1.1rem;
     position: relative;
     margin-left:3%;
     color: antiquewhite;
 }
-.head-p::after{
+.acco-head-p::after{
     content: " ";
     position:absolute;
     height: 100%;
@@ -64,7 +61,7 @@
     left: 5px;
     top: 0;
 }
-.head-p::before{
+.acco-head-p::before{
     content:" ";
     position : absolute;
     height:100%;
@@ -74,52 +71,53 @@
     rgba(15, 15, 15, 0.7),
     rgba(50, 44, 45, 0));
 }
-.card{
+.acco-card{
     display:grid;
     height:40vh;
     width :100%;
     margin-inline: auto;
 }
-.m-con{
+.acco-m-con{
     background: url("../assets/images/ChatGPT Image Jan 1, 2026, 12_56_48 PM.png");
     background-position: bottom 0;
     background-repeat: no-repeat;
     margin:auto;
     height:250px;
-    width:160px;
+    width:190px;
     transition: 0.2s;
     display: flex;
     flex-direction: column;
     text-align: center;
     position:relative;
     padding: 10px;
-    overflow-x: visible;
+    overflow-x:visible;
+    margin-inline: auto;
 }
-.m-con h1{
+.acco-m-con .acco-head{
     display:block;
     font-size: 1.4rem;
     text-align: center;
     margin-top:25%;
     margin-bottom: 0%;
-    margin-left: 10%;
+    margin-inline: 15%;
     max-height:60%;
     overflow-y: auto;
-    overflow-x:clip;
+    overflow-x:visible;
     width:80%;
+    padding:0;
 }
-.m-con p{
+.acco-m-con .acco-p{
     height: auto;
     width:85%;
     overflow-y: auto;
     margin-left:15%;
     padding:0;
-    margin-top:0;
+    margin-top:10px;
     flex:1;
     color: #111111;
     font-size: 0.85rem;
-    margin-block:auto;
 }
-.cards-container{
+.acco-cards-container{
     display:grid;
     grid-template-columns: 1fr 1fr 1fr ;
     gap : 15px;
@@ -127,7 +125,8 @@
     margin-block:15px;
 }
 /*heading*/
-.heading{
+.acco-heading{
+    color:#d1d1d1;
     border-radius: 5px;
     position: relative;
     width:40%;
@@ -135,8 +134,9 @@
      margin:10px;
     margin-top:10%;
     margin-left:3%;
+    font-size:1.5rem;
 }
-.heading::after{
+.acco-heading::after{
     content:" ";
     background-image: linear-gradient(
     to bottom,
@@ -153,7 +153,7 @@
 }
 
 /*glowig effect*/
-.heading::before{
+.acco-heading::before{
     content:" ";
     height:calc(100% + 8px);
     position: absolute;
@@ -170,7 +170,7 @@
 }
 
 /*text color*/
-.heading span{
+.acco-heading span{
     font-family: 'Creepster', cursive;
     background:linear-gradient(to right, #8a0303, #ff4d4d, #ffffff);
     background-clip:text;
@@ -179,10 +179,10 @@
     font-size: 2.2rem;
 }
 
-.holder{
+.acco-holder{
     position: absolute;
 }
-.heading #b1{
+.acco-heading #b1{
     top: 5%;;
     left:1%;
     width:8px;
@@ -191,7 +191,7 @@
     background-color: rgb(255, 255, 255);
     border:1px solid black;
 }
-.heading #b2{
+.acco-heading #b2{
     bottom: 5%;;
     left:1%;
     width:8px;
@@ -200,7 +200,7 @@
     background-color: aliceblue;
     border:1px solid black;
 }
-.heading #b3{
+.acco-heading #b3{
     top: 5%;;
     right:1%;
     width:8px;
@@ -209,7 +209,7 @@
     background-color: aliceblue;
     border:1px solid black;
 }
-.heading #b4{
+.acco-heading #b4{
     bottom: 5%;;
     right:1%;
     width:8px;
@@ -218,7 +218,7 @@
     background-color: aliceblue;
     border:1px solid black;
 }
-.nav-btn {
+.acco-nav-btn {
     background: linear-gradient(to right, #2a2e35, #1d2127);
     border-radius: 10px;
     border: 2px solid rgb(0, 0, 0);
@@ -238,7 +238,7 @@
     justify-content: center;
     gap: 10px;
 }
-.nav-btn::before {
+.acco-nav-btn::before {
     content: "";
     position: absolute;
     top: 0;
@@ -253,30 +253,30 @@
     transition: opacity 0.4s ease;
 }
 
-.nav-btn:hover::before {
+.acco-nav-btn:hover::before {
     opacity: 1;
 }
 
-.nav-btn:hover {
+.acco-nav-btn:hover {
     color: #ff0000;
     text-shadow: 0 0 10px #ff0000;
     border-color: #8a0303;
     transform: scale(1.05);
 }
 
-.nav-btn.active {
+.acco-nav-btn.acco-active {
     color: #ff4d4d;
     border-color: #ff0000;
     box-shadow: 0 0 15px rgba(255, 0, 0, 0.4), inset 0 0 10px rgba(255, 0, 0, 0.2);
     text-shadow: 0 0 15px #ff0000;
 }
 
-.nav-btn.active::before {
+.acco-nav-btn.acco-active::before {
     opacity: 0.8;
     background: rgba(16, 105, 157, 0.6);
 }
 
-.bnt-con{
+.acco-bnt-con{
     position:relative;
     height:50%;
     width: 100%;
@@ -285,7 +285,7 @@
     display:grid;
     grid-template-rows: 1fr 1fr 1fr 1fr;
     top:20%;
-    margin-inline:3%;
+    margin-inline:0;
 }
 #n1{
     transform:rotateZ(3deg);
@@ -300,29 +300,29 @@
     transform:rotateZ(-3deg);
 }
 
-.nav-btn i {
+.acco-nav-btn i {
     font-size: 1.3rem;
     width: 25px;
     text-align: center;
 }
 
-.m-con:hover{
+.acco-m-con:hover{
     scale:115%;
 }
 
 
-.card {
+.acco-card {
     transition: transform 0.2s ease;
 }
 
-.m-con:hover {
+.acco-m-con:hover {
     cursor: pointer;
     transform: translateY(-5px);
 }
 
 
 /* The dark background overlay covering the whole screen */
-    .modal-overlay {
+    .acco-modal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     background-color: rgba(0, 0, 0, 0.9);
@@ -335,7 +335,7 @@
 
 
 /* The actual pop-up box */
-.modal-content {
+.acco-modal-content {
     background: linear-gradient(145deg, #0a0a0a, #2b0000);
     border: 2px solid #8a0303;
     padding: 30px;
@@ -351,7 +351,7 @@
 }
 
 /* Modal Heading */
-.modal-content h2 {
+.acco-modal-content h2 {
     font-family: 'Creepster', cursive;
     color: #ff0000;
     font-size: 2.5rem;
@@ -364,14 +364,14 @@
 }
 
 /* Modal Body Text */
-.modal-body p {
+.acco-modal-body p {
     font-size: 1.1rem;
     line-height: 1.6;
     white-space: pre-line; /* This ensures \n line breaks in your data are respected */
 }
 
 /* The Close Button (X) */
-.close-modal-btn {
+.acco-close-modal-btn {
     position: absolute;
     top: 10px;
     right: 15px;
@@ -384,7 +384,7 @@
     transition: color 0.2s;
 }
 
-.close-modal-btn:hover {
+.acco-close-modal-btn:hover {
     color: red;
 }
 
@@ -407,7 +407,7 @@
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
-.spider {
+.acco-spider {
     position: fixed;
     display: inline-block;
     top: 0;
@@ -421,18 +421,18 @@
     scale:0.8;
 
 }
-/* .container-1:hover .spider {
+/* .acco-container-1:hover .acco-spider {
     top: -120%;
 } */
 
-.spider .spiderweb {
+.acco-spider .acco-spiderweb {
     width: 2px;
     height: 100px;
     margin-left: 50%;
     background: rgba(255,255,255, .7);
 }
 
-.spider .body {
+.acco-spider .acco-body {
     width: 100px;
     height: 80px;
     background: #000;
@@ -440,7 +440,7 @@
     border-radius: 50%;
 }
 
-.spider .body .eye {
+.acco-spider .acco-body .acco-eye {
     width: 33px;
     height: 33px;
     position: absolute;
@@ -449,15 +449,15 @@
     border-radius: 50%;
 }
 
-.spider .body .eye.left {
+.acco-spider .acco-body .acco-eye.left {
     left: 15px;
 }
 
-.spider .body .eye.right {
+.acco-spider .acco-body .acco-eye.right {
     right: 15px;
 }
 
-.spider .body .eye:after {
+.acco-spider .acco-body .acco-eye:after {
     background: #000;
     width: 7px;
     height: 7px;
@@ -470,7 +470,7 @@
     animation: look 8s infinite;
 }
 
-.spider .legs .leg {
+.acco-spider .acco-legs .leg {
     width: 80px;
     height: 40px;
     margin-top: -20px;
@@ -479,45 +479,45 @@
     border-radius: 40px 40px 0 0;
 }
 
-.spider .legs {
+.acco-spider .acco-legs {
     position: absolute;
     bottom: -10%;
     z-index: -1;
 }
 
-.spider .legs.left {
+.acco-spider .acco-legs.left {
     left: -70%;
 }
-.spider .legs.right {
+.acco-spider .acco-legs.right {
     right: -60%;
 }
 
 
-.legs.left .leg:nth-child(1){
+.acco-legs.left .leg:nth-child(1){
     transform: rotate(10deg);
     margin-left: 10px;
 }
-.legs.right .leg:nth-child(1){
+.acco-legs.right .leg:nth-child(1){
     transform: rotate(-10deg);
     margin-left: -10px;
 }
 
 
-.legs.left .leg:nth-child(2){
+.acco-legs.left .leg:nth-child(2){
     transform: rotate(-20deg);
     margin-left: 20px;
 }
-.legs.right .leg:nth-child(2){
+.acco-legs.right .leg:nth-child(2){
     transform: rotate(20deg);
     margin-left: -20px;
 }
 
 
-.legs.left .leg:nth-child(3){
+.acco-legs.left .leg:nth-child(3){
     transform: rotate(-50deg);
     margin-left: 30px;
 }
-.legs.right .leg:nth-child(3){
+.acco-legs.right .leg:nth-child(3){
     transform: rotate(50deg);
     margin-left: -30px;
 }
@@ -558,91 +558,92 @@
 
 /* Responsive adjustments for small screens */
 @media screen and (max-width: 600px) {
-    .modal-content {
+    .acco-modal-content {
         width: 95%;
         padding: 20px;
     }
-    .modal-content h2 {
+    .acco-modal-content h2 {
         font-size: 1.3rem;
     }
-    .modal-body p {
+    .acco-modal-body p {
         font-size: 1rem;
     }
 }
 
 @media screen and (min-width:801px) and (max-width:1200px){
-    .main-container .heading{
+    .acco-main-container .acco-heading{
         margin-top: 100px;
     }
-    .spider{
+    .acco-spider{
         scale:0.6;
         right:5vw;
     }
-    .container-1{
+    .acco-container-1{
         height:auto;
     }
-    .bnt-con{
+    .acco-bnt-con{
         scale:0.6;
     }
-    .heading{
+    .acco-heading{
         scale:0.8;
         margin-left:0;
         font-size:1.8rem;
         color:#d1d1d1
     }
-    .heading span{
+    .acco-heading span{
         font-size: 2rem;
     }
-    .head-p{
+    .acco-head-p{
         max-height: 70px;
         width:70vw;
     }
-    .card{
+    .acco-card{
         scale:1;
     }
-    .cards-container{
+    .acco-cards-container{
         gap:0;
     }
-    .container-2{
+    .acco-container-2{
         width: 35%;
-        right:-8%;
+        right:-5vw;
     }
 }
 @media screen and (max-width:801px) and (min-width:391px){
-    .main-container .heading{
+    .acco-main-container .acco-heading{
         margin-top: 100px;
     }
-    .spider{
+    .acco-spider{
         scale:0.5;
         right:0;
     }
-    .cards-container{
+    .acco-cards-container{
         display:grid;
         grid-template-columns: 1fr 1fr;
         margin-top:0px;
     }
-    .heading span{
+    .acco-heading span{
         font-size:1.6rem;
     }
-    .heading{
+    .acco-heading{
         position:relative;
         font-size: 1.2rem;
+        width:50vw;
     }
-    .head-p{
+    .acco-head-p{
         width:auto;
     }
-    .container-2{
+    .acco-container-2{
         position:static ;
         height:auto;
     }
-    .main-container{
+    .acco-main-container{
         grid-template-columns: 1fr;
     }
-    .bnt-con .nav-btn{
+    .acco-bnt-con .acco-nav-btn{
         position:static;
         font-size: 0.8rem;
     }
-    .container-2 .bnt-con{
+    .acco-container-2 .acco-bnt-con{
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-template-rows: 1fr;
@@ -650,49 +651,54 @@
         height:80px;
         margin-top:25px;
     }
-    .main-container{
+    .acco-main-container{
         overflow: hidden;
     }
 }
 @media screen and (max-width:391px){
-    .main-container .heading{
+    .acco-main-container .acco-heading{
         margin-top: 100px;
         font-size: 1rem;
+        overflow: hidden;
+        width:80%;
+    }
+    .acco-main-container{
+        display:grid;
+        grid-template-columns: 1fr;
     }
     .light-map-frame{
         height:250px;
     }
-    .spider{
+    .acco-spider{
         scale:0.5;
         right:0;
     }
-    .cards-container{
+    .acco-cards-container{
         display:grid;
         grid-template-columns: 1fr;
         margin-top:0px;
     }
-    .heading span{
+    .acco-heading span{
         font-size:1.2rem;
     }
-    .heading{
+    .acco-heading{
         position:relative;
         font-size: 1.2rem;
     }
-    .head-p{
+    .acco-head-p{
         width:auto;
+        margin-inline:auto;
     }
-    .container-2{
+    .acco-container-2{
         position:static ;
         height:auto;
+
     }
-    .main-container{
-        grid-template-columns: 1fr;
-    }
-    .bnt-con .nav-btn{
+    .acco-bnt-con .acco-nav-btn{
         position:static;
         font-size: 0.8rem;
     }
-    .container-2 .bnt-con{
+    .acco-container-2 .acco-bnt-con{
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-template-rows: 1fr;
@@ -700,31 +706,28 @@
         height:80px;
         margin-top:25px;
     }
-    .main-container{
-        overflow: hidden;
-    }
 }
 @media screen and (min-width:1500px) and (max-width:2100px) and(min-height:800px){
-    .m-con{
+    .acco-m-con{
         scale:150%;
     }
-    .m-con:hover{
+    .acco-m-con:hover{
         scale:155%;
     }
 }
 @media screen and (min-width:2100px) and (min-height:900px){
-    .m-con{
+    .acco-m-con{
         scale:170%;
     }
-    .m-con:hover{
+    .acco-m-con:hover{
         scale:175%;
     }
 }
 @media screen and (min-width:1200px) and (max-width:1500px) and(min-height:850px){
-    .m-con{
+    .acco-m-con{
         scale:125%;
     }
-    .m-con:hover{
+    .acco-m-con:hover{
         scale:130%;
     }
 }
