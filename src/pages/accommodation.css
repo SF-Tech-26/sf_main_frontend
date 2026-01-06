@@ -115,8 +115,8 @@
     padding:0;
     margin-top:10px;
     flex:1;
-    color: #03142b;
-    font-size: 1rem;
+    color: #000000;
+    font-size: 1.2rem;
 }
 .acco-cards-container{
     display:grid;
@@ -613,6 +613,12 @@
     .acco-main-container .acco-heading{
         margin-top: 100px;
     }
+    .acco-container-2{
+        left:0;
+        position: sticky;
+        top: 290px;
+        z-index:5000;
+    }
     .acco-spider{
         scale:0.5;
         right:0;
@@ -632,6 +638,7 @@
     }
     .acco-head-p{
         width:auto;
+        margin-bottom:80px;
     }
     .acco-container-2{
         position:fixed ;
