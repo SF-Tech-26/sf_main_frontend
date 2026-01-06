@@ -3,9 +3,6 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import Accommodation from './pages/accommodation'
-import SpringFestPortsl from './pages/Music'
-
-
 import Dashboard from './components/Dashboard'
 import { Routes, Route } from "react-router-dom";
 import Report from './pages/Report'
@@ -17,10 +14,11 @@ function App() {
 
   return (
     <>
-      <SpringFestPortsl/>
+      
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/" element={<Accommodation />} />
+        <Route path="/aman" element={<Accommodation />} />
+        
         <Route path="/register" element={<RegisterEvent />} />
         <Route path="/report" element={<Report />} />
         <Route path='/profile' element={<Profile />} />
