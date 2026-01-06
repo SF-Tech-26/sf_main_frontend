@@ -82,46 +82,63 @@ function Accommodation() {
 
     return (
         <StrictMode>
-            <div className="main-container">
-                <div className="container-1">
-                    <h1 className="heading">
+            <div className="acco-main-container">
+                <div className="acco-container-1">
+                    <div class="acco-spider">
+                    <div class="acco-spiderweb"></div>
+                    <div class="acco-body">
+                        <div class="acco-eye left"></div>
+                        <div class="acco-eye right"></div>
+                    </div>
+                    <div class="acco-legs left">
+                        <div class="leg"></div>
+                        <div class="leg"></div>
+                        <div class="leg"></div>
+                    </div>
+                    <div class="acco-legs right">
+                        <div class="leg"></div>
+                        <div class="leg"></div>
+                        <div class="leg"></div>
+                    </div>
+                </div>
+                    <h1 className="acco-head acco-heading">
                         <span>ACCOMMODATIONS</span>
                         <p>{activeTab}</p>
-                        <div className="holder" id="b1"></div>
-                        <div className="holder" id="b2"></div>
-                        <div className="holder" id="b3"></div>
-                        <div className="holder" id="b4"></div>
+                        <div className="acco-holder" id="b1"></div>
+                        <div className="acco-holder" id="b2"></div>
+                        <div className="acco-holder" id="b3"></div>
+                        <div className="acco-holder" id="b4"></div>
                     </h1>
 
-                    <p className="head-p">
+                    <p className="acco-head-p">
                         Welcome to Spring Fest 2026. Please find information regarding your stay at IIT Kharagpur. Click on any tombstone to read details.
                     </p>
 
-                    <div className="container-2">
-                        <div className="bnt-con">
+                    <div className="acco-container-2">
+                        <div className="acco-bnt-con">
                             <button 
-                                className={`nav-btn ${activeTab === "Information" ? "active" : ""}`} 
+                                className={`acco-nav-btn ${activeTab === "Information" ? "acco-active" : ""}`} 
                                 id="n1" 
                                 onClick={() => handleCategoryChange(info, "Information")}
                             >
                                 <i className="fa-solid fa-circle-info"></i> INFO
                             </button>
                             <button 
-                                className={`nav-btn ${activeTab === "FAQ's" ? "active" : ""}`} 
+                                className={`acco-nav-btn ${activeTab === "FAQ's" ? "acco-active" : ""}`} 
                                 id="n2" 
                                 onClick={() => handleCategoryChange(faq, "FAQ's")}
                             >
                                 <i className="fa-solid fa-circle-question"></i> FAQ
                             </button>
                             <button 
-                                className={`nav-btn ${activeTab === "Rules" ? "active" : ""}`} 
+                                className={`acco-nav-btn ${activeTab === "Rules" ? "acco-active" : ""}`} 
                                 id="n3" 
                                 onClick={() => handleCategoryChange(rules, "Rules")}
                             >
                                 <i className="fa-solid fa-scroll"></i> RULES
                             </button>
                             <button 
-                                className={`nav-btn ${activeTab === "MAP" ? "active" : ""}`} 
+                                className={`acco-nav-btn ${activeTab === "MAP" ? "acco-active" : ""}`} 
                                 id="n4" 
                                 onClick={() => handleCategoryChange(map, "MAP")}
                             >
@@ -130,12 +147,12 @@ function Accommodation() {
                         </div>
                     </div>
 
-                    <div className="cards-container">
+                    <div className="acco-cards-container">
                         {cards.map((card) => (
-                            <div className="card" key={card.id}>
-                                <div className="m-con" onClick={() => handleCardClick(card)}>
-                                    <h1>{card.heading}</h1>
-                                    <p>{card.content}</p>
+                            <div className="acco-card" key={card.id}>
+                                <div className="acco-m-con" onClick={() => handleCardClick(card)}>
+                                    <h1 className="acco-head">{card.heading}</h1>
+                                    <p className="acco-p">{card.content}</p>
                                 </div>
                             </div>
                         ))}
@@ -160,12 +177,12 @@ function Accommodation() {
 
                 {/*conditional rendering */}
                 {showModal && selectedCard && (
-                    <div className="modal-overlay" onClick={handleCloseModal}>
+                    <div className="acco-modal-overlay" onClick={handleCloseModal}>
                         {/* stopPropagation prevents clicking inside the box from closing it */}
-                        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                            <button className="close-modal-btn" onClick={handleCloseModal}>X</button>
+                        <div className="acco-modal-content" onClick={(e) => e.stopPropagation()}>
+                            <button className="acco-close-modal-btn" onClick={handleCloseModal}>X</button>
                             <h2>{selectedCard.heading}</h2>
-                            <div className="modal-body">
+                            <div className="acco-modal-body">
                                 <p>{selectedCard.content}</p>
                             </div>
                         </div>
