@@ -149,13 +149,14 @@ function Accommodation() {
 
                     <div className="acco-cards-container">
                         {cards.map((card) => (
+                            <div className="acco-card-loader">
                             <div className="acco-card" key={card.id}>
                                 <div className="acco-m-con" onClick={() => handleCardClick(card)}>
                                     <h1 className="acco-head">{card.heading}</h1>
                                     <p className="acco-p">{card.content}</p>
                                 </div>
                             </div>
-                        ))}
+                        </div>))}
                     </div>
                     {/* --- NEW GOOGLE MAP SECTION --- */}
                     {activeTab === "MAP" && (

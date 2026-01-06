@@ -17,10 +17,10 @@ function App() {
 
   return (
     <>
-      <SpringFestPortsl/>
       <Routes>
+        <Route path="/" element={<SpringFestPortsl/>}/>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/" element={<Accommodation />} />
+        <Route path="/accomodations" element={<Accommodation />} />
         <Route path="/register" element={<RegisterEvent />} />
         <Route path="/report" element={<Report />} />
         <Route path='/profile' element={<Profile />} />
