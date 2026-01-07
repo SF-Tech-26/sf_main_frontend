@@ -1,8 +1,18 @@
+@import "tailwindcss";
+
 /* Base Styles */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    overscroll-behavior: none;
+}
+
+html,
+body,
+#root {
+    min-height: 100vh;
+    width: 100%;
 }
 
 body {
@@ -34,13 +44,7 @@ body {
     background: #a855f7;
     color: white;
 }
-@import "tailwindcss";
 
 .form-input {
-  @apply w-full px-4 py-2 rounded-lg bg-purple-950 text-white border border-purple-500 focus:outline-none focus:ring-2 focus:ring-orange-400;
-}
-
-*{
-    overscroll-behavior: none ;
-    box-sizing: border-box;
+    @apply w-full px-4 py-2 rounded-lg bg-purple-950 text-white border border-purple-500 focus:outline-none focus:ring-2 focus:ring-orange-400;
 }
