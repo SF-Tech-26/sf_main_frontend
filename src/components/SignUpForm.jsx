@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function SignUpForm() {
   return (
-    <div className="w-full max-w-md bg-purple-900/80 backdrop-blur-xl border border-purple-500 rounded-2xl p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
+    <div className="w-full max-w-md bg-purple-900/80 backdrop-blur-xl border border-purple-500 rounded-2xl p- shadow-2xl overflow-y-auto max-h-[90vh]">
       <h1 className="text-center text-4xl font-creepster text-orange-400 mb-4">
         SIGN UP
       </h1>
