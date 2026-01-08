@@ -142,31 +142,36 @@ const TarotCard = ({ event, index, totalCards, genreSlug, globalIndex }) => {
 
     const centerIndex = (totalCards - 1) / 2;
     const rotation = (index - centerIndex) * 8;
-    const translateX = (index - centerIndex) * 70;
+    const translateX = (index - centerIndex) * 100;
     const translateY = Math.abs(index - centerIndex) * 10;
+
+    const isSmallScreen = window.innerWidth < 768;
 
     return (
         <motion.div
-            className="absolute cursor-pointer"
-            style={{
-                width: '180px',
-                height: '270px',
+            className={isSmallScreen ? 'relative cursor-pointer' : 'absolute cursor-pointer'}
+            style={isSmallScreen ? {
+                width: '160px',
+                height: '240px',
+            } : {
+                width: '220px',
+                height: '330px',
                 left: '50%',
-                marginLeft: '-90px',
+                marginLeft: '-110px',
                 transformOrigin: 'bottom center',
             }}
-            initial={{ opacity: 0, y: 80, rotate: rotation, x: translateX }}
+            initial={{ opacity: 0, y: 80, rotate: isSmallScreen ? 0 : rotation, x: isSmallScreen ? 0 : translateX }}
             animate={{
                 opacity: 1,
-                y: translateY,
-                rotate: rotation,
-                x: translateX,
-                zIndex: 10 + index
+                y: isSmallScreen ? 0 : translateY,
+                rotate: isSmallScreen ? 0 : rotation,
+                x: isSmallScreen ? 0 : translateX,
+                zIndex: isSmallScreen ? 10 + index : 10 + index
             }}
             exit={{ opacity: 0, y: -50, transition: { duration: 0.2 } }}
             transition={{ duration: 0.4, delay: index * 0.08, ease: 'easeOut' }}
             whileHover={{
-                y: translateY - 40,
+                y: isSmallScreen ? -8 : translateY - 40,
                 scale: 1.08,
                 zIndex: 50,
                 rotate: 0,
@@ -194,19 +199,15 @@ const TarotCard = ({ event, index, totalCards, genreSlug, globalIndex }) => {
                     }}
                 />
 
-                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <span className={`px-2 py-0.5 rounded text-xs font-bold ${event.is_group ? 'bg-purple-500/80' : 'bg-emerald-500/80'
                         }`}>
                         {event.is_group ? 'Group' : 'Solo'}
                     </span>
 
-                    <h3 className="font-bold text-lg mt-2 leading-tight" style={{ fontFamily: 'Cinzel, serif' }}>
+                    <h3 className="font-bold text-xl mt-3 leading-tight" style={{ fontFamily: 'Cinzel, serif' }}>
                         {event.name}
                     </h3>
-
-                    <p className="text-purple-200 text-xs mt-1 line-clamp-2">
-                        {event.tagline}
-                    </p>
                 </div>
 
                 <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-purple-500/50 backdrop-blur-sm flex items-center justify-center text-xs font-bold border border-purple-400/30">
@@ -287,7 +288,7 @@ const SubEventsPage = () => {
                 {/* Header */}
                 <header className="text-center mb-8">
                     <motion.h1
-                        className="text-4xl md:text-6xl font-bold mb-2"
+                        className="text-4xl md:text-6xl font-bold mb-4"
                         style={{
                             fontFamily: 'Cinzel, serif',
                             background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #8b5cf6 100%)',
@@ -306,11 +307,12 @@ const SubEventsPage = () => {
                 </header>
 
                 {/* Tarot Card Spread */}
-                <div className="relative h-[380px] flex items-center justify-center">
+                <div className="relative h-auto md:h-[450px] flex items-center justify-center" style={{marginTop:'3rem'}}>
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={currentPage}
-                            className="relative w-full max-w-2xl h-full"
+                            className="relative w-full max-w-2xl h-full flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0 px-4 md:px-0"
+                            style={{ flexWrap: 'wrap' }}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
@@ -318,6 +320,7 @@ const SubEventsPage = () => {
                             {currentEvents.map((event, index) => (
                                 <TarotCard
                                     key={event.id}
+                                    className="tarot-card "
                                     event={event}
                                     index={index}
                                     totalCards={currentEvents.length}

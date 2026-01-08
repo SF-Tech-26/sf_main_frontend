@@ -40,7 +40,7 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
 
         {/* Default Route */}
-        <Route path="/" element={<Navigate to="/signin" replace />} />
+        <Route path="/" element={<Navigate to="/events" replace />} />
       </Routes>
     </AuthProvider>
   );
