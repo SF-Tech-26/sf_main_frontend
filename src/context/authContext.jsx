@@ -26,16 +26,28 @@ export const AuthProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        // Load token from localStorage on mount
+        // Load token and user from localStorage on mount
         const storedToken = localStorage.getItem('token');
+        const storedUser = localStorage.getItem('user');
+
         if (storedToken) {
-            setToken(storedToken);
             const decoded = decodeToken(storedToken);
             if (decoded && decoded.exp * 1000 > Date.now()) {
-                setUser(decoded);
+                setToken(storedToken);
+                // Use stored user data if available, otherwise use decoded token
+                if (storedUser) {
+                    try {
+                        setUser(JSON.parse(storedUser));
+                    } catch {
+                        setUser(decoded);
+                    }
+                } else {
+                    setUser(decoded);
+                }
             } else {
                 // Token expired
                 localStorage.removeItem('token');
+                localStorage.removeItem('user');
                 setToken(null);
                 setUser(null);
             }
@@ -43,15 +55,24 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(false);
     }, []);
 
-    const login = (newToken) => {
+    const login = (newToken, userData = null) => {
         localStorage.setItem('token', newToken);
         setToken(newToken);
-        const decoded = decodeToken(newToken);
-        setUser(decoded);
+
+        if (userData) {
+            // Store full user data from API response
+            localStorage.setItem('user', JSON.stringify(userData));
+            setUser(userData);
+        } else {
+            // Fallback to decoded token
+            const decoded = decodeToken(newToken);
+            setUser(decoded);
+        }
     };
 
     const logout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
         setToken(null);
         setUser(null);
     };
@@ -72,3 +93,4 @@ export const useAuth = () => {
     }
     return context;
 };
+
