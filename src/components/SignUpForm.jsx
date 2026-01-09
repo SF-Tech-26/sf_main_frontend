@@ -1,42 +1,181 @@
 import { Link } from "react-router-dom";
 
-export default function SignUpForm() {
+export default function Signup() {
   return (
-    <div className="w-full max-w-md bg-purple-900/80 backdrop-blur-xl border border-purple-500 rounded-2xl p- shadow-2xl overflow-y-auto max-h-[90vh]">
-      <h1 className="text-center text-4xl font-creepster text-orange-400 mb-4">
+    <div
+      className="
+        w-[330px] max-w-[90%]
+        h-[50vh]
+        overflow-y-auto
+        backdrop-blur-[12px]
+        border border-[#7DF9FF]
+        rounded-[40px]
+        text-[#E6FBFF]
+        px-[32px] py-[40px]
+      "
+      style={{
+        background: "rgba(10, 20, 44, 0.92)",
+        boxShadow: `
+          0 0 35px rgba(125, 249, 255, 0.55),
+          0 0 80px rgba(56, 189, 248, 0.35),
+          0 0 140px rgba(167, 139, 250, 0.18)
+        `,
+      }}
+    >
+      {/* Title */}
+      <h1
+        className="
+          text-center
+          font-bold
+          tracking-wider
+          text-[34px]
+          mb-[28px]
+        "
+        style={{
+          color: "#F0FDFF",
+          textShadow: `
+            0 0 10px rgba(125, 249, 255, 1),
+            0 0 26px rgba(56, 189, 248, 0.85),
+            0 0 52px rgba(167, 139, 250, 0.45)
+          `,
+        }}
+      >
         SIGN UP
       </h1>
 
-      <div className="space-y-3">
-        <input className="form-input" placeholder="Name" />
-        <input className="form-input" placeholder="Email Address" />
-        <input className="form-input" placeholder="Phone Number" />
-        <input className="form-input" type="date" />
-        <input className="form-input" placeholder="Gender" />
+      {/* FORM BODY */}
+      <div className="flex flex-col gap-[18px] flex-grow items-center">
+        <h2 className="text-[18px] font-semibold text-[#C7F5FF]">
+          Personal Information
+        </h2>
 
-        <h2 className="text-orange-300 font-creepster text-xl mt-4">
+        {[
+          { label: "Email", type: "email", placeholder: "abc@gmail.com" },
+          { label: "Phone Number", type: "text", placeholder: "Phone Number" },
+          { label: "Date of Birth", type: "date" },
+          { label: "Gender", type: "text", placeholder: "M/F" },
+        ].map(({ label, type, placeholder }) => (
+          <div
+            key={label}
+            className="flex flex-col gap-[6px] w-full mx-auto max-w-[300px]"
+          >
+            <label className="text-sm text-[#C7F5FF]">{label}</label>
+            <input
+              type={type}
+              placeholder={placeholder}
+              className="
+                h-[46px]
+                w-full
+                px-[14px] py-[12px]
+                rounded-[10px]
+                bg-transparent
+                border border-[#7DF9FF]
+                text-[#F0FDFF]
+                outline-none
+                focus:ring-2 focus:ring-[#60A5FA]
+                indent-[8px]
+              "
+              style={{
+                boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+              }}
+            />
+          </div>
+        ))}
+
+        <h2 className="text-[18px] font-semibold text-[#C7F5FF] mt-[6px]">
           College Information
         </h2>
 
-        <input className="form-input" placeholder="College" />
-        <input className="form-input" placeholder="Passing Year" />
-        <input className="form-input" placeholder="City" />
-        <input className="form-input" placeholder="State" />
+        {["College", "Passing Year", "City", "State"].map((item) => (
+          <div
+            key={item}
+            className="flex flex-col gap-[6px] mx-auto w-full max-w-[300px]"
+          >
+            <label className="text-sm text-[#C7F5FF]">{item}</label>
+            <input
+              placeholder={item}
+              className="
+                h-[46px]
+                w-full
+                px-[14px] py-[12px]
+                rounded-[10px]
+                bg-transparent
+                border border-[#7DF9FF]
+                text-[#F0FDFF]
+                outline-none
+                focus:ring-2 focus:ring-[#60A5FA]
+                indent-[8px]
+              "
+              style={{
+                boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+              }}
+            />
+          </div>
+        ))}
 
-        <h2 className="text-orange-300 font-creepster text-xl mt-4">
+        <h2 className="text-[18px] font-semibold text-[#C7F5FF] mt-[6px]">
           Account Credentials
         </h2>
 
-        <input className="form-input" type="password" placeholder="Password" />
-        <input className="form-input" type="password" placeholder="Confirm Password" />
+        {["Password", "Confirm Password"].map((item) => (
+          <div
+            key={item}
+            className="flex flex-col gap-[6px] mx-auto w-full max-w-[300px]"
+          >
+            <label className="text-sm text-[#C7F5FF]">{item}</label>
+            <input
+              type="password"
+              placeholder="********"
+              className="
+                h-[46px]
+                w-full
+                px-[14px] py-[12px]
+                rounded-[10px]
+                bg-transparent
+                border border-[#7DF9FF]
+                text-[#F0FDFF]
+                outline-none
+                focus:ring-2 focus:ring-[#60A5FA]
+                indent-[8px]
+              "
+              style={{
+                boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+              }}
+            />
+          </div>
+        ))}
 
-        <button className="w-full mt-4 py-2 rounded-lg bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold hover:scale-105 transition">
-          ENTER THE FEST
+        <button
+          className="
+            mt-[12px]
+            h-[46px]
+            mx-auto
+            w-full max-w-[300px]
+            rounded-full
+            font-semibold
+            tracking-wider
+            text-[#020617]
+            bg-gradient-to-r from-[#38BDF8] via-[#7DF9FF] to-[#A78BFA]
+            hover:scale-[1.03]
+            transition
+          "
+          style={{
+            boxShadow: `
+              0 0 22px rgba(125, 249, 255, 0.9),
+              0 0 50px rgba(56, 189, 248, 0.65),
+              0 0 90px rgba(167, 139, 250, 0.45)
+            `,
+          }}
+        >
+          CREATE ACCOUNT
         </button>
 
-        <p className="text-center text-sm text-purple-200 mt-3">
+        <p className="mt-[14px] text-center text-sm text-[#C7F5FF]">
           Already have an account?{" "}
-          <Link to="/signin" className="text-orange-400 hover:underline">
+          <Link
+            to="/signin"
+            className="underline text-[#9FE7FF] hover:text-[#7DF9FF] transition"
+          >
             Sign In
           </Link>
         </p>

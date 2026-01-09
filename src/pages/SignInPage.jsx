@@ -1,5 +1,5 @@
 import SignInForm from "../components/SignInForm";
-import bgImage from "../assets/images/bgImage.png";
+import bgImage from "../assets/images/bgpic.jpg";
 
 export default function SignInPage() {
   return (
@@ -15,7 +15,7 @@ export default function SignInPage() {
   
   <div
   style={{
-    transform: "translateY(clamp(40px, 8vh, 120px))",
+    transform: "translateY(clamp(40px, 10vh, 120px))",
   }}
 >
   <SignInForm />

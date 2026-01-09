@@ -1,138 +1,121 @@
 import { Link } from "react-router-dom";
 
-export default function SignInForm() {
+export default function Signin() {
   return (
-    <div
-      style={{
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-      }}
-    >
+    <div className="w-full flex justify-center">
       {/* Card */}
       <div
+        className="
+          w-[350px] max-w-[90%]
+          min-h-[420px]
+          flex flex-col
+          rounded-[40px]
+          border border-[#5EEBFF]
+          backdrop-blur-[12px]
+          text-[#CFF6FF]
+        "
         style={{
-          width: "420px",          // smaller desktop width
-          maxWidth: "90%",         // responsive
-          minHeight: "480px",      // flexible height
-          background: "rgba(30, 42, 38, 0.85)",
-          backdropFilter: "blur(12px)",
-          border: "1px solid #6CFFB3",
-          borderRadius: "40px",
-          boxShadow: "0 0 50px #6CFFB3",
-          padding: "40px 32px",    // correct place for padding
-          display: "flex",
-          flexDirection: "column",
-          color: "#A7F3D0",
+          background: "rgba(14, 26, 48, 0.88)", // deep space blue glass
+          boxShadow: `
+            0 0 40px rgba(94, 235, 255, 0.45),
+            0 0 80px rgba(56, 189, 248, 0.25)
+          `,
+          padding: "40px 32px",
         }}
       >
         {/* Title */}
         <h1
-  className="text-center font-bold tracking-wider"
-  style={{
-    fontSize: "34px",
-    marginBottom: "26px",
-    color: "#A7F3D0",
-    textShadow: `
-      0 0 6px rgba(108, 255, 179, 0.6),
-      0 0 14px rgba(108, 255, 179, 0.5),
-      0 0 28px rgba(108, 255, 179, 0.35)
-    `,
-  }}
->
-  SIGNIN
-</h1>
-
-
-        {/* Form body */}
-        <div
+          className="text-center font-bold tracking-wider mb-[26px]"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "18px",        // controls vertical rhythm
-            flexGrow: 1,
+            fontSize: "34px",
+            color: "#E0F7FF",
+            textShadow: `
+              0 0 8px rgba(94, 235, 255, 0.9),
+              0 0 18px rgba(56, 189, 248, 0.6),
+              0 0 36px rgba(56, 189, 248, 0.4)
+            `,
           }}
         >
+          SIGNIN
+        </h1>
+
+        {/* Form Body */}
+        <div className="flex flex-col gap-[18px] flex-grow">
           {/* Email */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            <label className="text-sm">Email</label>
+          <div className="flex flex-col gap-[6px]">
+            <label className="text-sm text-[#BEE9FF]">Email</label>
             <input
               type="email"
-              placeholder="Email Address"
-              style={{
-                height: "46px",
-                padding: "12px 14px",
-                borderRadius: "10px",
-                background: "transparent",
-                border: "1px solid #6CFFB3",
-                color: "#A7F3D0",
-                outline: "none",
-              }}
-              className="focus:ring-2 focus:ring-green-400"
+              placeholder="abc@gmail.com"
+              className="
+                h-[46px]
+                px-[14px] py-[12px]
+                rounded-[10px]
+                bg-transparent
+                border border-[#5EEBFF]
+                text-[#E0F7FF]
+                outline-none
+                focus:ring-2 focus:ring-[#38BDF8]
+                indent-[8px]
+              "
             />
           </div>
 
           {/* Password */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            <label className="text-sm">Password</label>
+          <div className="flex flex-col gap-[6px]">
+            <label className="text-sm text-[#BEE9FF]">Password</label>
             <input
               type="password"
-              placeholder="Password"
-              style={{
-                height: "46px",
-                padding: "12px 14px",
-                borderRadius: "10px",
-                background: "transparent",
-                border: "1px solid #6CFFB3",
-                color: "#A7F3D0",
-                outline: "none",
-              }}
-              className="focus:ring-2 focus:ring-green-400"
+              placeholder="********"
+              className="
+                h-[46px]
+                px-[14px] py-[12px]
+                rounded-[10px]
+                bg-transparent
+                border border-[#5EEBFF]
+                text-[#E0F7FF]
+                outline-none
+                focus:ring-2 focus:ring-[#38BDF8]
+                indent-[8px]
+              "
             />
           </div>
 
           {/* Button */}
           <button
+            className="
+              mt-[8px]
+              h-[46px]
+              rounded-full
+              font-semibold
+              tracking-[1px]
+              text-[#001B2E]
+              bg-gradient-to-r from-[#38BDF8] via-[#5EEBFF] to-[#22D3EE]
+              hover:scale-[1.03]
+              transition
+            "
             style={{
-              marginTop: "8px",
-              height: "46px",
-              borderRadius: "999px",
-              background: "linear-gradient(90deg, #4ade80, #22c55e)",
-              color: "#000",
-              fontWeight: 600,
-              letterSpacing: "1px",
-              border: "none",
-              cursor: "pointer",
+              boxShadow: `
+                0 0 18px rgba(94, 235, 255, 0.7),
+                0 0 36px rgba(56, 189, 248, 0.45)
+              `,
             }}
-            className="hover:scale-[1.03] transition"
           >
             UNLOCK THE SECRETS
           </button>
 
           {/* Links */}
-          <div
-            style={{
-              marginTop: "10px",
-              textAlign: "center",
-              fontSize: "14px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "6px",
-              alignItems: "center",
-            }}
-          >
+          <div className="mt-[10px] text-center text-[14px] flex flex-col gap-[6px] items-center">
             <Link
               to="/forgot-password"
-              style={{ color: "#86efac", textDecoration: "underline" }}
-              className="hover:text-green-400 transition"
+              className="text-[#9FE7FF] underline hover:text-[#5EEBFF] transition"
             >
               Forgot Password?
             </Link>
 
             <Link
               to="/signup"
-              style={{ color: "#86efac", textDecoration: "underline" }}
-              className="hover:text-green-400 transition"
+              className="text-[#9FE7FF] underline hover:text-[#5EEBFF] transition"
             >
               Create New Account
             </Link>
