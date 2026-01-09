@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import api from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -33,6 +34,8 @@ export const AuthProvider = ({ children }) => {
             const decoded = decodeToken(storedToken);
             if (decoded && decoded.exp * 1000 > Date.now()) {
                 setUser(decoded);
+                // Set authorization header for API calls
+                api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
             } else {
                 // Token expired
                 localStorage.removeItem('token');
@@ -48,18 +51,33 @@ export const AuthProvider = ({ children }) => {
         setToken(newToken);
         const decoded = decodeToken(newToken);
         setUser(decoded);
+        // Set authorization header for API calls
+        api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
     };
 
     const logout = () => {
         localStorage.removeItem('token');
         setToken(null);
         setUser(null);
+        delete api.defaults.headers.common['Authorization'];
+    };
+
+    const changePassword = async (oldPassword, newPassword) => {
+        try {
+            const response = await api.post('/user/changePassword', {
+                old_password: oldPassword,
+                new_password: newPassword,
+            });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
     };
 
     const isAuthenticated = !!token && !!user;
 
     return (
-        <AuthContext.Provider value={{ token, user, isLoading, isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ token, user, isLoading, isAuthenticated, login, logout, changePassword }}>
             {children}
         </AuthContext.Provider>
     );

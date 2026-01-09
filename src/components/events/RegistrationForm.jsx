@@ -1,32 +1,71 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../context/authContext';
-import { registerForEvent } from '../../services/eventService';
+import { registerForEvent, getRegisteredEvents } from '../../services/eventService';
+import toast from 'react-hot-toast';
 
 const RegistrationForm = ({ event, onSuccess, onCancel }) => {
-    const { token, user } = useAuth();
-    const [teamMembers, setTeamMembers] = useState([
-        { email: user?.email || '', sfId: user?.sfId || '' }
-    ]);
-    const [eventCity, setEventCity] = useState('KGP');
+    const auth = useAuth();
+
+    // Use real auth if available, otherwise fallback to test credentials
+    const token = auth.token || "HARDCODED_TEST_TOKEN";
+    const user = auth.user || {
+        email: "sanjayahari1704@gmail.com",
+        sfId: "SF_TEST_ID"
+    };
+
+    const [teamMembers, setTeamMembers] = useState(() => {
+        const initialMembers = [{ email: user?.email || '', sfId: user?.sfId || '' }];
+        if (event?.min_participation > 1) {
+            const extraNeeded = event.min_participation - 1;
+            for (let i = 0; i < extraNeeded; i++) {
+                initialMembers.push({ email: '', sfId: '' });
+            }
+        }
+        return initialMembers;
+    });
+    // const [eventCity, setEventCity] = useState('KGP');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [isRegistered, setIsRegistered] = useState(false);
+
+    useEffect(() => {
+        const checkRegistrationStatus = async () => {
+            if (token && event?.id) {
+                try {
+                    const response = await getRegisteredEvents(token);
+
+                    if (response.code === 0 && response.data) {
+                        const registeredEventIds = response.data.map(e => e.id);
+
+                        // Check both string and number for safe comparison
+                        if (registeredEventIds.some(id => String(id) === String(event.id))) {
+                            setIsRegistered(true);
+                            toast.error("You are already registered for this event", {
+                                id: 'already-registered',
+                                style: {
+                                    background: '#1a1a2e',
+                                    color: '#fff',
+                                    border: '1px solid rgba(239, 68, 68, 0.5)',
+                                },
+                            });
+                        }
+                    } else {
+                        console.warn("Unexpected response format:", response);
+                    }
+                } catch (err) {
+                    console.error("Failed to check registration status:", err);
+                }
+            }
+        };
+
+        checkRegistrationStatus();
+    }, [token, event]);
 
     const isSolo = event.min_participation === 1 && event.max_participation === 1;
-    const canAddMore = teamMembers.length < event.max_participation;
-    const canRemove = teamMembers.length > event.min_participation;
 
-    const handleAddMember = () => {
-        if (canAddMore) {
-            setTeamMembers([...teamMembers, { email: '', sfId: '' }]);
-        }
-    };
-
-    const handleRemoveMember = (index) => {
-        if (canRemove && index !== 0) {
-            setTeamMembers(teamMembers.filter((_, i) => i !== index));
-        }
-    };
+    // const handleAddMember = () => { ... } - REMOVED
+    // const handleRemoveMember = () => { ... } - REMOVED
 
     const handleMemberChange = (index, field, value) => {
         const updated = [...teamMembers];
@@ -49,7 +88,7 @@ const RegistrationForm = ({ event, onSuccess, onCancel }) => {
                 throw new Error(`Minimum ${event.min_participation} members required`);
             }
 
-            await registerForEvent(token, event.id, eventCity, teamMembers);
+            await registerForEvent(token, event.id, 'KGP', teamMembers);
             onSuccess?.();
         } catch (err) {
             setError(err.response?.data?.message || err.message || 'Registration failed');
@@ -58,106 +97,109 @@ const RegistrationForm = ({ event, onSuccess, onCancel }) => {
         }
     };
 
+    const handleMemberCountChange = (e) => {
+        const count = parseInt(e.target.value);
+        const currentCount = teamMembers.length;
+
+        if (count > currentCount) {
+            const newMembers = Array(count - currentCount).fill().map(() => ({ email: '', sfId: '' }));
+            setTeamMembers([...teamMembers, ...newMembers]);
+        } else if (count < currentCount) {
+            setTeamMembers(teamMembers.slice(0, count));
+        }
+    };
+
     return (
-        <motion.form
-            onSubmit={handleSubmit}
-            className="space-y-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-        >
-            <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">Event City</label>
-                <select
-                    value={eventCity}
-                    onChange={(e) => setEventCity(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-black/30 border border-purple-500/50 text-white focus:outline-none focus:border-purple-400"
-                >
-                    <option value="KGP">IIT Kharagpur</option>
-                </select>
+        <div className="relative bg-[#050210] p-12 rounded-2xl w-full max-w-3xl mx-auto border border-white/10 shadow-2xl my-8">
+            {/* Close Button */}
+            <button
+                onClick={onCancel}
+                className="absolute top-6 right-6 text-cyan-400 hover:text-white transition-colors"
+            >
+                <span className="material-icons text-xl">close</span>
+            </button>
+
+            {/* Header */}
+            <div className="text-center mb-12">
+                <h2 className="text-4xl font-bold text-white mb-2 tracking-widest text-shadow-glow" style={{ fontFamily: 'Cinzel, serif', textShadow: '0 0 20px rgba(255, 255, 255, 0.5)', marginTop: '4rem' }}>
+                    {event?.name || 'EVENT NAME'}
+                </h2>
+                <p className="text-cyan-400 text-xs tracking-[0.3em] font-light " style={{ marginBottom: '3rem' }}>
+                    {event?.tagline || 'RESONANCE IN THE VOID'}
+                </p>
             </div>
 
-            <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                    <label className="text-sm font-medium text-slate-300">
-                        Team Members ({teamMembers.length}/{event.max_participation})
-                    </label>
-                    {!isSolo && canAddMore && (
-                        <button
-                            type="button"
-                            onClick={handleAddMember}
-                            className="text-sm text-purple-400 hover:text-purple-300 flex items-center gap-1"
-                        >
-                            <span className="material-icons text-sm">add</span>
-                            Add
-                        </button>
-                    )}
-                </div>
-
-                {teamMembers.map((member, index) => (
-                    <motion.div
-                        key={index}
-                        className="flex gap-2 items-start"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
+            {/* Member Selection */}
+            {!isSolo && (
+                <div className="mb-10 flex flex-col items-center" style={{ margin: '4rem' }}>
+                    <label className="text-gray-400 text-xs tracking-widest uppercase mb-2 " style={{ margin: '1rem' }}>Select No. of Members</label>
+                    <select
+                        value={teamMembers.length}
+                        onChange={handleMemberCountChange}
+                        className="bg-[#0f0a20] text-white px-4 py-2 w-64 rounded border border-white/20 focus:border-purple-500 outline-none text-center appearance-none"
                     >
-                        <div className="flex-1 space-y-2">
-                            <input
-                                type="text"
-                                placeholder="SF ID (e.g., SF0001)"
-                                value={member.sfId}
-                                onChange={(e) => handleMemberChange(index, 'sfId', e.target.value)}
-                                className="w-full px-3 py-2 rounded-lg bg-black/30 border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:border-purple-400 text-sm"
-                                disabled={index === 0}
-                            />
-                            <input
-                                type="email"
-                                placeholder="Email"
-                                value={member.email}
-                                onChange={(e) => handleMemberChange(index, 'email', e.target.value)}
-                                className="w-full px-3 py-2 rounded-lg bg-black/30 border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:border-purple-400 text-sm"
-                                disabled={index === 0}
-                            />
-                        </div>
-                        {!isSolo && canRemove && index !== 0 && (
-                            <button
-                                type="button"
-                                onClick={() => handleRemoveMember(index)}
-                                className="p-2 text-red-400 hover:text-red-300"
-                            >
-                                <span className="material-icons text-sm">close</span>
-                            </button>
-                        )}
-                        {index === 0 && (
-                            <span className="p-2 text-purple-400 text-xs">(You)</span>
-                        )}
-                    </motion.div>
-                ))}
-            </div>
-
-            {error && (
-                <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-sm">
-                    {error}
+                        {Array.from({ length: event.max_participation - event.min_participation + 1 }, (_, i) => event.min_participation + i).map(num => (
+                            <option key={num} value={num}>{num} Members</option>
+                        ))}
+                    </select>
                 </div>
             )}
 
-            <div className="flex gap-3 pt-2">
-                <button
-                    type="button"
-                    onClick={onCancel}
-                    className="flex-1 py-2 px-4 rounded-lg border border-slate-600 text-slate-300 hover:bg-white/5 transition-colors text-sm"
-                >
-                    Cancel
-                </button>
-                <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="flex-1 py-2 px-4 rounded-lg bg-purple-600 text-white font-bold hover:bg-purple-500 transition-colors disabled:opacity-50 text-sm"
-                >
-                    {isLoading ? 'Registering...' : 'Register'}
-                </button>
-            </div>
-        </motion.form>
+            <form onSubmit={handleSubmit} className="space-y-8">
+                {/* Team Members Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 " style={{ paddingRight: '2rem' }}>
+                    {teamMembers.map((member, index) => (
+                        <div key={index} className="contents">
+                            {/* SF ID Input */}
+                            <div className="flex flex-col space-y-2" style={{ paddingLeft: '2rem' }}>
+                                <label className="text-gray-400 text-xs uppercase tracking-widest pl-1" >
+                                    {index === 0 ? 'Your SF-ID' : `Member ${index + 1} SF-ID`}
+                                </label>
+                                <input
+                                    type="text"
+                                    value={member.sfId}
+                                    onChange={(e) => handleMemberChange(index, 'sfId', e.target.value)}
+                                    placeholder={index === 0 ? "SFXXXXXX" : "SFXXXXXX"}
+                                    className="w-full bg-white text-black px-4 py-3 rounded font-medium focus:outline-none focus:ring-4 focus:ring-purple-500/30 transition-shadow" style={{ padding: '0.5rem' }}
+                                    disabled={index === 0}
+                                />
+                            </div>
+
+                            {/* Email Input */}
+                            <div className="flex flex-col space-y-2" >
+                                <label className="text-gray-400 text-xs uppercase tracking-widest pl-1" >
+                                    {index === 0 ? 'Your Mail-ID' : `Member ${index + 1} Mail-ID`}
+                                </label>
+                                <input
+                                    type="email"
+                                    value={member.email}
+                                    onChange={(e) => handleMemberChange(index, 'email', e.target.value)}
+                                    placeholder="abc@gmail.com"
+                                    className="w-full bg-white text-black px-4 py-3 rounded-md font-medium focus:outline-none focus:ring-4 focus:ring-purple-500/30 transition-shadow" style={{ padding: '0.5rem' }}
+                                    disabled={index === 0}
+                                />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Submit Button */}
+                <div className="flex justify-center mt-16 mb-8">
+                    <button
+                        type="submit"
+                        disabled={isLoading || isRegistered}
+                        className={`
+                             px-12 py-3  rounded-lg text-white font-bold tracking-widest uppercase transition-all duration-300
+                             ${isLoading || isRegistered
+                                ? 'bg-gray-600 opacity-50 cursor-not-allowed'
+                                : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-[0_0_20px_rgba(79,70,229,0.5)] transform hover:scale-105'}
+                         `} style={{ marginTop: '1rem', marginBottom: '4rem' }}
+                    >
+                        {isLoading ? 'Registering...' : (isRegistered ? 'Registered' : 'Register')}
+                    </button>
+                </div>
+            </form>
+        </div>
     );
 };
 
