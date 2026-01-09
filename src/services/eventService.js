@@ -14,34 +14,12 @@ export const getEventsByGenre = (allEvents, genre) => {
 
 // Get user's registered events
 export const getRegisteredEvents = async (token) => {
-    // Intercept test token for verification purposes
-    if (token === "HARDCODED_TEST_TOKEN") {
-        const stored = localStorage.getItem('test_registrations');
-        const eventIds = stored ? JSON.parse(stored) : [];
-        // Return valid response structure with mocked data
-        return {
-            code: 0,
-            data: eventIds.map(id => ({ id: parseInt(id) }))
-        };
-    }
-
     const response = await api.post('/user/registered_events', { token });
     return response.data;
 };
 
 // Register for an event (solo or group)
 export const registerForEvent = async (token, eventId, eventCity, teamMembers) => {
-    // Intercept test token for verification purposes
-    if (token === "HARDCODED_TEST_TOKEN") {
-        console.log("Mocking registration for test token in localStorage");
-        const stored = localStorage.getItem('test_registrations');
-        const registrations = stored ? JSON.parse(stored) : [];
-        if (!registrations.includes(eventId)) {
-            registrations.push(eventId);
-            localStorage.setItem('test_registrations', JSON.stringify(registrations));
-        }
-    }
-
     const response = await api.post('/event/register', {
         token,
         eventId,

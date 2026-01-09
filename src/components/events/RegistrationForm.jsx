@@ -7,12 +7,8 @@ import toast from 'react-hot-toast';
 const RegistrationForm = ({ event, onSuccess, onCancel }) => {
     const auth = useAuth();
 
-    // Use real auth if available, otherwise fallback to test credentials
-    const token = auth.token || "HARDCODED_TEST_TOKEN";
-    const user = auth.user || {
-        email: "sanjayahari1704@gmail.com",
-        sfId: "SF_TEST_ID"
-    };
+    // Use real auth
+    const { token, user } = auth;
 
     const [teamMembers, setTeamMembers] = useState(() => {
         const initialMembers = [{ email: user?.email || '', sfId: user?.sfId || '' }];
