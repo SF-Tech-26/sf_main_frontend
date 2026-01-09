@@ -17,7 +17,7 @@ function App() {
 
   return (
     <>
-      <SpringFestPortsl/>
+      {/* <SpringFestPortsl/> */}
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Accommodation />} />
