@@ -18,14 +18,14 @@ const slugToGenre = {
 };
 
 const cardImages = [
-    'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=400',
-    'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400',
-    'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=400',
-    'https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=400',
-    'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=400',
-    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400',
-    'https://images.unsplash.com/photo-1549490349-8643362247b5?w=400',
-    'https://images.unsplash.com/photo-1541367777708-7905fe3296c0?w=400',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
 ];
 
 const CARDS_PER_PAGE = 5;
@@ -139,34 +139,48 @@ const EtherealBackground = () => {
 
 const TarotCard = ({ event, index, totalCards, genreSlug, globalIndex }) => {
     const navigate = useNavigate();
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(max-width: 767px)');
+        setIsSmallScreen(mediaQuery.matches);
+
+        const handleChange = (e) => setIsSmallScreen(e.matches);
+        mediaQuery.addEventListener('change', handleChange);
+
+        return () => mediaQuery.removeEventListener('change', handleChange);
+    }, []);
 
     const centerIndex = (totalCards - 1) / 2;
     const rotation = (index - centerIndex) * 8;
-    const translateX = (index - centerIndex) * 70;
+    const translateX = (index - centerIndex) * 150;
     const translateY = Math.abs(index - centerIndex) * 10;
 
     return (
         <motion.div
-            className="absolute cursor-pointer"
-            style={{
-                width: '180px',
-                height: '270px',
+            className={isSmallScreen ? 'relative cursor-pointer' : 'absolute cursor-pointer'}
+            style={isSmallScreen ? {
+                width: window.innerWidth < 480 ? '140px' : '160px',
+                height: window.innerWidth < 480 ? '210px' : '240px',
+            } : {
+                width: '220px',
+                height: '330px',
                 left: '50%',
-                marginLeft: '-90px',
+                marginLeft: '-110px',
                 transformOrigin: 'bottom center',
             }}
-            initial={{ opacity: 0, y: 80, rotate: rotation, x: translateX }}
+            initial={{ opacity: 0, y: 80, rotate: isSmallScreen ? 0 : rotation, x: isSmallScreen ? 0 : translateX }}
             animate={{
                 opacity: 1,
-                y: translateY,
-                rotate: rotation,
-                x: translateX,
-                zIndex: 10 + index
+                y: isSmallScreen ? 0 : translateY,
+                rotate: isSmallScreen ? 0 : rotation,
+                x: isSmallScreen ? 0 : translateX,
+                zIndex: isSmallScreen ? 10 + index : 10 + index
             }}
             exit={{ opacity: 0, y: -50, transition: { duration: 0.2 } }}
             transition={{ duration: 0.4, delay: index * 0.08, ease: 'easeOut' }}
             whileHover={{
-                y: translateY - 40,
+                y: isSmallScreen ? -8 : translateY - 40,
                 scale: 1.08,
                 zIndex: 50,
                 rotate: 0,
@@ -194,19 +208,15 @@ const TarotCard = ({ event, index, totalCards, genreSlug, globalIndex }) => {
                     }}
                 />
 
-                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <span className={`px-2 py-0.5 rounded text-xs font-bold ${event.is_group ? 'bg-purple-500/80' : 'bg-emerald-500/80'
                         }`}>
                         {event.is_group ? 'Group' : 'Solo'}
                     </span>
 
-                    <h3 className="font-bold text-lg mt-2 leading-tight" style={{ fontFamily: 'Cinzel, serif' }}>
+                    <h3 className="font-bold text-xl mt-3 leading-tight" style={{ fontFamily: 'Cinzel, serif' }}>
                         {event.name}
                     </h3>
-
-                    <p className="text-purple-200 text-xs mt-1 line-clamp-2">
-                        {event.tagline}
-                    </p>
                 </div>
 
                 <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-purple-500/50 backdrop-blur-sm flex items-center justify-center text-xs font-bold border border-purple-400/30">
@@ -287,7 +297,7 @@ const SubEventsPage = () => {
                 {/* Header */}
                 <header className="text-center mb-8">
                     <motion.h1
-                        className="text-4xl md:text-6xl font-bold mb-2"
+                        className="text-4xl md:text-6xl font-bold mb-4"
                         style={{
                             fontFamily: 'Cinzel, serif',
                             background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #8b5cf6 100%)',
@@ -306,11 +316,11 @@ const SubEventsPage = () => {
                 </header>
 
                 {/* Tarot Card Spread */}
-                <div className="relative h-[380px] flex items-center justify-center">
+                <div className="relative h-auto md:h-[450px] flex items-center justify-center" style={{marginTop:'3rem'}}>
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={currentPage}
-                            className="relative w-full max-w-2xl h-full"
+                            className="relative w-full max-w-2xl h-full flex flex-wrap justify-center items-center gap-4 px-4"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
@@ -318,6 +328,7 @@ const SubEventsPage = () => {
                             {currentEvents.map((event, index) => (
                                 <TarotCard
                                     key={event.id}
+                                    className="tarot-card "
                                     event={event}
                                     index={index}
                                     totalCards={currentEvents.length}

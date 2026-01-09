@@ -54,6 +54,8 @@ body {
     @apply w-full px-4 py-2 rounded-lg bg-purple-950 text-white border border-purple-500 focus:outline-none focus:ring-2 focus:ring-orange-400;
 }
 
+.group,.mem{
+    padding:0.25rem 1rem;
 /* ================= AFTERMOVIE ANIMATIONS ================= */
 
 /* Fade up */
