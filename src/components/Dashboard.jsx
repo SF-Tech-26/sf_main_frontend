@@ -142,13 +142,11 @@ export default function Dashboard() {
               icon={cardImg} // Replace with actual icon
               path="/register"
             />
-
             <CardButton
               title="Profile"
               icon={cardImg} // Replace with actual icon
               path="/profile"
             />
-
             <CardButton
               title="Report Issue"
               icon={cardImg} // Replace with actual icon
