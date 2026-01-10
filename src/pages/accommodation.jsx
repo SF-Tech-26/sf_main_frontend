@@ -1,5 +1,6 @@
 import React, { StrictMode, useState } from "react";
 import "./accommodation.css";
+import { useNavigate } from "react-router-dom";
 
 function Accommodation() {
     const info = [{id:1,heading:"ABOUT US",content:"Spring Fest, since its inception in 1960, has stood as a shining example of cultural excellence, growing exponentially in scale, participation, and grandeur. Renowned for its world-class performances, diverse events, and a vibrant atmosphere, the fest attracts massive crowds, creating an unparalleled celebration of art and culture. Amidst this vastness, ensuring hospitality becomes a cornerstone, reflecting the event's commitment to creating a welcoming and memorable experience for all its guests."},
@@ -59,13 +60,14 @@ function Accommodation() {
         { id: 2, heading: "You can reach IIT Kharagpur in two ways:", content: "By Air: The nearest airport to Kharagpur is Kolkata's Netaji Subhas Chandra Bose International Airport (CCU). From Kolkata Airport, take a taxi to Kharagpur from the airport taxi stand. The distance is close to 140 Kilometres. Take a taxi to Howrah railway station. Regular express and local trains run to Kharagpur. The Institute is located 5 Kilometres from Kharagpur Railway Station.\nBy train: Kharagpur is well connected to most major cities of India by rail. The nearest railway station to IIT Kharagpur is Hijli Station. There are frequent trains to Kharagpur. Alternatively, you can reach the Howrah Railway station and take a local or express train to Kharagpur or Book a cab to reach Kharagpur via road. The distance is almost 140KM.\n" },
         {id:3,heading:"Some Important Things To Remember",content:"1. A Team ID will be allocated to the team on registration which shall be used for future references.\n2. No responsibility will be held by Spring Fest, IIT Kharagpur for any late, lost, or misdirected entries.\n3. All modes of official communication will be through the Spring fest e-mail. Participants are advised to keep track of all folders in their email accounts.\n4. Note that at any point of time the latest information will be the one mentioned on the website. However, registered participants will be informed through mail about any changes.\n5. The decision of the organizers or judges shall be treated as final and binding on all."}
     ];
-
+   
     const [cards, setCard] = useState(info);
     const [showModal, setShowModal] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const [activeTab, setActiveTab] = useState("Information");
+    const navigate = useNavigate();
 
-   const handleCategoryChange = (categoryData, tabName) => {
+    const handleCategoryChange = (categoryData, tabName) => {
         setCard(categoryData);
         setActiveTab(tabName);
     };
@@ -75,7 +77,6 @@ function Accommodation() {
         setShowModal(true);
     };
 
-
     const handleCloseModal = () => {
         setShowModal(false);
     };
@@ -84,32 +85,16 @@ function Accommodation() {
         <StrictMode>
             <div className="acco-main-container">
                 <div className="acco-container-1">
-                    <div class="acco-spider">
-                    <div class="acco-spiderweb"></div>
-                    <div class="acco-body">
-                        <div class="acco-eye left"></div>
-                        <div class="acco-eye right"></div>
+                    
+                    {/* Separate Container for Heading */}
+                    <div className="acco-info-box">
+                        <h1 className="acco-head acco-heading">
+                            <span>ACCOMMODATIONS</span>
+                            <p style={{fontFamily: 'Jolly Lodger', color: '#ff4d4d', fontSize: '1.5rem', marginTop: '5px'}}>{activeTab}</p>
+                        </h1>
                     </div>
-                    <div class="acco-legs left">
-                        <div class="leg"></div>
-                        <div class="leg"></div>
-                        <div class="leg"></div>
-                    </div>
-                    <div class="acco-legs right">
-                        <div class="leg"></div>
-                        <div class="leg"></div>
-                        <div class="leg"></div>
-                    </div>
-                </div>
-                    <h1 className="acco-head acco-heading">
-                        <span>ACCOMMODATIONS</span>
-                        <p>{activeTab}</p>
-                        <div className="acco-holder" id="b1"></div>
-                        <div className="acco-holder" id="b2"></div>
-                        <div className="acco-holder" id="b3"></div>
-                        <div className="acco-holder" id="b4"></div>
-                    </h1>
 
+                    {/* Independent Paragraph */}
                     <p className="acco-head-p">
                         Welcome to Spring Fest 2026. Please find information regarding your stay at IIT Kharagpur. Click on any tombstone to read details.
                     </p>
@@ -118,70 +103,76 @@ function Accommodation() {
                         <div className="acco-bnt-con">
                             <button 
                                 className={`acco-nav-btn ${activeTab === "Information" ? "acco-active" : ""}`} 
-                                id="n1" 
                                 onClick={() => handleCategoryChange(info, "Information")}
                             >
-                                <i className="fa-solid fa-circle-info"></i> INFO
+                                <i className="fa-solid fa-circle-info"></i> <span>INFO</span>
                             </button>
                             <button 
                                 className={`acco-nav-btn ${activeTab === "FAQ's" ? "acco-active" : ""}`} 
-                                id="n2" 
                                 onClick={() => handleCategoryChange(faq, "FAQ's")}
                             >
-                                <i className="fa-solid fa-circle-question"></i> FAQ
+                                <i className="fa-solid fa-circle-question"></i> <span>FAQ</span>
                             </button>
                             <button 
                                 className={`acco-nav-btn ${activeTab === "Rules" ? "acco-active" : ""}`} 
-                                id="n3" 
                                 onClick={() => handleCategoryChange(rules, "Rules")}
                             >
-                                <i className="fa-solid fa-scroll"></i> RULES
+                                <i className="fa-solid fa-scroll"></i> <span>RULES</span>
                             </button>
                             <button 
                                 className={`acco-nav-btn ${activeTab === "MAP" ? "acco-active" : ""}`} 
-                                id="n4" 
                                 onClick={() => handleCategoryChange(map, "MAP")}
                             >
-                                <i className="fa-solid fa-map-location-dot"></i> MAP
+                                <i className="fa-solid fa-map-location-dot"></i> <span>MAP</span>
+                            </button>
+                            
+                            <button 
+                                className="acco-nav-btn"
+                                id="btn-contingent"
+                                onClick={() => {navigate("/Contingent")}}
+                            >
+                                <i className="fa-solid fa-users-rays"></i>
+                                <span>Contingent</span>
                             </button>
                         </div>
                     </div>
 
                     <div className="acco-cards-container">
                         {cards.map((card) => (
-                            <div className="acco-card-loader">
-                            <div className="acco-card" key={card.id}>
-                                <div className="acco-m-con" onClick={() => handleCardClick(card)}>
-                                    <h1 className="acco-head">{card.heading}</h1>
-                                    <p className="acco-p">{card.content}</p>
+                            <div className="acco-card-loader" key={card.id}>
+                                <div className="acco-card">
+                                    <div className="acco-m-con" onClick={() => handleCardClick(card)}>
+                                        <h1 className="acco-head">{card.heading}</h1>
+                                        <p className="acco-p">{card.content}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>))}
+                        ))}
                     </div>
-                    {/* --- NEW GOOGLE MAP SECTION --- */}
+
                     {activeTab === "MAP" && (
                         <div className="map-wrapper">
                             <h2 className="map-title">IIT KHARAGPUR CAMPUS</h2>
                             <iframe
                                 title="IIT Kharagpur Map"
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.0121115503096!2d87.30831207604474!3d22.316314742352882!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1d440447330757%3A0x10f0396558504533!2sIIT%20Kharagpur!5e0!3m2!1sen!2sin!4v1705000000000"
+                                src="https://www.google.com/maps?q=Indian+Institute+of+Technology+Kharagpur&output=embed"
                                 width="100%"
                                 height="450"
                                 className="light-map-frame"
                                 allowFullScreen=""
                                 loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
                             ></iframe>
                         </div>
                     )}
-                    {/* --- END MAP SECTION --- */}
                 </div>
 
-                {/*conditional rendering */}
                 {showModal && selectedCard && (
                     <div className="acco-modal-overlay" onClick={handleCloseModal}>
-                        {/* stopPropagation prevents clicking inside the box from closing it */}
                         <div className="acco-modal-content" onClick={(e) => e.stopPropagation()}>
-                            <button className="acco-close-modal-btn" onClick={handleCloseModal}>X</button>
+                            <button className="acco-close-modal-btn" onClick={handleCloseModal}>
+                                <span className="material-symbols-outlined">close</span>
+                            </button>
                             <h2>{selectedCard.heading}</h2>
                             <div className="acco-modal-body">
                                 <p>{selectedCard.content}</p>
@@ -189,8 +180,6 @@ function Accommodation() {
                         </div>
                     </div>
                 )}
-                 {/* --- END --- */}
-
             </div>
         </StrictMode>
     );
