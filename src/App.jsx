@@ -11,8 +11,8 @@ import "@fontsource/libre-baskerville";
 const PRODUCTS = [
   { id: "nw-hoodie", name: "Nightwalker Hoodie", price: 1299 },
   { id: "nw-tee", name: "Nightwalker Tee", price: 1299 },
-  { id: "kr-hoodie", name: "Karma Rools Hoodie", price: 1299 },
-  { id: "kr-tee", name: "Karma Rools Tee", price: 1299 },
+  { id: "kr-hoodie", name: "Karma Rolls Hoodie", price: 1299 },
+  { id: "kr-tee", name: "Karma Rolls Tee", price: 1299 },
 ];
 
 export default function App() {
@@ -112,7 +112,6 @@ function MerchPage({ onViewCart, onAdd, cartCount }) {
       <div className="title">
         <h1>SPRING FEST</h1>
         <h2>OFFICIAL MERCH</h2>
-        <p>Fest Out. Vibed Up.</p>
       </div>
 
       <div className="products">
