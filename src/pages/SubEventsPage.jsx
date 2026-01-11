@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getAllEvents, getEventsByGenre } from '../services/eventService';
+import { useEvents } from '../context/eventContext';
 
 const slugToGenre = {
     'dance': 'Dance',
@@ -221,9 +221,8 @@ const TarotCard = ({ event, index, totalCards, genreSlug, globalIndex }) => {
 const SubEventsPage = () => {
     const { genre: genreSlug } = useParams();
     const navigate = useNavigate();
+    const { events: allEvents, isLoadingEvents, eventError, getEventsByGenre } = useEvents();
     const [events, setEvents] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
 
     const genreName = slugToGenre[genreSlug] || genreSlug;
@@ -231,28 +230,17 @@ const SubEventsPage = () => {
     const currentEvents = events.slice(currentPage * CARDS_PER_PAGE, (currentPage + 1) * CARDS_PER_PAGE);
 
     useEffect(() => {
-        const fetchEvents = async () => {
-            try {
-                setIsLoading(true);
-                const response = await getAllEvents();
-                if (response.code === 0 && response.data) {
-                    const genreEvents = getEventsByGenre(response, genreName);
-                    setEvents(genreEvents.filter(e => e.event_status !== false));
-                }
-            } catch (err) {
-                setError(err.message || 'Failed to fetch events');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchEvents();
-    }, [genreName]);
+        if (allEvents.length > 0) {
+            const genreEvents = getEventsByGenre(genreName);
+            setEvents(genreEvents.filter(e => e.event_status !== false));
+        }
+    }, [allEvents, genreName, getEventsByGenre]);
 
     const goToPage = (page) => {
         if (page >= 0 && page < totalPages) setCurrentPage(page);
     };
 
-    if (isLoading) {
+    if (isLoadingEvents) {
         return (
             <div className="min-h-screen flex items-center justify-center" style={{ background: '#0d0015' }}>
                 <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
@@ -260,11 +248,11 @@ const SubEventsPage = () => {
         );
     }
 
-    if (error) {
+    if (eventError) {
         return (
             <div className="min-h-screen flex items-center justify-center text-white" style={{ background: '#0d0015' }}>
                 <div className="text-center">
-                    <p className="text-red-400 mb-4">{error}</p>
+                    <p className="text-red-400 mb-4">{eventError}</p>
                     <button onClick={() => navigate('/events')} className="px-4 py-2 bg-purple-600 rounded-lg">Back</button>
                 </div>
             </div>
@@ -307,7 +295,7 @@ const SubEventsPage = () => {
                 </header>
 
                 {/* Tarot Card Spread */}
-                <div className="relative h-auto md:h-[450px] flex items-center justify-center" style={{marginTop:'3rem'}}>
+                <div className="relative h-auto md:h-[450px] flex items-center justify-center" style={{ marginTop: '3rem' }}>
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={currentPage}
@@ -349,8 +337,8 @@ const SubEventsPage = () => {
                                     key={i}
                                     onClick={() => goToPage(i)}
                                     className={`w-2.5 h-2.5 rounded-full transition-all ${i === currentPage
-                                            ? 'bg-purple-400 scale-125 shadow-lg shadow-purple-500/50'
-                                            : 'bg-purple-500/30 hover:bg-purple-500/50'
+                                        ? 'bg-purple-400 scale-125 shadow-lg shadow-purple-500/50'
+                                        : 'bg-purple-500/30 hover:bg-purple-500/50'
                                         }`}
                                 />
                             ))}

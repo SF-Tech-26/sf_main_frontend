@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { getAllEvents, getEventsByGenre } from '../services/eventService';
+import { useEvents } from '../context/eventContext';
 import { useAuth } from '../context/authContext';
 import RegistrationForm from '../components/events/RegistrationForm';
 
@@ -43,33 +43,19 @@ const EventDetailPage = () => {
     const { genre: genreSlug, eventId } = useParams();
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
+    const { events: allEvents, isLoadingEvents, eventError, getEventById } = useEvents();
 
     const [event, setEvent] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [showRegistration, setShowRegistration] = useState(false);
 
     const genreName = slugToGenre[genreSlug] || genreSlug;
 
     useEffect(() => {
-        const fetchEvent = async () => {
-            try {
-                setIsLoading(true);
-                const response = await getAllEvents();
-                if (response.code === 0 && response.data) {
-                    const genreEvents = getEventsByGenre(response, genreName);
-                    const foundEvent = genreEvents.find(e => e.id === parseInt(eventId));
-                    setEvent(foundEvent || null);
-                    if (!foundEvent) setError('Event not found');
-                }
-            } catch (err) {
-                setError(err.message || 'Failed to fetch event');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchEvent();
-    }, [genreName, eventId]);
+        if (allEvents.length > 0) {
+            const foundEvent = getEventById(genreName, eventId);
+            setEvent(foundEvent);
+        }
+    }, [allEvents, genreName, eventId, getEventById]);
 
     const handleRegistrationSuccess = () => {
         setShowRegistration(false);
@@ -101,7 +87,7 @@ const EventDetailPage = () => {
         }
     };
 
-    if (isLoading) {
+    if (isLoadingEvents) {
         return (
             <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#050210' }}>
                 <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
@@ -109,11 +95,11 @@ const EventDetailPage = () => {
         );
     }
 
-    if (error || !event) {
+    if (eventError || !event) {
         return (
             <div className="min-h-screen flex items-center justify-center text-white" style={{ backgroundColor: '#050210' }}>
                 <div className="text-center">
-                    <p className="text-red-400 mb-4">{error || 'Event not found'}</p>
+                    <p className="text-red-400 mb-4">{eventError || 'Event not found'}</p>
                     <button onClick={() => navigate(`/events/${genreSlug}`)} className="px-4 py-2 bg-purple-600 rounded-lg">
                         Back to {genreName}
                     </button>
@@ -163,16 +149,16 @@ const EventDetailPage = () => {
                                 <div className="lg:w-2/5 p-10 lg:p-16 border-b lg:border-b-0 lg:border-r border-white/5 flex flex-col items-center lg:items-start justify-center text-center lg:text-left relative">
                                     <h1
                                         className="text-5xl lg:text-5xl font-bold text-white mb-8 relative z-10"
-                                        style={{ fontFamily: 'Cinzel, serif',margin:'1rem',marginTop:0, textShadow: '0 0 10px rgba(168, 85, 247, 0.8), 0 0 20px rgba(217, 70, 239, 0.5)' }}
+                                        style={{ fontFamily: 'Cinzel, serif', margin: '1rem', marginTop: 0, textShadow: '0 0 10px rgba(168, 85, 247, 0.8), 0 0 20px rgba(217, 70, 239, 0.5)' }}
                                     >
                                         {event.name.toUpperCase()}
                                     </h1>
 
-                                    <p className="text-fuchsia-300 font-semibold tracking-[0.15em] uppercase text-base md:text-lg mb-10 relative z-10" style={{ fontFamily: 'Cinzel, serif',margin:'1.5rem' }}>
+                                    <p className="text-fuchsia-300 font-semibold tracking-[0.15em] uppercase text-base md:text-lg mb-10 relative z-10" style={{ fontFamily: 'Cinzel, serif', margin: '1.5rem' }}>
                                         {event.tagline}
                                     </p>
 
-                                    <div className="flex gap-10 mb-12 relative z-10" style={{ marginBottom: '1.5rem' ,marginLeft:'1.5rem'}}>
+                                    <div className="flex gap-10 mb-12 relative z-10" style={{ marginBottom: '1.5rem', marginLeft: '1.5rem' }}>
                                         <span className={`px-4  group py-1 rounded-full text-base font-medium ${event.is_group ? 'bg-purple-500/60' : 'bg-emerald-500/60'}`} >
                                             {event.is_group ? 'Group Event' : 'Solo Event'}
                                         </span>
@@ -182,7 +168,7 @@ const EventDetailPage = () => {
                                     </div>
 
                                     {!showRegistration && (
-                                        <div className="relative group cursor-pointer z-10 mt-8" style={{ marginBottom: '1.5rem' ,marginLeft:'1.5rem'}}>
+                                        <div className="relative group cursor-pointer z-10 mt-8" style={{ marginBottom: '1.5rem', marginLeft: '1.5rem' }}>
                                             <div className="absolute inset-0 bg-purple-500 rounded-rounded  blur-2xl opacity-40 group-hover:opacity-70 transition-opacity duration-500 animate-pulse" />
                                             <motion.button
                                                 onClick={handleRegisterClick}
@@ -224,21 +210,21 @@ const EventDetailPage = () => {
                                     </div>
 
                                     <div className="space-y-14 max-h-[60vh] overflow-y-auto pr-4">
-                                        <div className="rounded-2xl p-20  hover:bg-black/40 transition-colors duration-300" style={{ background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.05)',margin:'1rem' }}>
+                                        <div className="rounded-2xl p-20  hover:bg-black/40 transition-colors duration-300" style={{ background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.05)', margin: '1rem' }}>
                                             <h2 className="text-3xl font-bold mb-8 text-fuchsia-200 uppercase flex items-center gap-4" style={{ fontFamily: 'Cinzel, serif' }}>
                                                 <span className="w-8 h-px bg-fuchsia-500" />
                                                 About
                                             </h2>
-                                            <p className="text-slate-300 leading-relaxed text-0.5xl  font-light tracking-wide" style={{margin:'0.5rem'}}>{event.writeup}</p>
+                                            <p className="text-slate-300 leading-relaxed text-0.5xl  font-light tracking-wide" style={{ margin: '0.5rem' }}>{event.writeup}</p>
                                         </div>
 
                                         {event.rules && event.rules.length > 0 && (
-                                            <div className="rounded-2xl p-20 hover:bg-black/40 transition-colors duration-300" style={{ background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.05)',margin:'1rem' }}>
+                                            <div className="rounded-2xl p-20 hover:bg-black/40 transition-colors duration-300" style={{ background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.05)', margin: '1rem' }}>
                                                 <h2 className="text-3xl font-bold mb-8 text-indigo-200 uppercase flex items-center gap-3" style={{ fontFamily: 'Cinzel, serif' }}>
                                                     <span className="w-8 h-px bg-indigo-500" />
                                                     Rules
                                                 </h2>
-                                                <ul className="space-y-6 text-slate-300 text-lg md:text-0.5xl font-light" style={{margin:'0.5rem'}}>
+                                                <ul className="space-y-6 text-slate-300 text-lg md:text-0.5xl font-light" style={{ margin: '0.5rem' }}>
                                                     {event.rules.filter(r => r && r.trim()).map((rule, index) => (
                                                         <li key={index} className="flex gap-5 items-start">
                                                             <span className="font-bold text-fuchsia-400 text-2xl mt-0.5" style={{ fontFamily: 'Cinzel, serif' }}>

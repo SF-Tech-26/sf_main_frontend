@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllEvents } from '../services/eventService';
+import { useEvents } from '../context/eventContext';
 
 // Event data mapping
 const eventData = {
@@ -78,10 +78,8 @@ const eventData = {
 
 const EventsPage = () => {
     const navigate = useNavigate();
-    const [events, setEvents] = useState([]);
+    const { events, isLoadingEvents, eventError } = useEvents();
     const [selectedEvent, setSelectedEvent] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [isDark, setIsDark] = useState(false);
 
     useEffect(() => {
@@ -91,28 +89,11 @@ const EventsPage = () => {
             document.documentElement.classList.add('dark');
         }
 
-        // Fetch events from API
-        const fetchEvents = async () => {
-            try {
-                const response = await getAllEvents();
-                if (response.code === 0 && response.data) {
-                    setEvents(response.data);
-                    if (response.data.length > 0) {
-                        setSelectedEvent(response.data[0]);
-                    }
-                } else {
-                    setError('Failed to fetch events');
-                }
-            } catch (err) {
-                console.error('Error fetching events:', err);
-                setError('Failed to load events');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchEvents();
-    }, []);
+        // Set selected event when events are loaded
+        if (events.length > 0 && !selectedEvent) {
+            setSelectedEvent(events[0]);
+        }
+    }, [events, selectedEvent]);
 
     const handleEventClick = (event) => {
         setSelectedEvent(event);
@@ -138,7 +119,7 @@ const EventsPage = () => {
     const getEventDisplayData = (event) => {
         const genreKey = event.genre.toLowerCase().replace(/\s+/g, '');
         const genreInfo = eventData[genreKey] || {};
-        
+
         return {
             name: event.name || event.genre,
             title: genreInfo.title || event.name || event.genre,
@@ -150,7 +131,7 @@ const EventsPage = () => {
         };
     };
 
-    if (isLoading) {
+    if (isLoadingEvents) {
         return (
             <div className="font-body bg-background-dark text-slate-200 min-h-screen relative overflow-x-hidden flex items-center justify-center">
                 <div className="fixed inset-0 z-0 pointer-events-none">
@@ -164,16 +145,16 @@ const EventsPage = () => {
         );
     }
 
-    if (error || events.length === 0) {
+    if (eventError || events.length === 0) {
         return (
             <div className="font-body bg-background-dark text-slate-200 min-h-screen relative overflow-x-hidden flex items-center justify-center">
                 <div className="fixed inset-0 z-0 pointer-events-none">
                     <div className="absolute inset-0 bg-forest-gradient"></div>
                 </div>
                 <div className="relative z-10 text-center">
-                    <p className="text-red-400 mb-4">{error || 'No events available'}</p>
-                    <button 
-                        onClick={() => window.location.reload()} 
+                    <p className="text-red-400 mb-4">{eventError || 'No events available'}</p>
+                    <button
+                        onClick={() => window.location.reload()}
                         className="px-6 py-2 bg-deep-amber text-white rounded-lg hover:bg-opacity-80 transition"
                     >
                         Retry
@@ -190,19 +171,19 @@ const EventsPage = () => {
             {/* Background Effects */}
             <div className="fixed inset-0 z-0 pointer-events-none">
                 <div className="absolute inset-0 bg-forest-gradient"></div>
-                <div 
-                    className="absolute inset-0 opacity-20" 
+                <div
+                    className="absolute inset-0 opacity-20"
                     style={{
                         backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.8\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\' opacity=\'1\'/%3E%3C/svg%3E")',
                         mixBlendMode: 'overlay'
                     }}
                 ></div>
                 <div className="absolute top-[-10%] left-[20%] w-[500px] h-[500px] bg-moss-green/30 rounded-full blur-[100px] animate-pulse-slow mix-blend-screen"></div>
-                <div className="absolute bottom-[-10%] right-[10%] w-[600px] h-[600px] bg-deep-amber/20 rounded-full blur-[120px] mix-blend-screen" style={{animation: 'float 6s ease-in-out infinite 1s'}}></div>
+                <div className="absolute bottom-[-10%] right-[10%] w-[600px] h-[600px] bg-deep-amber/20 rounded-full blur-[120px] mix-blend-screen" style={{ animation: 'float 6s ease-in-out infinite 1s' }}></div>
                 <div className="absolute inset-0 bg-fireflies animate-drift opacity-50"></div>
-                <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-firefly-glow rounded-full blur-[2px] animate-glow" style={{boxShadow: '0 0 10px #dfff00'}}></div>
-                <div className="absolute top-2/3 right-1/3 w-3 h-3 bg-firefly-glow rounded-full blur-[3px] animate-glow" style={{boxShadow: '0 0 15px #dfff00', animationDelay: '1.5s'}}></div>
-                <div className="absolute bottom-1/4 left-10 w-2 h-2 bg-firefly-glow rounded-full blur-[2px] animate-glow" style={{boxShadow: '0 0 8px #dfff00', animationDelay: '3s'}}></div>
+                <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-firefly-glow rounded-full blur-[2px] animate-glow" style={{ boxShadow: '0 0 10px #dfff00' }}></div>
+                <div className="absolute top-2/3 right-1/3 w-3 h-3 bg-firefly-glow rounded-full blur-[3px] animate-glow" style={{ boxShadow: '0 0 15px #dfff00', animationDelay: '1.5s' }}></div>
+                <div className="absolute bottom-1/4 left-10 w-2 h-2 bg-firefly-glow rounded-full blur-[2px] animate-glow" style={{ boxShadow: '0 0 8px #dfff00', animationDelay: '3s' }}></div>
             </div>
 
             {/* Main Content */}
@@ -212,7 +193,7 @@ const EventsPage = () => {
                     <h1 className="font-display text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-[#ffd700] via-[#deb887] to-[#8b4513] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] mb-2 tracking-wide">
                         EVENTS
                     </h1>
-                    <div className="h-1 w-32 bg-gradient-to-r from-transparent via-deep-amber to-transparent mx-auto rounded-full" style={{boxShadow: '0 0 10px rgba(184,134,11,0.5)'}}></div>
+                    <div className="h-1 w-32 bg-gradient-to-r from-transparent via-deep-amber to-transparent mx-auto rounded-full" style={{ boxShadow: '0 0 10px rgba(184,134,11,0.5)' }}></div>
                     <p className="mt-4 text-[#d2b48c] font-light tracking-[0.2em]  uppercase text-sm drop-shadow-md">Discover the Magic Within the Woods</p>
                 </header>
 
@@ -223,11 +204,11 @@ const EventsPage = () => {
                         {events.map((event, index) => {
                             const displayData = getEventDisplayData(event);
                             return (
-                                <div 
+                                <div
                                     key={event.id || index}
                                     className={`codex-tab ${selectedEvent?.id === event.id ? 'active' : ''}`}
                                     onClick={() => handleEventClick(event)}
-                                    style={{cursor: 'pointer'}}
+                                    style={{ cursor: 'pointer' }}
                                     title={displayData.name}
                                 >
                                     <div className="codex-tab-inner">
@@ -247,11 +228,11 @@ const EventsPage = () => {
                             {events.map((event, index) => {
                                 const displayData = getEventDisplayData(event);
                                 return (
-                                    <div 
+                                    <div
                                         key={event.id || index}
                                         className={`codex-tab-horizontal ${selectedEvent?.id === event.id ? 'active' : ''}`}
                                         onClick={() => handleEventClick(event)}
-                                        style={{cursor: 'pointer'}}
+                                        style={{ cursor: 'pointer' }}
                                         title={displayData.name}
                                     >
                                         <div className="codex-tab-inner">
@@ -274,7 +255,7 @@ const EventsPage = () => {
                                 <div className="grimoire-display w-full lg:w-auto">
                                     <div className="grimoire-page left">
                                         <div className="grimoire-image-frame">
-                                            <img 
+                                            <img
                                                 alt={displayData.name}
                                                 src={displayData.image}
                                             />
@@ -285,11 +266,11 @@ const EventsPage = () => {
                                         <p className="grimoire-description">
                                             {displayData.description}
                                         </p>
-                                        <button 
+                                        <button
                                             className="discover-button"
                                             onClick={handleDiscover}
                                         >
-                                            Discover More 
+                                            Discover More
                                             <span className="material-icons text-base ml-2">arrow_forward</span>
                                         </button>
                                     </div>
@@ -302,10 +283,10 @@ const EventsPage = () => {
 
             {/* Theme Toggle */}
             <div className="fixed bottom-6 right-6 z-50">
-                <button 
+                <button
                     className="w-12 h-12 rounded-full bg-aged-wood-dark shadow-lg flex items-center justify-center hover:scale-110 transition-transform border border-deep-amber/30 text-deep-amber"
                     onClick={handleThemeToggle}
-                    style={{boxShadow: '0 0 20px rgba(184, 134, 11, 0.3)'}}
+                    style={{ boxShadow: '0 0 20px rgba(184, 134, 11, 0.3)' }}
                 >
                     {isDark ? (
                         <span className="material-icons">dark_mode</span>
