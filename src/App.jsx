@@ -20,6 +20,8 @@ import FAQ from './pages/FAQ';
 import AftermoviePage from './pages/AftermoviePage';
 import Gallery from './pages/Gallery';
 import Navbar from './components/Navbar';
+// import Profile from './pages/Profile';
+
 
 function App() {
   return (
