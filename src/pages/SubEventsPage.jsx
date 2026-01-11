@@ -18,14 +18,14 @@ const slugToGenre = {
 };
 
 const cardImages = [
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
+    'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=400',
+    'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400',
+    'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=400',
+    'https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=400',
+    'https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=400',
+    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400',
+    'https://images.unsplash.com/photo-1549490349-8643362247b5?w=400',
+    'https://images.unsplash.com/photo-1541367777708-7905fe3296c0?w=400',
 ];
 
 const CARDS_PER_PAGE = 5;
@@ -139,29 +139,20 @@ const EtherealBackground = () => {
 
 const TarotCard = ({ event, index, totalCards, genreSlug, globalIndex }) => {
     const navigate = useNavigate();
-    const [isSmallScreen, setIsSmallScreen] = useState(false);
-
-    useEffect(() => {
-        const mediaQuery = window.matchMedia('(max-width: 767px)');
-        setIsSmallScreen(mediaQuery.matches);
-
-        const handleChange = (e) => setIsSmallScreen(e.matches);
-        mediaQuery.addEventListener('change', handleChange);
-
-        return () => mediaQuery.removeEventListener('change', handleChange);
-    }, []);
 
     const centerIndex = (totalCards - 1) / 2;
     const rotation = (index - centerIndex) * 8;
-    const translateX = (index - centerIndex) * 150;
+    const translateX = (index - centerIndex) * 100;
     const translateY = Math.abs(index - centerIndex) * 10;
+
+    const isSmallScreen = window.innerWidth < 768;
 
     return (
         <motion.div
             className={isSmallScreen ? 'relative cursor-pointer' : 'absolute cursor-pointer'}
             style={isSmallScreen ? {
-                width: window.innerWidth < 480 ? '140px' : '160px',
-                height: window.innerWidth < 480 ? '210px' : '240px',
+                width: '160px',
+                height: '240px',
             } : {
                 width: '220px',
                 height: '330px',
@@ -320,7 +311,8 @@ const SubEventsPage = () => {
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={currentPage}
-                            className="relative w-full max-w-2xl h-full flex flex-wrap justify-center items-center gap-4 px-4"
+                            className="relative w-full max-w-2xl h-full flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0 px-4 md:px-0"
+                            style={{ flexWrap: 'wrap' }}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
