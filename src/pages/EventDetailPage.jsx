@@ -88,18 +88,17 @@ const EventDetailPage = () => {
     };
 
     const handleRegisterClick = () => {
-        setShowRegistration(true);
-        // if (isAuthenticated) {
-        //     setShowRegistration(true);
-        // } else {
-        //     toast.error('Please login to register', {
-        //         style: {
-        //             background: '#1a1a2e',
-        //             color: '#fff',
-        //             border: '1px solid rgba(239, 68, 68, 0.5)',
-        //         },
-        //     });
-        // }
+        if (isAuthenticated) {
+            setShowRegistration(true);
+        } else {
+            toast.error('Please login to register', {
+                style: {
+                    background: '#1a1a2e',
+                    color: '#fff',
+                    border: '1px solid rgba(239, 68, 68, 0.5)',
+                },
+            });
+        }
     };
 
     if (isLoading) {
@@ -164,16 +163,16 @@ const EventDetailPage = () => {
                                 <div className="lg:w-2/5 p-10 lg:p-16 border-b lg:border-b-0 lg:border-r border-white/5 flex flex-col items-center lg:items-start justify-center text-center lg:text-left relative">
                                     <h1
                                         className="text-5xl lg:text-5xl font-bold text-white mb-8 relative z-10"
-                                        style={{ fontFamily: 'Cinzel, serif', margin: '1rem', marginTop: 0, textShadow: '0 0 10px rgba(168, 85, 247, 0.8), 0 0 20px rgba(217, 70, 239, 0.5)' }}
+                                        style={{ fontFamily: 'Cinzel, serif',margin:'1rem',marginTop:0, textShadow: '0 0 10px rgba(168, 85, 247, 0.8), 0 0 20px rgba(217, 70, 239, 0.5)' }}
                                     >
                                         {event.name.toUpperCase()}
                                     </h1>
 
-                                    <p className="text-fuchsia-300 font-semibold tracking-[0.15em] uppercase text-base md:text-lg mb-10 relative z-10" style={{ fontFamily: 'Cinzel, serif', margin: '1.5rem' }}>
+                                    <p className="text-fuchsia-300 font-semibold tracking-[0.15em] uppercase text-base md:text-lg mb-10 relative z-10" style={{ fontFamily: 'Cinzel, serif',margin:'1.5rem' }}>
                                         {event.tagline}
                                     </p>
 
-                                    <div className="flex gap-10 mb-12 relative z-10" style={{ marginBottom: '1.5rem', marginLeft: '1.5rem' }}>
+                                    <div className="flex gap-10 mb-12 relative z-10" style={{ marginBottom: '1.5rem' ,marginLeft:'1.5rem'}}>
                                         <span className={`px-4  group py-1 rounded-full text-base font-medium ${event.is_group ? 'bg-purple-500/60' : 'bg-emerald-500/60'}`} >
                                             {event.is_group ? 'Group Event' : 'Solo Event'}
                                         </span>
@@ -182,22 +181,38 @@ const EventDetailPage = () => {
                                         </span>
                                     </div>
 
-                                    <div className="relative group cursor-pointer z-10 mt-8" style={{ marginBottom: '1.5rem', marginLeft: '1.5rem' }}>
-                                        <div className="absolute inset-0 bg-purple-500 rounded-rounded  blur-2xl opacity-40 group-hover:opacity-70 transition-opacity duration-500 animate-pulse" />
-                                        <motion.button
-                                            onClick={handleRegisterClick}
-                                            className="w-32 h-32 rounded-full flex items-center justify-center text-white font-bold  p-5 text-sm tracking-wider relative z-10 border border-white/20"
-                                            style={{
-                                                fontFamily: 'Cinzel, serif',
-                                                background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8) 0%, rgba(217, 70, 239, 1) 20%, rgba(139, 92, 246, 1) 50%, rgba(76, 29, 149, 1) 100%)',
-                                                boxShadow: '0 0 30px rgba(217, 70, 239, 0.5), 0 0 60px rgba(139, 92, 246, 0.3)'
-                                            }}
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
+                                    {!showRegistration && (
+                                        <div className="relative group cursor-pointer z-10 mt-8" style={{ marginBottom: '1.5rem' ,marginLeft:'1.5rem'}}>
+                                            <div className="absolute inset-0 bg-purple-500 rounded-rounded  blur-2xl opacity-40 group-hover:opacity-70 transition-opacity duration-500 animate-pulse" />
+                                            <motion.button
+                                                onClick={handleRegisterClick}
+                                                className="w-32 h-32 rounded-full flex items-center justify-center text-white font-bold  p-5 text-sm tracking-wider relative z-10 border border-white/20"
+                                                style={{
+                                                    fontFamily: 'Cinzel, serif',
+                                                    background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8) 0%, rgba(217, 70, 239, 1) 20%, rgba(139, 92, 246, 1) 50%, rgba(76, 29, 149, 1) 100%)',
+                                                    boxShadow: '0 0 30px rgba(217, 70, 239, 0.5), 0 0 60px rgba(139, 92, 246, 0.3)'
+                                                }}
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                            >
+                                                REGISTER<br />NOW
+                                            </motion.button>
+                                        </div>
+                                    )}
+
+                                    {showRegistration && (
+                                        <motion.div
+                                            className="w-full mt-4 relative z-10"
+                                            initial={{ opacity: 0, height: 0 }}
+                                            animate={{ opacity: 1, height: 'auto' }}
                                         >
-                                            REGISTER<br />NOW
-                                        </motion.button>
-                                    </div>
+                                            <RegistrationForm
+                                                event={event}
+                                                onSuccess={handleRegistrationSuccess}
+                                                onCancel={() => setShowRegistration(false)}
+                                            />
+                                        </motion.div>
+                                    )}
                                 </div>
 
                                 {/* Right Section */}
@@ -209,21 +224,21 @@ const EventDetailPage = () => {
                                     </div>
 
                                     <div className="space-y-14 max-h-[60vh] overflow-y-auto pr-4">
-                                        <div className="rounded-2xl p-20  hover:bg-black/40 transition-colors duration-300" style={{ background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.05)', margin: '1rem' }}>
+                                        <div className="rounded-2xl p-20  hover:bg-black/40 transition-colors duration-300" style={{ background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.05)',margin:'1rem' }}>
                                             <h2 className="text-3xl font-bold mb-8 text-fuchsia-200 uppercase flex items-center gap-4" style={{ fontFamily: 'Cinzel, serif' }}>
                                                 <span className="w-8 h-px bg-fuchsia-500" />
                                                 About
                                             </h2>
-                                            <p className="text-slate-300 leading-relaxed text-0.5xl  font-light tracking-wide" style={{ margin: '0.5rem' }}>{event.writeup}</p>
+                                            <p className="text-slate-300 leading-relaxed text-0.5xl  font-light tracking-wide" style={{margin:'0.5rem'}}>{event.writeup}</p>
                                         </div>
 
                                         {event.rules && event.rules.length > 0 && (
-                                            <div className="rounded-2xl p-20 hover:bg-black/40 transition-colors duration-300" style={{ background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.05)', margin: '1rem' }}>
+                                            <div className="rounded-2xl p-20 hover:bg-black/40 transition-colors duration-300" style={{ background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.05)',margin:'1rem' }}>
                                                 <h2 className="text-3xl font-bold mb-8 text-indigo-200 uppercase flex items-center gap-3" style={{ fontFamily: 'Cinzel, serif' }}>
                                                     <span className="w-8 h-px bg-indigo-500" />
                                                     Rules
                                                 </h2>
-                                                <ul className="space-y-6 text-slate-300 text-lg md:text-0.5xl font-light" style={{ margin: '0.5rem' }}>
+                                                <ul className="space-y-6 text-slate-300 text-lg md:text-0.5xl font-light" style={{margin:'0.5rem'}}>
                                                     {event.rules.filter(r => r && r.trim()).map((rule, index) => (
                                                         <li key={index} className="flex gap-5 items-start">
                                                             <span className="font-bold text-fuchsia-400 text-2xl mt-0.5" style={{ fontFamily: 'Cinzel, serif' }}>
@@ -245,30 +260,6 @@ const EventDetailPage = () => {
                 <footer className="relative z-10 text-center py-6 text-slate-500 text-xs md:text-sm tracking-widest uppercase opacity-60" style={{ fontFamily: 'Cinzel, serif' }}>
                     © 2025 SF Ethereal Enigma. All Rights Reserved.
                 </footer>
-                {/* Registration Modal Overlay */}
-                {showRegistration && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center px-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)', backdropFilter: 'blur(8px)' }}>
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            className="w-full max-w-4xl relative"
-                            style={{
-                                background: 'transparent',
-                                boxShadow: 'none'
-                            }}
-                        >
-                            {/* Modal Body */}
-                            <div className="max-h-[85vh] overflow-y-auto">
-                                <RegistrationForm
-                                    event={event}
-                                    onSuccess={handleRegistrationSuccess}
-                                    onCancel={() => setShowRegistration(false)}
-                                />
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
             </div>
         </div>
     );
