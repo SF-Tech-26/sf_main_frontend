@@ -19,6 +19,7 @@ function Contingent() {
   const [conti, setConti] = useState(false);
   const [data, setData] = useState(null);
   const [myUserId,setId] = useState(null);
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
   useEffect(()=>{
   if (token) {
     try {
@@ -71,6 +72,40 @@ function Contingent() {
   const [joinCode, setJoinCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Function to simply open the custom modal
+const triggerLeaveConfirmation = () => {
+  if (isDeleting) return;
+
+  if (data?.updatedMembersInfo && (Object.keys(data.updatedMembersInfo).length !== 1) && myUserId === data.leaderId) {
+    toast.error("Can't delete: Leader cannot leave if other members exist.");
+    return;
+  }
+  setShowLeaveModal(true);
+};
+
+const handleConfirmLeave = async () => {
+  setShowLeaveModal(false);
+  setIsDeleting(true);
+
+  try {
+    const response = await axios.post("https://masterapi.springfest.in/api/contingent/leave", {
+      token: token
+    });
+
+    if (response.data.code === 0) {
+      toast.success("Successfully left the contingent.");
+      setTimeout(() => window.location.reload(), 1500);
+    } else {
+      toast.error(response.data.message || "Failed to leave.");
+      setIsDeleting(false);
+    }
+  } catch (err) {
+    console.error("Error leaving contingent:", err);
+    toast.error(err.response?.data?.message || "An error occurred. Please try again.");
+    setIsDeleting(false);
+  }
+};
+
   const Joincontingent = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -90,7 +125,6 @@ function Contingent() {
       }
     } catch (err) {
       console.error("Join error:", err);
-      // Improved error message handling
       toast.error(err.response?.data?.message || "An error occurred while joining.");
     } finally {
       setIsSubmitting(false);
@@ -216,19 +250,12 @@ function Contingent() {
 
       <div
         className="min-h-screen flex flex-col flex-1 items-center justify-center bg-center bg-no-repeat bg-cover"
-        style={{ backgroundImage: `url(${contin})` }}
+        style={{ backgroundImage: `url(${contin})`, backgroundAttachment:"fixed",backgroundPosition:"bottom" }}
       >
 
       {!token && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/10 backdrop-blur-xl">
-            <div
-              className="w-full max-w-md p-10 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.8)] text-center relative overflow-hidden popup-anim" 
-              style={{
-                backgroundImage: `linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url("${cardbg}")`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-              }}
-            >
+            <div className="w-full max-w-md p-10 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.8)] text-center relative overflow-hidden popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/90 to-[#5f8a84]/70">
               {/* Decorative Glow */}
               <div className="absolute -top-24 -left-24 w-48 h-48 bg-purple-600/20 blur-[100px]"></div>
               
@@ -247,14 +274,14 @@ function Contingent() {
               <div className="flex flex-col gap-4">
                 <button
                   onClick={() => navigate("/signin")}
-                  className="w-full py-4 text-3xl text-white font-['Jolly_Lodger'] tracking-[0.2em] bg-purple-900/40 border border-purple-500/50 rounded-xl hover:bg-purple-700/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all duration-300 active:scale-95"
+                  className="cursor-pointer w-full py-4 text-3xl text-white font-['Jolly_Lodger'] tracking-[0.2em] bg-purple-900/40 border border-purple-500/50 rounded-xl hover:bg-purple-700/60 hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all duration-300 active:scale-95"
                 >
                   SIGN IN
                 </button>
                 
                 <button
                   onClick={() => navigate("/")}
-                  className="text-gray-400 hover:text-white font-['Jolly_Lodger'] text-2xl transition-colors"
+                  className="cursor-pointer text-gray-400 hover:text-white font-['Jolly_Lodger'] text-2xl transition-colors"
                 >
                   Return to Home
                 </button>
@@ -265,19 +292,45 @@ function Contingent() {
 
         {conti && (
           <>
+            {showLeaveModal && (
+              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                <div className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-2xl relative popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/95 to-[#5f8a84]/80 text-center">
+                  
+                  <span className="material-symbols-outlined !text-6xl text-red-500 mb-4 block">
+                    warning
+                  </span>
+
+                  <h2 className="text-5xl text-white font-['Jolly_Lodger'] mb-4 tracking-widest">
+                    Abandon Journey?
+                  </h2>
+
+                  <p className="text-gray-200 text-xl font-sans mb-8 leading-relaxed">
+                    Are you sure you want to leave your contingent?
+                  </p>
+
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <button
+                      onClick={() => setShowLeaveModal(false)}
+                      className="cursor-pointer flex-1 py-3 text-2xl text-white font-['Jolly_Lodger'] tracking-widest bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition-all"
+                    >
+                      STAY
+                    </button>
+                    <button
+                      onClick={handleConfirmLeave}
+                      className="cursor-pointer flex-1 py-3 text-2xl text-white font-['Jolly_Lodger'] tracking-widest bg-red-900/60 border border-red-500/50 rounded-xl hover:bg-red-600/80 hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all"
+                    >
+                      ABANDON
+                    </button>
+                  </div>
+                </div>
+              </div>
+  )}
             {showBarcodeModal && (
               <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
-                <div
-                 className="w-full max-w-sm p-8 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative text-center popup-anim"
-                  style={{
-                    backgroundImage: `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url("${cardbg}")`,
-                    backgroundSize: 'cover',
-                    opacity: 0.8,
-                  }}
-                >
+                <div className="w-full max-w-sm p-8 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative text-center popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/85 to-[#5f8a84]/65">
                   <button
                     onClick={() => setShowBarcodeModal(false)}
-                    className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
+                    className="cursor-pointer absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
                   >
                     <span className="material-symbols-outlined">close</span>
                   </button>
@@ -310,18 +363,10 @@ function Contingent() {
             )}
             {showAddModal && (
               <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-                <div
-                  className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-2xl relative popup-anim"
-                  style={{
-                    backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("${cardbg}")`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    opacity: 0.8,
-                  }}
-                >
+                <div className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-2xl relative popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/80 to-[#5f8a84]/60">
                   <button
                     onClick={() => setShowAddModal(false)}
-                    className="absolute top-4 right-4 text-white/50 hover:text-white"
+                    className="cursor-pointer absolute top-4 right-4 text-white/50 hover:text-white"
                   >
                     <span className="material-symbols-outlined">close</span>
                   </button>
@@ -358,7 +403,7 @@ function Contingent() {
                     <button
                       type="submit"
                       disabled={isAdding}
-                      className="w-full py-4 text-3xl text-white font-['Jolly_Lodger'] tracking-widest bg-purple-900/40 border border-purple-500/50 rounded-xl hover:bg-purple-700/60 transition-all"
+                      className="cursor-pointer w-full py-4 text-3xl text-white font-['Jolly_Lodger'] tracking-widest bg-purple-900/40 border border-purple-500/50 rounded-xl hover:bg-purple-700/60 transition-all"
                     >
                       {isAdding ? "Summoning..." : "ADD MEMBER"}
                     </button>
@@ -368,38 +413,30 @@ function Contingent() {
             )}
             
             <div
-              className="h-[100px] w-full flex items-center justify-center font-['Jolly_Lodger'] text-white text-5xl sm:text-7xl"
+              className="h-[100px] w-full flex mt-[50px] items-center justify-center font-['Jolly_Lodger'] text-white text-5xl sm:text-7xl"
             >
               Contingent
             </div>
 
-            <div
-              className="h-auto w-[95%] sm:w-[85%] max-w-[1200px] backdrop-blur-md border border-white/20 rounded-3xl shadow-2xl relative p-6 mx-auto popup-anim"
-              style={{
-                backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url("${cardbg}")`,
-                backgroundPosition: 'center',
-                backgroundSize: 'cover',
-                opacity: 0.8,
-              }}
-            >
+            <div className="h-[550px] overflow-auto w-[95%] sm:w-[85%] max-w-[800px] backdrop-blur-md border border-white/20 rounded-3xl shadow-2xl relative p-6 mx-auto popup-anim bg-gradient-to-r from-[#302e3b]/80 to-[#5f8a84]/60">
               <button
                 onClick={() => { navigate("/accommodation") }}
-                className="absolute top-4 left-4 p-2 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all z-10"
+                className="cursor-pointer absolute top-4 left-4 p-2 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all z-10"
               >
                 <span className="material-symbols-outlined !text-[28px]">arrow_back</span>
               </button>
 
-              <h2 className="text-4xl sm:text-6xl text-white text-center tracking-wider font-['Jolly_Lodger'] mb-8 mt-4">
+              <h2 className="text-4xl sm:text-6xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-0 mb-2">
                 {data.contingent_name}
               </h2>
 
               <div className="flex flex-col gap-8">
 
                 <div className={(myUserId === data.leaderId) ? "grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-[600px] mx-auto" : "grid grid-cols-1 gap-4 w-[250px] mx-auto"}>
-                  {(myUserId == data.leaderId) && <button className="h-[60px] bg-green-800 backdrop-blur-md border border-white/20 rounded-xl text-white font-['Jolly_Lodger'] text-2xl hover:bg-green-400 hover:text-black transition-all">
+                  {(myUserId == data.leaderId) && <button className="cursor-pointer h-[60px] bg-green-800 backdrop-blur-md border border-white/20 rounded-xl text-white font-['Jolly_Lodger'] text-2xl hover:bg-green-400 hover:text-black transition-all">
                     Contingent Payment
                   </button>}
-                  <button className="h-[60px] bg-green-800 backdrop-blur-md border border-white/20 rounded-xl text-white font-['Jolly_Lodger'] text-2xl  hover:bg-green-400 hover:text-black transition-all">
+                  <button className="cursor-pointer h-[60px] bg-green-800 backdrop-blur-md border border-white/20 rounded-xl text-white font-['Jolly_Lodger'] text-2xl  hover:bg-green-400 hover:text-black transition-all">
                     {(myUserId === data.leaderId) ? "Individual Payment" : "Make Payment"}
                   </button>
                 </div>
@@ -418,7 +455,7 @@ function Contingent() {
                   <p className="font-['Jolly_Lodger'] text-white text-3xl opacity-70">Barcode</p>
                   <button
                     onClick={() => setShowBarcodeModal(true)}
-                    className="group relative flex flex-col items-center justify-center w-full transition-all duration-300 active:scale-95"
+                    className="cursor-pointer group relative flex flex-col items-center justify-center w-full transition-all duration-300 active:scale-95"
                   >
                     <p className="font-['Jolly_Lodger'] text-white text-3xl opacity-70 mb-1 group-hover:text-purple-300 transition-colors">
                       View Barcode
@@ -431,15 +468,18 @@ function Contingent() {
                     </span>
                   </button>
                 </div>
-                <div className="bg-black/40 p-4 rounded-2xl border border-white/10 text-center">
-                  <p className="font-['Jolly_Lodger'] text-white text-3xl opacity-70">Members</p>
+                <div className="bg-black/40 p-4 rounded-2xl border border-white/10 text-center"
+                style={{background:"linear-gradient(to right,#302e3b 0%, #5f8a84 100%)"}}>
+                  <p className="font-['Jolly_Lodger'] text-white text-3xl opacity-70"
+                  >Members</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {member.map((m, index) => (
-                    <div key={index} className="bg-white/5 border border-white/10 p-4 rounded-xl flex items-center justify-between">
+                    <div key={index} className="bg-white/5 border border-white/10 p-4 rounded-xl flex items-center justify-between"
+                    style={{background:"linear-gradient(to right,#302e3b 0%, #5f8a84 100%)"}}>
                       <span className="text-white font-['Jolly_Lodger'] text-xl">
-                        <div className="text-4xl text-gray-400">{m.name} {(m.id === data.leaderId) ? "👑" : ""}</div>
+                        <div className="text-4xl text-black">{m.name} {(m.id === data.leaderId) ? "👑" : ""}</div>
                         {m.sfId}
                       </span>
                       {m.paymentStatus && <span className="text-green-800 text-xs uppercase font-bold">Paid</span>}
@@ -451,12 +491,12 @@ function Contingent() {
                 <div className={(myUserId === data.leaderId) ? "grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-[600px] mx-auto" : "grid grid-cols-1 gap-4 w-[250px] mx-auto"}>
                   <button 
                     disabled={isDeleting}
-                    className={`h-[60px] bg-red-800 backdrop-blur-md border border-white/20 rounded-xl text-white font-['Jolly_Lodger'] text-2xl  hover:bg-red-400 hover:text-black transition-all ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`} 
-                    onClick={DeleteContin}
+                    className={`cursor-pointer h-[60px] bg-red-800 backdrop-blur-md border border-white/20 rounded-xl text-white font-['Jolly_Lodger'] text-2xl hover:bg-red-400 hover:text-black transition-all ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`} 
+                    onClick={triggerLeaveConfirmation} 
                   >
                     {isDeleting ? "Processing..." : (myUserId === data.leaderId) ? "Delete Contingent" : "Leaving Contingent"}
                   </button>
-                  {(myUserId === data.leaderId) && <button className="h-[60px] bg-green-800 backdrop-blur-md border border-white/20 rounded-xl text-white font-['Jolly_Lodger'] text-2xl  hover:bg-green-400 hover:text-black transition-all" onClick={() => setShowAddModal(true)}>
+                  {(myUserId === data.leaderId) && <button className="cursor-pointer h-[60px] bg-green-800 backdrop-blur-md border border-white/20 rounded-xl text-white font-['Jolly_Lodger'] text-2xl  hover:bg-green-400 hover:text-black transition-all" onClick={() => setShowAddModal(true)}>
                     ADD Member
                   </button>}
                 </div>
@@ -469,42 +509,44 @@ function Contingent() {
 
         {
           token && !conti && !joinOn && !CreateOn &&
-          <div className="grid gap-2 bg-black/60 items-center h-[350px] w-[80%] max-h-[1085.5px] max-w-[1720.25px] backdrop-blur-md border border-white/20 rounded-2xl shadow-xl popup-anim"
-            style={{ gridTemplateRows: "2fr 5fr", backgroundImage: `url("${cardbg}")`, backgroundPosition: "center", opacity: 0.8, }}>
+          <div className="grid gap-2 bg-black/20 items-center h-[300px] w-[80%] max-h-[1085.5px] max-w-[500.25px] backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl popup-anim"
+     style={{ gridTemplateRows: "2fr 5fr" }}>
             <button
               onClick={() => { navigate("/accommodation") }}
-              className="absolute top-4 left-4 p-2 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all z-10"
+              className="cursor-pointer absolute top-4 left-4 p-2 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all z-10"
             >
               <span className="material-symbols-outlined !text-[28px]">arrow_back</span>
             </button>
-            <div className="h-[150px] w-full max-w-[350px] m-auto text-5xl sm:text-7xl rounded-2xl shadow-xl" style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Jolly Lodger', color: "white" }}>
+            <div className="h-[100px] w-full max-w-[300px] m-auto text-5xl sm:text-7xl rounded-2xl" style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Jolly Lodger', color: "black" }}>
               Contingent</div>
             <div className="grid gap-5" style={{ gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr", }}>
-              <div className="h-[100px] w-full max-w-[350px] m-auto bg-gray backdrop-blur-md border border-white/20 rounded-2xl shadow-xl contin-custom-btn btn-6 relative overflow-hidden group"
+              <div className="h-auto  m-auto bg-gray backdrop-blur-md border border-white/20 rounded-2xl shadow-xl contin-custom-btn btn-6 relative overflow-hidden group"
                 onClick={() => setJoinOn(true)}
                 style={{
                   background: "linear-gradient(135deg, #e7e5e4 0%, #d6d3d1 100%)",
                   boxShadow: "0 4px 15px rgba(0,0,0,0.5)",
                 }}>
                 {/* Hover effect overlay */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black to-red-600 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></div>
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"
+                style={{background:"linear-gradient(to right,#302e3b 0%, #5f8a84 100%)"}}></div>
                 
                 {/* Text content */}
-                <span className="sm:pt-5 pt-2 relative z-10 flex items-center justify-center h-full font-['Jolly_Lodger'] text-4xl text-black group-hover:text-white transition-colors duration-300">
+                <span className="p-2 relative z-10 flex items-center justify-center h-full font-['Jolly_Lodger'] text-4xl text-black group-hover:text-white transition-colors duration-300">
                   Join Contingent
                 </span>
               </div>
-             <div className="h-[100px] w-full max-w-[350px] m-auto bg-gray backdrop-blur-md border border-white/20 rounded-2xl shadow-xl contin-custom-btn btn-6 relative overflow-hidden group" 
+             <div className=" m-auto bg-gray backdrop-blur-md border border-white/20 rounded-2xl shadow-xl contin-custom-btn btn-6 relative overflow-hidden group" 
                 onClick={() => setCreateOn(true)}
                 style={{
                   background: "linear-gradient(135deg, #e7e5e4 0%, #d6d3d1 100%)",
                   boxShadow: "0 4px 15px rgba(0,0,0,0.5)",
                 }}>
                 {/* Hover effect overlay */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black to-red-600 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></div>
+                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"
+                style={{background:"linear-gradient(to right,#302e3b 0%, #5f8a84 100%)"}}></div>
                 
                 {/* Text content */}
-                <span className="sm:pt-5 pt-2 relative z-10 flex items-center justify-center h-full font-['Jolly_Lodger'] text-4xl text-black group-hover:text-white transition-colors duration-300">
+                <span className="p-2 relative z-10 flex items-center justify-center h-full font-['Jolly_Lodger'] text-4xl text-black group-hover:text-white transition-colors duration-300">
                   Create Contingent
                 </span>
               </div>
@@ -515,25 +557,24 @@ function Contingent() {
 
         {!conti && !CreateOn && joinOn &&
           <>
-            <div className="h-[150px] w-full max-w-[350px] rounded-2xl shadow-xl "
+            <div className="h-[150px] mt-[20px] w-full max-w-[350px] rounded-2xl shadow-xl "
               style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Jolly Lodger', color: "white", fontSize: '4rem' }}>
               Contingent</div>
-            <div className="h-auto sm:max-h-[580px] w-[80%] sm:w-[73%] max-w-[1000.25px] backdrop-blur-md border border-white/20  rounded-2xl shadow-xl justify-items-center relative popup-anim"
-              style={{ backgroundImage: `url("${cardbg}")`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', opacity: 0.8, }}>
-              <h2 className="text-5xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-20">
+            <div className="h-auto w-[80%] sm:w-[73%] max-w-[600.25px] backdrop-blur-md bg-black/10 border border-white/20 rounded-2xl shadow-xl justify-items-center relative popup-anim">
+              <h2 className="text-5xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-5">
                 Join Contingents
               </h2>
 
               <button
                 onClick={() => setJoinOn(false)}
-                className="absolute top-10 left-3 sm:left-10 flex items-center justify-center p-2 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200 group"
+                className="cursor-pointer absolute top-10 left-3 sm:left-10 flex items-center justify-center p-2 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200 group"
               >
                 <span className="material-symbols-outlined !text-[28px] group-hover:-translate-x-1 transition-transform">
                   arrow_back
                 </span>
               </button>
 
-              <form className="w-[90%] sm:w-[100%] max-w-md bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-3xl shadow-2xl flex flex-col gap-6 mt-20 mb-20" onSubmit={Joincontingent}>
+              <form className="w-[90%] sm:w-[100%] max-w-md bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-3xl shadow-2xl flex flex-col gap-6 mt-5 mb-20" onSubmit={Joincontingent}>
 
                 <div className="flex flex-col gap-4">
                   <div>
@@ -561,7 +602,7 @@ function Contingent() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3 text-2xl text-white font-['Jolly_Lodger'] tracking-widest border border-white/40 rounded-xl hover:bg-white/20 hover:border-white bg-black/60 transition-all duration-300 active:scale-95"
+                  className="cursor-pointer w-full py-3 text-2xl text-white font-['Jolly_Lodger'] tracking-widest border border-white/40 rounded-xl hover:bg-white/20 hover:border-white bg-black/60 transition-all duration-300 active:scale-95"
                 >
                   {isSubmitting ? "Joining..." : "Join Contingent"}
 
@@ -577,22 +618,21 @@ function Contingent() {
             <div className="h-[150px] w-full max-w-[350px] rounded-2xl shadow-xl "
               style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Jolly Lodger', color: "white", fontSize: '4rem' }}>
               Contingent</div>
-            <div className="h-auto w-[80%] sm:w-[73%] max-w-[1000.25px] backdrop-blur-md border border-white/20  rounded-2xl shadow-xl justify-items-center relative popup-anim"
-              style={{ backgroundImage: `url("${cardbg}")`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', opacity: 0.8 }}>
-              <h2 className="text-5xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-20">
+           <div className="h-auto w-[80%] sm:w-[73%] max-w-[600.25px] backdrop-blur-md bg-black/10 border border-white/20 rounded-2xl shadow-xl justify-items-center relative popup-anim">
+              <h2 className="text-5xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-5">
                 Create A Contingents
               </h2>
 
               <button
                 onClick={() => setCreateOn(false)}
-                className="absolute top-10 left-3 sm:left-10 flex items-center justify-center p-2 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200 group"
+                className="cursor-pointer absolute top-10 left-3 sm:left-10 flex items-center justify-center p-2 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200 group"
               >
                 <span className="material-symbols-outlined !text-[28px] group-hover:-translate-x-1 transition-transform">
                   arrow_back
                 </span>
               </button>
 
-              <form className="w-[90%] sm:w-[100%] max-w-md bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-3xl shadow-2xl flex flex-col gap-6 mt-20 mb-20" onSubmit={createContin}>
+              <form className="w-[90%] sm:w-[100%] max-w-md bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-3xl shadow-2xl flex flex-col gap-6 mt-5 mb-10" onSubmit={createContin}>
 
                 <div className="flex flex-col gap-4">
                   <div>
@@ -611,7 +651,7 @@ function Contingent() {
                 <button
                   type="submit"
                   disabled={isCreating}
-                  className="w-full py-3 text-2xl text-white font-['Jolly_Lodger'] tracking-widest border border-white/40 rounded-xl hover:bg-white/20 hover:border-white bg-black/60 transition-all duration-300 active:scale-95"
+                  className="cursor-pointer w-full py-3 text-2xl text-white font-['Jolly_Lodger'] tracking-widest border border-white/40 rounded-xl hover:bg-white/20 hover:border-white bg-black/60 transition-all duration-300 active:scale-95"
                 >
                   {isCreating ? "Creating..." : "Create Contingent"}
                 </button>

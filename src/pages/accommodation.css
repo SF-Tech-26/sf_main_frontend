@@ -9,8 +9,6 @@
     padding: 0%;
     overscroll-behavior: none;
     font-family: 'Special Elite', serif;
-    display: grid;
-    grid-template-columns: 7fr 2fr;
     position: relative;
     background-image: url("../assets/images/Untitled-2_upscayl_4x_upscayl-standard-4x.png");
     background-repeat: no-repeat;
@@ -18,7 +16,7 @@
     background-size: cover;
     background-attachment: fixed;
     overflow: hidden;
-    min-height: 100vh;
+    min-height: 100vh ;
 }
 
 ::-webkit-scrollbar {
@@ -40,7 +38,7 @@
     width: 50%;
     min-width: 300px;
     margin-left: 3%;
-    margin-top: 10%;
+    margin-top:60px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     position: relative;
     z-index: 10;
@@ -78,13 +76,12 @@
 
 /* --- TOMBSTONE CARDS --- */
 .acco-cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 422px);
-    gap: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    width:100%;
+    gap: 5px;
     justify-content: center;
     align-items: center;
-    margin-block: 15px;
-    padding: 0 20px;
 }
 
 .acco-card {
@@ -93,6 +90,10 @@
     width: 422px;
     margin: 0;
     position: relative;
+    
+}
+.acco-card-loader{
+    scale:0.6;
 }
 
 .acco-m-con {
@@ -106,7 +107,6 @@
     flex-direction: column;
     text-align: center;
     position: relative;
-    padding: 10px;
     overflow-x: visible;
     margin-inline: auto;
     opacity: 1;
@@ -131,7 +131,7 @@
 .acco-m-con .acco-p {
     height: auto;
     max-height:150px;
-    width: 55%;
+    width: 40%;
     margin-inline:auto;
     margin-block:0;
     overflow-y: auto;
@@ -151,51 +151,63 @@
 
 /* --- NAVIGATION CONTAINER --- */
 .acco-container-2 {
-    background-color: transparent;
-    position: fixed;
-    right: 2vw;
-    width: 20vw;
-    height: 100vh;
-    top: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    box-shadow: none;
-}
+        justify-content: center;
+        display: flex;
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100vw;
+        height: 70px;
+        background-color: #000;
+        border-top: 1px solid #333;
+        flex-direction: row;
+        z-index: 2000;
+        padding: 0 10px;
+        box-shadow: none;
+    }
 
 .acco-bnt-con {
-    position: relative;
-    height: auto;
-    width: 100%;
-    gap: 15px;
-    box-shadow: none;
-    display: flex;
-    flex-direction: column;
-    background: transparent;
-}
+        background: transparent;
+        box-shadow: none;
+        display: flex;
+        position: relative;
+        flex-direction: row;
+        height: 100%;
+        width: 100%;
+        gap: 5px;
+        align-items: center;
+        justify-content: space-between;
+    }
+
 
 /* --- NAVIGATION BUTTONS --- */
 .acco-nav-btn {
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50px;
+    border-radius: 10px;
     outline: none;
     color: #e0e0e0;
     font-family: 'Jolly Lodger', cursive;
     letter-spacing: 3px;
-    font-size: 2rem;
-    height: 60px;
+    font-size: 1.2rem;
+    height: 50px;
     cursor: pointer;
     position: relative;
     z-index: 1;
+    flex: 1;
+    padding-left: 30px;
+    padding: 0;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    padding-left: 30px;
-    gap: 15px;
+    justify-content: center;
+    gap: 5px;
     overflow: hidden;
     transition: color 0.4s ease, border-color 0.4s ease, transform 0.2s ease;
+    margin: 0;
 }
+    
 
 .acco-nav-btn::before {
     content: "";
@@ -206,6 +218,7 @@
     z-index: -1;
     transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 50px;
+    border-radius: 10px;
 }
 
 .acco-nav-btn i {
@@ -214,6 +227,8 @@
     text-align: center;
     position: relative;
     z-index: 2;
+    display: inline;
+    font-size: 1.2rem;
 }
 
 .acco-nav-btn span {
@@ -541,49 +556,6 @@
         grid-template-columns: 1fr;
     }
 
-    .acco-container-2 {
-        position: fixed;
-        top: auto;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100vw;
-        height: 70px;
-        background-color: #000;
-        border-top: 1px solid #333;
-        flex-direction: row;
-        z-index: 2000;
-        padding: 0 10px;
-        box-shadow: none;
-    }
-
-    .acco-bnt-con {
-        flex-direction: row;
-        height: 100%;
-        width: 100%;
-        gap: 5px;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .acco-nav-btn {
-        flex: 1;
-        height: 50px;
-        font-size: 1.2rem;
-        padding: 0;
-        justify-content: center;
-        border-radius: 10px;
-        margin: 0;
-        gap: 5px;
-    }
-    
-    .acco-nav-btn::before {
-        border-radius: 10px;
-    }
-
-    .acco-nav-btn i { font-size: 1.2rem; }
-    .acco-nav-btn span { display: inline; }
-
     .acco-main-container {
         overflow-y: auto;
         height: auto;
@@ -597,16 +569,11 @@
         padding: 15px;
     }
     
-    .acco-cards-container {
-        grid-template-columns: repeat(auto-fit, 422px);
-        padding: 0 10px;
-    }
 }
 
 /* Medium screens (950px and below) - Cards stay 422px but container adjusts */
 @media screen and (max-width: 950px) {
     .acco-cards-container {
-        grid-template-columns: 422px;
         justify-content: center;
     }
 
@@ -634,18 +601,12 @@
     .acco-heading span { 
         font-size: 2rem; 
     }
-
-    .acco-cards-container {
-        padding: 0 5px;
-    }
 }
 
 /* Very small screens - Ensure cards are still visible with horizontal scroll if needed */
 @media screen and (max-width: 440px) {
     .acco-cards-container {
         overflow-x: auto;
-        justify-content: flex-start;
-        padding: 0 10px;
     }
 }
 
