@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/authContext';
+import Contingent from './pages/contingent';
 
 // Page imports
 import EventsPage from './pages/EventsPage';
@@ -40,6 +41,7 @@ function App() {
 
         {/* Accommodation Routes */}
         <Route path="/accommodation" element={<Accommodation />} />
+        <Route path = "/Contingent" element={<Contingent/>}/>
 
         {/* Auth Routes */}
         <Route path="/signin" element={<SignInPage />} />
