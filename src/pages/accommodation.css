@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Jolly+Lodger&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Jolly+Lodger&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap');
@@ -13,7 +14,7 @@
     position: relative;
     background-image: url("../assets/images/Untitled-2_upscayl_4x_upscayl-standard-4x.png");
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: bottom;
     background-size: cover;
     background-attachment: fixed;
     overflow: hidden;
@@ -52,7 +53,6 @@
     border-radius: 5px;
     position: relative;
     width: 100%;
-    margin: 0;
     font-size: 1.5rem;
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
 }
@@ -74,58 +74,33 @@
     animation: spookyPulse 3s infinite ease-in-out;
 }
 
-/* --- INTRO TEXT --- */
-.acco-head-p {
-    padding-left: 15px;
-    width: 80%;
-    color: #e0e0e0;
-    font-size: 1.1rem;
-    position: relative;
-    margin-left: 3%;
-    margin-top: 25px;
-    text-shadow: 0px 0px 4px rgba(0, 0, 0, 1);
-    background: linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
-    border-radius: 8px;
-    padding: 15px;
-}
 
-.acco-head-p::after {
-    content: " ";
-    position: absolute;
-    height: 100%;
-    width: 3px;
-    background-color: #ff4d4d;
-    left: 0;
-    top: 0;
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-    box-shadow: 0 0 8px #ff0000;
-}
 
 /* --- TOMBSTONE CARDS --- */
 .acco-cards-container {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, 422px);
     gap: 15px;
+    justify-content: center;
     align-items: center;
     margin-block: 15px;
-    padding-bottom: 100px;
+    padding: 0 20px;
 }
 
 .acco-card {
     display: grid;
-    height: 40vh;
-    width: 100%;
-    margin-inline: auto;
+    height: 458px;
+    width: 422px;
+    margin: 0;
+    position: relative;
 }
 
 .acco-m-con {
-    background: url("../assets/images/ChatGPT Image Jan 1, 2026, 12_56_48 PM.png");
-    background-position: bottom 0;
+    background: url("../assets/images/graveyard.png");
+    background-position: bottom;
     background-repeat: no-repeat;
-    margin: auto;
-    height: 250px;
-    width: 190px;
+    height: 458px;
+    width: 422px;
     transition: 0.2s;
     display: flex;
     flex-direction: column;
@@ -134,39 +109,41 @@
     padding: 10px;
     overflow-x: visible;
     margin-inline: auto;
-    opacity: 0.8;
+    opacity: 1;
 }
 
 .acco-m-con .acco-head {
     display: block;
+    margin-top: 35%;
     font-size: 1.4rem;
     text-align: center;
-    margin-top: 25%;
     margin-bottom: 0%;
-    margin-inline: 15%;
-    max-height: 60%;
+    margin-inline: auto;
+    max-height: 95px;
     overflow-y: auto;
-    width: 80%;
+    width: 50%;
     padding: 0;
     color: #8a0303;
     font-family: 'Creepster', cursive;
+    white-space: pre-line;
 }
 
 .acco-m-con .acco-p {
     height: auto;
-    width: 80%;
+    max-height:150px;
+    width: 55%;
+    margin-inline:auto;
+    margin-block:0;
     overflow-y: auto;
-    margin-left: 15%;
+    overflow-x: hidden;
     padding: 0;
-    margin-top: 10px;
-    flex: 1;
     color: #000000;
     font-size: 1.2rem;
     font-weight: 600;
+    white-space: pre-line;;
 }
 
 .acco-m-con:hover {
-    scale: 115%;
     cursor: pointer;
     transform: translateY(-5px);
     filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
@@ -272,7 +249,10 @@
 /* --- MODAL UPDATES --- */
 .acco-modal-overlay {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-color: rgba(0, 0, 0, 0.9);
     display: flex;
     justify-content: center;
@@ -282,40 +262,66 @@
 }
 
 .acco-modal-content {
-    /* Lighter Background: Dark Charcoal to Reddish Brown gradient */
-    background: linear-gradient(145deg, #2b2b2b, #4a0000);
-    border: 2px solid #ff4d4d;
-    padding: 30px;
-    border-radius: 12px;
+    background: url("../assets/images/graveyard.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: none;
+    padding: 0;
+    border-radius: 0;
     width: 90%;
-    /* Theme matching text color (Bone White/Gold) */
-    color: #f5f5dc; 
-    text-align: center;
-    max-width: 600px;
-    max-height: 80vh;
+    max-width: 500px;
+    height: 550px;
     position: relative;
-    overflow-y: auto;
+    overflow: hidden;
     animation: slideUp 0.3s ease;
-    box-shadow: 0 0 30px rgba(138, 3, 3, 0.5);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    transition: 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.acco-modal-content:hover {
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
 }
 
 .acco-modal-content h2 {
     font-family: 'Creepster', cursive;
-    color: #ff6b6b; /* Lighter red for contrast on the new background */
-    font-size: 2.5rem;
-    margin-top: 0;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #852424;
-    padding-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    color: #8a0303; /* Same dark red as card headings */
+    font-size: 2.2rem;
+    margin-top: 35%;
+    margin-bottom: 0;
+    padding: 10px 20px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    text-align: center;
+    white-space: pre-line;
+    position: relative;
+    z-index: 1;
+}
+
+.acco-modal-body {
+    width: 60%;
+    margin: 0 auto;
+    padding: 0 20px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    max-height: 150px;
+    position: relative;
 }
 
 .acco-modal-body p {
     font-size: 1.1rem;
+    width:80%;
+    margin:auto;
     line-height: 1.6;
     white-space: pre-line;
-    /* Ensure text matches the bone white theme */
-    color: #f5f5dc; 
+    color: #000000; /* Black text like cards */
+    font-weight: 600;
+    text-align: center;
+    padding: 10px 0;
+    overflow-y: auto;
+    overflow-x: auto;
 }
 
 /* Close Icon Button */
@@ -366,34 +372,10 @@
 
 /* --- RESPONSIVE / MOBILE NAVBAR ADJUSTMENTS --- */
 
-@media screen and (max-width: 801px) {
+/* Large Tablets (1400px and below) - Switch to 2 columns */
+@media screen and (max-width: 1400px) {
     .acco-main-container {
         grid-template-columns: 1fr;
-        overflow-y: auto;
-        height: auto;
-        padding-bottom: 80px;
-    }
-
-    .acco-container-1 { width: 100%; }
-
-    /* Adjust info box for mobile */
-    .acco-info-box {
-        width: 90%;
-        margin-left: 5%;
-        margin-top: 80px;
-        padding: 15px;
-    }
-    
-    .acco-head-p {
-        width: 90%;
-        margin-left: 5%;
-    }
-
-    .acco-heading span { font-size: 2.2rem; }
-
-    .acco-cards-container {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
     }
 
     .acco-container-2 {
@@ -438,12 +420,70 @@
 
     .acco-nav-btn i { font-size: 1.2rem; }
     .acco-nav-btn span { display: inline; }
+
+    .acco-main-container {
+        overflow-y: auto;
+        height: auto;
+        padding-bottom: 80px;
+    }
+
+    .acco-info-box {
+        width: 90%;
+        margin-left: 5%;
+        margin-top: 80px;
+        padding: 15px;
+    }
+    
+    .acco-cards-container {
+        grid-template-columns: repeat(auto-fit, 422px);
+        padding: 0 10px;
+    }
 }
 
-@media screen and (max-width: 450px) {
-    .acco-cards-container { grid-template-columns: 1fr; }
-    .acco-nav-btn span { display: none; }
-    .acco-nav-btn i { font-size: 1.5rem; }
+/* Medium screens (950px and below) - Cards stay 422px but container adjusts */
+@media screen and (max-width: 950px) {
+    .acco-cards-container {
+        grid-template-columns: 422px;
+        justify-content: center;
+    }
+
+    .acco-heading span { 
+        font-size: 2.5rem; 
+    }
+}
+
+/* Small screens (500px and below) - Hide button text, show icons only */
+@media screen and (max-width: 500px) {
+    .acco-nav-btn span { 
+        display: none; 
+    }
+    
+    .acco-nav-btn i { 
+        font-size: 1.5rem; 
+    }
+
+    .acco-info-box {
+        width: 95%;
+        margin-left: 2.5%;
+        margin-top: 60px;
+    }
+
+    .acco-heading span { 
+        font-size: 2rem; 
+    }
+
+    .acco-cards-container {
+        padding: 0 5px;
+    }
+}
+
+/* Very small screens - Ensure cards are still visible with horizontal scroll if needed */
+@media screen and (max-width: 440px) {
+    .acco-cards-container {
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding: 0 10px;
+    }
 }
 
   /*contingent*/
@@ -543,4 +583,22 @@
 .btn-6 span:hover:after {
     width: 100%;
     background-color: #000;
+}
+
+@keyframes popupScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.popup-anim {
+  animation: popupScale 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }

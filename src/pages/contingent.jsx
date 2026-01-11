@@ -1,4 +1,4 @@
-import React, { StrictMode, useEffect, useState } from "react";
+import React, { StrictMode, useContext, useEffect, useState } from "react";
 import contin from "../assets/images/Untitled-2_upscayl_4x_upscayl-standard-4x.png";
 import "./accommodation.css";
 import cardbg from "../assets/images/dark-fantasy-scene.jpg";
@@ -8,10 +8,11 @@ import Barcode from 'react-barcode';
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {AuthContext} from "../context/authContext.jsx";
 
 function Contingent() {
   const navigate = useNavigate();
-  const token = "eyJhbGciOiJIUzI1NiJ9.eyJzZklkIjoiU0YwMDAwMTEiLCJpZCI6MTEsImVtYWlsIjoidGVzdDFAZ21haWwuY29tIiwibW9iaWxlIjoiMTIzNDU2NzgxMSIsImNvbGxlZ2UiOiJ0aGFydW4iLCJjaXR5IjoiQmFycGV0YSIsIm5hbWUiOiJ0aGFydW4iLCJkb2IiOiIxMjIyLTEyLTEyVDAwOjAwOjAwLjAwMFoiLCJ5b3AiOjIwMjYsImFkZHIiOiJub25lIiwic3RhdGUiOiJBc3NhbSIsImdlbmRlciI6Ik0iLCJpc19jYSI6MSwic3RhdHVzIjoxLCJwYXltZW50X3N0YXR1cyI6MCwiZXhwIjoxNzY4MTEwOTY4fQ.rGghVl6gaYg92ePTwG5LrFI_Xr2Z2bj6njFZZWN2vfs";
+  const {token} = useContext(AuthContext);
   const [member, setMember] = useState([]);
   const [joinOn, setJoinOn] = useState(false);
   const [CreateOn, setCreateOn] = useState(false);
@@ -27,7 +28,7 @@ function Contingent() {
       console.error("Invalid token");
     }
   }
-  },[])
+  },[token])
   const [showBarcodeModal, setShowBarcodeModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -64,7 +65,7 @@ function Contingent() {
     }
 
     fetchData();
-  }, []);
+  }, [token]);
 
   const [joinId, setJoinId] = useState("");
   const [joinCode, setJoinCode] = useState("");
@@ -221,7 +222,7 @@ function Contingent() {
       {!token && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/10 backdrop-blur-xl">
             <div
-              className="w-full max-w-md p-10 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.8)] text-center relative overflow-hidden"
+              className="w-full max-w-md p-10 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.8)] text-center relative overflow-hidden popup-anim" 
               style={{
                 backgroundImage: `linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url("${cardbg}")`,
                 backgroundSize: 'cover',
@@ -267,7 +268,7 @@ function Contingent() {
             {showBarcodeModal && (
               <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
                 <div
-                  className="w-full max-w-sm p-8 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative text-center"
+                 className="w-full max-w-sm p-8 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative text-center popup-anim"
                   style={{
                     backgroundImage: `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url("${cardbg}")`,
                     backgroundSize: 'cover',
@@ -310,7 +311,7 @@ function Contingent() {
             {showAddModal && (
               <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
                 <div
-                  className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-2xl relative"
+                  className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-2xl relative popup-anim"
                   style={{
                     backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url("${cardbg}")`,
                     backgroundSize: 'cover',
@@ -373,7 +374,7 @@ function Contingent() {
             </div>
 
             <div
-              className="h-auto w-[95%] sm:w-[85%] max-w-[1200px] backdrop-blur-md border border-white/20 rounded-3xl shadow-2xl relative p-6 mx-auto"
+              className="h-auto w-[95%] sm:w-[85%] max-w-[1200px] backdrop-blur-md border border-white/20 rounded-3xl shadow-2xl relative p-6 mx-auto popup-anim"
               style={{
                 backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url("${cardbg}")`,
                 backgroundPosition: 'center',
@@ -468,7 +469,7 @@ function Contingent() {
 
         {
           token && !conti && !joinOn && !CreateOn &&
-          <div className=" grid gap-2 bg-black/60 items-center h-[350px] w-[80%] max-h-[1085.5px] max-w-[1720.25px] backdrop-blur-md border border-white/20  rounded-2xl shadow-xl"
+          <div className="grid gap-2 bg-black/60 items-center h-[350px] w-[80%] max-h-[1085.5px] max-w-[1720.25px] backdrop-blur-md border border-white/20 rounded-2xl shadow-xl popup-anim"
             style={{ gridTemplateRows: "2fr 5fr", backgroundImage: `url("${cardbg}")`, backgroundPosition: "center", opacity: 0.8, }}>
             <button
               onClick={() => { navigate("/accommodation") }}
@@ -476,22 +477,37 @@ function Contingent() {
             >
               <span className="material-symbols-outlined !text-[28px]">arrow_back</span>
             </button>
-            <div className="h-[150px] w-full max-w-[350px] m-auto rounded-2xl shadow-xl" style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Jolly Lodger', color: "white", fontSize: '2rem' }}>
+            <div className="h-[150px] w-full max-w-[350px] m-auto text-5xl sm:text-7xl rounded-2xl shadow-xl" style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Jolly Lodger', color: "white" }}>
               Contingent</div>
             <div className="grid gap-5" style={{ gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr", }}>
-              <div className="h-[100px] w-full max-w-[350px] m-auto  bg-gray backdrop-blur-md border border-white/20  rounded-2xl shadow-xl contin-custom-btn btn-6 "
+              <div className="h-[100px] w-full max-w-[350px] m-auto bg-gray backdrop-blur-md border border-white/20 rounded-2xl shadow-xl contin-custom-btn btn-6 relative overflow-hidden group"
                 onClick={() => setJoinOn(true)}
                 style={{
                   background: "linear-gradient(135deg, #e7e5e4 0%, #d6d3d1 100%)",
                   boxShadow: "0 4px 15px rgba(0,0,0,0.5)",
                 }}>
-                Join Contingent</div>
-              <div className="h-[100px] w-full max-w-[350px] m-auto  bg-gray backdrop-blur-md border border-white/20  rounded-2xl shadow-xl contin-custom-btn btn-6" onClick={() => setCreateOn(true)}
+                {/* Hover effect overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black to-red-600 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></div>
+                
+                {/* Text content */}
+                <span className="sm:pt-5 pt-2 relative z-10 flex items-center justify-center h-full font-['Jolly_Lodger'] text-4xl text-black group-hover:text-white transition-colors duration-300">
+                  Join Contingent
+                </span>
+              </div>
+             <div className="h-[100px] w-full max-w-[350px] m-auto bg-gray backdrop-blur-md border border-white/20 rounded-2xl shadow-xl contin-custom-btn btn-6 relative overflow-hidden group" 
+                onClick={() => setCreateOn(true)}
                 style={{
                   background: "linear-gradient(135deg, #e7e5e4 0%, #d6d3d1 100%)",
                   boxShadow: "0 4px 15px rgba(0,0,0,0.5)",
                 }}>
-                Create Contingent</div>
+                {/* Hover effect overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black to-red-600 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></div>
+                
+                {/* Text content */}
+                <span className="sm:pt-5 pt-2 relative z-10 flex items-center justify-center h-full font-['Jolly_Lodger'] text-4xl text-black group-hover:text-white transition-colors duration-300">
+                  Create Contingent
+                </span>
+              </div>
             </div>
           </div>
         }
@@ -502,7 +518,7 @@ function Contingent() {
             <div className="h-[150px] w-full max-w-[350px] rounded-2xl shadow-xl "
               style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Jolly Lodger', color: "white", fontSize: '4rem' }}>
               Contingent</div>
-            <div className="h-auto w-[80%] sm:w-[73%] max-w-[1720.25px] backdrop-blur-md border border-white/20  rounded-2xl shadow-xl justify-items-center relative"
+            <div className="h-auto sm:max-h-[580px] w-[80%] sm:w-[73%] max-w-[1000.25px] backdrop-blur-md border border-white/20  rounded-2xl shadow-xl justify-items-center relative popup-anim"
               style={{ backgroundImage: `url("${cardbg}")`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', opacity: 0.8, }}>
               <h2 className="text-5xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-20">
                 Join Contingents
@@ -561,7 +577,7 @@ function Contingent() {
             <div className="h-[150px] w-full max-w-[350px] rounded-2xl shadow-xl "
               style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Jolly Lodger', color: "white", fontSize: '4rem' }}>
               Contingent</div>
-            <div className="h-auto w-[80%] sm:w-[73%] max-w-[1720.25px] backdrop-blur-md border border-white/20  rounded-2xl shadow-xl justify-items-center relative"
+            <div className="h-auto w-[80%] sm:w-[73%] max-w-[1000.25px] backdrop-blur-md border border-white/20  rounded-2xl shadow-xl justify-items-center relative popup-anim"
               style={{ backgroundImage: `url("${cardbg}")`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', opacity: 0.8 }}>
               <h2 className="text-5xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-20">
                 Create A Contingents

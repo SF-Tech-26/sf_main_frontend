@@ -10,18 +10,24 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.18",
-    "axiom": "^0.35.0",
+    "@fontsource/cinzel": "^5.2.8",
+    "@fontsource/holtwood-one-sc": "^5.2.8",
+    "@fontsource/libre-baskerville": "^5.2.10",
+    "@fontsource/space-grotesk": "^5.2.10",
     "axios": "^1.13.2",
+    "framer-motion": "^12.23.26",
     "jwt-decode": "^4.0.0",
     "react": "^19.2.0",
     "react-barcode": "^1.6.1",
     "react-dom": "^19.2.0",
+    "react-google-recaptcha": "^3.1.0",
+    "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.11.0",
     "react-toastify": "^11.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@tailwindcss/vite": "^4.1.18",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
