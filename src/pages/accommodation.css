@@ -259,21 +259,30 @@
     align-items: center;
     z-index: 3000;
     backdrop-filter: blur(5px);
+    padding: 20px;
 }
 
 .acco-modal-content {
-    background: url("../assets/images/graveyard.png");
+    background: url("../assets/images/graveyard-modal.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     border: none;
     padding: 0;
     border-radius: 0;
-    width: 90%;
-    max-width: 500px;
-    height: 550px;
+    
+    width: 90%;           
+    max-width: 1063px;    
+    height: auto;
+    min-height: 400px;
+    max-height: 90vh;
+    
     position: relative;
-    overflow: hidden;
+    
+    /* --- SCROLLING --- */
+    overflow-y: auto;     
+    overflow-x: hidden;   
+
     animation: slideUp 0.3s ease;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
     transition: 0.2s;
@@ -287,14 +296,19 @@
 
 .acco-modal-content h2 {
     font-family: 'Creepster', cursive;
-    color: #8a0303; /* Same dark red as card headings */
-    font-size: 2.2rem;
-    margin-top: 35%;
+    color: #8a0303;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    margin-top: 8%;
     margin-bottom: 0;
     padding: 10px 20px;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     text-align: center;
     white-space: pre-line;
+    width: 60%;
+    margin-inline: auto;
+    height: auto;
+    max-height: 200px;
+    overflow: auto;
     position: relative;
     z-index: 1;
 }
@@ -302,26 +316,26 @@
 .acco-modal-body {
     width: 60%;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 20px 20px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    max-height: 150px;
     position: relative;
 }
 
 .acco-modal-body p {
-    font-size: 1.1rem;
-    width:80%;
-    margin:auto;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    width: 80%;
+    margin-inline: auto;
     line-height: 1.6;
     white-space: pre-line;
-    color: #000000; /* Black text like cards */
+    color: #cfd8dc;
     font-weight: 600;
     text-align: center;
     padding: 10px 0;
     overflow-y: auto;
     overflow-x: auto;
+    margin-bottom: 0;
 }
 
 /* Close Icon Button */
@@ -337,16 +351,165 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 10;
 }
 
 .acco-close-modal-btn span {
-    font-size: 2rem; /* Make icon larger */
+    font-size: 2rem;
     font-weight: bold;
 }
 
 .acco-close-modal-btn:hover {
     color: #fff;
-    transform: scale(1.1) rotate(90deg); /* Slight rotation effect on hover */
+    transform: scale(1.1) rotate(90deg);
+}
+
+/* Tablet Landscape (1200px and below) */
+@media (max-width: 1200px) {
+    .acco-modal-content {
+        width: 95%;
+        height: auto;
+        max-height: 85vh;
+    }
+    
+    .acco-modal-content h2 {
+        margin-top: 8%;
+        width: 70%;
+    }
+    
+    .acco-modal-body {
+        width: 70%;
+    }
+    
+    .acco-modal-body p {
+        width: 65%;
+    }
+}
+
+/* Tablet Portrait (900px and below) */
+@media (max-width: 900px) {
+    .acco-modal-overlay {
+        padding: 15px;
+    }
+    
+    .acco-modal-content {
+        width: 100%;
+        height: auto;
+        max-height: 90vh;
+        min-height: 350px;
+    }
+    
+    .acco-modal-content h2 {
+        margin-top: 8%;
+        width: 80%;
+        padding: 8px 15px;
+    }
+    
+    .acco-modal-body {
+        width: 80%;
+        padding: 0 15px 15px;
+    }
+    
+    .acco-modal-body p {
+        width: 70%;
+    }
+}
+
+/* Mobile Landscape (700px and below) */
+@media (max-width: 700px) {
+    .acco-modal-content {
+        height: auto;
+        max-height: 85vh;
+        min-height: 300px;
+    }
+    
+    .acco-modal-content h2 {
+        margin-top: 8%;
+        width: 90%;
+        font-size: 1.5rem;
+        max-height: 150px;
+    }
+    
+    .acco-modal-body {
+        width: 90%;
+        padding: 0 10px 10px;
+    }
+    
+    .acco-modal-body p {
+        width: 70%;
+        font-size: 0.95rem;
+    }
+    
+    .acco-close-modal-btn {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .acco-close-modal-btn span {
+        font-size: 1.5rem;
+    }
+}
+
+/* Mobile Portrait (500px and below) */
+@media (max-width: 500px) {
+    .acco-modal-overlay {
+        padding: 10px;
+    }
+    
+    .acco-modal-content {
+        width: 100%;
+        height: auto;
+        max-height: 90vh;
+        min-height: 280px;
+    }
+    
+    .acco-modal-content h2 {
+        margin-top: 12%;
+        width: 95%;
+        font-size: 1.3rem;
+        padding: 5px 10px;
+    }
+    
+    .acco-modal-body {
+        width: 95%;
+        padding: 0 10px 10px;
+    }
+    
+    .acco-modal-body p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        width:70%;
+    }
+}
+
+/* Very Small Devices (350px and below) */
+@media (max-width: 350px) {
+    .acco-modal-content h2 {
+        margin-top: 15%;
+        font-size: 1.1rem;
+    }
+    
+    .acco-modal-body p {
+        font-size: 0.85rem;
+    }
+    
+    .acco-close-modal-btn span {
+        font-size: 1.3rem;
+    }
+     .acco-modal-body p {
+        width:100%;
+    }
+}
+
+@keyframes slideUp { 
+    from { 
+        transform: translateY(20px); 
+        opacity: 0; 
+    } 
+    to { 
+        transform: translateY(0); 
+        opacity: 1; 
+    } 
 }
 
 /* --- MAP --- */
