@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/authContext';
+import { EventProvider } from './context/eventContext';
 import Contingent from './pages/contingent';
 
 // Page imports
@@ -26,41 +27,43 @@ import Navbar from './components/Navbar';
 function App() {
   return (
     <AuthProvider>
-      <Navbar />
-      <Toaster position="top-center" />
-      <Routes>
-        {/* Events Routes */}
-        <Route path="/events" element={<EventsPage />} />
-        <Route path="/events/:genre" element={<SubEventsPage />} />
-        <Route path="/events/:genre/:eventId" element={<EventDetailPage />} />
-        <Route path="/my-registrations" element={<MyRegistrations />} />
+      <EventProvider>
+        <Navbar />
+        <Toaster position="top-center" />
+        <Routes>
+          {/* Events Routes */}
+          <Route path="/events" element={<EventsPage />} />
+          <Route path="/events/:genre" element={<SubEventsPage />} />
+          <Route path="/events/:genre/:eventId" element={<EventDetailPage />} />
+          <Route path="/my-registrations" element={<MyRegistrations />} />
 
-        {/* Dashboard Routes */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/register" element={<RegisterEvent />} />
-        <Route path="/report" element={<Report />} />
-        <Route path="/profile" element={<Profile />} />
+          {/* Dashboard Routes */}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/register" element={<RegisterEvent />} />
+          <Route path="/report" element={<Report />} />
+          <Route path="/profile" element={<Profile />} />
 
-        {/* Accommodation Routes */}
-        <Route path="/accommodation" element={<Accommodation />} />
-        <Route path = "/Contingent" element={<Contingent/>}/>
+          {/* Accommodation Routes */}
+          <Route path="/accommodation" element={<Accommodation />} />
+          <Route path="/Contingent" element={<Contingent />} />
 
-        {/* Auth Routes */}
-        <Route path="/signin" element={<SignInPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
+          {/* Auth Routes */}
+          <Route path="/signin" element={<SignInPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
 
-        {/* FAQ Routes */}
-        <Route path="/faq" element={<FAQ />} />
+          {/* FAQ Routes */}
+          <Route path="/faq" element={<FAQ />} />
 
-        {/* Aftermovie Route */}
-        <Route path="/aftermovie" element={<AftermoviePage />} />
+          {/* Aftermovie Route */}
+          <Route path="/aftermovie" element={<AftermoviePage />} />
 
-        {/* Gallery Route */}
-        <Route path="/gallery" element={<Gallery />} />
+          {/* Gallery Route */}
+          <Route path="/gallery" element={<Gallery />} />
 
-        {/* Homepage Route */}
-        <Route path="/" element={<HomePage />} />
-      </Routes>
+          {/* Homepage Route */}
+          <Route path="/" element={<HomePage />} />
+        </Routes>
+      </EventProvider>
     </AuthProvider>
   );
 }
