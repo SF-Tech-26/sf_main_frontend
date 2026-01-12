@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAllEvents } from '../services/eventService';
+import { useEvents } from '../context/eventContext';
 
 const slugToGenre = {
     'dance': 'Dance',
@@ -273,7 +274,7 @@ const EventsPage = () => {
         navigate(`/events/${slug}`);
     };
 
-    if (isLoading) {
+    if (isLoadingEvents) {
         return (
             <div className="min-h-screen flex items-center justify-center" style={{ background: '#0d0015' }}>
                 <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />

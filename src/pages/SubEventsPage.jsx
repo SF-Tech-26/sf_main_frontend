@@ -6,6 +6,8 @@ import { getAllEvents, getEventsByGenre } from '../services/eventService';
 import { useAuth } from '../context/authContext';
 import RegistrationForm from '../components/events/RegistrationForm';
 import woodsBackground from '../assets/images/woods ghost.avif';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useEvents } from '../context/eventContext';
 
 const slugToGenre = {
     'dance': 'Dance',
@@ -266,7 +268,7 @@ const SubEventsPage = () => {
         return eventData[genreKey]?.icon || 'category';
     };
 
-    if (isLoading) {
+    if (isLoadingEvents) {
         return (
             <div className="font-body bg-background-dark text-slate-200 min-h-screen relative overflow-x-hidden flex items-center justify-center" style={{ backgroundColor: '#050210' }}>
                 <div className="relative z-10 flex flex-col items-center gap-4">

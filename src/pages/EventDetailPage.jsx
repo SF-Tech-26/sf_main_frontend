@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { getAllEvents, getEventsByGenre } from '../services/eventService';
+import { useEvents } from '../context/eventContext';
 import { useAuth } from '../context/authContext';
 import RegistrationForm from '../components/events/RegistrationForm';
 
@@ -112,33 +112,19 @@ const EventDetailPage = () => {
     const { genre: genreSlug, eventId } = useParams();
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
+    const { events: allEvents, isLoadingEvents, eventError, getEventById } = useEvents();
 
     const [event, setEvent] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [showRegistration, setShowRegistration] = useState(false);
 
     const genreName = slugToGenre[genreSlug] || genreSlug;
 
     useEffect(() => {
-        const fetchEvent = async () => {
-            try {
-                setIsLoading(true);
-                const response = await getAllEvents();
-                if (response.code === 0 && response.data) {
-                    const genreEvents = getEventsByGenre(response, genreName);
-                    const foundEvent = genreEvents.find(e => e.id === parseInt(eventId));
-                    setEvent(foundEvent || null);
-                    if (!foundEvent) setError('Event not found');
-                }
-            } catch (err) {
-                setError(err.message || 'Failed to fetch event');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchEvent();
-    }, [genreName, eventId]);
+        if (allEvents.length > 0) {
+            const foundEvent = getEventById(genreName, eventId);
+            setEvent(foundEvent);
+        }
+    }, [allEvents, genreName, eventId, getEventById]);
 
     const handleRegistrationSuccess = () => {
         setShowRegistration(false);
@@ -157,21 +143,20 @@ const EventDetailPage = () => {
     };
 
     const handleRegisterClick = () => {
-        setShowRegistration(true);
-        // if (isAuthenticated) {
-        //     setShowRegistration(true);
-        // } else {
-        //     toast.error('Please login to register', {
-        //         style: {
-        //             background: '#1a1a2e',
-        //             color: '#fff',
-        //             border: '1px solid rgba(239, 68, 68, 0.5)',
-        //         },
-        //     });
-        // }
+        if (isAuthenticated) {
+            setShowRegistration(true);
+        } else {
+            toast.error('Please login to register', {
+                style: {
+                    background: '#1a1a2e',
+                    color: '#fff',
+                    border: '1px solid rgba(239, 68, 68, 0.5)',
+                },
+            });
+        }
     };
 
-    if (isLoading) {
+    if (isLoadingEvents) {
         return (
             <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#050210' }}>
                 <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
@@ -179,11 +164,11 @@ const EventDetailPage = () => {
         );
     }
 
-    if (error || !event) {
+    if (eventError || !event) {
         return (
             <div className="min-h-screen flex items-center justify-center text-white" style={{ backgroundColor: '#050210' }}>
                 <div className="text-center">
-                    <p className="text-red-400 mb-4">{error || 'Event not found'}</p>
+                    <p className="text-red-400 mb-4">{eventError || 'Event not found'}</p>
                     <button onClick={() => navigate(`/events/${genreSlug}`)} className="px-4 py-2 bg-purple-600 rounded-lg">
                         Back to {genreName}
                     </button>
@@ -251,22 +236,38 @@ const EventDetailPage = () => {
                                         </span>
                                     </div>
 
-                                    <div className="relative group cursor-pointer z-10 mt-8" style={{ marginBottom: '1.5rem', marginLeft: '1.5rem' }}>
-                                        <div className="absolute inset-0 bg-purple-500 rounded-rounded  blur-2xl opacity-40 group-hover:opacity-70 transition-opacity duration-500 animate-pulse" />
-                                        <motion.button
-                                            onClick={handleRegisterClick}
-                                            className="w-32 h-32 rounded-full flex items-center justify-center text-white font-bold  p-5 text-sm tracking-wider relative z-10 border border-white/20"
-                                            style={{
-                                                fontFamily: 'Cinzel, serif',
-                                                background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8) 0%, rgba(217, 70, 239, 1) 20%, rgba(139, 92, 246, 1) 50%, rgba(76, 29, 149, 1) 100%)',
-                                                boxShadow: '0 0 30px rgba(217, 70, 239, 0.5), 0 0 60px rgba(139, 92, 246, 0.3)'
-                                            }}
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
+                                    {!showRegistration && (
+                                        <div className="relative group cursor-pointer z-10 mt-8" style={{ marginBottom: '1.5rem', marginLeft: '1.5rem' }}>
+                                            <div className="absolute inset-0 bg-purple-500 rounded-rounded  blur-2xl opacity-40 group-hover:opacity-70 transition-opacity duration-500 animate-pulse" />
+                                            <motion.button
+                                                onClick={handleRegisterClick}
+                                                className="w-32 h-32 rounded-full flex items-center justify-center text-white font-bold  p-5 text-sm tracking-wider relative z-10 border border-white/20"
+                                                style={{
+                                                    fontFamily: 'Cinzel, serif',
+                                                    background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8) 0%, rgba(217, 70, 239, 1) 20%, rgba(139, 92, 246, 1) 50%, rgba(76, 29, 149, 1) 100%)',
+                                                    boxShadow: '0 0 30px rgba(217, 70, 239, 0.5), 0 0 60px rgba(139, 92, 246, 0.3)'
+                                                }}
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                            >
+                                                REGISTER<br />NOW
+                                            </motion.button>
+                                        </div>
+                                    )}
+
+                                    {showRegistration && (
+                                        <motion.div
+                                            className="w-full mt-4 relative z-10"
+                                            initial={{ opacity: 0, height: 0 }}
+                                            animate={{ opacity: 1, height: 'auto' }}
                                         >
-                                            REGISTER<br />NOW
-                                        </motion.button>
-                                    </div>
+                                            <RegistrationForm
+                                                event={event}
+                                                onSuccess={handleRegistrationSuccess}
+                                                onCancel={() => setShowRegistration(false)}
+                                            />
+                                        </motion.div>
+                                    )}
                                 </div>
 
                                 {/* Right Section */}
@@ -314,30 +315,6 @@ const EventDetailPage = () => {
                 <footer className="relative z-10 text-center py-6 text-slate-500 text-xs md:text-sm tracking-widest uppercase opacity-60" style={{ fontFamily: 'Cinzel, serif' }}>
                     © 2025 SF Ethereal Enigma. All Rights Reserved.
                 </footer>
-                {/* Registration Modal Overlay */}
-                {showRegistration && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center px-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)', backdropFilter: 'blur(8px)' }}>
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            className="w-full max-w-4xl relative"
-                            style={{
-                                background: 'transparent',
-                                boxShadow: 'none'
-                            }}
-                        >
-                            {/* Modal Body */}
-                            <div className="max-h-[85vh] overflow-y-auto">
-                                <RegistrationForm
-                                    event={event}
-                                    onSuccess={handleRegistrationSuccess}
-                                    onCancel={() => setShowRegistration(false)}
-                                />
-                            </div>
-                        </motion.div>
-                    </div>
-                )}
             </div>
         </div>
     );
