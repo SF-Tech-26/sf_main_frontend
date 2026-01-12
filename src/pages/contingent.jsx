@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {AuthContext} from "../context/authContext.jsx";
+import { Crown } from "lucide-react"
+
 
 function Contingent() {
   const navigate = useNavigate();
@@ -171,7 +173,7 @@ const handleConfirmLeave = async () => {
       return;
     }
     
-    const confirmLeave = window.confirm("Are you sure you want to abandon your contingent?");
+    const confirmLeave = window.confirm("Are you sure you want to leave your contingent?");
 
     if (!confirmLeave) return;
 
@@ -254,7 +256,7 @@ const handleConfirmLeave = async () => {
       >
 
       {!token && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/10 backdrop-blur-xl">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-xl">
             <div className="w-full max-w-md p-10 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.8)] text-center relative overflow-hidden popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/90 to-[#5f8a84]/70">
               {/* Decorative Glow */}
               <div className="absolute -top-24 -left-24 w-48 h-48 bg-purple-600/20 blur-[100px]"></div>
@@ -264,7 +266,7 @@ const handleConfirmLeave = async () => {
               </span>
 
               <h2 className="text-6xl text-white font-['Jolly_Lodger'] mb-4 tracking-widest">
-                Halt, Stranger!
+                Sign In
               </h2>
               
               <p className="text-gray-300 text-xl font-sans mb-8 leading-relaxed">
@@ -301,7 +303,7 @@ const handleConfirmLeave = async () => {
                   </span>
 
                   <h2 className="text-5xl text-white font-['Jolly_Lodger'] mb-4 tracking-widest">
-                    Abandon Journey?
+                    leave Contingent?
                   </h2>
 
                   <p className="text-gray-200 text-xl font-sans mb-8 leading-relaxed">
@@ -319,7 +321,7 @@ const handleConfirmLeave = async () => {
                       onClick={handleConfirmLeave}
                       className="cursor-pointer flex-1 py-3 text-2xl text-white font-['Jolly_Lodger'] tracking-widest bg-red-900/60 border border-red-500/50 rounded-xl hover:bg-red-600/80 hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all"
                     >
-                      ABANDON
+                      Leave
                     </button>
                   </div>
                 </div>
@@ -372,7 +374,7 @@ const handleConfirmLeave = async () => {
                   </button>
 
                   <h2 className="text-5xl text-white text-center font-['Jolly_Lodger'] mb-6 tracking-widest">
-                    Summon Member
+                    Add Member
                   </h2>
 
                   <form onSubmit={AddMember} className="flex flex-col gap-5">
@@ -418,7 +420,7 @@ const handleConfirmLeave = async () => {
               Contingent
             </div>
 
-            <div className="h-[550px] overflow-auto w-[95%] sm:w-[85%] max-w-[800px] backdrop-blur-md border border-white/20 rounded-3xl shadow-2xl relative p-6 mx-auto popup-anim bg-gradient-to-r from-[#302e3b]/80 to-[#5f8a84]/60">
+            <div className="h-[550px] overflow-auto w-[95%] sm:w-[85%] max-w-[800px] backdrop-blur-md border border-white/20 rounded-3xl shadow-2xl relative p-6 mx-auto popup-anim bg-black/70">
               <button
                 onClick={() => { navigate("/accommodation") }}
                 className="cursor-pointer absolute top-4 left-4 p-2 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all z-10"
@@ -453,20 +455,19 @@ const handleConfirmLeave = async () => {
                 </div>
                 <div className="bg-black/40 p-4 rounded-2xl border border-white/10 text-center">
                   <p className="font-['Jolly_Lodger'] text-white text-3xl opacity-70">Barcode</p>
+                  <div className=" justify-items-center">
                   <button
-                    onClick={() => setShowBarcodeModal(true)}
-                    className="cursor-pointer group relative flex flex-col items-center justify-center w-full transition-all duration-300 active:scale-95"
-                  >
-                    <p className="font-['Jolly_Lodger'] text-white text-3xl opacity-70 mb-1 group-hover:text-purple-300 transition-colors">
-                      View Barcode
-                    </p>
-                    <p className="font-['Jolly_Lodger'] text-purple-400 text-2xl tracking-widest border-b border-transparent group-hover:border-purple-500 group-hover:shadow-[0_5px_15px_rgba(168,85,247,0.4)] transition-all">
-                      {data.id || "N/A"}
-                    </p>
-                    <span className="text-[10px] text-white/30 uppercase mt-2 tracking-tighter group-hover:text-white/60">
-                      Click to scan
-                    </span>
-                  </button>
+                onClick={() => setShowBarcodeModal(true)}
+                className="cursor-pointer group relative flex flex-col items-center justify-center w-full max-w-[200px] transition-all duration-300 active:scale-95 bg-green-800 hover:bg-green-400 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-purple-500/50 shadow-lg hover:shadow-purple-500/20"
+              >
+                <p className="font-['Jolly_Lodger'] text-white text-2xl tracking-widest group-hover:text-black transition-all">
+                  {data.id || "N/A"}
+                </p>
+                <span className="text-[10px] text-white/80 uppercase mt-2 tracking-tighter group-hover:text-black">
+                  Click to scan
+                </span>
+              </button>
+              </div>
                 </div>
                 <div className="bg-black/40 p-4 rounded-2xl border border-white/10 text-center"
                 style={{background:"linear-gradient(to right,#302e3b 0%, #5f8a84 100%)"}}>
@@ -479,8 +480,18 @@ const handleConfirmLeave = async () => {
                     <div key={index} className="bg-white/5 border border-white/10 p-4 rounded-xl flex items-center justify-between"
                     style={{background:"linear-gradient(to right,#302e3b 0%, #5f8a84 100%)"}}>
                       <span className="text-white font-['Jolly_Lodger'] text-xl">
-                        <div className="text-4xl text-black">{m.name} {(m.id === data.leaderId) ? "👑" : ""}</div>
+                        <div className="text-4xl text-black flex items-center gap-2">
+                            {m.name} 
+                          </div>
+                          {(m.id === data.leaderId) && (
+                              <p className="inline-flex items-center gap-1 px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
+                                <Crown className="w-4 h-4" />
+                                Leader
+                              </p>
+                            )}
+                        <div>
                         {m.sfId}
+                        </div>
                       </span>
                       {m.paymentStatus && <span className="text-green-800 text-xs uppercase font-bold">Paid</span>}
                       {!m.paymentStatus && <span className="text-red-800 text-xs uppercase font-bold">Unpaid</span>}
@@ -509,49 +520,103 @@ const handleConfirmLeave = async () => {
 
         {
           token && !conti && !joinOn && !CreateOn &&
-          <div className="grid gap-2 bg-black/20 items-center h-[300px] w-[80%] max-h-[1085.5px] max-w-[500.25px] backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl popup-anim"
-     style={{ gridTemplateRows: "2fr 5fr" }}>
-            <button
-              onClick={() => { navigate("/accommodation") }}
-              className="cursor-pointer absolute top-4 left-4 p-2 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all z-10"
-            >
-              <span className="material-symbols-outlined !text-[28px]">arrow_back</span>
-            </button>
-            <div className="h-[100px] w-full max-w-[300px] m-auto text-5xl sm:text-7xl rounded-2xl" style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Jolly Lodger', color: "black" }}>
-              Contingent</div>
-            <div className="grid gap-5" style={{ gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr", }}>
-              <div className="h-auto  m-auto bg-gray backdrop-blur-md border border-white/20 rounded-2xl shadow-xl contin-custom-btn btn-6 relative overflow-hidden group"
-                onClick={() => setJoinOn(true)}
-                style={{
-                  background: "linear-gradient(135deg, #e7e5e4 0%, #d6d3d1 100%)",
-                  boxShadow: "0 4px 15px rgba(0,0,0,0.5)",
-                }}>
-                {/* Hover effect overlay */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"
-                style={{background:"linear-gradient(to right,#302e3b 0%, #5f8a84 100%)"}}></div>
-                
-                {/* Text content */}
-                <span className="p-2 relative z-10 flex items-center justify-center h-full font-['Jolly_Lodger'] text-4xl text-black group-hover:text-white transition-colors duration-300">
-                  Join Contingent
-                </span>
-              </div>
-             <div className=" m-auto bg-gray backdrop-blur-md border border-white/20 rounded-2xl shadow-xl contin-custom-btn btn-6 relative overflow-hidden group" 
-                onClick={() => setCreateOn(true)}
-                style={{
-                  background: "linear-gradient(135deg, #e7e5e4 0%, #d6d3d1 100%)",
-                  boxShadow: "0 4px 15px rgba(0,0,0,0.5)",
-                }}>
-                {/* Hover effect overlay */}
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"
-                style={{background:"linear-gradient(to right,#302e3b 0%, #5f8a84 100%)"}}></div>
-                
-                {/* Text content */}
-                <span className="p-2 relative z-10 flex items-center justify-center h-full font-['Jolly_Lodger'] text-4xl text-black group-hover:text-white transition-colors duration-300">
-                  Create Contingent
-                </span>
-              </div>
-            </div>
+  <div className="flex flex-col gap-6 bg-black/70 p-6 sm:p-10 w-[95%] sm:w-[90%] max-w-[550px] h-auto backdrop-blur-xl border border-purple-500/30 rounded-3xl shadow-[0_0_50px_rgba(139,92,246,0.3)] popup-anim relative">
+    {/* Back Button */}
+    <button
+      onClick={() => { navigate("/accommodation") }}
+      className="absolute top-4 left-4 p-2.5 rounded-full text-white/60 hover:text-white hover:bg-purple-500/20 transition-all z-10 hover:shadow-lg hover:shadow-purple-500/30"
+    >
+      <span className="material-symbols-outlined !text-[28px]">arrow_back</span>
+    </button>
+
+    {/* Title */}
+    <div className="text-center pt-8 sm:pt-8 pb-2 sm:pb-2">
+      <h1 className="font-['Jolly_Lodger'] text-5xl sm:text-6xl md:text-7xl text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-purple-400 drop-shadow-[0_0_30px_rgba(168,85,247,0.6)]">
+        Contingent
+      </h1>
+    </div>
+
+    {/* Cards Container */}
+    <div className="flex flex-col sm:flex-row gap-4 max-h-[250px] sm:gap-6 w-full px-2 sm:px-4 flex-1 items-center sm:items-stretch">
+      {/* Join Contingent Card */}
+      <div 
+        onClick={() => setJoinOn(true)}
+        className="w-full sm:flex-1 h-[140px] sm:h-auto sm:aspect-square group cursor-pointer relative overflow-hidden rounded-xl border-2 hover:border-[#4a4a5e] transition-all duration-500 hover:scale-105"
+        style={{
+          background: "rgba(74, 74, 94, 0.25)",
+          borderColor: "rgba(74, 74, 94, 0.5)",
+          boxShadow: "0 0 0 rgba(74, 74, 94, 0.3)"
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.boxShadow = "0 0 40px rgba(74, 74, 94, 0.5)"}
+        onMouseLeave={(e) => e.currentTarget.style.boxShadow = "0 0 0 rgba(74, 74, 94, 0.3)"}
+      >
+        {/* Animated background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#4a4a5e]/0 via-[#4a4a5e]/0 to-[#4a4a5e]/0 group-hover:from-[#4a4a5e]/30 group-hover:via-[#4a4a5e]/20 group-hover:to-[#4a4a5e]/30 transition-all duration-500"></div>
+        
+        {/* Glow effect */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-[#4a4a5e] to-transparent blur-sm"></div>
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 flex flex-row sm:flex-col items-center justify-center gap-4 sm:gap-3 p-4 sm:p-6 h-full">
+          <div className="text-4xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">
+            🚪
           </div>
+          <div className="flex flex-col items-center sm:items-center">
+            <h2 className="font-['Jolly_Lodger'] text-3xl sm:text-4xl text-white text-center transition-colors duration-300" style={{color: "white"}}>
+              Join Contingent
+            </h2>
+            <p className="font-['Jolly_Lodger'] text-base sm:text-lg text-center transition-colors duration-300" style={{color: "rgba(74, 74, 94, 0.7)"}}>
+              
+            </p>
+          </div>
+        </div>
+
+        {/* Corner decoration */}
+        <div className="absolute bottom-0 right-0 w-16 h-16 rounded-tl-full" style={{background: "linear-gradient(to top left, rgba(74, 74, 94, 0.2), transparent)"}}></div>
+      </div>
+
+      {/* Create Contingent Card */}
+      <div 
+        onClick={() => setCreateOn(true)}
+        className="w-full sm:flex-1 h-[140px] sm:h-auto sm:aspect-square group cursor-pointer relative overflow-hidden rounded-xl border-2 hover:border-[#5F938B] transition-all duration-500 hover:scale-105"
+        style={{
+          background: "rgba(95, 147, 139, 0.15)",
+          borderColor: "rgba(95, 147, 139, 0.4)",
+          boxShadow: "0 0 0 rgba(95, 147, 139, 0.3)"
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.boxShadow = "0 0 40px rgba(95, 147, 139, 0.5)"}
+        onMouseLeave={(e) => e.currentTarget.style.boxShadow = "0 0 0 rgba(95, 147, 139, 0.3)"}
+      >
+        {/* Animated background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#5F938B]/0 via-[#5F938B]/0 to-[#5F938B]/0 group-hover:from-[#5F938B]/30 group-hover:via-[#5F938B]/20 group-hover:to-[#5F938B]/30 transition-all duration-500"></div>
+        
+        {/* Glow effect */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-[#5F938B] to-transparent blur-sm"></div>
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 flex flex-row sm:flex-col items-center justify-center gap-4 sm:gap-3 p-4 sm:p-6 h-full">
+          <div className="text-4xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">
+            ✨
+          </div>
+          <div className="flex flex-col items-center sm:items-center">
+            <h2 className="font-['Jolly_Lodger'] text-3xl sm:text-4xl text-white text-center transition-colors duration-300" style={{color: "white"}}>
+              Create Contingent
+            </h2>
+            <p className="font-['Jolly_Lodger'] text-base sm:text-lg text-center transition-colors duration-300" style={{color: "rgba(95, 147, 139, 0.7)"}}>
+            
+            </p>
+          </div>
+        </div>
+
+        {/* Corner decoration */}
+        <div className="absolute bottom-0 right-0 w-16 h-16 rounded-tl-full" style={{background: "linear-gradient(to top left, rgba(95, 147, 139, 0.2), transparent)"}}></div>
+      </div>
+    </div>
+  </div>
         }
 
 
@@ -560,7 +625,7 @@ const handleConfirmLeave = async () => {
             <div className="h-[150px] mt-[20px] w-full max-w-[350px] rounded-2xl shadow-xl "
               style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Jolly Lodger', color: "white", fontSize: '4rem' }}>
               Contingent</div>
-            <div className="h-auto w-[80%] sm:w-[73%] max-w-[600.25px] backdrop-blur-md bg-black/10 border border-white/20 rounded-2xl shadow-xl justify-items-center relative popup-anim">
+            <div className="h-auto w-[80%] sm:w-[73%] max-w-[600.25px] backdrop-blur-md bg-black/70 border border-white/20 rounded-2xl shadow-xl justify-items-center relative popup-anim">
               <h2 className="text-5xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-5">
                 Join Contingents
               </h2>
@@ -618,7 +683,7 @@ const handleConfirmLeave = async () => {
             <div className="h-[150px] w-full max-w-[350px] rounded-2xl shadow-xl "
               style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Jolly Lodger', color: "white", fontSize: '4rem' }}>
               Contingent</div>
-           <div className="h-auto w-[80%] sm:w-[73%] max-w-[600.25px] backdrop-blur-md bg-black/10 border border-white/20 rounded-2xl shadow-xl justify-items-center relative popup-anim">
+           <div className="h-auto w-[80%] sm:w-[73%] max-w-[600.25px] backdrop-blur-md bg-black/70 border border-white/20 rounded-2xl shadow-xl justify-items-center relative popup-anim">
               <h2 className="text-5xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-5">
                 Create A Contingents
               </h2>
