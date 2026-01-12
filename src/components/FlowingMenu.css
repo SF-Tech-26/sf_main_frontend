@@ -1,0 +1,133 @@
+/* FlowingMenu.css */
+.menu-wrap {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  counter-reset: menu;
+  height: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+.menu__item {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid #fff;
+  /* Default border, can be overridden */
+  cursor: pointer;
+  transition: background 0.3s ease;
+  min-height: 100px;
+  /* Ensure some height for squarish look if content is small */
+}
+
+.menu__item:last-child {
+  border-bottom: none;
+}
+
+.menu__item-link {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  padding: 0 2rem;
+  text-decoration: none;
+  color: inherit;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 2rem;
+  /* Larger text */
+  letter-spacing: 0.05em;
+  z-index: 20;
+}
+
+.menu__item-link:hover {
+  /* text-decoration: underline; - Optional */
+}
+
+/* Marquee Styles */
+.marquee {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  /* Default, overridden by prop */
+  transform: translate3d(0, 101%, 0);
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.marquee__inner-wrap {
+  width: 100%;
+  height: 100%;
+  transform: translate3d(0, -101%, 0);
+}
+
+.marquee__inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  /* animation handled by GSAP */
+  will-change: transform;
+}
+
+.marquee__part {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  padding: 0 2rem;
+  flex-shrink: 0;
+}
+
+.marquee__part span {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 3rem;
+  /* Larger for marquee */
+  margin-right: 2rem;
+}
+
+.marquee__img {
+  width: 120px;
+  /* Squarish image in marquee */
+  height: 90px;
+  background-size: cover;
+  background-position: center;
+  margin-right: 2rem;
+  border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .menu__item {
+    min-height: 80px;
+  }
+
+  .menu__item-link {
+    font-size: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .marquee__part span {
+    font-size: 2rem;
+  }
+
+  .marquee__img {
+    width: 80px;
+    height: 60px;
+  }
+}

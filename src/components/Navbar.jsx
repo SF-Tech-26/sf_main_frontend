@@ -1,144 +1,69 @@
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import StaggeredMenu from './StaggeredMenu';
+import { useLocation } from 'react-router-dom';
 
 export default function Navbar() {
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(false);
 
-  const isActive = (path) => location.pathname === path;
-
-  const navLinks = [
-    { path: '/', label: 'Home' },
-    { path: '/events', label: 'Events' },
-    { path: '/gallery', label: 'Gallery' },
-    { path: '/aftermovie', label: 'Aftermovie' },
-    { path: '/accommodation', label: 'Accommodation' },
-    { path: '/merch', label: 'Merch' },
-    { path: '/faq', label: 'FAQ' },
+  const menuItems = [
+    { label: 'Home', ariaLabel: 'Go to home page', link: '/' },
+    { label: 'Events', ariaLabel: 'View events', link: '/events' },
+    { label: 'Gallery', ariaLabel: 'View gallery', link: '/gallery' },
+    { label: 'Aftermovie', ariaLabel: 'Watch aftermovie', link: '/aftermovie' },
+    { label: 'Accommodation', ariaLabel: 'Accommodation details', link: '/accommodation' },
+    { label: 'Merch', ariaLabel: 'Buy merchandise', link: '/merch' },
+    { label: 'FAQ', ariaLabel: 'Frequently Asked Questions', link: '/faq' },
   ];
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-  const closeMenu = () => setIsOpen(false);
+  const socialItems = [
+    {
+      label: 'Instagram',
+      link: 'https://instagram.com/springfest.iitkgp',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+          <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+        </svg>
+      )
+    },
+    {
+      label: 'Facebook',
+      link: 'https://facebook.com/springfest.iitkgp',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+        </svg>
+      )
+    },
+    {
+      label: 'YouTube',
+      link: 'https://youtube.com/springfest',
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
+          <path d="m10 15 5-3-5-3z" />
+        </svg>
+      )
+    }
+  ];
 
   return (
-    <>
-      {/* Small floating menu button */}
-      <button
-        className={`nav-toggle ${isOpen ? 'open' : ''}`}
-        onClick={toggleMenu}
-        aria-label="Navigation"
-      >
-        <span className="toggle-icon">☰</span>
-      </button>
-
-      {/* Compact dropdown menu */}
-      <nav className={`mini-nav ${isOpen ? 'open' : ''}`}>
-        {navLinks.map((link) => (
-          <Link
-            key={link.path}
-            to={link.path}
-            className={`mini-link ${isActive(link.path) ? 'active' : ''}`}
-            onClick={closeMenu}
-          >
-            {link.label}
-          </Link>
-        ))}
-      </nav>
-
-      {isOpen && <div className="mini-overlay" onClick={closeMenu}></div>}
-
-      <style>{`
-        .nav-toggle {
-          position: fixed;
-          top: 12px;
-          right: 12px;
-          z-index: 1001;
-          width: 36px;
-          height: 36px;
-          background: rgba(24, 24, 27, 0.9);
-          border: 1px solid rgba(161, 161, 170, 0.2);
-          border-radius: 8px;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          backdrop-filter: blur(8px);
-          transition: all 0.2s;
-        }
-
-        .nav-toggle:hover {
-          background: rgba(24, 24, 27, 1);
-          border-color: #10b981;
-        }
-
-        .nav-toggle.open {
-          background: #10b981;
-          border-color: #10b981;
-        }
-
-        .toggle-icon {
-          font-size: 16px;
-          color: #a1a1aa;
-          transition: all 0.2s;
-        }
-
-        .nav-toggle:hover .toggle-icon,
-        .nav-toggle.open .toggle-icon {
-          color: #fff;
-        }
-
-        .mini-nav {
-          position: fixed;
-          top: 54px;
-          right: 12px;
-          z-index: 1000;
-          background: rgba(24, 24, 27, 0.95);
-          border: 1px solid rgba(161, 161, 170, 0.15);
-          border-radius: 10px;
-          backdrop-filter: blur(12px);
-          padding: 6px;
-          display: flex;
-          flex-direction: column;
-          gap: 2px;
-          opacity: 0;
-          transform: translateY(-8px) scale(0.95);
-          pointer-events: none;
-          transition: all 0.2s ease;
-          min-width: 140px;
-        }
-
-        .mini-nav.open {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-          pointer-events: auto;
-        }
-
-        .mini-link {
-          padding: 8px 12px;
-          color: #a1a1aa;
-          text-decoration: none;
-          font-size: 13px;
-          border-radius: 6px;
-          transition: all 0.15s;
-          white-space: nowrap;
-        }
-
-        .mini-link:hover {
-          color: #fafafa;
-          background: rgba(255, 255, 255, 0.08);
-        }
-
-        .mini-link.active {
-          color: #10b981;
-          background: rgba(16, 185, 129, 0.15);
-        }
-
-        .mini-overlay {
-          position: fixed;
-          inset: 0;
-          z-index: 999;
-        }
-      `}</style>
-    </>
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 0, zIndex: 9999 }}>
+      <StaggeredMenu
+        position="left"
+        items={menuItems}
+        socialItems={socialItems}
+        displaySocials={true}
+        displayItemNumbering={true}
+        menuButtonColor="#fff"
+        openMenuButtonColor="#fff"
+        changeMenuColorOnOpen={true}
+        colors={['#18181b', '#042f2e']} // Zinc-900 to Emerald-950
+        logoUrl=""
+        accentColor="#10b981" // Emerald-500
+        onMenuOpen={() => console.log('Menu opened')}
+        onMenuClose={() => console.log('Menu closed')}
+      />
+    </div>
   );
 }
