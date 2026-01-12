@@ -22,6 +22,8 @@ import AftermoviePage from './pages/AftermoviePage';
 import Gallery from './pages/Gallery';
 import Merch from './pages/Merch';
 import Navbar from './components/Navbar';
+// import Profile from './pages/Profile';
+
 
 function App() {
   return (
