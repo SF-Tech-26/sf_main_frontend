@@ -324,7 +324,7 @@ const SubEventsPage = () => {
                 ></div>
                 <div className="absolute top-[-10%] left-[20%] w-[500px] h-[500px] bg-moss-green/30 rounded-full blur-[100px] animate-pulse-slow mix-blend-screen"></div>
                 <div className="absolute bottom-[-10%] right-[10%] w-[600px] h-[600px] bg-deep-amber/20 rounded-full blur-[120px] mix-blend-screen" style={{ animation: 'float 6s ease-in-out infinite 1s' }}></div>
-            </div>
+            </div>  
 
             {/* Main Content */}
             <main className="relative z-10 pt-16 pb-20 container mx-auto px-4 min-h-screen flex flex-col items-center">
