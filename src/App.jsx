@@ -20,6 +20,7 @@ import HomePage from './pages/HomePage';
 import FAQ from './pages/FAQ';
 import AftermoviePage from './pages/AftermoviePage';
 import Gallery from './pages/Gallery';
+import Merch from './pages/Merch';
 import Navbar from './components/Navbar';
 // import Profile from './pages/Profile';
 
@@ -59,6 +60,9 @@ function App() {
 
           {/* Gallery Route */}
           <Route path="/gallery" element={<Gallery />} />
+
+          {/* Merch Route */}
+          <Route path="/merch" element={<Merch />} />
 
           {/* Homepage Route */}
           <Route path="/" element={<HomePage />} />
