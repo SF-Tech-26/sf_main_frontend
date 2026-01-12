@@ -68,7 +68,7 @@ export default function Merch() {
     return (
         <div
             className="w-full min-h-screen bg-fixed bg-cover bg-center bg-no-repeat px-4 py-10 md:px-16 md:py-10 text-[#f5e9dc] overflow-y-auto"
-            style={{ backgroundImage: `url(${bg})`, fontFamily: 'Cinzel, serif' }}
+            style={{ backgroundImage: `url(${bg})`, fontFamily: '"Cinzel Decorative", serif' }}
         >
             {page === "merch" && (
                 <MerchPage
