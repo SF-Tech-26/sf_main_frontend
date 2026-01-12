@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { getAllEvents, getEventsByGenre } from '../services/eventService';
 import { useAuth } from '../context/authContext';
@@ -268,7 +267,7 @@ const SubEventsPage = () => {
         return eventData[genreKey]?.icon || 'category';
     };
 
-    if (isLoadingEvents) {
+    if (isLoading) {
         return (
             <div className="font-body bg-background-dark text-slate-200 min-h-screen relative overflow-x-hidden flex items-center justify-center" style={{ backgroundColor: '#050210' }}>
                 <div className="relative z-10 flex flex-col items-center gap-4">
@@ -543,24 +542,26 @@ const SubEventsPage = () => {
             </div>
 
             {/* Registration Modal Overlay */}
-            {showRegistration && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center px-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)', backdropFilter: 'blur(8px)' }}>
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        className="w-full max-w-4xl relative"
-                    >
-                        <div className="max-h-[85vh] overflow-y-auto">
-                            <RegistrationForm
-                                event={currentEvent}
-                                onSuccess={handleRegistrationSuccess}
-                                onCancel={() => setShowRegistration(false)}
-                            />
-                        </div>
-                    </motion.div>
-                </div>
-            )}
+            <AnimatePresence>
+                {showRegistration && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center px-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)', backdropFilter: 'blur(8px)' }}>
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            className="w-full max-w-4xl relative"
+                        >
+                            <div className="max-h-[85vh] overflow-y-auto">
+                                <RegistrationForm
+                                    event={currentEvent}
+                                    onSuccess={handleRegistrationSuccess}
+                                    onCancel={() => setShowRegistration(false)}
+                                />
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
             {/* Styles */}
             <style>{`
