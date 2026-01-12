@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../context/authContext';
 import { registerForEvent, getRegisteredEvents } from '../../services/eventService';
 import toast from 'react-hot-toast';
-import DotGrid from '../effects/DotGrid';
 
 const RegistrationForm = ({ event, onSuccess, onCancel }) => {
     const auth = useAuth();
+    const formRef = useRef(null);
 
     // Use real auth
     const { token, user } = auth;
@@ -25,6 +25,18 @@ const RegistrationForm = ({ event, onSuccess, onCancel }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [isRegistered, setIsRegistered] = useState(false);
+
+    // Handle click outside to close
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (formRef.current && !formRef.current.contains(event.target)) {
+                onCancel?.();
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [onCancel]);
 
     useEffect(() => {
         const checkRegistrationStatus = async () => {
@@ -157,28 +169,13 @@ const RegistrationForm = ({ event, onSuccess, onCancel }) => {
 
     return (
         <div
+            ref={formRef}
             className="relative p-4 sm:p-8 md:p-12 rounded-3xl w-full max-w-2xl mx-auto border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] my-4 sm:my-8 overflow-hidden"
             style={{
                 background: 'rgba(10, 10, 20, 0.85)',
                 backdropFilter: 'blur(20px)'
             }}
         >
-            {/* Interactive Dot Grid Background - Desktop Only */}
-            <div className="hidden lg:block">
-                <DotGrid
-                    dotSize={4}
-                    gap={24}
-                    baseColor="#1a1a2e"
-                    activeColor="#8b5cf6"
-                    proximity={120}
-                    speedTrigger={80}
-                    shockRadius={200}
-                    shockStrength={4}
-                    maxSpeed={4000}
-                    resistance={600}
-                    returnDuration={1.2}
-                />
-            </div>
 
             {/* Subtle overlay for depth */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 z-[1]" />
