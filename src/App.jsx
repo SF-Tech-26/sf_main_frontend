@@ -14,10 +14,16 @@ import RegisterEvent from './pages/RegisterEvents';
 import Profile from './pages/Profile';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
+import HomePage from './pages/HomePage';
+import FAQ from './pages/FAQ';
+import AftermoviePage from './pages/AftermoviePage';
+import Gallery from './pages/Gallery';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
     <AuthProvider>
+      <Navbar />
       <Toaster position="top-center" />
       <Routes>
         {/* Events Routes */}
@@ -32,15 +38,24 @@ function App() {
         <Route path="/report" element={<Report />} />
         <Route path="/profile" element={<Profile />} />
 
-        {/* Other Routes */}
+        {/* Accommodation Routes */}
         <Route path="/accommodation" element={<Accommodation />} />
 
         {/* Auth Routes */}
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
 
-        {/* Default Route */}
-        <Route path="/" element={<Navigate to="/events" replace />} />
+        {/* FAQ Routes */}
+        <Route path="/faq" element={<FAQ />} />
+
+        {/* Aftermovie Route */}
+        <Route path="/aftermovie" element={<AftermoviePage />} />
+
+        {/* Gallery Route */}
+        <Route path="/gallery" element={<Gallery />} />
+
+        {/* Homepage Route */}
+        <Route path="/" element={<HomePage />} />
       </Routes>
     </AuthProvider>
   );
