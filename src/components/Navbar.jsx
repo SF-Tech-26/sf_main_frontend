@@ -11,6 +11,7 @@ export default function Navbar() {
     { path: '/gallery', label: 'Gallery' },
     { path: '/aftermovie', label: 'Aftermovie' },
     { path: '/accommodation', label: 'Accommodation' },
+    { path: '/merch', label: 'Merch' },
     { path: '/faq', label: 'FAQ' },
   ];
 
