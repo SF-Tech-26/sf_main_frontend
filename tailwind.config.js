@@ -7,7 +7,7 @@ export default {
     extend: {
       fontFamily: {
         creepster: ["Creepster", "cursive"],
-        cinzel: ["Cinzel Decorative", "serif"],
+        cinzel: ["Cinzel", "serif"],
         spaceGrotesk: ["Space Grotesk", "sans-serif"],
         libreBaskerville: ["Libre Baskerville", "serif"],
         playfair: ["Playfair Display", "serif"],
