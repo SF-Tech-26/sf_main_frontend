@@ -21,23 +21,92 @@ const slugToGenre = {
 };
 
 // Ethereal Background Component
-const EtherealBackground = () => (
-    <div className="fixed inset-0 z-0">
-        <div
-            className="absolute inset-0 bg-cover bg-center opacity-80 mix-blend-screen"
-            style={{ backgroundImage: "url('https://images.unsplash.com/photo-1506318137071-a8bcbf67cc77?q=80&w=2940&auto=format&fit=crop')" }}
-        />
-        <div
-            className="absolute inset-0 mix-blend-multiply"
-            style={{ background: 'linear-gradient(to bottom, transparent, #050210)', backgroundColor: 'rgba(5, 2, 16, 0.8)' }}
-        />
-        <div className="absolute top-10 right-20 w-1 h-1 bg-white rounded-full animate-pulse" style={{ boxShadow: '0 0 10px white' }} />
-        <div className="absolute top-40 right-40 w-1.5 h-1.5 bg-blue-300 rounded-full animate-pulse" style={{ boxShadow: '0 0 15px cyan', animationDelay: '0.7s' }} />
-        <div className="absolute bottom-20 left-20 w-2 h-2 bg-purple-300 rounded-full animate-pulse" style={{ boxShadow: '0 0 20px magenta', animationDelay: '0.3s' }} />
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-purple-500/20 rounded-full blur-[150px] animate-pulse" style={{ animationDuration: '4s' }} />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-fuchsia-500/10 rounded-full blur-[150px]" />
-    </div>
-);
+// Ethereal Background Component
+const EtherealBackground = () => {
+    // Generate random stars
+    const stars = [...Array(100)].map((_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 2 + 1,
+        delay: Math.random() * 3,
+        duration: 2 + Math.random() * 2,
+    }));
+
+    return (
+        <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+            {/* Deep space gradient */}
+            <div
+                className="absolute inset-0"
+                style={{
+                    background: 'radial-gradient(ellipse at center, #1a0a2e 0%, #0d0015 50%, #000000 100%)'
+                }}
+            />
+
+            {/* Nebula clouds */}
+            <div
+                className="absolute top-0 left-0 w-full h-full opacity-30"
+                style={{
+                    background: 'radial-gradient(ellipse at 20% 30%, rgba(139, 92, 246, 0.3) 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(236, 72, 153, 0.2) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 60%)'
+                }}
+            />
+
+            {/* Stars */}
+            {stars.map((star) => (
+                <motion.div
+                    key={star.id}
+                    className="absolute rounded-full bg-white"
+                    style={{
+                        left: `${star.x}%`,
+                        top: `${star.y}%`,
+                        width: star.size,
+                        height: star.size,
+                    }}
+                    animate={{
+                        opacity: [0.3, 1, 0.3],
+                        scale: [1, 1.2, 1],
+                    }}
+                    transition={{
+                        duration: star.duration,
+                        delay: star.delay,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                    }}
+                />
+            ))}
+
+            {/* Floating ethereal orbs */}
+            <motion.div
+                className="absolute w-96 h-96 rounded-full"
+                style={{
+                    background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)',
+                    top: '-10%',
+                    right: '20%',
+                    filter: 'blur(60px)',
+                }}
+                animate={{
+                    scale: [1, 1.1, 1],
+                    opacity: [0.3, 0.5, 0.3],
+                }}
+                transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+            />
+            <motion.div
+                className="absolute w-[500px] h-[500px] rounded-full"
+                style={{
+                    background: 'radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%)',
+                    bottom: '-20%',
+                    left: '-10%',
+                    filter: 'blur(80px)',
+                }}
+                animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.2, 0.4, 0.2],
+                }}
+                transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+            />
+        </div>
+    );
+};
 
 const EventDetailPage = () => {
     const { genre: genreSlug, eventId } = useParams();

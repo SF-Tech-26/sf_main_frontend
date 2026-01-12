@@ -106,97 +106,156 @@ const RegistrationForm = ({ event, onSuccess, onCancel }) => {
     };
 
     return (
-        <div className="relative bg-[#050210] p-12 rounded-2xl w-full max-w-3xl mx-auto border border-white/10 shadow-2xl my-8">
-            {/* Close Button */}
-            <button
-                onClick={onCancel}
-                className="absolute top-6 right-6 text-cyan-400 hover:text-white transition-colors"
-            >
-                <span className="material-icons text-xl">close</span>
-            </button>
+        <div
+            className="relative p-12 rounded-3xl w-full max-w-2xl mx-auto border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] my-8 overflow-hidden"
+            style={{
+                background: 'rgba(20, 20, 30, 0.95)',
+                backdropFilter: 'blur(20px)'
+            }}
+        >
+            {/* Subtle overlay for depth */}
+            <div className="absolute inset-0 bg-black/10 z-0" />
 
-            {/* Header */}
-            <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold text-white mb-2 tracking-widest text-shadow-glow" style={{ fontFamily: 'Cinzel, serif', textShadow: '0 0 20px rgba(255, 255, 255, 0.5)', marginTop: '4rem' }}>
-                    {event?.name || 'EVENT NAME'}
-                </h2>
-                <p className="text-cyan-400 text-xs tracking-[0.3em] font-light " style={{ marginBottom: '3rem' }}>
-                    {event?.tagline || 'RESONANCE IN THE VOID'}
-                </p>
-            </div>
+            {/* Content Container - Ensure it is above the overlay */}
+            <div className="relative z-10">
 
-            {/* Member Selection */}
-            {!isSolo && (
-                <div className="mb-10 flex flex-col items-center" style={{ margin: '4rem' }}>
-                    <label className="text-gray-400 text-xs tracking-widest uppercase mb-2 " style={{ margin: '1rem' }}>Select No. of Members</label>
-                    <select
-                        value={teamMembers.length}
-                        onChange={handleMemberCountChange}
-                        className="bg-[#0f0a20] text-white px-4 py-2 w-64 rounded border border-white/20 focus:border-purple-500 outline-none text-center appearance-none"
+
+
+                {/* Close Button */}
+                <button
+                    onClick={onCancel}
+                    className="absolute top-2 right-2 z-30 p-2 text-[#b8860b] hover:text-white transition-all hover:scale-110 active:scale-90"
+                    title="Close form"
+                >
+                    <span className="material-icons text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">close</span>
+                </button>
+
+                {/* Header */}
+                <div className="text-center mb-12">
+                    <h2
+                        className="text-4xl md:text-5xl font-medium text-white mb-4 tracking-[0.2em] uppercase text-shadow-glow"
+                        style={{ fontFamily: 'Inter, sans-serif', marginTop: '4rem' }}
                     >
-                        {Array.from({ length: event.max_participation - event.min_participation + 1 }, (_, i) => event.min_participation + i).map(num => (
-                            <option key={num} value={num}>{num} Members</option>
-                        ))}
-                    </select>
+                        {event?.name || 'SPRING FLORA'}
+                    </h2>
+                    <div className="flex items-center justify-center gap-4 opacity-70" style={{ marginBottom: '3rem' }}>
+                        <div className="h-px w-8 bg-gradient-to-r from-transparent to-gray-400" />
+                        <p className="text-gray-300 text-[10px] md:text-xs tracking-[0.3em] uppercase font-light">
+                            {event?.tagline || 'ETHEREAL ENIGMA EDITION'}
+                        </p>
+                        <div className="h-px w-8 bg-gradient-to-l from-transparent to-gray-400" />
+                    </div>
                 </div>
-            )}
 
-            <form onSubmit={handleSubmit} className="space-y-8">
-                {/* Team Members Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 " style={{ paddingRight: '2rem' }}>
-                    {teamMembers.map((member, index) => (
-                        <div key={index} className="contents">
-                            {/* SF ID Input */}
-                            <div className="flex flex-col space-y-2" style={{ paddingLeft: '2rem' }}>
-                                <label className="text-gray-400 text-xs uppercase tracking-widest pl-1" >
-                                    {index === 0 ? 'Your SF-ID' : `Member ${index + 1} SF-ID`}
-                                </label>
-                                <input
-                                    type="text"
-                                    value={member.sfId}
-                                    onChange={(e) => handleMemberChange(index, 'sfId', e.target.value)}
-                                    placeholder={index === 0 ? "SFXXXXXX" : "SFXXXXXX"}
-                                    className="w-full bg-white text-black px-4 py-3 rounded font-medium focus:outline-none focus:ring-4 focus:ring-purple-500/30 transition-shadow" style={{ padding: '0.5rem' }}
-                                    disabled={index === 0}
-                                />
-                            </div>
-
-                            {/* Email Input */}
-                            <div className="flex flex-col space-y-2" >
-                                <label className="text-gray-400 text-xs uppercase tracking-widest pl-1" >
-                                    {index === 0 ? 'Your Mail-ID' : `Member ${index + 1} Mail-ID`}
-                                </label>
-                                <input
-                                    type="email"
-                                    value={member.email}
-                                    onChange={(e) => handleMemberChange(index, 'email', e.target.value)}
-                                    placeholder="abc@gmail.com"
-                                    className="w-full bg-white text-black px-4 py-3 rounded-md font-medium focus:outline-none focus:ring-4 focus:ring-purple-500/30 transition-shadow" style={{ padding: '0.5rem' }}
-                                    disabled={index === 0}
-                                />
-                            </div>
+                {/* Member Management */}
+                {!isSolo && (
+                    <div
+                        className="mb-8 flex justify-between items-center bg-white/5 p-4 rounded-xl border border-white/5"
+                        style={{ margin: '4rem' }}
+                    >
+                        <div className="flex flex-col">
+                            <span className="text-gray-300 text-xs uppercase tracking-widest font-medium">Team Members</span>
                         </div>
-                    ))}
-                </div>
 
-                {/* Submit Button */}
-                <div className="flex justify-center mt-16 mb-8">
-                    <button
-                        type="submit"
-                        disabled={isLoading || isRegistered}
-                        className={`
-                             px-12 py-3  rounded-lg text-white font-bold tracking-widest uppercase transition-all duration-300
+                        <div className="flex gap-3">
+                            {teamMembers.length > event.min_participation && (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        if (teamMembers.length > event.min_participation) {
+                                            setTeamMembers(teamMembers.slice(0, -1));
+                                        }
+                                    }}
+                                    className="w-8 h-8 flex items-center justify-center rounded-full bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/30 transition-all"
+                                    title="Remove last member"
+                                >
+                                    <span className="material-icons text-base">remove</span>
+                                </button>
+                            )}
+
+                            {teamMembers.length < event.max_participation && (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        if (teamMembers.length < event.max_participation) {
+                                            setTeamMembers([...teamMembers, { email: '', sfId: '' }]);
+                                        }
+                                    }}
+                                    className="px-4 py-2 flex items-center gap-2 rounded-lg bg-white/10 text-white hover:bg-white/20 border border-white/20 transition-all text-xs uppercase tracking-wider font-bold"
+                                >
+                                    <span className="material-icons text-sm">add</span>
+                                    Add Member
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Team Members Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6" style={{ paddingRight: '2rem' }}>
+                        {teamMembers.map((member, index) => (
+                            <div key={index} className="contents">
+                                {/* SF ID Input */}
+                                <div className="flex flex-col space-y-2" style={{ paddingLeft: '2rem' }}>
+                                    <label className="text-gray-500 text-[10px] uppercase tracking-[0.15em] font-medium pl-1">
+                                        {index === 0 ? 'Primary SF-ID' : `Member ${index + 1} SF-ID`}
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={member.sfId}
+                                        onChange={(e) => handleMemberChange(index, 'sfId', e.target.value)}
+                                        placeholder={index === 0 ? "SF001679" : "SF-XXXXXX"}
+                                        className="w-full bg-white/5 text-white px-4 py-3 rounded-lg text-sm border border-transparent focus:border-white/10 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-white/5 transition-all placeholder-gray-600 font-light" style={{ padding: '0.5rem' }}
+                                        disabled={index === 0}
+                                    />
+                                </div>
+
+                                {/* Email Input */}
+                                <div className="flex flex-col space-y-2">
+                                    <label className="text-gray-500 text-[10px] uppercase tracking-[0.15em] font-medium pl-1">
+                                        {index === 0 ? 'Contact Mail-ID' : `Member ${index + 1} Mail-ID`}
+                                    </label>
+                                    <input
+                                        type="email"
+                                        value={member.email}
+                                        onChange={(e) => handleMemberChange(index, 'email', e.target.value)}
+                                        placeholder={index === 0 ? "sanjayahari1704@gmail.com" : "invite@domain.com"}
+                                        className="w-full bg-white/5 text-white px-4 py-3 rounded-lg text-sm border border-transparent focus:border-white/10 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-white/5 transition-all placeholder-gray-600 font-light" style={{ padding: '0.5rem' }}
+                                        disabled={index === 0}
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Submit Button */}
+                    <div className="flex justify-center mt-12 mb-4">
+                        <button
+                            type="submit"
+                            disabled={isLoading || isRegistered}
+                            className={`
+                             px-16 py-4 rounded-lg text-white text-sm font-bold tracking-[0.2em] uppercase transition-all duration-300
                              ${isLoading || isRegistered
-                                ? 'bg-gray-600 opacity-50 cursor-not-allowed'
-                                : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-[0_0_20px_rgba(79,70,229,0.5)] transform hover:scale-105'}
-                         `} style={{ marginTop: '1rem', marginBottom: '4rem' }}
-                    >
-                        {isLoading ? 'Registering...' : (isRegistered ? 'Registered' : 'Register')}
-                    </button>
-                </div>
-            </form>
+                                    ? 'bg-gray-600 opacity-50 cursor-not-allowed'
+                                    : 'bg-purple-600 hover:bg-purple-700 hover:shadow-lg hover:scale-105 active:scale-95'}
+                         `}
+                            style={{
+                                marginTop: '1rem',
+                                marginBottom: '4rem'
+                            }}
+                        >
+                            {isLoading ? 'Registering...' : (isRegistered ? 'Registered' : 'Register Now')}
+                        </button>
+                    </div>
+
+
+                </form>
+            </div>
         </div>
     );
 };
 
 export default RegistrationForm;
+
+
