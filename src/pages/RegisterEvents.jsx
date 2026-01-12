@@ -7,7 +7,8 @@ import {
   deregisterMember,
   deregisterTeam,
   addMember,
-} from "../api/eventApi";
+  getRegisteredEvents
+} from "../services/eventService";
 // Import from RegisteredEvents subfolder (one level down)
 import SoloEventsList from "./RegisteredEvents/SoloEventsList";
 import GroupEventsList from "./RegisteredEvents/GroupEventsList";
@@ -20,7 +21,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
   // const token = "eyJhbGciOiJIUzI1NiJ9.eyJzZklkIjoiU0YwMDE2NDUiLCJpZCI6MTY0NSwiZW1haWwiOiJwdXNoa2FycmF0aG9yNzdAZ21haWwuY29tIiwibW9iaWxlIjoiNzY2NzMzMDMyNyIsImNvbGxlZ2UiOiJpaXQga2dwIiwiY2l0eSI6IlBhdG5hIiwibmFtZSI6InB1c2thciAiLCJkb2IiOiIyMDA0LTA1LTA4VDE4OjMwOjAwLjAwMFoiLCJ5b3AiOjIwMjgsImFkZHIiOiJub25lIiwic3RhdGUiOiJCaWhhciIsImdlbmRlciI6Ik0iLCJpc19jYSI6MCwic3RhdHVzIjoxLCJwYXltZW50X3N0YXR1cyI6MCwiZXhwIjoxNzY3OTc1OTc2fQ.9lZVrm5s_DR8AYCxZRXt0ywJVbwHc0Bac06cIJlzrGo";
 
   const navigate = useNavigate();
-  
+
 
   const [soloEvents, setSoloEvents] = useState([]);
   const [groupEvents, setGroupEvents] = useState([]);
@@ -32,56 +33,43 @@ const RegisteredEvents = ({ onClose, userToken }) => {
   const fetchEvents = async () => {
     setLoading(true);
     try {
-      // TODO: Replace with actual API to get list of registered events with their details
-      // This should come from your backend - list of all events the user registered for
-      const registeredEvents = [
-        { eventId: 1, name: "Solo Dance", minMembers: 1, maxMembers: 1 },
-        { eventId: 2, name: "CentriFuge", minMembers: 3, maxMembers: 5 },
-        { eventId: 3, name: "Group Music", minMembers: 2, maxMembers: 4 },
-      ];
+      const response = await getRegisteredEvents(token);
 
-      const solo = [];
-      const group = [];
+      if (response && response.code === 0) {
+        // Map Solo Events
+        const solo = (response.soloEventData || []).map(item => ({
+          eventId: item.event?.id,
+          name: item.event?.name,
+          genre: item.event?.genre?.genre,
+          eventCity: item.event_city,
+          members: []
+        }));
 
-      for (const event of registeredEvents) {
-        try {
-          const res = await getMembers(token, event.eventId);
-          
-          console.log(`Event ${event.name} response:`, res.data); // Debug log
+        // Map Group Events
+        const group = (response.groupEventData || []).map(item => ({
+          eventId: item.event?.id,
+          name: item.event?.name,
+          genre: item.event?.genre?.genre,
+          eventCity: item.event_city,
+          teamName: item.team_name,
+          isAdmin: item.is_admin,
+          members: (item.members || []).map(m => ({
+            sfId: m.sf_id || m.sfId || m.id,
+            name: m.name || m.user_name || 'Member',
+            isAdmin: m.is_admin || false
+          })),
+          minMembers: item.event?.min_members || 1,
+          maxMembers: item.event?.max_members || 1
+        }));
 
-          if (res.data && res.data.code === 0) {
-            const members = res.data.members || res.data.data?.members || [];
-            const isAdmin = res.data.isAdmin || res.data.data?.isAdmin || false;
+        console.log("Mapped Solo:", solo);
+        console.log("Mapped Group:", group);
 
-            // Skip if no members (not actually registered)
-            if (members.length === 0) continue;
-
-            const eventData = {
-              eventId: event.eventId,
-              name: event.name,
-              members,
-              isAdmin,
-              minMembers: event.minMembers || 1,
-              maxMembers: event.maxMembers || 1,
-            };
-
-            // Solo event: maxMembers = 1
-            if (event.maxMembers === 1) {
-              solo.push(eventData);
-            } else {
-              group.push(eventData);
-            }
-          }
-        } catch (error) {
-          console.error(`Failed to fetch members for event ${event.eventId}:`, error);
-        }
+        setSoloEvents(solo);
+        setGroupEvents(group);
+      } else {
+        console.error("Failed to fetch registered events:", response?.message);
       }
-
-      console.log("Solo Events:", solo); // Debug
-      console.log("Group Events:", group); // Debug
-
-      setSoloEvents(solo);
-      setGroupEvents(group);
     } catch (error) {
       console.error("Failed to fetch events:", error);
     } finally {
@@ -108,7 +96,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
       if (!event || !event.members[0]) return;
 
       const response = await deregisterMember(token, eventId, [event.members[0].sfId]);
-      
+
       if (response.data.code === 0) {
         alert("Successfully deregistered");
         fetchEvents();
@@ -128,7 +116,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
 
     try {
       const response = await deregisterTeam(token, eventId);
-      
+
       if (response.data.code === 0) {
         alert("Team deregistered successfully");
         fetchEvents();
@@ -148,7 +136,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
 
     try {
       const response = await deregisterMember(token, eventId, [memberSfId]);
-      
+
       if (response.data.code === 0) {
         alert("Member removed successfully");
         fetchEvents();
@@ -171,7 +159,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
   const handleAddMember = async (memberData) => {
     try {
       const response = await addMember(token, selectedEventId, [memberData]);
-      
+
       if (response.data.code === 0) {
         alert("Member added successfully");
         setShowAddMemberModal(false);

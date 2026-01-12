@@ -7,6 +7,7 @@ import RegistrationForm from '../components/events/RegistrationForm';
 import eventsDesktopBg from '../assets/eventsdesktopbg.jpeg';
 import eventsMobileBg from '../assets/eventsmobilebg.jpeg';
 import GlassSurface from '../components/GlassSurface';
+import PillNav from '../components/PillNav';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEvents } from '../context/eventContext';
@@ -345,42 +346,19 @@ const SubEventsPage = () => {
                 {/* Main Display */}
                 <div className="relative w-full flex gap-6 justify-center items-start flex-col lg:flex-row max-w-7xl px-4 py-4">
                     {/* Event List Container */}
-                    <div className="w-full lg:w-1/4 h-[450px] shrink-0">
-                        <GlassSurface
-                            opacity={0.6}
-                            brightness={90}
-                            className="rounded-2xl overflow-hidden border border-white/10"
-                            style={{
-                                background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)',
-                            }}
-                        >
-                            <div className="w-full h-full overflow-y-auto p-4 custom-scrollbar flex flex-col gap-3">
-                                {events.map((event, index) => {
-                                    const displayData = getEventDisplayData(event);
-                                    const isActive = selectedEvent?.id === event.id;
-                                    return (
-                                        <button
-                                            key={event.id || index}
-                                            onClick={() => handleEventClick(event)}
-                                            className={`w-full p-4 rounded-xl flex items-center gap-4 transition-all duration-300 group text-left relative overflow-hidden ${isActive
-                                                ? 'bg-sky-500/20 border border-sky-400/30'
-                                                : 'bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/20'
-                                                }`}
-                                        >
-                                            <span className={`material-symbols-outlined text-2xl transition-colors ${isActive ? 'text-sky-300' : 'text-sky-200/60 group-hover:text-sky-200'}`}>
-                                                {getGenreIcon(event.genre)}
-                                            </span>
-                                            <span className={`font-cinzel text-sm font-bold tracking-wider transition-colors ${isActive ? 'text-sky-100' : 'text-sky-200/70 group-hover:text-sky-100'}`}>
-                                                {displayData.name}
-                                            </span>
-                                            {isActive && (
-                                                <div className="absolute left-0 top-0 bottom-0 w-1 bg-sky-400 shadow-[0_0_10px_rgba(56,189,248,0.5)]" />
-                                            )}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </GlassSurface>
+                    <div className="w-full lg:w-1/4 h-[450px] shrink-0 border border-white/10 rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm relative z-20 flex justify-center py-4">
+                        <PillNav
+                            layout="vertical"
+                            items={events.map(event => ({
+                                label: event.name || event.genre,
+                                onClick: () => handleEventClick(event),
+                                active: selectedEvent?.id === event.id
+                            }))}
+                            pillColor="rgba(255, 255, 255, 0.05)"
+                            pillTextColor="#bae6fd" // Sky-200
+                            hoveredPillTextColor="#f0f9ff" // Sky-50
+                            baseColor="#0ea5e9" // Sky-500
+                        />
                     </div>
 
                     {/* Event Details Container */}
