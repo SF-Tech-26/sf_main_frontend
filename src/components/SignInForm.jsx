@@ -36,7 +36,7 @@ export default function Signin() {
             `,
           }}
         >
-          SIGNIN
+          SIGN IN
         </h1>
 
         {/* Form Body */}
