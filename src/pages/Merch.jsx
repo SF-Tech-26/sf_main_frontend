@@ -68,7 +68,7 @@ export default function Merch() {
     return (
         <div
             className="w-full min-h-screen bg-fixed bg-cover bg-center bg-no-repeat px-4 py-10 md:px-16 md:py-10 text-[#f5e9dc] overflow-y-auto"
-            style={{ backgroundImage: `url(${bg})` }}
+            style={{ backgroundImage: `url(${bg})`, fontFamily: 'Cinzel, serif' }}
         >
             {page === "merch" && (
                 <MerchPage
@@ -90,7 +90,7 @@ export default function Merch() {
             {toast && (
                 <div
                     key={toast.id}
-                    className="fixed top-5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-emerald-400 to-teal-400 text-emerald-950 px-6 py-3 rounded-xl font-spaceGrotesk text-sm font-semibold z-[9999] shadow-[0_0_18px_rgba(0,230,118,0.9),0_0_32px_rgba(0,230,118,0.6)] animate-toast-pop"
+                    className="fixed top-5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-emerald-400 to-teal-400 text-emerald-950 px-6 py-3 rounded-xl font-cinzel text-sm font-semibold z-[9999] shadow-[0_0_18px_rgba(0,230,118,0.9),0_0_32px_rgba(0,230,118,0.6)] animate-toast-pop"
                 >
                     {toast.message}
                 </div>
@@ -107,7 +107,7 @@ function MerchPage({ onViewCart, onAdd, cartCount }) {
             {/* Top Bar - Cart Button */}
             <div className="flex justify-end md:justify-end fixed md:relative top-4 right-4 md:top-0 md:right-0 z-50">
                 <button
-                    className="relative bg-black/55 border border-orange-400 text-orange-200 px-4 py-2 rounded-md font-spaceGrotesk text-xs md:text-sm tracking-wider cursor-pointer transition-all duration-300 hover:shadow-[0_0_14px_rgba(255,160,90,0.7)] md:w-auto w-11 h-11 md:h-auto flex items-center justify-center"
+                    className="relative bg-black/55 border border-orange-400 text-orange-200 px-4 py-2 rounded-md font-cinzel text-xs md:text-sm tracking-wider cursor-pointer transition-all duration-300 hover:shadow-[0_0_14px_rgba(255,160,90,0.7)] md:w-auto w-11 h-11 md:h-auto flex items-center justify-center"
                     onClick={onViewCart}
                 >
                     <span className="hidden md:inline">🛒 VIEW CART</span>
@@ -125,7 +125,7 @@ function MerchPage({ onViewCart, onAdd, cartCount }) {
                 <h1 className="font-cinzel text-4xl md:text-6xl font-bold tracking-wider animate-float-slow text-shadow-[0_0_12px_rgba(255,200,140,0.6),0_0_26px_rgba(255,140,80,0.35)]">
                     SPRING FEST
                 </h1>
-                <h2 className="mt-3 font-playfair text-2xl md:text-4xl tracking-wider text-orange-300 animate-float-medium">
+                <h2 className="mt-3 font-cinzel text-2xl md:text-4xl tracking-wider text-orange-300 animate-float-medium">
                     OFFICIAL MERCH
                 </h2>
             </div>
@@ -141,13 +141,13 @@ function MerchPage({ onViewCart, onAdd, cartCount }) {
                         <div className="h-40 md:h-[165px] mb-3 rounded-xl border border-dashed border-orange-300/35 bg-black/20" />
 
                         {/* Price */}
-                        <div className="mt-auto mb-2 font-spaceGrotesk text-lg md:text-xl font-semibold text-shadow-[0_0_6px_rgba(255,180,120,0.35)]">
+                        <div className="mt-auto mb-2 font-cinzel text-lg md:text-xl font-semibold text-shadow-[0_0_6px_rgba(255,180,120,0.35)]">
                             ₹ {p.price}
                         </div>
 
                         {/* Add to Cart Button */}
                         <button
-                            className="w-full py-2.5 bg-gradient-to-r from-orange-400 to-orange-300 border-none rounded-lg font-bebas text-sm md:text-base tracking-widest cursor-pointer transition-all duration-300 hover:shadow-[0_0_14px_rgba(255,160,90,0.8),0_0_26px_rgba(255,120,60,0.6)] text-black"
+                            className="w-full py-2.5 bg-gradient-to-r from-orange-400 to-orange-300 border-none rounded-lg font-cinzel text-sm md:text-base tracking-widest cursor-pointer transition-all duration-300 hover:shadow-[0_0_14px_rgba(255,160,90,0.8),0_0_26px_rgba(255,120,60,0.6)] text-black"
                             onClick={() => onAdd(p)}
                         >
                             ADD TO CART
@@ -179,7 +179,7 @@ function CartPage({ cart, onBack, onQtyChange }) {
             {/* Cart Table */}
             <div className="flex flex-col mt-5">
                 {/* Header - Hidden on mobile */}
-                <div className="hidden md:grid grid-cols-[2.5fr_1fr_1fr_1fr] items-center py-4 border-b border-orange-400/30 font-spaceGrotesk text-base tracking-wide opacity-85">
+                <div className="hidden md:grid grid-cols-[2.5fr_1fr_1fr_1fr] items-center py-4 border-b border-orange-400/30 font-cinzel text-base tracking-wide opacity-85">
                     <span>PRODUCT</span>
                     <span>PRICE</span>
                     <span>QUANTITY</span>
@@ -189,7 +189,7 @@ function CartPage({ cart, onBack, onQtyChange }) {
                 {/* Cart Items */}
                 <div className="max-h-80 overflow-y-auto pr-1.5 scrollbar-thin scrollbar-thumb-orange-400/50">
                     {items.length === 0 && (
-                        <div className="text-center py-10 text-orange-200/70 font-libreBaskerville text-lg">
+                        <div className="text-center py-10 text-orange-200/70 font-cinzel text-lg">
                             Your cart is empty
                         </div>
                     )}
@@ -200,7 +200,7 @@ function CartPage({ cart, onBack, onQtyChange }) {
                             className="grid grid-cols-1 md:grid-cols-[2.5fr_1fr_1fr_1fr] items-center gap-3 py-4 border-b border-orange-400/30 md:bg-transparent bg-gradient-to-b from-purple-900/70 to-purple-950/75 md:rounded-none rounded-2xl md:border-0 md:border-b md:p-0 p-4 mb-4 md:mb-0"
                         >
                             {/* Product */}
-                            <div className="flex items-center gap-4 font-libreBaskerville text-base md:text-lg">
+                            <div className="flex items-center gap-4 font-cinzel text-base md:text-lg">
                                 <div className="w-12 h-16 rounded-md bg-black/30 border border-orange-400/40" />
                                 <span>{product.name}</span>
                             </div>
@@ -244,19 +244,19 @@ function CartPage({ cart, onBack, onQtyChange }) {
             {/* Cart Bottom */}
             <div className="mt-7 flex flex-col md:flex-row items-center justify-between gap-4">
                 {/* Subtotal */}
-                <div className="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500/45 to-teal-400/20 border border-emerald-400/75 font-spaceGrotesk text-lg font-semibold text-emerald-100 shadow-[0_0_10px_rgba(211,230,0,0.55),0_0_18px_rgba(199,230,0,0.51)]">
+                <div className="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500/45 to-teal-400/20 border border-emerald-400/75 font-cinzel text-lg font-semibold text-emerald-100 shadow-[0_0_10px_rgba(211,230,0,0.55),0_0_18px_rgba(199,230,0,0.51)]">
                     Subtotal &nbsp; ₹ {subtotal}
                 </div>
 
                 {/* Action Buttons */}
                 <div className="flex gap-4 w-full md:w-auto">
                     <button
-                        className="flex-1 md:flex-none px-5 py-3 bg-black/50 border border-orange-400 text-orange-200 rounded-lg font-spaceGrotesk text-sm tracking-wider transition-all duration-300 hover:shadow-[0_0_10px_rgba(255,160,90,0.5)]"
+                        className="flex-1 md:flex-none px-5 py-3 bg-black/50 border border-orange-400 text-orange-200 rounded-lg font-cinzel text-sm tracking-wider transition-all duration-300 hover:shadow-[0_0_10px_rgba(255,160,90,0.5)]"
                         onClick={onBack}
                     >
                         CONTINUE SHOPPING
                     </button>
-                    <button className="flex-1 md:flex-none px-7 py-3 bg-gradient-to-r from-orange-400 to-orange-300 border-none rounded-lg font-spaceGrotesk text-sm tracking-wider text-black transition-all duration-300 hover:shadow-[0_0_14px_rgba(255,160,90,0.8)]">
+                    <button className="flex-1 md:flex-none px-7 py-3 bg-gradient-to-r from-orange-400 to-orange-300 border-none rounded-lg font-cinzel text-sm tracking-wider text-black transition-all duration-300 hover:shadow-[0_0_14px_rgba(255,160,90,0.8)]">
                         CHECKOUT
                     </button>
                 </div>
