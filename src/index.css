@@ -116,3 +116,45 @@ body {
     opacity: 0;
     animation: imageReveal 1s ease-out forwards;
 }
+
+/* ================= MERCH IMAGE TUNING ================= */
+/* 
+/* Hoodie images inside merch cards */
+/* .merch-image-wrapper {
+    display: flex;
+    align-items: centre;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.merch-image-wrapper img {
+    
+    object-fit: contain;
+    margin: auto;
+}
+
+/* Slightly larger on desktop */
+@media (min-width: 768px) {
+    .merch-image-wrapper img {
+        height: 145%;
+    }
+} */ */
+
+
+/* ================= MERCH FLOAT ANIMATION ================= */
+
+@keyframes merchFloat {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.animate-merch-float {
+    animation: merchFloat 3s ease-in-out infinite;
+}
