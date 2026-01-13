@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import { submitComplaint } from "../../api/complaintApi";
-import { useEvents } from "../../context/EventContext";
+import { useEvents } from "../../context/eventContext";
 
 
 const PageRegistered = ({ token, goBack, reload }) => {
