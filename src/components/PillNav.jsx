@@ -6,19 +6,18 @@ import './PillNav.css';
 const PillNav = ({
     logo,
     logoAlt = 'Logo',
-    items,
+    items = [],
     activeHref,
     className = '',
     ease = 'power3.easeOut',
-    baseColor = '#fff',
-    pillColor = '#060010',
-    hoveredPillTextColor = '#060010',
-    pillTextColor,
-    onMobileMenuClick,
+    baseColor = '#000000',
+    pillColor = '#ffffff',
+    hoveredPillTextColor = '#ffffff',
+    pillTextColor = '#000000',
+    onItemClick,
     initialLoadAnimation = true,
-    layout = 'horizontal' // 'horizontal' or 'vertical'
+    layout = 'horizontal'
 }) => {
-    const resolvedPillTextColor = pillTextColor ?? baseColor;
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const circleRefs = useRef([]);
     const tlRefs = useRef([]);
@@ -39,10 +38,6 @@ const PillNav = ({
                 const rect = pill.getBoundingClientRect();
                 const { width: w, height: h } = rect;
 
-                // Animation math differs for vertical vs horizontal
-                // For vertical, we probably still want the "swell" effect?
-                // Or maybe just a simple scale/fade if the math is too complex for vertical.
-                // Keeping original math but ensuring it works for the circle's container.
                 const R = ((w * w) / 4 + h * h) / (2 * h);
                 const D = Math.ceil(2 * R) + 2;
                 const delta = Math.ceil(R - Math.sqrt(Math.max(0, R * R - (w * w) / 4))) + 1;
@@ -100,12 +95,12 @@ const PillNav = ({
         }
 
         if (initialLoadAnimation) {
-            const logo = logoRef.current;
+            const logoEl = logoRef.current;
             const navItems = navItemsRef.current;
 
-            if (logo) {
-                gsap.set(logo, { scale: 0 });
-                gsap.to(logo, {
+            if (logoEl) {
+                gsap.set(logoEl, { scale: 0 });
+                gsap.to(logoEl, {
                     scale: 1,
                     duration: 0.6,
                     ease
@@ -163,7 +158,7 @@ const PillNav = ({
         gsap.set(img, { rotate: 0 });
         logoTweenRef.current = gsap.to(img, {
             rotate: 360,
-            duration: 0.2,
+            duration: 0.5,
             ease,
             overwrite: 'auto'
         });
@@ -216,12 +211,11 @@ const PillNav = ({
                 });
             }
         }
-
-        onMobileMenuClick?.();
     };
 
     const isExternalLink = href =>
-        href && (href.startsWith('http://') ||
+        href &&
+        (href.startsWith('http://') ||
             href.startsWith('https://') ||
             href.startsWith('//') ||
             href.startsWith('mailto:') ||
@@ -231,10 +225,19 @@ const PillNav = ({
     const isRouterLink = href => href && !isExternalLink(href);
 
     const cssVars = {
-        ['--base']: baseColor,
-        ['--pill-bg']: pillColor,
-        ['--hover-text']: hoveredPillTextColor,
-        ['--pill-text']: resolvedPillTextColor
+        '--base': baseColor,
+        '--pill-bg': pillColor,
+        '--hover-text': hoveredPillTextColor,
+        '--pill-text': pillTextColor
+    };
+
+    const handleItemClick = (item, index) => {
+        if (item.onClick) {
+            item.onClick();
+        }
+        if (onItemClick) {
+            onItemClick(item, index);
+        }
     };
 
     const renderItemContent = (item, i) => (
@@ -259,38 +262,19 @@ const PillNav = ({
         <div className={`pill-nav-container ${layout}`}>
             <nav className={`pill-nav ${className} ${layout}`} aria-label="Primary" style={cssVars}>
                 {logo && (
-                    isRouterLink(items?.[0]?.href) ? (
-                        <Link
-                            className="pill-logo"
-                            to={items[0].href}
-                            aria-label="Home"
-                            onMouseEnter={handleLogoEnter}
-                            role="menuitem"
-                            ref={el => {
-                                logoRef.current = el;
-                            }}
-                        >
-                            <img src={logo} alt={logoAlt} ref={logoImgRef} />
-                        </Link>
-                    ) : (
-                        <a
-                            className="pill-logo"
-                            href={items?.[0]?.href || '#'}
-                            aria-label="Home"
-                            onMouseEnter={handleLogoEnter}
-                            ref={el => {
-                                logoRef.current = el;
-                            }}
-                        >
-                            <img src={logo} alt={logoAlt} ref={logoImgRef} />
-                        </a>
-                    )
+                    <div
+                        className="pill-logo"
+                        onMouseEnter={handleLogoEnter}
+                        ref={logoRef}
+                    >
+                        <img src={logo} alt={logoAlt} ref={logoImgRef} />
+                    </div>
                 )}
 
-                <div className="pill-nav-items desktop-only" ref={navItemsRef}>
+                <div className="pill-nav-items" ref={navItemsRef}>
                     <ul className="pill-list" role="menubar">
                         {items.map((item, i) => (
-                            <li key={item.href || `item-${i}`} role="none">
+                            <li key={item.href || item.label || `item-${i}`} role="none">
                                 {isRouterLink(item.href) ? (
                                     <Link
                                         role="menuitem"
@@ -299,7 +283,7 @@ const PillNav = ({
                                         aria-label={item.ariaLabel || item.label}
                                         onMouseEnter={() => handleEnter(i)}
                                         onMouseLeave={() => handleLeave(i)}
-                                        onClick={item.onClick}
+                                        onClick={() => handleItemClick(item, i)}
                                     >
                                         {renderItemContent(item, i)}
                                     </Link>
@@ -311,19 +295,19 @@ const PillNav = ({
                                         aria-label={item.ariaLabel || item.label}
                                         onMouseEnter={() => handleEnter(i)}
                                         onMouseLeave={() => handleLeave(i)}
-                                        onClick={item.onClick}
+                                        onClick={() => handleItemClick(item, i)}
                                     >
                                         {renderItemContent(item, i)}
                                     </a>
                                 ) : (
                                     <button
                                         role="menuitem"
-                                        className={`pill${activeHref === item.href || item.active ? ' is-active' : ''}`}
+                                        type="button"
+                                        className={`pill${item.active ? ' is-active' : ''}`}
                                         aria-label={item.ariaLabel || item.label}
                                         onMouseEnter={() => handleEnter(i)}
                                         onMouseLeave={() => handleLeave(i)}
-                                        onClick={item.onClick}
-                                        style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}
+                                        onClick={() => handleItemClick(item, i)}
                                     >
                                         {renderItemContent(item, i)}
                                     </button>
@@ -334,7 +318,7 @@ const PillNav = ({
                 </div>
 
                 <button
-                    className="mobile-menu-button mobile-only"
+                    className="mobile-menu-button"
                     onClick={toggleMobileMenu}
                     aria-label="Toggle menu"
                     ref={hamburgerRef}
@@ -344,33 +328,32 @@ const PillNav = ({
                 </button>
             </nav>
 
-            <div className="mobile-menu-popover mobile-only" ref={mobileMenuRef} style={cssVars}>
+            <div className="mobile-menu-popover" ref={mobileMenuRef} style={cssVars}>
                 <ul className="mobile-menu-list">
                     {items.map((item, i) => (
-                        <li key={item.href || `mobile-item-${i}`}>
+                        <li key={item.href || item.label || `mobile-item-${i}`}>
                             {isRouterLink(item.href) ? (
                                 <Link
                                     to={item.href}
                                     className={`mobile-menu-link${activeHref === item.href || item.active ? ' is-active' : ''}`}
                                     onClick={() => {
                                         setIsMobileMenuOpen(false);
-                                        item.onClick?.();
+                                        handleItemClick(item, i);
                                     }}
                                 >
                                     {item.label}
                                 </Link>
                             ) : (
-                                <a
-                                    href={item.href || '#'}
-                                    className={`mobile-menu-link${activeHref === item.href || item.active ? ' is-active' : ''}`}
-                                    onClick={(e) => {
-                                        if (!item.href) e.preventDefault();
+                                <button
+                                    type="button"
+                                    className={`mobile-menu-link${item.active ? ' is-active' : ''}`}
+                                    onClick={() => {
                                         setIsMobileMenuOpen(false);
-                                        item.onClick?.();
+                                        handleItemClick(item, i);
                                     }}
                                 >
                                     {item.label}
-                                </a>
+                                </button>
                             )}
                         </li>
                     ))}

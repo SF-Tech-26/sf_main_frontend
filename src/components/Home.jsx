@@ -78,6 +78,10 @@ const HomePage = ({ backgroundImage }) => {
 
 
       {/* LOGIN BUTTON */}
+      
+<div className="min-h-screen w-full flex items-center justify-center">
+      {!isAuthenticated ? (
+        /* ===== BEFORE LOGIN ===== */
         <Link
           to="/signin"
           className="
@@ -115,79 +119,59 @@ const HomePage = ({ backgroundImage }) => {
         >
           LOG IN
         </Link>
+      ) : (
+        /* ===== AFTER LOGIN ===== */
+        <div className="flex gap-6">
+          {/* Dashboard Button */}
+          <Link
+            to="/dashboard"
+            className="
+              inline-flex items-center justify-center
+              w-[180px] h-[50px]
+              text-[15px] font-semibold tracking-[0.18em]
+              uppercase text-[#e8dcc4]
+
+              bg-gradient-to-b from-[#3a3a3a] to-[#1a1a1a]
+              border border-[#6e6a5f]
+              rounded-[10px]
+
+              shadow-[0_10px_30px_rgba(0,0,0,0.6)]
+              hover:shadow-[0_14px_40px_rgba(0,0,0,0.8)]
+              transition-all duration-300
+              no-underline
+            "
+          >
+            DASHBOARD
+          </Link>
+
+          {/* Pay Now Button */}
+          <Link
+            to="/payment"
+            className="
+              inline-flex items-center justify-center
+              w-[180px] h-[50px]
+              text-[15px] font-semibold tracking-[0.18em]
+              uppercase text-[#1a1916]
+
+              bg-gradient-to-b from-[#e8dcc4] to-[#b9ad94]
+              border border-[#b9ad94]
+              rounded-[10px]
+
+              shadow-[0_10px_30px_rgba(0,0,0,0.4)]
+              hover:shadow-[0_14px_40px_rgba(0,0,0,0.6)]
+              transition-all duration-300
+              no-underline
+            "
+          >
+            PAY NOW
+          </Link>
+        </div>
+      )}
+    </div>
      
 
-      {isPaid ? (
-  <button
-    disabled
-    className="
-      inline-flex items-center justify-center
-      w-[160px] h-[48px]
-
-      text-[14px]
-      font-semibold
-      tracking-[0.22em]
-      uppercase
-      text-[#9fe0b6]
-
-      bg-[#0f2a1d]
-      border border-[#2f6f4f]
-      rounded-[10px]
-
-      cursor-not-allowed
-      opacity-85
-      select-none
-    "
-  >
-    PAID
-  </button>
-) : (
-    <Link
-    to="/payment"
-    className="
-      inline-flex items-center justify-center
-      w-[160px] h-[48px]
-
-      text-[14px]
-      font-semibold
-      tracking-[0.22em]
-      uppercase
-      text-[#eafff2]
-
-      bg-gradient-to-b
-      from-[#1f7a4a]
-      to-[#0e3f28]
-
-      border border-[#2fbf7a]
-      rounded-[10px]
-
-      shadow-[0_10px_30px_rgba(0,0,0,0.6)]
-
-      hover:from-[#2a8f5b]
-      hover:to-[#145a3a]
-      hover:shadow-[0_14px_40px_rgba(0,0,0,0.85)]
-
-      active:scale-[0.97]
-      transition-all duration-300 ease-out
-
-      no-underline
-      outline-none
-      focus:outline-none
-      focus:ring-0
-      select-none
-    "
-  >
-    PAY NOW
-  </Link>
-)}
-
-
-
     </div>
-
-
-        
-      </main>
+         </main>
 
         
 

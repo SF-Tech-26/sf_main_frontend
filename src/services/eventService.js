@@ -42,7 +42,7 @@ export const getMembers = async (token, eventId) => {
       }
     );
     console.log("✅ getMembers response:", response.data);
-    return response;
+    return response.data;
   } catch (error) {
     console.error('❌ Error getting members:', error.response?.data || error);
     throw error;
@@ -67,7 +67,7 @@ export const addMember = async (token, eventId, teamMembers) => {
       }
     );
     console.log("✅ addMember response:", response.data);
-    return response;
+    return response.data;
   } catch (error) {
     console.error('❌ Error adding member:', error.response?.data || error);
     throw error;
@@ -97,8 +97,9 @@ export const deregisterMember = async (token, eventId, memberToDeregister) => {
       }
     );
 
+
     console.log("✅ deregisterMember response:", response.data);
-    return response;
+    return response.data;
   } catch (error) {
     console.error('❌ Error deregistering member:', error.response?.data || error);
     throw error;
@@ -122,7 +123,7 @@ export const deregisterTeam = async (token, eventId) => {
       }
     );
     console.log("✅ deregisterTeam response:", response.data);
-    return response;
+    return response.data;
   } catch (error) {
     console.error('❌ Error deregistering team:', error.response?.data || error);
     throw error;
@@ -148,7 +149,7 @@ export const registerEvent = async (token, eventCity, eventId, teamMembers) => {
       }
     );
     console.log("✅ registerEvent response:", response.data);
-    return response;
+    return response.data;
   } catch (error) {
     console.error('❌ Error registering for event:', error.response?.data || error);
     throw error;
@@ -158,17 +159,52 @@ export const registerEvent = async (token, eventCity, eventId, teamMembers) => {
 // Alias for backward compatibility
 export const registerForEvent = registerEvent;
 
+// ========== CACHING LOGIC ==========
+let cachedEventsData = null;
+let cacheTimestamp = 0;
+let fetchPromise = null;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
 // ========== GET ALL EVENTS ==========
 export const getAllEvents = async () => {
   try {
-    console.log("📡 API Call: getAllEvents");
-    const response = await axios.get(`${API_BASE_URL}/event`, {
-      headers: {
-        'Content-Type': 'application/json',
+    const now = Date.now();
+
+    // Return cached data if valid
+    if (cachedEventsData && (now - cacheTimestamp < CACHE_DURATION)) {
+      console.log("💾 Returning cached events data");
+      return cachedEventsData;
+    }
+
+    // Return existing promise if request is in flight
+    if (fetchPromise) {
+      console.log("⏳ Returning in-flight fetch promise");
+      return fetchPromise;
+    }
+
+    console.log("📡 API Call: getAllEvents (Network Request)");
+
+    fetchPromise = (async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/event`, {
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+
+        console.log("✅ getAllEvents response:", response.data);
+
+        // Update cache
+        cachedEventsData = response.data;
+        cacheTimestamp = Date.now();
+
+        return response.data;
+      } finally {
+        fetchPromise = null;
       }
-    });
-    console.log("✅ getAllEvents response:", response.data);
-    return response.data;
+    })();
+
+    return fetchPromise;
   } catch (error) {
     console.error('❌ Error fetching all events:', error.response?.data || error);
     throw error;
@@ -178,26 +214,28 @@ export const getAllEvents = async () => {
 // ========== GET EVENTS BY GENRE ==========
 export const getEventsByGenre = async (genre) => {
   try {
-    console.log("📡 API Call: getEventsByGenre", { genre });
-    const response = await axios.get(`${API_BASE_URL}/event`, {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
+    console.log("📡 getEventsByGenre called for:", genre);
+
+    // Use cached getAllEvents instead of new API call
+    const data = await getAllEvents();
 
     // Check if we have the expected data structure
-    const events = response.data?.data || response.data; // Handle both wrapped and unwrapped
+    // The structure is { data: [ { genre: "Dance", events: [...] }, ... ] }
+    const genreGroups = data?.data || data;
 
-    if (genre && Array.isArray(events)) {
-      const filteredEvents = events.filter(
-        event => event.genre?.genre?.toLowerCase() === genre.toLowerCase() ||
-          event.genre?.toLowerCase() === genre.toLowerCase()
+    if (genre && Array.isArray(genreGroups)) {
+      // Find the group that matches the requested genre
+      const matchingGroup = genreGroups.find(
+        group => group.genre?.toLowerCase() === genre.toLowerCase()
       );
-      console.log("✅ Filtered events by genre:", filteredEvents);
+
+      const filteredEvents = matchingGroup ? matchingGroup.events : [];
+
+      console.log(`✅ Filtered events for genre '${genre}':`, filteredEvents);
       return filteredEvents;
     }
 
-    return response.data;
+    return [];
   } catch (error) {
     console.error('❌ Error fetching events by genre:', error.response?.data || error);
     throw error;
@@ -207,17 +245,19 @@ export const getEventsByGenre = async (genre) => {
 // ========== GET EVENT BY ID ==========
 export const getEventById = async (eventId) => {
   try {
-    console.log("📡 API Call: getEventById", { eventId });
-    const response = await axios.get(`${API_BASE_URL}/event`, {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
+    console.log("📡 getEventById called for:", eventId);
 
-    const events = response.data?.data || response.data; // Handle both wrapped and unwrapped
+    // Use cached getAllEvents instead of new API call
+    const data = await getAllEvents();
 
-    if (Array.isArray(events)) {
-      const event = events.find(e => e.id === eventId);
+    const genreGroups = data?.data || data;
+
+    if (Array.isArray(genreGroups)) {
+      // Flatten all events from all genres to find the specific ID
+      // Each group has { genre: "...", events: [...] }
+      const allEvents = genreGroups.flatMap(group => group.events || []);
+      const event = allEvents.find(e => e.id === Number(eventId)); // Ensure numeric comparison
+
       console.log("✅ Found event by ID:", event);
       return event;
     }

@@ -7,6 +7,15 @@ import { useEvents } from '../context/eventContext';
 import eventsDesktopBg from '../assets/eventsdesktopbg.jpeg';
 import eventsMobileBg from '../assets/eventsmobilebg.jpeg';
 import GlassSurface from '../components/GlassSurface';
+import danceImg from '../assets/Dance.png';
+import musicImg from '../assets/Music.png';
+import dramaticsImg from '../assets/Dramatics.png';
+import literaryImg from '../assets/Literary.png';
+import filmImg from '../assets/Film Fest.png';
+import quizImg from '../assets/Quiz.png';
+import fineArtsImg from '../assets/Fine Arts.png';
+import humorImg from '../assets/Humor.png';
+import fashionImg from '../assets/Fashion.png';
 
 const slugToGenre = {
     'dance': 'Dance',
@@ -36,7 +45,20 @@ const genreToSlug = {
     'Game Fest': 'game-fest',
 };
 
-// Genre icons/emojis for each category
+// Genre images for Tarot cards
+const genreImages = {
+    'Dance': danceImg,
+    'Music': musicImg,
+    'Dramatics': dramaticsImg,
+    'Literary': literaryImg,
+    'Film Fest': filmImg,
+    'Quiz': quizImg,
+    'Fine Arts': fineArtsImg,
+    'Humor Fest': humorImg,
+    'Fashion': fashionImg,
+};
+
+// Fallback genre icons/emojis
 const genreIcons = {
     'Dance': '🩰',
     'Music': '🎸',
@@ -168,7 +190,7 @@ const TarotCard = ({ genre, index, totalCards, globalIndex, onClick }) => {
 
     const centerIndex = (totalCards - 1) / 2;
     const rotation = (index - centerIndex) * 10;
-    const translateX = (index - centerIndex) * 170;
+    const translateX = (index - centerIndex) * 200; // Increased spacing for wider cards
     const translateY = Math.abs(index - centerIndex) * 25;
 
     const icon = genreIcons[genre] || '✨';
@@ -177,13 +199,13 @@ const TarotCard = ({ genre, index, totalCards, globalIndex, onClick }) => {
         <motion.div
             className={isSmallScreen ? 'relative cursor-pointer' : 'absolute cursor-pointer'}
             style={isSmallScreen ? {
-                width: window.innerWidth < 480 ? '150px' : '170px',
-                height: window.innerWidth < 480 ? '225px' : '255px',
+                width: window.innerWidth < 480 ? '200px' : '220px',
+                height: window.innerWidth < 480 ? '300px' : '330px',
             } : {
-                width: '200px',
-                height: '300px',
+                width: '260px',
+                height: '390px',
                 left: '50%',
-                marginLeft: '-100px',
+                marginLeft: '-130px', // Half of width
                 transformOrigin: 'bottom center',
             }}
             initial={{ opacity: 0, y: 80, rotate: isSmallScreen ? 0 : rotation, x: isSmallScreen ? 0 : translateX }}
@@ -219,16 +241,26 @@ const TarotCard = ({ genre, index, totalCards, globalIndex, onClick }) => {
                 }}
             >
                 <div className="w-full h-full relative">
-                    {/* Icon container */}
-                    <div className="flex items-center justify-center h-3/5 pt-6">
-                        <span
-                            className="text-7xl md:text-8xl transform hover:scale-110 transition-transform duration-300"
-                            style={{
-                                filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.5))'
-                            }}
-                        >
-                            {icon}
-                        </span>
+                    {/* Icon/Image container */}
+                    <div className="flex items-center justify-center h-full w-full absolute inset-0">
+                        {genreImages[genre] ? (
+                            <img
+                                src={genreImages[genre]}
+                                alt={genre}
+                                className="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-500"
+                            />
+                        ) : (
+                            <div className="flex items-center justify-center h-3/5 pt-6">
+                                <span
+                                    className="text-7xl md:text-8xl transform hover:scale-110 transition-transform duration-300"
+                                    style={{
+                                        filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.5))'
+                                    }}
+                                >
+                                    {icon}
+                                </span>
+                            </div>
+                        )}
                     </div>
 
                     {/* Category name */}
@@ -315,9 +347,9 @@ const EventsPage = () => {
                 {/* Header */}
                 <header className="text-center mb-8 pt-4">
                     <motion.h1
-                        className="text-5xl md:text-7xl font-bold mb-1"
+                        className="text-5xl md:text-7xl font-bold mb-4"
                         style={{
-                            fontFamily: '"Cinzel Decorative", Cinzel, serif',
+                            fontFamily: '"Cinzel Decorative", serif', // Changed font as requested
                             color: '#c9e4e4',
                             textShadow: '0 0 30px rgba(100, 180, 180, 0.4), 0 4px 20px rgba(0,0,0,0.5)'
                         }}
@@ -326,15 +358,7 @@ const EventsPage = () => {
                     >
                         SPRINGFEST
                     </motion.h1>
-                    <motion.p
-                        className="text-sm md:text-base tracking-[0.3em] uppercase mb-6"
-                        style={{ color: 'rgba(180, 200, 200, 0.7)' }}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                    >
-                        — IIT KHARAGPUR —
-                    </motion.p>
+                    {/* Description removed as requested */}
                     <motion.h2
                         className="text-2xl md:text-4xl font-bold tracking-wide"
                         style={{
