@@ -15,7 +15,7 @@ export default function HomePage() {
   
   <div
   style={{
-    transform: "translateY(clamp(40px, 14vh, 120px))",
+    // transform: "translateY(clamp(40px, 16vh, 120px))",
   }}
 >
   <Home />
