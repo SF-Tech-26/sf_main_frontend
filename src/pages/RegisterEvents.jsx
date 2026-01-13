@@ -1,4 +1,4 @@
-// src/pages/RegisteredEvents.jsx (FINAL FIXED VERSION)
+// src/pages/RegisteredEvents.jsx - FINAL WORKING VERSION
 
 import React, { useEffect, useState } from "react";
 import {
@@ -12,7 +12,7 @@ import SoloEventsList from "./RegisteredEvents/SoloEventsList";
 import GroupEventsList from "./RegisteredEvents/GroupEventsList";
 import AddMemberModal from "./RegisteredEvents/AddMemberModal";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode"; // Install: npm install jwt-decode
+import { jwtDecode } from "jwt-decode";
 
 const RegisteredEvents = ({ onClose, userToken }) => {
   const token = userToken || localStorage.getItem("token") || "";
@@ -33,66 +33,141 @@ const RegisteredEvents = ({ onClose, userToken }) => {
         setUserInfo({
           email: decoded.email,
           sfId: decoded.sfId,
-          name: decoded.name
+          name: decoded.name,
+          id: decoded.id
         });
-        console.log("Decoded user info:", decoded);
+        console.log("✅ Decoded user info:", decoded);
       } catch (error) {
-        console.error("Failed to decode token:", error);
+        console.error("❌ Failed to decode token:", error);
       }
     }
   }, [token]);
 
   // Fetch all registered events
   const fetchEvents = async () => {
+    if (!userInfo) return;
+    
     setLoading(true);
     try {
+      console.log("📡 Fetching registered events...");
       const response = await getRegisteredEvents(token);
-      console.log("API Response:", response);
+      console.log("📥 Full API Response:", response);
 
       if (response && response.code === 0) {
-        // Map Solo Events with user info from decoded token
-        const solo = (response.soloEventData || []).map(item => ({
-          eventId: item.event?.id,
-          name: item.event?.name,
-          genre: item.event?.genre?.genre,
-          eventCity: item.event_city,
-          members: userInfo ? [{
-            sfId: userInfo.sfId,
-            email: userInfo.email,
-            name: userInfo.name,
-            isAdmin: true
-          }] : []
-        }));
+        // ========== MAP SOLO EVENTS ==========
+        const solo = (response.soloEventData || []).map(item => {
+          console.log("👤 Solo event raw:", item);
+          return {
+            eventId: item.event?.id,
+            name: item.event?.name,
+            genre: item.event?.genre?.genre || item.event?.genre,
+            eventCity: item.event_city,
+            members: [{
+              sfId: userInfo.sfId,
+              email: userInfo.email,
+              name: userInfo.name,
+              isAdmin: true
+            }]
+          };
+        });
 
-        // Map Group Events
-        const group = (response.groupEventData || []).map(item => ({
-          eventId: item.event?.id,
-          name: item.event?.name,
-          genre: item.event?.genre?.genre,
-          eventCity: item.event_city,
-          teamName: item.team_name,
-          isAdmin: item.is_admin,
-          members: (item.members || []).map(m => ({
-            sfId: m.sf_id || m.sfId || m.id,
-            email: m.email || m.user_email || '',
-            name: m.name || m.user_name || 'Member',
-            isAdmin: m.is_admin || false
-          })),
-          minMembers: item.event?.min_members || 1,
-          maxMembers: item.event?.max_members || 1
-        }));
+        // ========== MAP GROUP EVENTS ==========
+        const groupPromises = (response.groupEventData || []).map(async (item) => {
+          console.log("👥 Group event raw:", item);
+          
+          // Extract members from GroupMembers array (NEW STRUCTURE!)
+          let detailedMembers = [];
+          
+          if (item.GroupMembers && item.GroupMembers.length > 0) {
+            console.log("✅ Found GroupMembers in response:", item.GroupMembers);
+            detailedMembers = item.GroupMembers.map(gm => {
+              const user = gm.user || gm;
+              const isLeader = user.id === item.leader_id;
+              console.log("🔍 Processing GroupMember:", user, "Is Leader:", isLeader);
+              
+              return {
+                sfId: user.sfId || user.sf_id || user.SF_ID,
+                email: user.email || user.EMAIL || userInfo.email,
+                name: user.name || user.NAME || 'Member',
+                isAdmin: isLeader,
+                userId: user.id
+              };
+            });
+          } else {
+            // Fallback: Try to fetch using getMembers API
+            try {
+              console.log(`🔍 No GroupMembers, fetching via API for event ${item.event?.id}...`);
+              const membersResponse = await getMembers(token, item.event?.id);
+              console.log("📥 getMembers API response:", membersResponse);
+              
+              if (membersResponse?.data?.code === 0 && membersResponse?.data?.data) {
+                const membersData = membersResponse.data.data;
+                console.log("✅ Members from API:", membersData);
+                
+                detailedMembers = membersData.map(m => {
+                  const user = m.user || m;
+                  const isLeader = user.id === item.leader_id;
+                  
+                  return {
+                    sfId: user.sfId || user.sf_id || user.SF_ID,
+                    email: user.email || user.EMAIL || userInfo.email,
+                    name: user.name || user.NAME || 'Member',
+                    isAdmin: isLeader,
+                    userId: user.id
+                  };
+                });
+              }
+            } catch (err) {
+              console.error("❌ Failed to fetch members via API:", err);
+            }
+          }
+          
+          // If still no members, create default entry
+          if (detailedMembers.length === 0) {
+            console.log("⚠️ No members found, creating default entry");
+            detailedMembers = [{
+              sfId: userInfo.sfId,
+              email: userInfo.email,
+              name: userInfo.name,
+              isAdmin: true,
+              userId: userInfo.id
+            }];
+          }
+          
+          // Check if current user is admin
+          const currentUserIsAdmin = userInfo.id === item.leader_id || 
+                                    detailedMembers.some(m => m.userId === userInfo.id && m.isAdmin);
+          
+          console.log("✅ Final processed members:", detailedMembers);
+          console.log("🔑 Current user is admin:", currentUserIsAdmin);
+          
+          return {
+            eventId: item.event?.id,
+            name: item.event?.name,
+            genre: item.event?.genre?.genre || item.event?.genre,
+            eventCity: item.event_city,
+            teamName: item.team_name,
+            isAdmin: currentUserIsAdmin,
+            members: detailedMembers,
+            minMembers: item.event?.min_participation || item.event?.min_members || 1,
+            maxMembers: item.event?.max_participation || item.event?.max_members || 10,
+            leaderId: item.leader_id
+          };
+        });
+        
+        const group = await Promise.all(groupPromises);
 
-        console.log("Mapped Solo:", solo);
-        console.log("Mapped Group:", group);
+        console.log("✅ Final Mapped Solo Events:", solo);
+        console.log("✅ Final Mapped Group Events:", group);
 
         setSoloEvents(solo);
         setGroupEvents(group);
       } else {
-        console.error("Failed to fetch registered events:", response?.message);
+        console.error("❌ API returned error:", response?.message);
         alert(response?.message || "Failed to fetch events");
       }
     } catch (error) {
-      console.error("Failed to fetch events:", error);
+      console.error("❌ Failed to fetch events:", error);
       alert("Failed to fetch events: " + error.message);
     } finally {
       setLoading(false);
@@ -105,68 +180,59 @@ const RegisteredEvents = ({ onClose, userToken }) => {
       setLoading(false);
       return;
     }
-    // Wait for userInfo to be set before fetching events
     if (userInfo) {
       fetchEvents();
     }
   }, [token, userInfo]);
 
-  // Deregister from solo event
+  // ========== DEREGISTER SOLO EVENT ==========
   const handleDeregisterSolo = async (eventId) => {
-    const confirm = window.confirm("Are you sure you want to deregister?");
+    const confirm = window.confirm("Are you sure you want to deregister from this event?");
     if (!confirm) return;
 
     try {
       const event = soloEvents.find((e) => e.eventId === eventId);
       
-      if (!event) {
-        alert("Event not found");
-        return;
-      }
-
-      if (!event.members || !event.members[0]) {
-        alert("Unable to deregister: Member information not found");
+      if (!event || !event.members[0]) {
+        alert("Unable to deregister: Event information not found");
         return;
       }
 
       const member = event.members[0];
       
       if (!member.sfId || !member.email) {
-        alert("Unable to deregister: Invalid member data");
-        console.error("Member data:", member);
+        alert("Unable to deregister: Missing member information");
         return;
       }
 
-      console.log("Deregistering with:", {
+      console.log("🗑️ Deregistering solo event:", {
         eventId,
         memberToDeregister: [{
-          sfId: member.sfId,
-          email: member.email
+          email: member.email,
+          sfId: member.sfId
         }]
       });
 
-      // API expects memberToDeregister array with email and sfId objects
       const response = await deregisterMember(token, eventId, [{
         email: member.email,
         sfId: member.sfId
       }]);
 
-      console.log("Deregister response:", response);
+      console.log("✅ Deregister response:", response);
 
-      if (response.data.code === 0) {
-        alert("Successfully deregistered");
+      if (response?.data?.code === 0) {
+        alert("Successfully deregistered from the event!");
         fetchEvents();
       } else {
-        alert(response.data.message || "Failed to deregister");
+        alert(response?.data?.message || "Failed to deregister");
       }
     } catch (error) {
-      console.error("Failed to deregister:", error);
-      console.error("Error details:", error.response?.data);
+      console.error("❌ Failed to deregister:", error);
       alert("Failed to deregister: " + (error.response?.data?.message || error.message));
     }
   };
 
-  // Deregister entire team (admin only)
+  // ========== DEREGISTER ENTIRE TEAM ==========
   const handleDeregisterTeam = async (eventId) => {
     const event = groupEvents.find(e => e.eventId === eventId);
     
@@ -176,29 +242,32 @@ const RegisteredEvents = ({ onClose, userToken }) => {
     }
 
     if (!event.isAdmin) {
-      alert("Only team admin can deregister the entire team");
+      alert("Only the team leader can deregister the entire team");
       return;
     }
 
-    const confirm = window.confirm("Are you sure you want to deregister the entire team?");
+    const confirm = window.confirm(`Are you sure you want to deregister the entire team from "${event.name}"?\n\nThis will remove all ${event.members.length} member(s) and cannot be undone.`);
     if (!confirm) return;
 
     try {
+      console.log("🗑️ Deregistering entire team for event:", eventId);
+      
       const response = await deregisterTeam(token, eventId);
+      console.log("✅ Deregister team response:", response);
 
-      if (response.data.code === 0) {
-        alert("Team deregistered successfully");
+      if (response?.data?.code === 0) {
+        alert("Team deregistered successfully!");
         fetchEvents();
       } else {
-        alert(response.data.message || "Failed to deregister team");
+        alert(response?.data?.message || "Failed to deregister team");
       }
     } catch (error) {
-      console.error("Failed to deregister team:", error);
+      console.error("❌ Failed to deregister team:", error);
       alert("Failed to deregister team: " + (error.response?.data?.message || error.message));
     }
   };
 
-  // Deregister a single member from group (admin only)
+  // ========== DEREGISTER SINGLE MEMBER ==========
   const handleDeregisterMember = async (eventId, memberSfId) => {
     try {
       const event = groupEvents.find(e => e.eventId === eventId);
@@ -208,35 +277,39 @@ const RegisteredEvents = ({ onClose, userToken }) => {
         return;
       }
 
-      // Check if user is admin
       if (!event.isAdmin) {
-        alert("Only team admin can remove members");
+        alert("Only the team leader can remove members");
         return;
       }
 
-      // Check if there are enough members (must be > minMembers after removal)
+      // Check minimum member requirement
       if (event.members.length <= event.minMembers) {
-        alert(`Cannot remove member. Team must have at least ${event.minMembers} members. Current members: ${event.members.length}`);
+        alert(`Cannot remove member.\n\nTeam must have at least ${event.minMembers} member(s).\nCurrent members: ${event.members.length}\n\nTo remove this member, use "Deregister Team" to remove the entire team.`);
         return;
       }
 
-      // Find the member to deregister
       const memberToRemove = event.members.find(m => m.sfId === memberSfId);
       
       if (!memberToRemove) {
-        alert("Member not found");
+        alert("Member not found in team");
+        return;
+      }
+
+      // Prevent removing leader
+      if (memberToRemove.isAdmin) {
+        alert("Cannot remove the team leader.\n\nUse 'Deregister Team' to remove the entire team instead.");
         return;
       }
 
       if (!memberToRemove.email) {
-        alert("Member email not found. Cannot deregister.");
+        alert("Cannot remove member: Email information missing");
         return;
       }
 
-      const confirm = window.confirm(`Are you sure you want to remove ${memberToRemove.name || memberSfId}?`);
+      const confirm = window.confirm(`Remove ${memberToRemove.name} (${memberToRemove.sfId}) from the team?`);
       if (!confirm) return;
 
-      console.log("Deregistering member:", {
+      console.log("🗑️ Removing member:", {
         eventId,
         memberToDeregister: [{
           email: memberToRemove.email,
@@ -244,25 +317,26 @@ const RegisteredEvents = ({ onClose, userToken }) => {
         }]
       });
 
-      // API expects memberToDeregister array with email and sfId objects
       const response = await deregisterMember(token, eventId, [{
         email: memberToRemove.email,
         sfId: memberToRemove.sfId
       }]);
 
-      if (response.data.code === 0) {
-        alert("Member removed successfully");
+      console.log("✅ Remove member response:", response);
+
+      if (response?.data?.code === 0) {
+        alert("Member removed successfully!");
         fetchEvents();
       } else {
-        alert(response.data.message || "Failed to remove member");
+        alert(response?.data?.message || "Failed to remove member");
       }
     } catch (error) {
-      console.error("Failed to remove member:", error);
+      console.error("❌ Failed to remove member:", error);
       alert("Failed to remove member: " + (error.response?.data?.message || error.message));
     }
   };
 
-  // Open add member modal (admin only)
+  // ========== OPEN ADD MEMBER MODAL ==========
   const handleOpenAddMember = (eventId) => {
     const event = groupEvents.find(e => e.eventId === eventId);
     
@@ -271,15 +345,13 @@ const RegisteredEvents = ({ onClose, userToken }) => {
       return;
     }
 
-    // Check if user is admin
     if (!event.isAdmin) {
-      alert("Only team admin can add members");
+      alert("Only the team leader can add members");
       return;
     }
 
-    // Check if team is already full
     if (event.members.length >= event.maxMembers) {
-      alert(`Team is full. Maximum members: ${event.maxMembers}`);
+      alert(`Team is full.\n\nMaximum members: ${event.maxMembers}\nCurrent members: ${event.members.length}`);
       return;
     }
 
@@ -287,7 +359,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
     setShowAddMemberModal(true);
   };
 
-  // Submit add member (admin only)
+  // ========== ADD MEMBER ==========
   const handleAddMember = async (memberData) => {
     try {
       const event = groupEvents.find(e => e.eventId === selectedEventId);
@@ -297,31 +369,44 @@ const RegisteredEvents = ({ onClose, userToken }) => {
         return;
       }
 
-      // Check if user is admin
       if (!event.isAdmin) {
-        alert("Only team admin can add members");
+        alert("Only the team leader can add members");
         return;
       }
 
-      // Check if team is already full
       if (event.members.length >= event.maxMembers) {
         alert(`Team is full. Maximum members: ${event.maxMembers}`);
         return;
       }
 
-      console.log("Adding member:", memberData);
+      // Check if member already exists
+      const memberExists = event.members.some(m => 
+        m.sfId.toUpperCase() === memberData.sfId.toUpperCase() || 
+        m.email.toLowerCase() === memberData.email.toLowerCase()
+      );
+
+      if (memberExists) {
+        alert("This member is already in the team");
+        return;
+      }
+
+      console.log("➕ Adding member:", {
+        eventId: selectedEventId,
+        teamMembers: [memberData]
+      });
 
       const response = await addMember(token, selectedEventId, [memberData]);
+      console.log("✅ Add member response:", response);
 
-      if (response.data.code === 0) {
-        alert("Member added successfully");
+      if (response?.data?.code === 0) {
+        alert("Member added successfully!");
         setShowAddMemberModal(false);
         fetchEvents();
       } else {
-        alert(response.data.message || "Failed to add member");
+        alert(response?.data?.message || "Failed to add member");
       }
     } catch (error) {
-      console.error("Failed to add member:", error);
+      console.error("❌ Failed to add member:", error);
       alert("Failed to add member: " + (error.response?.data?.message || error.message));
     }
   };
@@ -346,6 +431,11 @@ const RegisteredEvents = ({ onClose, userToken }) => {
         {/* Header */}
         <div className="bg-gradient-to-r from-purple-900 via-blue-900 to-pink-900 text-white py-6 px-8 rounded-t-3xl text-center border-2 border-white/30 border-b-0 mb-6">
           <h1 className="text-4xl font-bold">Registered Events</h1>
+          {userInfo && (
+            <p className="text-sm text-gray-300 mt-2">
+              Welcome, {userInfo.name} ({userInfo.sfId})
+            </p>
+          )}
         </div>
 
         {loading ? (
@@ -356,18 +446,26 @@ const RegisteredEvents = ({ onClose, userToken }) => {
           <div className="bg-gradient-to-br from-purple-900/90 via-blue-900/90 to-pink-900/90 backdrop-blur-sm rounded-3xl border-2 border-white/30 p-12">
             <div className="text-white text-center text-xl">Please login to view registered events</div>
           </div>
+        ) : (soloEvents.length === 0 && groupEvents.length === 0) ? (
+          <div className="bg-gradient-to-br from-purple-900/90 via-blue-900/90 to-pink-900/90 backdrop-blur-sm rounded-3xl border-2 border-white/30 p-12">
+            <div className="text-white text-center text-xl">You haven't registered for any events yet</div>
+          </div>
         ) : (
           <>
             {/* Solo Events */}
-            <SoloEventsList events={soloEvents} onDeregister={handleDeregisterSolo} />
+            {soloEvents.length > 0 && (
+              <SoloEventsList events={soloEvents} onDeregister={handleDeregisterSolo} />
+            )}
 
             {/* Group Events */}
-            <GroupEventsList
-              events={groupEvents}
-              onDeregisterTeam={handleDeregisterTeam}
-              onDeregisterMember={handleDeregisterMember}
-              onAddMember={handleOpenAddMember}
-            />
+            {groupEvents.length > 0 && (
+              <GroupEventsList
+                events={groupEvents}
+                onDeregisterTeam={handleDeregisterTeam}
+                onDeregisterMember={handleDeregisterMember}
+                onAddMember={handleOpenAddMember}
+              />
+            )}
           </>
         )}
 

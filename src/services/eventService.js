@@ -1,12 +1,13 @@
-// src/services/eventService.js - FIXED VERSION
+// src/services/eventService.js - COMPLETE API SERVICE
 
 import axios from 'axios';
 
 const API_BASE_URL = 'https://masterapi.springfest.in/api';
 
-// Get all registered events
+// ========== GET REGISTERED EVENTS ==========
 export const getRegisteredEvents = async (token) => {
   try {
+    console.log("📡 API Call: getRegisteredEvents");
     const response = await axios.post(
       `${API_BASE_URL}/user/registered_events`,
       { token },
@@ -16,16 +17,18 @@ export const getRegisteredEvents = async (token) => {
         }
       }
     );
+    console.log("✅ getRegisteredEvents response:", response.data);
     return response.data;
   } catch (error) {
-    console.error('Error fetching registered events:', error);
+    console.error('❌ Error fetching registered events:', error.response?.data || error);
     throw error;
   }
 };
 
-// Get members of a group
+// ========== GET MEMBERS OF A GROUP ==========
 export const getMembers = async (token, eventId) => {
   try {
+    console.log("📡 API Call: getMembers", { eventId });
     const response = await axios.post(
       `${API_BASE_URL}/event/getMembers`,
       { 
@@ -38,16 +41,18 @@ export const getMembers = async (token, eventId) => {
         }
       }
     );
+    console.log("✅ getMembers response:", response.data);
     return response;
   } catch (error) {
-    console.error('Error getting members:', error);
+    console.error('❌ Error getting members:', error.response?.data || error);
     throw error;
   }
 };
 
-// Add member to a group (Admin only)
+// ========== ADD MEMBER TO GROUP ==========
 export const addMember = async (token, eventId, teamMembers) => {
   try {
+    console.log("📡 API Call: addMember", { eventId, teamMembers });
     const response = await axios.post(
       `${API_BASE_URL}/event/addMember`,
       {
@@ -61,19 +66,18 @@ export const addMember = async (token, eventId, teamMembers) => {
         }
       }
     );
+    console.log("✅ addMember response:", response.data);
     return response;
   } catch (error) {
-    console.error('Error adding member:', error);
+    console.error('❌ Error adding member:', error.response?.data || error);
     throw error;
   }
 };
 
-// Deregister member(s) from event
-// For solo: send current user's { email, sfId }
-// For group: send member's { email, sfId } (Admin only can remove others)
+// ========== DEREGISTER MEMBER(S) ==========
 export const deregisterMember = async (token, eventId, memberToDeregister) => {
   try {
-    console.log('Deregister API call:', {
+    console.log("📡 API Call: deregisterMember", {
       token: token.substring(0, 20) + '...',
       eventId,
       memberToDeregister
@@ -93,17 +97,18 @@ export const deregisterMember = async (token, eventId, memberToDeregister) => {
       }
     );
     
-    console.log('Deregister API response:', response.data);
+    console.log("✅ deregisterMember response:", response.data);
     return response;
   } catch (error) {
-    console.error('Error deregistering member:', error.response?.data || error);
+    console.error('❌ Error deregistering member:', error.response?.data || error);
     throw error;
   }
 };
 
-// Deregister entire team (Admin only)
+// ========== DEREGISTER ENTIRE TEAM ==========
 export const deregisterTeam = async (token, eventId) => {
   try {
+    console.log("📡 API Call: deregisterTeam", { eventId });
     const response = await axios.post(
       `${API_BASE_URL}/event/deregister/team`,
       {
@@ -116,16 +121,18 @@ export const deregisterTeam = async (token, eventId) => {
         }
       }
     );
+    console.log("✅ deregisterTeam response:", response.data);
     return response;
   } catch (error) {
-    console.error('Error deregistering team:', error);
+    console.error('❌ Error deregistering team:', error.response?.data || error);
     throw error;
   }
 };
 
-// Register for event (Solo or Group)
+// ========== REGISTER FOR EVENT ==========
 export const registerEvent = async (token, eventCity, eventId, teamMembers) => {
   try {
+    console.log("📡 API Call: registerEvent", { eventCity, eventId, teamMembers });
     const response = await axios.post(
       `${API_BASE_URL}/event/register`,
       {
@@ -140,9 +147,10 @@ export const registerEvent = async (token, eventCity, eventId, teamMembers) => {
         }
       }
     );
+    console.log("✅ registerEvent response:", response.data);
     return response;
   } catch (error) {
-    console.error('Error registering for event:', error);
+    console.error('❌ Error registering for event:', error.response?.data || error);
     throw error;
   }
 };
@@ -150,63 +158,68 @@ export const registerEvent = async (token, eventCity, eventId, teamMembers) => {
 // Alias for backward compatibility
 export const registerForEvent = registerEvent;
 
-// Get all events
+// ========== GET ALL EVENTS ==========
 export const getAllEvents = async () => {
   try {
+    console.log("📡 API Call: getAllEvents");
     const response = await axios.get(`${API_BASE_URL}/event`, {
       headers: {
         'Content-Type': 'application/json',
       }
     });
+    console.log("✅ getAllEvents response:", response.data);
     return response.data;
   } catch (error) {
-    console.error('Error fetching all events:', error);
+    console.error('❌ Error fetching all events:', error.response?.data || error);
     throw error;
   }
 };
 
-// Get events by genre
+// ========== GET EVENTS BY GENRE ==========
 export const getEventsByGenre = async (genre) => {
   try {
+    console.log("📡 API Call: getEventsByGenre", { genre });
     const response = await axios.get(`${API_BASE_URL}/event`, {
       headers: {
         'Content-Type': 'application/json',
       }
     });
     
-    // Filter events by genre if genre is provided
     if (genre && response.data) {
       const filteredEvents = response.data.filter(
-        event => event.genre?.genre?.toLowerCase() === genre.toLowerCase()
+        event => event.genre?.genre?.toLowerCase() === genre.toLowerCase() ||
+                event.genre?.toLowerCase() === genre.toLowerCase()
       );
+      console.log("✅ Filtered events by genre:", filteredEvents);
       return filteredEvents;
     }
     
     return response.data;
   } catch (error) {
-    console.error('Error fetching events by genre:', error);
+    console.error('❌ Error fetching events by genre:', error.response?.data || error);
     throw error;
   }
 };
 
-// Get event by ID
+// ========== GET EVENT BY ID ==========
 export const getEventById = async (eventId) => {
   try {
+    console.log("📡 API Call: getEventById", { eventId });
     const response = await axios.get(`${API_BASE_URL}/event`, {
       headers: {
         'Content-Type': 'application/json',
       }
     });
     
-    // Find specific event by ID
     if (response.data) {
       const event = response.data.find(e => e.id === eventId);
+      console.log("✅ Found event by ID:", event);
       return event;
     }
     
     return null;
   } catch (error) {
-    console.error('Error fetching event by ID:', error);
+    console.error('❌ Error fetching event by ID:', error.response?.data || error);
     throw error;
   }
 };
