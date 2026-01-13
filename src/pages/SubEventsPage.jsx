@@ -6,8 +6,10 @@ import { useAuth } from '../context/authContext';
 import RegistrationForm from '../components/events/RegistrationForm';
 import eventsDesktopBg from '../assets/eventsdesktopbg.jpeg';
 import eventsMobileBg from '../assets/eventsmobilebg.jpeg';
+import centrifugeBg from '../assets/centrifugebg.jpeg';
 import GlassSurface from '../components/GlassSurface';
 import PillNav from '../components/PillNav';
+import logo from '../assets/logo.png';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEvents } from '../context/eventContext';
@@ -110,16 +112,6 @@ const EtherealBackground = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Generate random stars
-    const stars = [...Array(100)].map((_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: Math.random() * 2 + 1,
-        delay: Math.random() * 3,
-        duration: 2 + Math.random() * 2,
-    }));
-
     return (
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
             {/* Responsive background image */}
@@ -129,74 +121,14 @@ const EtherealBackground = () => {
                     backgroundImage: `url(${isMobile ? eventsMobileBg : eventsDesktopBg})`,
                 }}
             />
-
-            {/* Stars */}
-            {stars.map((star) => (
-                <motion.div
-                    key={star.id}
-                    className="absolute rounded-full bg-white"
-                    style={{
-                        left: `${star.x}%`,
-                        top: `${star.y}%`,
-                        width: star.size,
-                        height: star.size,
-                    }}
-                    animate={{
-                        opacity: [0.3, 1, 0.3],
-                        scale: [1, 1.2, 1],
-                    }}
-                    transition={{
-                        duration: star.duration,
-                        delay: star.delay,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                    }}
-                />
-            ))}
-
-            {/* Floating ethereal orbs */}
-            <motion.div
-                className="absolute w-64 h-64 rounded-full"
-                style={{
-                    background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)',
-                    left: '10%',
-                    top: '20%',
-                    filter: 'blur(40px)',
-                }}
-                animate={{
-                    x: [0, 30, 0],
-                    y: [0, -20, 0],
-                    scale: [1, 1.1, 1],
-                }}
-                transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-            />
-
-            <motion.div
-                className="absolute w-80 h-80 rounded-full"
-                style={{
-                    background: 'radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%)',
-                    right: '10%',
-                    bottom: '20%',
-                    filter: 'blur(50px)',
-                }}
-                animate={{
-                    x: [0, -20, 0],
-                    y: [0, 30, 0],
-                    scale: [1, 1.15, 1],
-                }}
-                transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-            />
-
-            {/* Mystical mist at bottom */}
-            <div
-                className="absolute bottom-0 left-0 right-0 h-48"
-                style={{
-                    background: 'linear-gradient(to top, rgba(139, 92, 246, 0.1) 0%, transparent 100%)'
-                }}
-            />
+            {/* ... */}
         </div>
     );
 };
+// ...
+// Inside SubEventsPage component:
+// ...
+
 
 const SubEventsPage = () => {
     const { genre: genreSlug } = useParams();
@@ -207,29 +139,29 @@ const SubEventsPage = () => {
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isDark, setIsDark] = useState(false);
+
     const [showRegistration, setShowRegistration] = useState(false);
 
     const genreName = slugToGenre[genreSlug] || genreSlug;
 
     useEffect(() => {
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            setIsDark(true);
-            document.documentElement.classList.add('dark');
-        }
+
 
         const fetchEvents = async () => {
             try {
                 setIsLoading(true);
-                const response = await getAllEvents();
-                if (response.code === 0 && response.data) {
-                    // Filter events locally since we already have all events
-                    const allEvents = response.data;
-                    const genreEvents = allEvents.filter(event =>
-                        event.genre?.toLowerCase() === genreName.toLowerCase() ||
-                        event.genre?.genre?.toLowerCase() === genreName.toLowerCase()
-                    );
+                // Use getEventsByGenre directly as it now handles the API response correctly
+                const genreEvents = await getEventsByGenre(genreName);
+
+                if (Array.isArray(genreEvents)) {
                     const activeEvents = genreEvents.filter(e => e.event_status !== false);
+                    setEvents(activeEvents);
+                    if (activeEvents.length > 0) {
+                        setSelectedEvent(activeEvents[0]);
+                    }
+                } else if (genreEvents?.code === 0 && Array.isArray(genreEvents.data)) {
+                    // Fallback in case it returns wrapped object
+                    const activeEvents = genreEvents.data.filter(e => e.event_status !== false);
                     setEvents(activeEvents);
                     if (activeEvents.length > 0) {
                         setSelectedEvent(activeEvents[0]);
@@ -248,10 +180,14 @@ const SubEventsPage = () => {
         setSelectedEvent(event);
     };
 
-    const handleThemeToggle = () => {
-        setIsDark(!isDark);
-        document.documentElement.classList.toggle('dark');
-    };
+    // Navigation items for PillNav - dynamically from events
+    const eventNavItems = events.map((event) => ({
+        label: event.name,
+        active: selectedEvent?.id === event.id,
+        onClick: () => handleEventClick(event)
+    }));
+
+
 
 
 
@@ -323,167 +259,304 @@ const SubEventsPage = () => {
     }
 
     const currentEvent = selectedEvent;
+    const isCentrifuge = currentEvent?.name?.toLowerCase().includes('centrifuge');
 
     return (
-        <div className="font-body bg-background-dark text-slate-200 h-screen relative overflow-hidden selection:bg-deep-amber selection:text-white transition-colors duration-300 dark:bg-background-dark dark:text-slate-200">
+        <div className="font-body bg-background-dark text-slate-200 min-h-screen lg:h-screen relative overflow-y-auto lg:overflow-hidden selection:bg-deep-amber selection:text-white transition-colors duration-300 dark:bg-background-dark dark:text-slate-200">
             <EtherealBackground />
 
             {/* Main Content */}
-            <main className="relative z-10 pt-16 pb-4 container mx-auto px-4 h-full flex flex-col items-center justify-center">
-                {/* Back Button - Fixed in Corner */}
-                <button
-                    onClick={() => navigate('/events')}
-                    className="fixed top-6 left-6 z-50 flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-sky-300 hover:text-white hover:bg-white/20 transition-all shadow-lg"
-                >
-                    <span className="material-icons">arrow_back</span>
-                    <span className="hidden sm:inline">Back</span>
-                </button>
+            <main className="relative z-10 pt-8 pb-8 container mx-auto px-4 min-h-full lg:h-full flex flex-col items-center lg:justify-center">
 
                 {/* Header */}
-                <header className="text-center mb-6 relative w-full max-w-7xl">
-                    <h1 className="font-display text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-sky-200 via-sky-300 to-sky-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] mb-2 tracking-wide font-cinzel">
+                <header className="text-center mb-8 pt-4 relative w-full max-w-7xl z-10">
+                    <h1
+                        className="text-4xl md:text-6xl font-bold mb-4 tracking-wider"
+                        style={{
+                            fontFamily: '"Cinzel Decorative", serif',
+                            color: '#c9e4e4',
+                            textShadow: '0 0 30px rgba(100, 180, 180, 0.4), 0 4px 20px rgba(0,0,0,0.5)'
+                        }}
+                    >
                         {genreName.toUpperCase()}
                     </h1>
-                    <div className="h-1 w-32 bg-gradient-to-r from-transparent via-sky-500 to-transparent mx-auto rounded-full shadow-[0_0_10px_rgba(14,165,233,0.5)]"></div>
-                    <p className="mt-4 text-sky-200/80 font-light tracking-[0.2em] uppercase text-sm drop-shadow-md">Discover the Events Within</p>
                 </header>
 
-                {/* Main Display */}
-                <div className="relative w-full flex gap-6 justify-center items-start flex-col lg:flex-row max-w-7xl px-4 py-4">
-                    {/* Event List Container */}
-                    <div className="w-full lg:w-1/4 h-[450px] shrink-0 border border-white/10 rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm relative z-20 flex justify-center py-4">
+                {/* PillNav for Subevent Navigation */}
+                {events.length > 1 && (
+                    <div className="mb-4 md:mb-6 w-full flex justify-center relative z-40">
                         <PillNav
-                            layout="vertical"
-                            items={events.map(event => ({
-                                label: event.name || event.genre,
-                                onClick: () => handleEventClick(event),
-                                active: selectedEvent?.id === event.id
-                            }))}
-                            pillColor="rgba(255, 255, 255, 0.05)"
-                            pillTextColor="#bae6fd" // Sky-200
-                            hoveredPillTextColor="#f0f9ff" // Sky-50
-                            baseColor="#0ea5e9" // Sky-500
+                            logo={logo}
+                            logoAlt="Back to Events"
+                            items={eventNavItems}
+                            className="subevent-nav"
+                            ease="power2.easeOut"
+                            baseColor="#000000"
+                            pillColor="#ffffff"
+                            hoveredPillTextColor="#ffffff"
+                            pillTextColor="#000000"
+                            onItemClick={(item) => item.onClick?.()}
                         />
                     </div>
+                )}
 
-                    {/* Event Details Container */}
-                    <div className="w-full lg:w-3/4 h-auto lg:h-[450px]">
-                        {currentEvent && (
-                            <GlassSurface
-                                opacity={0.7}
-                                brightness={40}
-                                className="rounded-2xl overflow-hidden border border-sky-500/20 shadow-2xl h-full"
-                                style={{
-                                    background: 'linear-gradient(180deg, rgba(8, 47, 73, 0.4) 0%, rgba(12, 74, 110, 0.5) 100%)',
-                                }}
-                            >
-                                {(() => {
-                                    const displayData = getEventDisplayData(currentEvent);
-                                    return (
-                                        <div className="flex flex-col lg:flex-row h-full">
-                                            {/* Image Section */}
-                                            <div className="w-full lg:w-2/5 h-[250px] lg:h-full relative overflow-hidden">
-                                                <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent z-10 lg:bg-gradient-to-r" />
-                                                <img
-                                                    alt={displayData.name}
-                                                    src={displayData.image}
-                                                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                                                />
-                                            </div>
+                {/* Main Display - Reference Design */}
+                <div className="relative w-full flex justify-center items-center max-w-5xl px-4">
 
-                                            {/* Details Section */}
-                                            <div className="w-full lg:w-3/5 p-6 lg:p-8 flex flex-col h-auto lg:h-full overflow-y-auto custom-scrollbar relative z-20">
-                                                <div className="flex justify-between items-start gap-4 mb-6">
-                                                    <div>
-                                                        <h2 className="text-3xl font-bold font-cinzel text-sky-100 mb-2 drop-shadow-lg">
-                                                            {currentEvent.name}
-                                                        </h2>
-                                                        <p className="text-sky-300/80 italic text-sm">
-                                                            {currentEvent.tagline}
-                                                        </p>
-                                                    </div>
+                    {/* Main Card with Shiny Border */}
+                    <div
+                        className="relative w-full rounded-xl overflow-hidden"
+                        style={{
+                            background: 'linear-gradient(135deg, rgba(180, 200, 220, 0.6) 0%, rgba(100, 130, 160, 0.4) 50%, rgba(180, 200, 220, 0.5) 100%)',
+                            padding: '2px',
+                            boxShadow: '0 0 30px rgba(150, 180, 210, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.1)'
+                        }}
+                    >
+                        {/* Inner Card */}
+                        <div
+                            className="rounded-xl overflow-hidden backdrop-blur-md"
+                            style={{
+                                background: 'linear-gradient(180deg, rgba(20, 35, 55, 0.85) 0%, rgba(15, 30, 50, 0.9) 100%)',
+                            }}
+                        >
+                            {currentEvent && (
+                                <div className="flex flex-col lg:flex-row">
 
-                                                    <button
-                                                        className="lg:hidden px-4 py-2 rounded-lg bg-sky-600 text-white text-xs font-bold uppercase tracking-wider hover:bg-sky-500 transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(2,132,199,0.4)]"
-                                                        onClick={handleRegisterClick}
-                                                    >
-                                                        Register
-                                                    </button>
-                                                </div>
+                                    {/* Left Section - Image */}
+                                    <div className="flex flex-row lg:flex-row">
 
-                                                <div className="flex gap-3 mb-6 flex-wrap">
-                                                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${currentEvent.is_group ? 'bg-purple-500/10 text-purple-200 border-purple-500/30' : 'bg-emerald-500/10 text-emerald-200 border-emerald-500/30'}`}>
-                                                        {currentEvent.is_group ? 'Group' : 'Solo'}
-                                                    </span>
-                                                    <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/10 text-amber-200 border border-amber-500/30">
-                                                        {currentEvent.min_participation}-{currentEvent.max_participation} members
-                                                    </span>
-                                                </div>
-
-                                                <div className="space-y-6 flex-1">
-                                                    <div>
-                                                        <h4 className="flex items-center gap-2 text-sky-400 font-bold uppercase tracking-widest text-xs mb-3">
-                                                            <span className="w-8 h-px bg-sky-500/50"></span>
-                                                            About
-                                                        </h4>
-                                                        <p className="text-sky-100/80 leading-relaxed text-sm">
-                                                            {currentEvent.writeup}
-                                                        </p>
-                                                    </div>
-
-                                                    {currentEvent.rules && currentEvent.rules.length > 0 && (
-                                                        <div>
-                                                            <h4 className="flex items-center gap-2 text-sky-400 font-bold uppercase tracking-widest text-xs mb-3">
-                                                                <span className="w-8 h-px bg-sky-500/50"></span>
-                                                                Rules
-                                                            </h4>
-                                                            <ul className="space-y-3">
-                                                                {currentEvent.rules.filter(r => r && r.trim()).map((rule, index) => (
-                                                                    <li key={index} className="flex gap-3 items-start text-sm group">
-                                                                        <span className="font-mono text-sky-500/70 text-xs mt-1">
-                                                                            {String(index + 1).padStart(2, '0')}
-                                                                        </span>
-                                                                        <span className="text-sky-100/70 group-hover:text-sky-100 transition-colors">{rule}</span>
-                                                                    </li>
-                                                                ))}
-                                                            </ul>
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                <div className="mt-8 pt-6 border-t border-white/10 hidden lg:block">
-                                                    <button
-                                                        className="px-8 py-3 rounded-xl bg-gradient-to-r from-sky-600 to-sky-500 text-white font-bold uppercase tracking-widest text-sm hover:from-sky-500 hover:to-sky-400 transition-all shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)] active:scale-95 flex items-center gap-2 transform"
-                                                        onClick={handleRegisterClick}
-                                                    >
-                                                        Register Now
-                                                        <span className="material-icons text-lg">arrow_forward</span>
-                                                    </button>
-                                                </div>
-                                            </div>
+                                        {/* Image with Shiny Border */}
+                                        <div
+                                            className="relative overflow-hidden flex-shrink-0 event-image-container"
+                                            style={{
+                                                background: 'linear-gradient(135deg, rgba(180, 200, 220, 0.5) 0%, rgba(120, 150, 180, 0.3) 50%, rgba(180, 200, 220, 0.4) 100%)',
+                                                boxShadow: '0 0 20px rgba(150, 180, 210, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.1)'
+                                            }}
+                                        >
+                                            <img
+                                                alt={currentEvent.name}
+                                                src={isCentrifuge ? centrifugeBg : getEventDisplayData(currentEvent).image}
+                                                className="w-full h-full object-cover"
+                                            />
                                         </div>
-                                    );
-                                })()}
-                            </GlassSurface>
-                        )}
+                                    </div>
+
+                                    {/* Right Section - Event Details */}
+                                    <div
+                                        className="w-full lg:flex-1 p-4 lg:p-6 flex flex-col max-h-[400px] lg:max-h-[450px] overflow-y-auto custom-scrollbar relative"
+                                        style={{
+                                            borderLeft: '1px solid rgba(150, 180, 210, 0.15)'
+                                        }}
+                                    >
+                                        {/* Header with Title and Mobile Register Button */}
+                                        <div className="flex flex-col lg:flex-row lg:justify-between items-start gap-4 mb-4">
+                                            <div>
+                                                <h2
+                                                    className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 leading-tight"
+                                                    style={{
+                                                        fontFamily: '"Cinzel", serif',
+                                                        color: '#e8e8e8',
+                                                        textShadow: '0 2px 10px rgba(0, 0, 0, 0.5)'
+                                                    }}
+                                                >
+                                                    {currentEvent.name.toUpperCase()}
+                                                </h2>
+                                                <p
+                                                    className="text-sm italic"
+                                                    style={{
+                                                        fontFamily: '"Cormorant Garamond", serif',
+                                                        color: 'rgba(180, 200, 220, 0.8)'
+                                                    }}
+                                                >
+                                                    {currentEvent.tagline}
+                                                </p>
+                                            </div>
+
+                                            {/* Register Button - visible on all screens */}
+                                            {/* Register Button - visible on all screens */}
+                                            <div className="mt-4 mb-4">
+                                                <GlassSurface
+                                                    borderWidth={1}
+                                                    brightness={120}
+                                                    opacity={0.2}
+                                                    mixBlendMode="normal"
+                                                    displace={20}
+                                                    distortionScale={-140}
+                                                    redOffset={2}
+                                                    greenOffset={5}
+                                                    blueOffset={10}
+                                                    className="cursor-pointer font-bold uppercase tracking-widest hover:scale-105 active:scale-95 transition-all text-white group relative overflow-hidden"
+                                                    onClick={handleRegisterClick}
+                                                    style={{
+                                                        padding: '10px 32px', // Reduced size as requested
+                                                        background: 'rgba(255, 255, 255, 0.05)',
+                                                        boxShadow: '0 0 20px rgba(100, 200, 255, 0.2)'
+                                                    }}
+                                                >
+                                                    <div className="flex items-center gap-2 text-xs md:text-sm z-10 relative">
+                                                        REGISTER
+                                                        <span className="material-icons text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                                    </div>
+                                                    {/* Gradient overlay for better visibility */}
+                                                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-600/20 opacity-50"></div>
+                                                </GlassSurface>
+                                            </div>
+
+                                            {/* Event Type Badges */}
+                                            <div className="flex gap-3 mb-4 flex-wrap">
+                                                <span
+                                                    className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
+                                                    style={{
+                                                        background: currentEvent.is_group ? 'rgba(139, 92, 246, 0.15)' : 'rgba(16, 185, 129, 0.15)',
+                                                        color: currentEvent.is_group ? '#c4b5fd' : '#6ee7b7',
+                                                        border: `1px solid ${currentEvent.is_group ? 'rgba(139, 92, 246, 0.3)' : 'rgba(16, 185, 129, 0.3)'}`
+                                                    }}
+                                                >
+                                                    {currentEvent.is_group ? 'Group' : 'Solo'}
+                                                </span>
+                                                <span
+                                                    className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
+                                                    style={{
+                                                        background: 'rgba(245, 158, 11, 0.15)',
+                                                        color: '#fcd34d',
+                                                        border: '1px solid rgba(245, 158, 11, 0.3)'
+                                                    }}
+                                                >
+                                                    {currentEvent.min_participation}-{currentEvent.max_participation} members
+                                                </span>
+                                            </div>
+
+                                            {/* About Section */}
+                                            <div className="mb-4">
+                                                <h4
+                                                    className="font-bold uppercase tracking-widest text-xs mb-3"
+                                                    style={{ color: 'rgba(150, 180, 210, 0.8)' }}
+                                                >
+                                                    About
+                                                </h4>
+                                                <p
+                                                    className="leading-relaxed text-sm"
+                                                    style={{
+                                                        fontFamily: '"Cormorant Garamond", serif',
+                                                        color: 'rgba(200, 210, 220, 0.85)',
+                                                        lineHeight: '1.7'
+                                                    }}
+                                                >
+                                                    {currentEvent.writeup}
+                                                </p>
+                                            </div>
+
+                                            {/* Rules Section */}
+                                            {currentEvent.rules && currentEvent.rules.length > 0 && (
+                                                <div className="mb-4">
+                                                    <h4
+                                                        className="font-bold uppercase tracking-widest text-xs mb-3"
+                                                        style={{ color: 'rgba(150, 180, 210, 0.8)' }}
+                                                    >
+                                                        Rules
+                                                    </h4>
+                                                    <ul className="space-y-2">
+                                                        {currentEvent.rules.filter(r => r && r.trim()).map((rule, index) => (
+                                                            <li key={index} className="flex gap-3 items-start text-sm group">
+                                                                <span
+                                                                    className="font-mono text-xs mt-1"
+                                                                    style={{ color: 'rgba(150, 180, 210, 0.5)' }}
+                                                                >
+                                                                    {String(index + 1).padStart(2, '0')}
+                                                                </span>
+                                                                <span
+                                                                    className="group-hover:text-white transition-colors text-lg tracking-wide"
+                                                                    style={{
+                                                                        color: 'rgba(200, 210, 220, 0.9)',
+                                                                        fontFamily: '"Cormorant Garamond", serif',
+                                                                        lineHeight: '1.4'
+                                                                    }}
+                                                                >
+                                                                    {rule.replace(/^\d+[\.\)]\s*/, '')}
+                                                                </span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            )}
+
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
+
+                {/* Navigation Dots */}
+                {events.length > 1 && (
+                    <div className="flex items-center justify-center gap-4 mt-6">
+                        <button
+                            onClick={() => {
+                                const currentIndex = events.indexOf(currentEvent);
+                                const prevIndex = currentIndex > 0 ? currentIndex - 1 : events.length - 1;
+                                setSelectedEvent(events[prevIndex]);
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                            style={{
+                                background: 'rgba(50, 70, 100, 0.5)',
+                                border: '1px solid rgba(150, 180, 210, 0.3)'
+                            }}
+                        >
+                            <span className="material-icons text-gray-400 text-sm">chevron_left</span>
+                        </button>
+
+                        <div className="flex items-center gap-2">
+                            {events.map((event, index) => (
+                                <button
+                                    key={event.id}
+                                    onClick={() => setSelectedEvent(event)}
+                                    className={`transition-all duration-300 rounded-full ${selectedEvent?.id === event.id
+                                        ? 'w-3 h-3 scale-110'
+                                        : 'w-2 h-2 hover:scale-125'
+                                        }`}
+                                    style={{
+                                        background: selectedEvent?.id === event.id
+                                            ? 'linear-gradient(135deg, rgba(200, 220, 240, 0.9) 0%, rgba(150, 180, 210, 0.7) 100%)'
+                                            : 'rgba(100, 130, 160, 0.5)',
+                                        boxShadow: selectedEvent?.id === event.id
+                                            ? '0 0 10px rgba(150, 180, 210, 0.5)'
+                                            : 'none'
+                                    }}
+                                />
+                            ))}
+                        </div>
+
+                        <button
+                            onClick={() => {
+                                const currentIndex = events.indexOf(currentEvent);
+                                const nextIndex = currentIndex < events.length - 1 ? currentIndex + 1 : 0;
+                                setSelectedEvent(events[nextIndex]);
+                            }}
+                            className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                            style={{
+                                background: 'rgba(50, 70, 100, 0.5)',
+                                border: '1px solid rgba(150, 180, 210, 0.3)'
+                            }}
+                        >
+                            <span className="material-icons text-gray-400 text-sm">chevron_right</span>
+                        </button>
+                    </div>
+                )}
+
+                {/* Event Number Display */}
+                <p
+                    className="text-center mt-4 text-xs tracking-[0.3em]"
+                    style={{
+                        fontFamily: '"Cormorant Garamond", serif',
+                        color: 'rgba(150, 180, 210, 0.5)'
+                    }}
+                >
+                    {events.indexOf(currentEvent) + 1} of {events.length}
+                </p>
             </main>
 
-            {/* Theme Toggle */}
-            <div className="fixed bottom-6 right-6 z-50">
-                <button
-                    className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md shadow-lg flex items-center justify-center hover:scale-110 transition-transform border border-white/20 text-sky-300 hover:text-white"
-                    onClick={handleThemeToggle}
-                    style={{ boxShadow: '0 0 20px rgba(56, 189, 248, 0.3)' }}
-                >
-                    {isDark ? (
-                        <span className="material-icons">dark_mode</span>
-                    ) : (
-                        <span className="material-icons">light_mode</span>
-                    )}
-                </button>
-            </div>
+
 
             {/* Registration Modal Overlay */}
             <AnimatePresence>
@@ -534,6 +607,28 @@ const SubEventsPage = () => {
                 .codex-container-horizontal::-webkit-scrollbar-thumb {
                     background: rgba(56, 189, 248, 0.5);
                     border-radius: 2px;
+                }
+
+                /* Responsive Event Image Container */
+                .event-image-container {
+                    width: 100%;
+                    margin: 0;
+                }
+                .event-image-container img {
+                    height: auto !important; /* Force auto height on mobile to respect aspect ratio */
+                }
+
+                @media (min-width: 1024px) {
+                    .event-image-container {
+                        width: clamp(200px, 35vw, 320px);
+                        aspect-ratio: 3/4;
+                        max-height: none;
+                        margin: 1rem;
+                    }
+                    .event-image-container img {
+                        height: 100% !important; /* Restore full height for desktop aspect ratio box */
+                        object-fit: cover;
+                    }
                 }
             `}</style>
         </div>
