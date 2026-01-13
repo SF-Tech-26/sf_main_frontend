@@ -10,6 +10,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {AuthContext} from "../context/authContext.jsx";
 import { Crown } from "lucide-react"
+import { Users, Building2 } from 'lucide-react';
+import icon1 from "../assets/images/handshake_shield_transparent.png";
+import icon2 from "../assets/images/haunted_house_transparent_v2.png";
 
 
 function Contingent() {
@@ -73,8 +76,70 @@ function Contingent() {
   const [joinId, setJoinId] = useState("");
   const [joinCode, setJoinCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+//---------------------------------------------------------------------------
+      const [showPaymentModal, setShowPaymentModal] = useState(false);
+      const [paymentData, setPaymentData] = useState({
+        checkIn: "",
+        checkOut: "",
+        emergencyNumber: ""
+      });
+      const [isPaying, setIsPaying] = useState(false);
 
-  // Function to simply open the custom modal
+      const handlePaymentSubmit = async (e) => {
+        e.preventDefault();
+        if(!paymentData.checkIn || !paymentData.checkOut || !paymentData.emergencyNumber) {
+            toast.warning("Please fill all fields");
+            return;
+        }
+        
+        setIsPaying(true);
+        try {
+            setTimeout(() => {
+                toast.success("Payment Initiated!");
+                setIsPaying(false);
+                setShowPaymentModal(false);
+            }, 1500);
+        } catch (error) {
+            toast.error("Payment failed");
+            setIsPaying(false);
+        }
+      };
+//---------------------------------------------------------------
+// State for Contingent (Group) Payment
+  const [showContingentPayModal, setShowContingentPayModal] = useState(false);
+  const [contingentPayData, setContingentPayData] = useState({
+    checkIn: "",
+    checkOut: "",
+    emergencyNumber: ""
+  });
+  const [isContingentPaying, setIsContingentPaying] = useState(false);
+
+  // Calculate total amount (Example: 2449 * number of members)
+  const totalAmount = member.length * 2449;
+
+  const handleContingentPaySubmit = async (e) => {
+    e.preventDefault();
+    if(!contingentPayData.checkIn || !contingentPayData.checkOut || !contingentPayData.emergencyNumber) {
+        toast.warning("Please fill all fields");
+        return;
+    }
+    
+    setIsContingentPaying(true);
+    try {
+        // API call for Contingent Payment
+        // await axios.post(CONTINGENT_PAYMENT_API, { ...contingentPayData, token });
+        setTimeout(() => {
+            toast.success(`Payment for ${member.length} members initiated!`);
+            setIsContingentPaying(false);
+            setShowContingentPayModal(false);
+        }, 1500);
+    } catch (error) {
+        toast.error("Payment failed");
+        setIsContingentPaying(false);
+    }
+  };
+//---------------------------------------------------------------
 const triggerLeaveConfirmation = () => {
   if (isDeleting) return;
 
@@ -295,8 +360,14 @@ const handleConfirmLeave = async () => {
         {conti && (
           <>
             {showLeaveModal && (
-              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-                <div className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-2xl relative popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/95 to-[#5f8a84]/80 text-center">
+              <div 
+                className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+                onClick={() => setShowLeaveModal(false)}
+              >
+                <div 
+                  className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-2xl relative popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/95 to-[#5f8a84]/80 text-center"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   
                   <span className="material-symbols-outlined !text-6xl text-red-500 mb-4 block">
                     warning
@@ -328,8 +399,14 @@ const handleConfirmLeave = async () => {
               </div>
   )}
             {showBarcodeModal && (
-              <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
-                <div className="w-full max-w-sm p-8 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative text-center popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/85 to-[#5f8a84]/65">
+              <div 
+                className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
+                onClick={() => setShowBarcodeModal(false)}
+              >
+                <div 
+                  className="w-full max-w-sm p-8 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative text-center popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/85 to-[#5f8a84]/65"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <button
                     onClick={() => setShowBarcodeModal(false)}
                     className="cursor-pointer absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
@@ -363,9 +440,237 @@ const handleConfirmLeave = async () => {
                 </div>
               </div>
             )}
+            {showPaymentModal && (
+  <div 
+    className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+    onClick={() => setShowPaymentModal(false)}
+  >
+    <div 
+      className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.6)] relative popup-anim backdrop-blur-md bg-black/10"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Close Button */}
+      <button
+        onClick={() => setShowPaymentModal(false)}
+        className="cursor-pointer absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
+      >
+        <span className="material-symbols-outlined">close</span>
+      </button>
+
+      {/* Header */}
+      <h2 className="text-5xl text-white font-['Jolly_Lodger'] mb-1 tracking-widest">
+        Make Payment
+      </h2>
+      <p className="text-gray-300 font-sans text-lg mb-6 border-b border-white/10 pb-4">
+        Total: <span className="text-green-400 font-bold">₹2449</span>
+      </p>
+
+      {/* Form */}
+      <form onSubmit={handlePaymentSubmit} className="flex flex-col gap-5">
+        
+        {/* Check-In */}
+        <div>
+          <label className="block text-gray-200 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">
+            Check-In
+          </label>
+          <div className="relative">
+            <select
+              required
+              value={paymentData.checkIn}
+              onChange={(e) => setPaymentData({...paymentData, checkIn: e.target.value})}
+              className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-purple-500 transition-colors cursor-pointer"
+            >
+              <option value="" disabled>Select Check-in</option>
+              <option value="day1">22-01-2026</option>
+              <option value="day2">23-01-2026</option>
+              <option value="day3">24-01-2026</option>
+              <option value="day4">25-01-2026</option>
+              <option value="day5">26-01-2026</option>
+            </select>
+            <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400 pointer-events-none">
+              expand_more
+            </span>
+          </div>
+        </div>
+
+        {/* Check-Out */}
+        <div>
+          <label className="block text-gray-200 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">
+            Check-Out
+          </label>
+          <div className="relative">
+            <select
+              required
+              value={paymentData.checkOut}
+              onChange={(e) => setPaymentData({...paymentData, checkOut: e.target.value})}
+              className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-purple-500 transition-colors cursor-pointer"
+            >
+              <option value="" disabled>Select Check-out</option>
+              <option value="day2">23-01-2026</option>
+              <option value="day3">24-01-2026</option>
+              <option value="day4">25-01-2026</option>
+              <option value="day5">26-01-2026</option>
+              <option value="day6">27-01-2026</option>
+            </select>
+            <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400 pointer-events-none">
+              expand_more
+            </span>
+          </div>
+        </div>
+
+        {/* Emergency Number */}
+        <div>
+          <label className="block text-gray-200 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">
+            Emergency Number
+          </label>
+          <input
+            type="tel"
+            required
+            maxLength="10"
+            pattern="[0-9]{10}"
+            placeholder="10 digit mobile number"
+            value={paymentData.emergencyNumber}
+            onChange={(e) => setPaymentData({...paymentData, emergencyNumber: e.target.value.replace(/\D/g,'')})}
+            className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-purple-500 transition-colors placeholder:text-gray-500"
+          />
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={isPaying}
+          className="mt-2 cursor-pointer w-full py-3 text-3xl text-white font-['Jolly_Lodger'] tracking-widest bg-green-700/80 border border-green-500/50 rounded-xl hover:bg-green-600 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isPaying ? "Processing..." : "Make Payment"}
+        </button>
+      </form>
+    </div>
+  </div>
+)}
+
+{showContingentPayModal && (
+  <div 
+    className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+    onClick={() => setShowContingentPayModal(false)}
+  >
+    <div 
+      className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.6)] relative popup-anim backdrop-blur-md bg-black/10"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Close Button */}
+      <button
+        onClick={() => setShowContingentPayModal(false)}
+        className="cursor-pointer absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
+      >
+        <span className="material-symbols-outlined">close</span>
+      </button>
+
+      {/* Header */}
+      <h2 className="text-5xl text-white font-['Jolly_Lodger'] mb-1 tracking-widest">
+        Contingent Payment
+      </h2>
+      
+      {/* Total Amount Display (Dynamic based on member count) */}
+      <div className="flex justify-between items-end border-b border-white/10 pb-4 mb-6">
+        <p className="text-gray-300 font-sans text-lg">
+          Paying for <span className="text-white font-bold">{member.length}</span> members
+        </p>
+        <p className="text-3xl text-green-400 font-['Jolly_Lodger'] tracking-wider">
+          ₹{totalAmount}
+        </p>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleContingentPaySubmit} className="flex flex-col gap-5">
+        
+        {/* Check-In */}
+        <div>
+          <label className="block text-gray-200 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">
+            Check-In
+          </label>
+          <div className="relative">
+            <select
+              required
+              value={contingentPayData.checkIn}
+              onChange={(e) => setContingentPayData({...contingentPayData, checkIn: e.target.value})}
+              className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-purple-500 transition-colors cursor-pointer"
+            >
+              <option value="" disabled>Select Check-in</option>
+              <option value="day1">22-01-2026</option>
+              <option value="day2">23-01-2026</option>
+              <option value="day3">24-01-2026</option>
+              <option value="day4">25-01-2026</option>
+              <option value="day5">26-01-2026</option>
+            </select>
+            <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400 pointer-events-none">
+              expand_more
+            </span>
+          </div>
+        </div>
+
+        {/* Check-Out */}
+        <div>
+          <label className="block text-gray-200 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">
+            Check-Out
+          </label>
+          <div className="relative">
+            <select
+              required
+              value={contingentPayData.checkOut}
+              onChange={(e) => setContingentPayData({...contingentPayData, checkOut: e.target.value})}
+              className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-purple-500 transition-colors cursor-pointer"
+            >
+              <option value="" disabled>Select Check-out</option>
+              <option value="day2">23-01-2026</option>
+              <option value="day3">24-01-2026</option>
+              <option value="day4">25-01-2026</option>
+              <option value="day5">26-01-2026</option>
+               <option value="day1">27-01-2026</option>
+            </select>
+            <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400 pointer-events-none">
+              expand_more
+            </span>
+          </div>
+        </div>
+
+        {/* Emergency Number */}
+        <div>
+          <label className="block text-gray-200 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">
+            Emergency Number
+          </label>
+          <input
+            type="tel"
+            required
+            maxLength="10"
+            pattern="[0-9]{10}"
+            placeholder="10 digit mobile number"
+            value={contingentPayData.emergencyNumber}
+            onChange={(e) => setContingentPayData({...contingentPayData, emergencyNumber: e.target.value.replace(/\D/g,'')})}
+            className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-purple-500 transition-colors placeholder:text-gray-500"
+          />
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={isContingentPaying}
+          className="mt-2 cursor-pointer w-full py-3 text-3xl text-white font-['Jolly_Lodger'] tracking-widest bg-green-700/80 border border-green-500/50 rounded-xl hover:bg-green-600 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isContingentPaying ? "Processing..." : "Make Payment"}
+        </button>
+      </form>
+    </div>
+  </div>
+)}
             {showAddModal && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-                <div className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-2xl relative popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/80 to-[#5f8a84]/60">
+              <div 
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                onClick={() => setShowAddModal(false)}
+              >
+                <div 
+                  className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-2xl relative popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/80 to-[#5f8a84]/60"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <button
                     onClick={() => setShowAddModal(false)}
                     className="cursor-pointer absolute top-4 right-4 text-white/50 hover:text-white"
@@ -435,12 +740,18 @@ const handleConfirmLeave = async () => {
               <div className="flex flex-col gap-8">
 
                 <div className={(myUserId === data.leaderId) ? "grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-[600px] mx-auto" : "grid grid-cols-1 gap-4 w-[250px] mx-auto"}>
-                  {(myUserId == data.leaderId) && <button className="cursor-pointer h-[60px] bg-green-800 backdrop-blur-md border border-white/20 rounded-xl text-white font-['Jolly_Lodger'] text-2xl hover:bg-green-400 hover:text-black transition-all">
+                  {(myUserId == data.leaderId) && <button 
+                    onClick={() => setShowContingentPayModal(true)} // <--- Add this
+                    className="cursor-pointer h-[60px] bg-green-800 backdrop-blur-md border border-white/20 rounded-xl text-white font-['Jolly_Lodger'] text-2xl hover:bg-green-400 hover:text-black transition-all"
+                  >
                     Contingent Payment
                   </button>}
-                  <button className="cursor-pointer h-[60px] bg-green-800 backdrop-blur-md border border-white/20 rounded-xl text-white font-['Jolly_Lodger'] text-2xl  hover:bg-green-400 hover:text-black transition-all">
-                    {(myUserId === data.leaderId) ? "Individual Payment" : "Make Payment"}
-                  </button>
+                  <button 
+                  onClick={() => setShowPaymentModal(true)} // <--- Update this line
+                  className="cursor-pointer h-[60px] bg-green-800 backdrop-blur-md border border-white/20 rounded-xl text-white font-['Jolly_Lodger'] text-2xl hover:bg-green-400 hover:text-black transition-all"
+                >
+                  {(myUserId === data.leaderId) ? "Individual Payment" : "Make Payment"}
+                </button>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -469,18 +780,19 @@ const handleConfirmLeave = async () => {
               </button>
               </div>
                 </div>
-                <div className="bg-black/40 p-4 rounded-2xl border border-white/10 text-center"
-                style={{background:"linear-gradient(to right,#302e3b 0%, #5f8a84 100%)"}}>
+                <div className="bg-black/70 p-4 rounded-2xl border border-white/10 text-center">
                   <p className="font-['Jolly_Lodger'] text-white text-3xl opacity-70"
                   >Members</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {member.map((m, index) => (
-                    <div key={index} className="bg-white/5 border border-white/10 p-4 rounded-xl flex items-center justify-between"
-                    style={{background:"linear-gradient(to right,#302e3b 0%, #5f8a84 100%)"}}>
+                    <div 
+                      key={index} 
+                      className="bg-white/5 backdrop-blur-lg border border-white/10 p-4 rounded-xl flex items-center justify-between"
+                    >
                       <span className="text-white font-['Jolly_Lodger'] text-xl">
-                        <div className="text-4xl text-black flex items-center gap-2">
+                        <div className="text-4xl text-white flex items-center gap-2">
                             {m.name} 
                           </div>
                           {(m.id === data.leaderId) && (
@@ -520,11 +832,11 @@ const handleConfirmLeave = async () => {
 
         {
           token && !conti && !joinOn && !CreateOn &&
-  <div className="flex flex-col gap-6 bg-black/70 p-6 sm:p-10 w-[95%] sm:w-[90%] max-w-[550px] h-auto backdrop-blur-xl border border-purple-500/30 rounded-3xl shadow-[0_0_50px_rgba(139,92,246,0.3)] popup-anim relative">
+  <div className="flex flex-col gap-6 bg-black/70 p-6 sm:p-10 w-[95%] sm:w-[90%] max-w-[550px] h-auto backdrop-blur-xl border border-purple-500/30 rounded-3xl shadow-2xl popup-anim relative">
     {/* Back Button */}
     <button
       onClick={() => { navigate("/accommodation") }}
-      className="absolute top-4 left-4 p-2.5 rounded-full text-white/60 hover:text-white hover:bg-purple-500/20 transition-all z-10 hover:shadow-lg hover:shadow-purple-500/30"
+      className="absolute top-4 left-4 p-2.5 rounded-full text-white/60 hover:text-white hover:bg-white/20 transition-all z-10 hover:shadow-lg hover:shadow-purple-500/30"
     >
       <span className="material-symbols-outlined !text-[28px]">arrow_back</span>
     </button>
@@ -561,7 +873,7 @@ const handleConfirmLeave = async () => {
         {/* Content */}
         <div className="relative z-10 flex flex-row sm:flex-col items-center justify-center gap-4 sm:gap-3 p-4 sm:p-6 h-full">
           <div className="text-4xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">
-            🚪
+             <img src = {icon1}/>
           </div>
           <div className="flex flex-col items-center sm:items-center">
             <h2 className="font-['Jolly_Lodger'] text-3xl sm:text-4xl text-white text-center transition-colors duration-300" style={{color: "white"}}>
@@ -600,7 +912,7 @@ const handleConfirmLeave = async () => {
         {/* Content */}
         <div className="relative z-10 flex flex-row sm:flex-col items-center justify-center gap-4 sm:gap-3 p-4 sm:p-6 h-full">
           <div className="text-4xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">
-            ✨
+            <img src = {icon2}/>
           </div>
           <div className="flex flex-col items-center sm:items-center">
             <h2 className="font-['Jolly_Lodger'] text-3xl sm:text-4xl text-white text-center transition-colors duration-300" style={{color: "white"}}>

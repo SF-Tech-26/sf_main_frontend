@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import bg from "../assets/background2.png";
+import bg from "../assets/dashBG.png";
 import maleAvatar from "../assets/male2 face.png";
 import femaleAvatar from "../assets/female1 face.png";
 import yellowLantern from "../assets/yellowlantern.png";
