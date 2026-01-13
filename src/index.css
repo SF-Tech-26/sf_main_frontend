@@ -1,12 +1,14 @@
 @import "tailwindcss";
 
-/* Fonts */
+/* ================= FONTS ================= */
+
 @import "@fontsource/holtwood-one-sc";
 @import "@fontsource/cinzel/600.css";
 @import "@fontsource/libre-baskerville/400.css";
 @import "@fontsource/space-grotesk/500.css";
 
-/* Base Styles */
+/* ================= BASE RESET ================= */
+
 * {
     box-sizing: border-box;
     overscroll-behavior: none;
@@ -15,9 +17,11 @@
 html,
 body,
 #root {
-    min-height: 100vh;
     width: 100%;
+    min-height: 100vh;
     background: black;
+    overflow-x: hidden;
+    /* 🔒 Prevent mobile screen movement */
 }
 
 body {
@@ -26,7 +30,8 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar */
+/* ================= SCROLLBAR ================= */
+
 ::-webkit-scrollbar {
     width: 8px;
 }
@@ -44,22 +49,27 @@ body {
     background: #9333ea;
 }
 
-/* Selection color */
+/* ================= SELECTION ================= */
+
 ::selection {
     background: #a855f7;
     color: white;
 }
 
+/* ================= FORMS ================= */
+
 .form-input {
     @apply w-full px-4 py-2 rounded-lg bg-purple-950 text-white border border-purple-500 focus:outline-none focus:ring-2 focus:ring-orange-400;
 }
+
+/* ================= UTIL ================= */
 
 .group,
 .mem {
     padding: 0.25rem 1rem;
 }
 
-/* ================= AFTERMOVIE ANIMATIONS ================= */
+/* ================= ANIMATIONS ================= */
 
 /* Fade up */
 @keyframes fadeUp {
@@ -99,74 +109,86 @@ body {
     animation: typeReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-/* Image reveal */
-@keyframes imageReveal {
-    from {
-        opacity: 0;
-        transform: translateX(40px) scale(1.05);
-    }
+/* ================= MERCH FLOAT ================= */
 
-    to {
-        opacity: 1;
-        transform: translateX(0) scale(1.05);
-    }
-}
-
-.animate-image-reveal {
-    opacity: 0;
-    animation: imageReveal 1s ease-out forwards;
-}
-
-/* ================= MERCH IMAGE TUNING ================= */
-/* 
-/* Hoodie images inside merch cards */
-/* .merch-image-wrapper {
-    display: flex;
-    align-items: centre;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.merch-image-wrapper img {
-    
-    object-fit: contain;
-    margin: auto;
-}
-
-/* Slightly larger on desktop */
-@media (min-width: 768px) {
-    .merch-image-wrapper img {
-        height: 145%;
-    }
-} */ */
-
-
-/* ================= MERCH FLOAT ANIMATION ================= */
-
-@keyframes merchFloat {
+/* Card floating animation */
+@keyframes cardFloat {
     0% {
         transform: translateY(0);
     }
+
     50% {
-        transform: translateY(-10px);
+        transform: translateY(-6px);
     }
+
     100% {
         transform: translateY(0);
     }
 }
 
-.animate-merch-float {
-    animation: merchFloat 3s ease-in-out infinite;
-}
-
-/* ================= MERCH CARD FLOAT ================= */
-
-@keyframes cardFloat {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-    100% { transform: translateY(0); }
-}
-
 .animate-card-float {
     animation: cardFloat 4s ease-in-out infinite;
+}
+
+/* ================= MERCH IMAGE TUNING ================= */
+
+/* Force hoodie blacks to stay deep */
+img {
+    image-rendering: auto;
+    filter: saturate(1.1) contrast(1.15);
+}
+
+/* Prevent image overflow on mobile */
+img,
+video,
+canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ================= MOBILE SAFETY ================= */
+
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    * {
+        max-width: 100vw;
+    }
+}
+
+/* ================= SIZE BUTTONS ================= */
+.size-btn {
+    @apply w-10 h-10 rounded-full border border-orange-400/30 flex items-center justify-center text-sm font-semibold transition-all duration-300 cursor-pointer hover:bg-orange-400/20 hover:border-orange-400;
+}
+
+.size-btn.active {
+    @apply bg-orange-400 text-black border-orange-400 font-bold;
+    box-shadow: 0 0 10px rgba(251, 146, 60, 0.6);
+}
+
+/* ================= SHIMMER ================= */
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% center;
+    }
+
+    100% {
+        background-position: -200% center;
+    }
+}
+
+.animate-text-shimmer {
+    background: linear-gradient(to right,
+            #f5e9dc 20%,
+            #fb923c 40%,
+            #fb923c 60%,
+            #f5e9dc 80%);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
 }

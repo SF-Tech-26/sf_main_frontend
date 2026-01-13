@@ -1,50 +1,62 @@
-// src/pages/RegisteredEvents/SoloEventsList.jsx
+import React, { useState } from "react";
 
-import React from "react";
+const AddMemberModal = ({ onClose, onSubmit }) => {
+  const [sfId, setSfId] = useState("");
 
-const SoloEventsList = ({ events, onDeregister }) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (sfId.trim()) {
+      onSubmit(sfId.trim());
+    }
+  };
+
   return (
-    <div className="bg-gradient-to-br from-purple-900/90 via-blue-900/90 to-pink-900/90 backdrop-blur-sm rounded-3xl border-2 border-white/30 p-8 mb-6">
-      <h2 className="text-white text-3xl font-bold text-center mb-6">
-        Solo Events
-      </h2>
-      <div className="w-full h-0.5 bg-white/30 mb-6"></div>
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[60] p-4">
+      <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl border border-white/20 p-8 w-full max-w-md shadow-2xl relative">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white/60 hover:text-white transition"
+        >
+          <span className="material-icons">close</span>
+        </button>
 
-      {events.length === 0 ? (
-        <p className="text-white/80 text-center text-lg">
-          No events registered
-        </p>
-      ) : (
-        <div className="space-y-4">
-          {events.map((event) => (
-            <div
-              key={event.eventId}
-              className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
+        <h2 className="text-2xl font-bold text-white mb-6 text-center">Add Team Member</h2>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Spring Fest ID
+            </label>
+            <input
+              type="text"
+              value={sfId}
+              onChange={(e) => setSfId(e.target.value)}
+              placeholder="SF ID (e.g. SF012345)"
+              className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-sky-500 transition-colors"
+              autoFocus
+            />
+          </div>
+
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 px-4 py-2 rounded-lg border border-white/10 text-white hover:bg-white/5 transition font-semibold"
             >
-              <div className="flex justify-between items-center">
-                <div>
-                  <h3 className="text-white text-xl font-bold mb-2">
-                    {event.name}
-                  </h3>
-                  {event.members && event.members[0] && (
-                    <p className="text-white/70 text-sm">
-                      {event.members[0].sfId} - {event.members[0].name}
-                    </p>
-                  )}
-                </div>
-                <button
-                  onClick={() => onDeregister(event.eventId)}
-                  className="bg-red-500/90 hover:bg-red-600 text-white px-6 py-2 rounded-lg font-semibold transition"
-                >
-                  Deregister
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={!sfId.trim()}
+              className="flex-1 px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-bold transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Add Member
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
 
-export default SoloEventsList;
+export default AddMemberModal;

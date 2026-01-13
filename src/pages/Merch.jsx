@@ -11,24 +11,29 @@ import Orangehoodie from "../assets/Orangehoodie.png";
 /* PRODUCTS */
 const PRODUCTS = [
     {
-        id: "kr-hoodie",
-        name: "Karma Rolls Hoodie",
+        id: "rm-hoodie",
+        name: "RINGMASTER HOODIE",
+        shortName: "RGM",
         price: 1299,
         image: Yellowhoodie,
     },
     {
         id: "nw-hoodie",
         name: "Nightwalker Hoodie",
+        shortName: "NGW",
         price: 1299,
         image: Bluehoodie,
     },
     {
-        id: "mg-hoodie",
-        name: "Magician Hoodie",
+        id: "kr-hoodie",
+        name: "KARMA ROLLS HOODIE",
+        shortName: "KRM",
         price: 1299,
         image: Orangehoodie,
     },
 ];
+
+const SIZES = ["XS", "S", "M", "L", "XL"];
 
 export default function Merch() {
     const [page, setPage] = useState("merch");
@@ -40,18 +45,28 @@ export default function Merch() {
         0
     );
 
-    const addToCart = (product) => {
+    const addToCart = (product, size) => {
+        const cartKey = `${product.id}-${size}`;
         setCart((prev) => ({
             ...prev,
-            [product.id]: {
+            [cartKey]: {
                 product,
-                qty: (prev[product.id]?.qty || 0) + 1,
+                size,
+                qty: (prev[cartKey]?.qty || 0) + 1,
             },
         }));
 
         setToast({
             id: Date.now(),
-            message: `${product.name} added to cart`,
+            message: `${product.name} (${size}) added to cart`,
+        });
+    };
+
+    // Helper to trigger warning toast
+    const showToast = (msg) => {
+        setToast({
+            id: Date.now(),
+            message: msg
         });
     };
 
@@ -61,21 +76,21 @@ export default function Merch() {
         return () => clearTimeout(t);
     }, [toast]);
 
-    const updateQty = (id, delta) => {
+    const updateQty = (key, delta) => {
         setCart((prev) => {
-            const item = prev[id];
+            const item = prev[key];
             if (!item) return prev;
 
             const newQty = item.qty + delta;
             if (newQty <= 0) {
                 const copy = { ...prev };
-                delete copy[id];
+                delete copy[key];
                 return copy;
             }
 
             return {
                 ...prev,
-                [id]: { ...item, qty: newQty },
+                [key]: { ...item, qty: newQty },
             };
         });
     };
@@ -83,7 +98,7 @@ export default function Merch() {
     return (
         <div
             className="w-full min-h-screen bg-fixed bg-cover bg-center bg-no-repeat
-                       px-4 py-10 md:px-16
+                       px-4 pt-20 pb-10 md:px-16 md:pt-4
                        text-[#f5e9dc]
                        overflow-x-hidden"
             style={{
@@ -95,6 +110,7 @@ export default function Merch() {
                 <MerchPage
                     onViewCart={() => setPage("cart")}
                     onAdd={addToCart}
+                    onToast={showToast}
                     cartCount={cartCount}
                 />
             )}
@@ -114,7 +130,8 @@ export default function Merch() {
                                 bg-gradient-to-r from-purple-500 to-fuchsia-500
                                 text-white
                                 shadow-[0_0_30px_rgba(168,85,247,0.9)]
-                                z-[9999]">
+                                z-[9999]"
+                    style={{ fontFamily: '"Space Grotesk", sans-serif' }}>
                     {toast.message}
                 </div>
             )}
@@ -124,7 +141,7 @@ export default function Merch() {
 
 /* ---------------- MERCH PAGE ---------------- */
 
-function MerchPage({ onViewCart, onAdd, cartCount }) {
+function MerchPage({ onViewCart, onAdd, onToast, cartCount }) {
     return (
         <>
             {/* Cart Button */}
@@ -160,142 +177,210 @@ function MerchPage({ onViewCart, onAdd, cartCount }) {
             </div>
 
             {/* Title */}
-            <div className="text-center mt-20">
-                <h1 className="text-5xl font-bold">SPRING FEST</h1>
-                <h2 className="mt-3 text-3xl text-orange-300">
+            <div className="text-center mt-4">
+                <h1 className="text-3xl md:text-5xl font-bold animate-text-shimmer whitespace-nowrap">SPRING FEST</h1>
+                <h2 className="mt-4 text-xl md:text-3xl text-orange-300 whitespace-nowrap">
                     OFFICIAL MERCH
                 </h2>
             </div>
 
             {/* Products */}
-            <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
+            <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
                             gap-8 justify-items-center">
                 {PRODUCTS.map((p) => (
-                    <div
-                        key={p.id}
-                        className="w-full max-w-[280px] md:h-[345px] p-4 flex flex-col
-                                   rounded-2xl text-center
-                                   bg-gradient-to-b from-purple-900/45 to-purple-950/55
-                                   border-2 border-orange-400/55
-                                   animate-card-float"
-                    >
-                        <div className="flex items-center justify-center mb-3 overflow-hidden">
-                            <img
-                                src={p.image}
-                                alt={p.name}
-                                className="w-[260px] md:w-[450px]
-                                           h-auto max-w-none
-                                           -translate-x-8 md:-translate-x-22
-                                           brightness-110 contrast-130"
-                            />
-                        </div>
-
-                        <div className="mt-auto mb-2 text-lg">
-                            ₹ {p.price}
-                        </div>
-
-                        <button
-                            className="w-full py-2.5 rounded-lg text-black
-                                       bg-gradient-to-r from-orange-400 to-orange-300
-                                       hover:shadow-[0_0_22px_rgba(255,160,0,0.9)]"
-                            onClick={() => onAdd(p)}
-                        >
-                            ADD TO CART
-                        </button>
-                    </div>
+                    <ProductCard key={p.id} product={p} onAdd={onAdd} onToast={onToast} />
                 ))}
             </div>
         </>
     );
 }
 
+/* ---------------- PRODUCT CARD (NEW) ---------------- */
+
+function ProductCard({ product, onAdd, onToast }) {
+    const [size, setSize] = useState(null);
+
+    const handleAdd = () => {
+        if (!size) {
+            onToast("Please select a size first!");
+            return;
+        }
+        onAdd(product, size);
+    };
+
+    return (
+        <div
+            className="group w-full max-w-[280px] p-6 pb-10 flex flex-col
+                       rounded-2xl text-center
+                       bg-gradient-to-b from-purple-900/45 to-purple-950/55
+                       border-2 border-orange-400/55
+                       animate-card-float
+                       hover:shadow-[0_0_30px_rgba(251,146,60,0.6)]
+                       transition-shadow duration-300"
+        >
+            <div className="flex items-center justify-center mb-6 overflow-hidden h-[220px]">
+                <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-auto h-full max-h-[220px] max-w-none
+                               scale-[1.8] translate-x-[-87px] translate-y-4
+                               object-contain
+                               brightness-110 contrast-130
+                               transition-transform duration-500"
+                />
+            </div>
+
+            <div className="text-lg font-bold mb-1 mt-auto">
+                {product.name}
+                <span className="md:hidden"> ({product.shortName})</span>
+            </div>
+            <div className="text-2xl text-orange-300 font-bold mb-4">₹ {product.price}</div>
+
+            {/* Size Selector */}
+            <div className="flex justify-center gap-2 mb-6">
+                {SIZES.map((s) => (
+                    <button
+                        key={s}
+                        onClick={() => setSize(s)}
+                        className={`size-btn ${size === s ? "active" : ""}`}
+                    >
+                        {s}
+                    </button>
+                ))}
+            </div>
+
+            <button
+                className="w-full py-2.5 rounded-lg text-black
+                           bg-gradient-to-r from-orange-400 to-orange-300
+                           hover:shadow-[0_0_22px_rgba(255,160,0,0.9)]
+                           font-bold tracking-wide"
+                onClick={handleAdd}
+            >
+                ADD TO CART
+            </button>
+        </div>
+    );
+}
+
+
+
 /* ---------------- CART PAGE ---------------- */
 
 function CartPage({ cart, onBack, onQtyChange }) {
-    const items = Object.values(cart);
+    const items = Object.entries(cart);
 
     const subtotal = items.reduce(
-        (sum, i) => sum + i.product.price * i.qty,
+        (sum, [_, item]) => sum + item.product.price * item.qty,
         0
     );
 
     return (
         <div className="max-w-6xl mx-auto pt-12 overflow-x-hidden">
-            <h1 className="text-center mb-10 text-5xl tracking-widest">
+            <h1 className="text-center mb-10 text-3xl md:text-5xl font-bold animate-text-shimmer tracking-widest whitespace-nowrap">
                 YOUR CART
             </h1>
 
             {/* Header */}
-            <div className="grid grid-cols-[1.5fr_0.9fr_1fr_1fr]
-                            px-3 mb-4 text-sm uppercase">
-                <span>Product</span>
-                <span className="text-center">Price</span>
+            <div className="grid grid-cols-4 md:grid-cols-5
+                            px-1 md:px-3 mb-4 text-xs md:text-sm uppercase font-bold tracking-wider">
+                <span className="md:text-center">Product</span>
+                <span className="text-center">Size</span>
+                <span className="text-center hidden md:block">Price</span>
                 <span className="text-center">Qty</span>
-                <span className="text-right">Total</span>
+                <span className="text-right pr-4 md:text-center md:pr-0">Total</span>
             </div>
 
-            {items.map(({ product, qty }) => (
-                <div
-                    key={product.id}
-                    className="grid grid-cols-[1.5fr_0.9fr_1fr_1fr]
-                               items-center
-                               px-3 py-3 mb-3
+            {/* Scrollable Items Container */}
+            <div className="max-h-[260px] md:max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
+                {items.map(([key, { product, size, qty }]) => {
+                    const liveProduct = PRODUCTS.find(p => p.id === product.id) || product;
+                    return (
+                        <div
+                            key={key}
+                            className="grid grid-cols-4 md:grid-cols-5
+                               items-center text-xs md:text-sm
+                               px-1 py-4 md:px-3 md:py-3 mb-3
                                bg-gradient-to-r from-purple-900/70 to-purple-950/80
                                rounded-xl"
-                >
-                    <span className="truncate">{product.name}</span>
-
-                    <span className="text-center">
-                        ₹ {product.price}
-                    </span>
-
-                    <div className="flex justify-center items-center gap-2">
-                        <button
-                            onClick={() => onQtyChange(product.id, -1)}
-                            className="w-7 h-7 rounded-md border border-orange-400/40"
                         >
-                            −
-                        </button>
-                        <span>{qty}</span>
-                        <button
-                            onClick={() => onQtyChange(product.id, +1)}
-                            className="w-7 h-7 rounded-md border border-orange-400/40"
-                        >
-                            +
-                        </button>
-                    </div>
+                            <span className="truncate pr-1 md:hidden">{liveProduct.shortName}</span>
+                            <span className="truncate pr-1 hidden md:block md:text-center">{liveProduct.name}</span>
 
-                    <span className="text-right">
-                        ₹ {product.price * qty}
-                    </span>
+                            <span className="text-center text-orange-300/80 font-bold">
+                                {size}
+                            </span>
+
+                            <span className="text-center hidden md:block text-base font-semibold text-orange-200">
+                                ₹ {liveProduct.price}
+                            </span>
+
+                            <div className="flex justify-center items-center gap-1 md:gap-2">
+                                <button
+                                    onClick={() => onQtyChange(key, -1)}
+                                    className="w-5 h-5 md:w-7 md:h-7 flex items-center justify-center rounded-md border border-orange-400/40"
+                                >
+                                    −
+                                </button>
+                                <span className="w-6 text-center">{qty}</span>
+                                <button
+                                    onClick={() => onQtyChange(key, +1)}
+                                    className="w-5 h-5 md:w-7 md:h-7 flex items-center justify-center rounded-md border border-orange-400/40"
+                                >
+                                    +
+                                </button>
+                            </div>
+
+                            <span className="text-right pr-4 md:text-center md:pr-0 font-bold text-orange-300">
+                                ₹ {liveProduct.price * qty}
+                            </span>
+                        </div>
+                    )
+                })}
+            </div>
+
+            {items.length === 0 && (
+                <div className="text-center py-10 text-white/50">
+                    Your cart is empty.
                 </div>
-            ))}
+            )}
 
             {/* Bottom */}
-            <div className="mt-8 flex flex-col gap-6">
-                <div className="px-6 py-3 rounded-xl
-                                bg-gradient-to-r from-emerald-500 to-teal-400
-                                text-emerald-950 font-semibold w-fit">
-                    Subtotal ₹ {subtotal}
-                </div>
+            {items.length > 0 && (
+                <div className="mt-8 flex flex-col items-center gap-4 md:flex-row md:justify-between md:gap-2">
+                    <div className="px-3 py-2 md:px-6 md:py-3 rounded-xl
+                                    bg-gradient-to-r from-emerald-500 to-teal-400
+                                    text-emerald-950 font-semibold text-xs md:text-base whitespace-nowrap">
+                        Subtotal ₹ {subtotal}
+                    </div>
 
-                <div className="flex gap-4">
-                    <button
-                        onClick={onBack}
-                        className="flex-1 px-6 py-3 rounded-lg text-black
-                                   bg-gradient-to-r from-orange-400 to-orange-300"
-                    >
-                        CONTINUE SHOPPING
-                    </button>
+                    <div className="flex flex-col w-full gap-3 md:flex-row md:w-auto md:gap-4 md:justify-center">
+                        <button
+                            onClick={onBack}
+                            className="w-full md:w-auto px-3 py-2 md:px-6 md:py-3 rounded-lg text-black
+                                       bg-gradient-to-r from-orange-400 to-orange-300
+                                       text-xs md:text-base font-bold whitespace-nowrap"
+                        >
+                            CONTINUE SHOPPING
+                        </button>
 
-                    <button
-                        className="flex-1 px-6 py-3 rounded-lg text-black
-                                   bg-gradient-to-r from-orange-400 to-orange-300"
-                    >
-                        CHECKOUT
-                    </button>
+                        <button
+                            className="w-full md:w-auto px-3 py-2 md:px-6 md:py-3 rounded-lg text-black
+                                       bg-gradient-to-r from-orange-400 to-orange-300
+                                       text-xs md:text-base font-bold"
+                        >
+                            CHECKOUT
+                        </button>
+                    </div>
                 </div>
-            </div>
+            )}
+            {items.length === 0 && (
+                <button
+                    onClick={onBack}
+                    className="mt-4 px-6 py-2 rounded-lg border border-orange-400 text-orange-300 mx-auto block"
+                >
+                    Go Back
+                </button>
+            )}
         </div>
     );
 }
