@@ -46,7 +46,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
   // Fetch all registered events
   const fetchEvents = async () => {
     if (!userInfo) return;
-    
+
     setLoading(true);
     try {
       console.log("📡 Fetching registered events...");
@@ -74,17 +74,17 @@ const RegisteredEvents = ({ onClose, userToken }) => {
         // ========== MAP GROUP EVENTS ==========
         const groupPromises = (response.groupEventData || []).map(async (item) => {
           console.log("👥 Group event raw:", item);
-          
+
           // Extract members from GroupMembers array (NEW STRUCTURE!)
           let detailedMembers = [];
-          
+
           if (item.GroupMembers && item.GroupMembers.length > 0) {
             console.log("✅ Found GroupMembers in response:", item.GroupMembers);
             detailedMembers = item.GroupMembers.map(gm => {
               const user = gm.user || gm;
               const isLeader = user.id === item.leader_id;
               console.log("🔍 Processing GroupMember:", user, "Is Leader:", isLeader);
-              
+
               return {
                 sfId: user.sfId || user.sf_id || user.SF_ID,
                 email: user.email || user.EMAIL || userInfo.email,
@@ -99,15 +99,15 @@ const RegisteredEvents = ({ onClose, userToken }) => {
               console.log(`🔍 No GroupMembers, fetching via API for event ${item.event?.id}...`);
               const membersResponse = await getMembers(token, item.event?.id);
               console.log("📥 getMembers API response:", membersResponse);
-              
-              if (membersResponse?.data?.code === 0 && membersResponse?.data?.data) {
-                const membersData = membersResponse.data.data;
+
+              if (membersResponse?.code === 0 && membersResponse?.data) {
+                const membersData = membersResponse.data;
                 console.log("✅ Members from API:", membersData);
-                
+
                 detailedMembers = membersData.map(m => {
                   const user = m.user || m;
                   const isLeader = user.id === item.leader_id;
-                  
+
                   return {
                     sfId: user.sfId || user.sf_id || user.SF_ID,
                     email: user.email || user.EMAIL || userInfo.email,
@@ -121,7 +121,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
               console.error("❌ Failed to fetch members via API:", err);
             }
           }
-          
+
           // If still no members, create default entry
           if (detailedMembers.length === 0) {
             console.log("⚠️ No members found, creating default entry");
@@ -133,14 +133,14 @@ const RegisteredEvents = ({ onClose, userToken }) => {
               userId: userInfo.id
             }];
           }
-          
+
           // Check if current user is admin
-          const currentUserIsAdmin = userInfo.id === item.leader_id || 
-                                    detailedMembers.some(m => m.userId === userInfo.id && m.isAdmin);
-          
+          const currentUserIsAdmin = userInfo.id === item.leader_id ||
+            detailedMembers.some(m => m.userId === userInfo.id && m.isAdmin);
+
           console.log("✅ Final processed members:", detailedMembers);
           console.log("🔑 Current user is admin:", currentUserIsAdmin);
-          
+
           return {
             eventId: item.event?.id,
             name: item.event?.name,
@@ -154,7 +154,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
             leaderId: item.leader_id
           };
         });
-        
+
         const group = await Promise.all(groupPromises);
 
         console.log("✅ Final Mapped Solo Events:", solo);
@@ -192,14 +192,14 @@ const RegisteredEvents = ({ onClose, userToken }) => {
 
     try {
       const event = soloEvents.find((e) => e.eventId === eventId);
-      
+
       if (!event || !event.members[0]) {
         alert("Unable to deregister: Event information not found");
         return;
       }
 
       const member = event.members[0];
-      
+
       if (!member.sfId || !member.email) {
         alert("Unable to deregister: Missing member information");
         return;
@@ -220,11 +220,11 @@ const RegisteredEvents = ({ onClose, userToken }) => {
 
       console.log("✅ Deregister response:", response);
 
-      if (response?.data?.code === 0) {
+      if (response?.code === 0) {
         alert("Successfully deregistered from the event!");
         fetchEvents();
       } else {
-        alert(response?.data?.message || "Failed to deregister");
+        alert(response?.message || "Failed to deregister");
       }
     } catch (error) {
       console.error("❌ Failed to deregister:", error);
@@ -235,7 +235,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
   // ========== DEREGISTER ENTIRE TEAM ==========
   const handleDeregisterTeam = async (eventId) => {
     const event = groupEvents.find(e => e.eventId === eventId);
-    
+
     if (!event) {
       alert("Event not found");
       return;
@@ -251,15 +251,15 @@ const RegisteredEvents = ({ onClose, userToken }) => {
 
     try {
       console.log("🗑️ Deregistering entire team for event:", eventId);
-      
+
       const response = await deregisterTeam(token, eventId);
       console.log("✅ Deregister team response:", response);
 
-      if (response?.data?.code === 0) {
+      if (response?.code === 0) {
         alert("Team deregistered successfully!");
         fetchEvents();
       } else {
-        alert(response?.data?.message || "Failed to deregister team");
+        alert(response?.message || "Failed to deregister team");
       }
     } catch (error) {
       console.error("❌ Failed to deregister team:", error);
@@ -271,7 +271,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
   const handleDeregisterMember = async (eventId, memberSfId) => {
     try {
       const event = groupEvents.find(e => e.eventId === eventId);
-      
+
       if (!event) {
         alert("Event not found");
         return;
@@ -289,7 +289,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
       }
 
       const memberToRemove = event.members.find(m => m.sfId === memberSfId);
-      
+
       if (!memberToRemove) {
         alert("Member not found in team");
         return;
@@ -324,11 +324,11 @@ const RegisteredEvents = ({ onClose, userToken }) => {
 
       console.log("✅ Remove member response:", response);
 
-      if (response?.data?.code === 0) {
+      if (response?.code === 0) {
         alert("Member removed successfully!");
         fetchEvents();
       } else {
-        alert(response?.data?.message || "Failed to remove member");
+        alert(response?.message || "Failed to remove member");
       }
     } catch (error) {
       console.error("❌ Failed to remove member:", error);
@@ -339,7 +339,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
   // ========== OPEN ADD MEMBER MODAL ==========
   const handleOpenAddMember = (eventId) => {
     const event = groupEvents.find(e => e.eventId === eventId);
-    
+
     if (!event) {
       alert("Event not found");
       return;
@@ -363,7 +363,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
   const handleAddMember = async (memberData) => {
     try {
       const event = groupEvents.find(e => e.eventId === selectedEventId);
-      
+
       if (!event) {
         alert("Event not found");
         return;
@@ -380,8 +380,8 @@ const RegisteredEvents = ({ onClose, userToken }) => {
       }
 
       // Check if member already exists
-      const memberExists = event.members.some(m => 
-        m.sfId.toUpperCase() === memberData.sfId.toUpperCase() || 
+      const memberExists = event.members.some(m =>
+        m.sfId.toUpperCase() === memberData.sfId.toUpperCase() ||
         m.email.toLowerCase() === memberData.email.toLowerCase()
       );
 
@@ -398,12 +398,12 @@ const RegisteredEvents = ({ onClose, userToken }) => {
       const response = await addMember(token, selectedEventId, [memberData]);
       console.log("✅ Add member response:", response);
 
-      if (response?.data?.code === 0) {
+      if (response?.code === 0) {
         alert("Member added successfully!");
         setShowAddMemberModal(false);
         fetchEvents();
       } else {
-        alert(response?.data?.message || "Failed to add member");
+        alert(response?.message || "Failed to add member");
       }
     } catch (error) {
       console.error("❌ Failed to add member:", error);
