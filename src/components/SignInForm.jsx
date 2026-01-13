@@ -32,7 +32,7 @@ export default function SignInForm() {
         const { token, data } = response.data;
         login(token, data);
         toast.success("Welcome back!");
-        navigate("/dashboard");
+        navigate("/");
       } else {
         setError(response.message || "Login failed. Please try again.");
       }

@@ -78,6 +78,10 @@ const HomePage = ({ backgroundImage }) => {
 
 
       {/* LOGIN BUTTON */}
+      
+<div className="min-h-screen w-full flex items-center justify-center">
+      {!isAuthenticated ? (
+        /* ===== BEFORE LOGIN ===== */
         <Link
           to="/signin"
           className="
@@ -115,6 +119,55 @@ const HomePage = ({ backgroundImage }) => {
         >
           LOG IN
         </Link>
+      ) : (
+        /* ===== AFTER LOGIN ===== */
+        <div className="flex gap-6">
+          {/* Dashboard Button */}
+          <Link
+            to="/dashboard"
+            className="
+              inline-flex items-center justify-center
+              w-[180px] h-[50px]
+              text-[15px] font-semibold tracking-[0.18em]
+              uppercase text-[#e8dcc4]
+
+              bg-gradient-to-b from-[#3a3a3a] to-[#1a1a1a]
+              border border-[#6e6a5f]
+              rounded-[10px]
+
+              shadow-[0_10px_30px_rgba(0,0,0,0.6)]
+              hover:shadow-[0_14px_40px_rgba(0,0,0,0.8)]
+              transition-all duration-300
+              no-underline
+            "
+          >
+            DASHBOARD
+          </Link>
+
+          {/* Pay Now Button */}
+          <Link
+            to="/payment"
+            className="
+              inline-flex items-center justify-center
+              w-[180px] h-[50px]
+              text-[15px] font-semibold tracking-[0.18em]
+              uppercase text-[#1a1916]
+
+              bg-gradient-to-b from-[#e8dcc4] to-[#b9ad94]
+              border border-[#b9ad94]
+              rounded-[10px]
+
+              shadow-[0_10px_30px_rgba(0,0,0,0.4)]
+              hover:shadow-[0_14px_40px_rgba(0,0,0,0.6)]
+              transition-all duration-300
+              no-underline
+            "
+          >
+            PAY NOW
+          </Link>
+        </div>
+      )}
+    </div>
      
 
     </div>
