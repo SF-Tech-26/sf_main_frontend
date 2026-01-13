@@ -12,7 +12,11 @@ const RegistrationForm = ({ event, onSuccess, onCancel }) => {
     const { token, user } = auth;
 
     const [teamMembers, setTeamMembers] = useState(() => {
-        const initialMembers = [{ email: user?.email || '', sfId: user?.sfId || '' }];
+        // Handle both sf_id and sfId field names
+        const userSfId = user?.sfId || user?.sf_id || '';
+        const userEmail = user?.email || '';
+
+        const initialMembers = [{ email: userEmail, sfId: userSfId }];
         if (event?.min_participation > 1) {
             const extraNeeded = event.min_participation - 1;
             for (let i = 0; i < extraNeeded; i++) {
@@ -102,28 +106,32 @@ const RegistrationForm = ({ event, onSuccess, onCancel }) => {
         setError(null);
 
         try {
+            // Debug: Log the team members data
+            console.log('Team Members Data:', teamMembers);
+            console.log('User from Auth:', user);
+
+            // Check for invalid members with better error messages
             const invalidMembers = teamMembers.filter(m => !m.email || !m.sfId);
             if (invalidMembers.length > 0) {
-                throw new Error('All team members must have valid email and SF ID');
+                const missingFields = [];
+                teamMembers.forEach((m, idx) => {
+                    if (!m.email) missingFields.push(`Member ${idx + 1}: Email`);
+                    if (!m.sfId) missingFields.push(`Member ${idx + 1}: SF ID`);
+                });
+                console.error('Missing fields:', missingFields);
+                throw new Error(`Please fill all required fields:\n${missingFields.join('\n')}`);
             }
 
             if (teamMembers.length < event.min_participation) {
                 throw new Error(`Minimum ${event.min_participation} members required`);
             }
 
-            const response = await registerForEvent(token, event.id, 'KGP', teamMembers);
+            const response = await registerForEvent(token, 'KGP', event.id, teamMembers);
 
             // Check if registration was successful
             if (response.code === 0) {
                 setIsRegistered(true);
-                toast.success("Successfully registered for the event!", {
-                    id: 'registration-success',
-                    style: {
-                        background: '#1a1a2e',
-                        color: '#fff',
-                        border: '1px solid rgba(34, 197, 94, 0.5)',
-                    },
-                });
+                // Don't show toast here - let parent component handle it
                 onSuccess?.();
             } else if (response.code === 1) {
                 // Already registered
@@ -292,9 +300,9 @@ const RegistrationForm = ({ event, onSuccess, onCancel }) => {
                                             type="text"
                                             value={member.sfId}
                                             onChange={(e) => handleMemberChange(index, 'sfId', e.target.value)}
-                                            placeholder={index === 0 ? "SF001679" : "SF-XXXXXX"}
+                                            placeholder={index === 0 ? "Your SF-ID" : "SF-XXXXXX"}
                                             className="w-full bg-white/5 text-white px-4 py-3 rounded-lg text-sm border border-transparent focus:border-white/10 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-white/5 transition-all placeholder-gray-600 font-light" style={{ padding: '0.5rem' }}
-                                            disabled={index === 0}
+                                            disabled={index === 0 && user?.sfId}
                                         />
                                     </div>
 
@@ -307,9 +315,9 @@ const RegistrationForm = ({ event, onSuccess, onCancel }) => {
                                             type="email"
                                             value={member.email}
                                             onChange={(e) => handleMemberChange(index, 'email', e.target.value)}
-                                            placeholder={index === 0 ? "sanjayahari1704@gmail.com" : "invite@domain.com"}
+                                            placeholder={index === 0 ? "your.email@domain.com" : "invite@domain.com"}
                                             className="w-full bg-white/5 text-white px-4 py-3 rounded-lg text-sm border border-transparent focus:border-white/10 focus:bg-white/10 focus:outline-none focus:ring-1 focus:ring-white/5 transition-all placeholder-gray-600 font-light" style={{ padding: '0.5rem' }}
-                                            disabled={index === 0}
+                                            disabled={index === 0 && user?.email}
                                         />
                                     </div>
                                 </div>

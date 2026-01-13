@@ -20,8 +20,6 @@ const slugToGenre = {
     'game-fest': 'Game Fest',
 };
 
-// Ethereal Background Component
-// Ethereal Background Component
 const EtherealBackground = () => {
     // Generate random stars
     const stars = [...Array(100)].map((_, i) => ({
@@ -237,12 +235,14 @@ const EventDetailPage = () => {
                                     </div>
 
                                     {!showRegistration && (
-                                        <div className="relative group cursor-pointer z-10 mt-8" style={{ marginBottom: '1.5rem', marginLeft: '1.5rem' }}>
+                                        <div className="relative group cursor-pointer z-10 mt-8 " style={{ marginBottom: '1rem', marginLeft: '1rem' }}>
                                             <div className="absolute inset-0 bg-purple-500 rounded-rounded  blur-2xl opacity-40 group-hover:opacity-70 transition-opacity duration-500 animate-pulse" />
                                             <motion.button
                                                 onClick={handleRegisterClick}
                                                 className="w-32 h-32 rounded-full flex items-center justify-center text-white font-bold  p-5 text-sm tracking-wider relative z-10 border border-white/20"
                                                 style={{
+                                                    width: '8rem',
+                                                    height: '2rem',
                                                     fontFamily: 'Cinzel, serif',
                                                     background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8) 0%, rgba(217, 70, 239, 1) 20%, rgba(139, 92, 246, 1) 50%, rgba(76, 29, 149, 1) 100%)',
                                                     boxShadow: '0 0 30px rgba(217, 70, 239, 0.5), 0 0 60px rgba(139, 92, 246, 0.3)'
@@ -278,22 +278,22 @@ const EventDetailPage = () => {
                                         </button>
                                     </div>
 
-                                    <div className="space-y-14 max-h-[60vh] overflow-y-auto pr-4">
-                                        <div className="rounded-2xl p-20  hover:bg-black/40 transition-colors duration-300" style={{ background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.05)', margin: '1rem' }}>
+                                    <div className="space-y-8 max-h-[60vh] overflow-y-auto pr-4">
+                                        <div className="rounded-2xl p-6 hover:bg-black/40 transition-colors duration-300" style={{ background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
                                             <h2 className="text-3xl font-bold mb-8 text-fuchsia-200 uppercase flex items-center gap-4" style={{ fontFamily: 'Cinzel, serif' }}>
                                                 <span className="w-8 h-px bg-fuchsia-500" />
                                                 About
                                             </h2>
-                                            <p className="text-slate-300 leading-relaxed text-0.5xl  font-light tracking-wide" style={{ margin: '0.5rem' }}>{event.writeup}</p>
+                                            <p className="text-slate-300 leading-relaxed text-base font-light tracking-wide">{event.writeup}</p>
                                         </div>
 
                                         {event.rules && event.rules.length > 0 && (
-                                            <div className="rounded-2xl p-20 hover:bg-black/40 transition-colors duration-300" style={{ background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.05)', margin: '1rem' }}>
+                                            <div className="rounded-2xl p-6 hover:bg-black/40 transition-colors duration-300" style={{ background: 'rgba(0, 0, 0, 0.3)', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
                                                 <h2 className="text-3xl font-bold mb-8 text-indigo-200 uppercase flex items-center gap-3" style={{ fontFamily: 'Cinzel, serif' }}>
                                                     <span className="w-8 h-px bg-indigo-500" />
                                                     Rules
                                                 </h2>
-                                                <ul className="space-y-6 text-slate-300 text-lg md:text-0.5xl font-light" style={{ margin: '0.5rem' }}>
+                                                <ul className="space-y-4 text-slate-300 text-base font-light">
                                                     {event.rules.filter(r => r && r.trim()).map((rule, index) => (
                                                         <li key={index} className="flex gap-5 items-start">
                                                             <span className="font-bold text-fuchsia-400 text-2xl mt-0.5" style={{ fontFamily: 'Cinzel, serif' }}>
