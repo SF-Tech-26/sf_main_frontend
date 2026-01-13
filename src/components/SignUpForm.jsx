@@ -124,159 +124,317 @@ export default function SignUpForm() {
     }
   };
 
-  const inputClass = "w-full px-4 py-2 rounded-lg bg-purple-950 text-white border border-purple-500 focus:outline-none focus:ring-2 focus:ring-orange-400 disabled:opacity-50";
-
+  const inputClass = `
+    h-[46px]
+    w-full
+    px-[14px] py-[12px]
+    rounded-[10px]
+    bg-transparent
+    border border-[#7DF9FF]
+    text-[#F0FDFF]
+    outline-none
+    focus:ring-2 focus:ring-[#60A5FA]
+    indent-[8px]
+    disabled:opacity-50
+  `;
+  
   return (
-    <div className="w-full max-w-md bg-purple-900/80 backdrop-blur-xl border border-purple-500 rounded-2xl p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
-      <h1 className="text-center text-4xl font-creepster text-orange-400 mb-4">
+    <div
+      className="
+        w-[330px] max-w-[90%]
+        h-[50vh]
+        overflow-y-auto
+        backdrop-blur-[12px]
+        border border-[#7DF9FF]
+        rounded-[40px]
+        text-[#E6FBFF]
+        px-[32px] py-[40px]
+      "
+      style={{
+        background: "rgba(10, 20, 44, 0.92)",
+        boxShadow: `
+          0 0 35px rgba(125, 249, 255, 0.55),
+          0 0 80px rgba(56, 189, 248, 0.35),
+          0 0 140px rgba(167, 139, 250, 0.18)
+        `,
+      }}
+    >
+      <h1
+        className="
+          text-center
+          font-bold
+          tracking-wider
+          text-[34px]
+          mb-[28px]
+        "
+        style={{
+          color: "#F0FDFF",
+          textShadow: `
+            0 0 10px rgba(125, 249, 255, 1),
+            0 0 26px rgba(56, 189, 248, 0.85),
+            0 0 52px rgba(167, 139, 250, 0.45)
+          `,
+        }}
+      >
         SIGN UP
       </h1>
 
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-[18px] flex-grow items-center">
         {error && (
-          <div className="bg-red-500/20 border border-red-500 text-red-200 px-4 py-2 rounded-lg text-sm">
+          <div className="bg-red-500/20 border border-red-500 text-red-200 px-4 py-2 rounded-lg text-sm w-full max-w-[300px]">
             {error}
           </div>
         )}
 
-        {/* Personal Information */}
-        <input
-          className={inputClass}
-          placeholder="Full Name *"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          disabled={isLoading}
-        />
-        <input
-          className={inputClass}
-          placeholder="Email Address *"
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleChange}
-          disabled={isLoading}
-        />
-        <input
-          className={inputClass}
-          placeholder="Phone Number (10 digits) *"
-          name="mobile"
-          value={formData.mobile}
-          onChange={handleChange}
-          disabled={isLoading}
-        />
-        <input
-          className={inputClass}
-          type="date"
-          name="dob"
-          value={formData.dob}
-          onChange={handleChange}
-          disabled={isLoading}
-        />
-        <select
-          className={inputClass}
-          name="gender"
-          value={formData.gender}
-          onChange={handleChange}
-          disabled={isLoading}
-        >
-          <option value="">Select Gender *</option>
-          <option value="M">Male</option>
-          <option value="F">Female</option>
-          <option value="O">Other</option>
-        </select>
+        <h2 className="text-[18px] font-semibold text-[#C7F5FF]">
+          Personal Information
+        </h2>
 
-        <h2 className="text-orange-300 font-creepster text-xl mt-4">
+        {/* Full Name */}
+        <div className="flex flex-col gap-[6px] w-full mx-auto max-w-[300px]">
+          <label className="text-sm text-[#C7F5FF]">Full Name</label>
+          <input
+            className={inputClass}
+            placeholder="Full Name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            disabled={isLoading}
+            style={{
+              boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+            }}
+          />
+        </div>
+
+        {/* Email */}
+        <div className="flex flex-col gap-[6px] w-full mx-auto max-w-[300px]">
+          <label className="text-sm text-[#C7F5FF]">Email</label>
+          <input
+            className={inputClass}
+            placeholder="abc@gmail.com"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            disabled={isLoading}
+            style={{
+              boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+            }}
+          />
+        </div>
+
+        {/* Phone Number */}
+        <div className="flex flex-col gap-[6px] w-full mx-auto max-w-[300px]">
+          <label className="text-sm text-[#C7F5FF]">Phone Number</label>
+          <input
+            className={inputClass}
+            placeholder="Phone Number"
+            name="mobile"
+            value={formData.mobile}
+            onChange={handleChange}
+            disabled={isLoading}
+            style={{
+              boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+            }}
+          />
+        </div>
+
+        {/* Date of Birth */}
+        <div className="flex flex-col gap-[6px] w-full mx-auto max-w-[300px]">
+          <label className="text-sm text-[#C7F5FF]">Date of Birth</label>
+          <input
+            className={inputClass}
+            type="date"
+            name="dob"
+            value={formData.dob}
+            onChange={handleChange}
+            disabled={isLoading}
+            style={{
+              boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+            }}
+          />
+        </div>
+
+        {/* Gender */}
+        <div className="flex flex-col gap-[6px] w-full mx-auto max-w-[300px]">
+          <label className="text-sm text-[#C7F5FF]">Gender</label>
+          <select
+            className={inputClass}
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            disabled={isLoading}
+            style={{
+              boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+            }}
+          >
+            <option value="">Select Gender</option>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+            <option value="O">Other</option>
+          </select>
+        </div>
+
+        <h2 className="text-[18px] font-semibold text-[#C7F5FF] mt-[6px]">
           College Information
         </h2>
 
-        <input
-          className={inputClass}
-          placeholder="College Name *"
-          name="college"
-          value={formData.college}
-          onChange={handleChange}
-          disabled={isLoading}
-        />
-        <input
-          className={inputClass}
-          placeholder="Year of Passing *"
-          name="yop"
-          type="number"
-          min="2020"
-          max="2035"
-          value={formData.yop}
-          onChange={handleChange}
-          disabled={isLoading}
-        />
-        <input
-          className={inputClass}
-          placeholder="Address"
-          name="addr"
-          value={formData.addr}
-          onChange={handleChange}
-          disabled={isLoading}
-        />
-        <input
-          className={inputClass}
-          placeholder="City *"
-          name="city"
-          value={formData.city}
-          onChange={handleChange}
-          disabled={isLoading}
-        />
-        <input
-          className={inputClass}
-          placeholder="State *"
-          name="state"
-          value={formData.state}
-          onChange={handleChange}
-          disabled={isLoading}
-        />
+        {/* College */}
+        <div className="flex flex-col gap-[6px] w-full mx-auto max-w-[300px]">
+          <label className="text-sm text-[#C7F5FF]">College</label>
+          <input
+            className={inputClass}
+            placeholder="College"
+            name="college"
+            value={formData.college}
+            onChange={handleChange}
+            disabled={isLoading}
+            style={{
+              boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+            }}
+          />
+        </div>
 
-        <h2 className="text-orange-300 font-creepster text-xl mt-4">
+        {/* Passing Year */}
+        <div className="flex flex-col gap-[6px] w-full mx-auto max-w-[300px]">
+          <label className="text-sm text-[#C7F5FF]">Passing Year</label>
+          <input
+            className={inputClass}
+            placeholder="Passing Year"
+            name="yop"
+            type="number"
+            min="2020"
+            max="2035"
+            value={formData.yop}
+            onChange={handleChange}
+            disabled={isLoading}
+            style={{
+              boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+            }}
+          />
+        </div>
+
+        {/* Address */}
+        <div className="flex flex-col gap-[6px] w-full mx-auto max-w-[300px]">
+          <label className="text-sm text-[#C7F5FF]">Address</label>
+          <input
+            className={inputClass}
+            placeholder="Address"
+            name="addr"
+            value={formData.addr}
+            onChange={handleChange}
+            disabled={isLoading}
+            style={{
+              boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+            }}
+          />
+        </div>
+
+        {/* City */}
+        <div className="flex flex-col gap-[6px] w-full mx-auto max-w-[300px]">
+          <label className="text-sm text-[#C7F5FF]">City</label>
+          <input
+            className={inputClass}
+            placeholder="City"
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+            disabled={isLoading}
+            style={{
+              boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+            }}
+          />
+        </div>
+
+        {/* State */}
+        <div className="flex flex-col gap-[6px] w-full mx-auto max-w-[300px]">
+          <label className="text-sm text-[#C7F5FF]">State</label>
+          <input
+            className={inputClass}
+            placeholder="State"
+            name="state"
+            value={formData.state}
+            onChange={handleChange}
+            disabled={isLoading}
+            style={{
+              boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+            }}
+          />
+        </div>
+
+        <h2 className="text-[18px] font-semibold text-[#C7F5FF] mt-[6px]">
           Security Information
         </h2>
 
-        <input
-          className={inputClass}
-          placeholder="Security Question *"
-          name="security_question"
-          value={formData.security_question}
-          onChange={handleChange}
-          disabled={isLoading}
-        />
-        <input
-          className={inputClass}
-          placeholder="Security Answer *"
-          name="security_answer"
-          value={formData.security_answer}
-          onChange={handleChange}
-          disabled={isLoading}
-        />
+        {/* Security Question */}
+        <div className="flex flex-col gap-[6px] w-full mx-auto max-w-[300px]">
+          <label className="text-sm text-[#C7F5FF]">Security Question</label>
+          <input
+            className={inputClass}
+            placeholder="Security Question"
+            name="security_question"
+            value={formData.security_question}
+            onChange={handleChange}
+            disabled={isLoading}
+            style={{
+              boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+            }}
+          />
+        </div>
 
-        <h2 className="text-orange-300 font-creepster text-xl mt-4">
+        {/* Security Answer */}
+        <div className="flex flex-col gap-[6px] w-full mx-auto max-w-[300px]">
+          <label className="text-sm text-[#C7F5FF]">Security Answer</label>
+          <input
+            className={inputClass}
+            placeholder="Security Answer"
+            name="security_answer"
+            value={formData.security_answer}
+            onChange={handleChange}
+            disabled={isLoading}
+            style={{
+              boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+            }}
+          />
+        </div>
+
+        <h2 className="text-[18px] font-semibold text-[#C7F5FF] mt-[6px]">
           Account Credentials
         </h2>
 
-        <input
-          className={inputClass}
-          type="password"
-          placeholder="Password (min 6 characters) *"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          disabled={isLoading}
-        />
-        <input
-          className={inputClass}
-          type="password"
-          placeholder="Confirm Password *"
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          disabled={isLoading}
-        />
+        {/* Password */}
+        <div className="flex flex-col gap-[6px] w-full mx-auto max-w-[300px]">
+          <label className="text-sm text-[#C7F5FF]">Password</label>
+          <input
+            className={inputClass}
+            type="password"
+            placeholder="********"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            disabled={isLoading}
+            style={{
+              boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+            }}
+          />
+        </div>
+
+        {/* Confirm Password */}
+        <div className="flex flex-col gap-[6px] w-full mx-auto max-w-[300px]">
+          <label className="text-sm text-[#C7F5FF]">Confirm Password</label>
+          <input
+            className={inputClass}
+            type="password"
+            placeholder="********"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            disabled={isLoading}
+            style={{
+              boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
+            }}
+          />
+        </div>
 
         <div className="flex justify-center my-4">
           <ReCAPTCHA
@@ -289,14 +447,37 @@ export default function SignUpForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full mt-4 py-2 rounded-lg bg-gradient-to-r from-orange-500 to-pink-500 text-white font-bold hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+          className="
+            mt-[12px]
+            h-[46px]
+            mx-auto
+            w-full max-w-[300px]
+            rounded-full
+            font-semibold
+            tracking-wider
+            text-[#020617]
+            bg-gradient-to-r from-[#38BDF8] via-[#7DF9FF] to-[#A78BFA]
+            hover:scale-[1.03]
+            transition
+            disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+          "
+          style={{
+            boxShadow: `
+              0 0 22px rgba(125, 249, 255, 0.9),
+              0 0 50px rgba(56, 189, 248, 0.65),
+              0 0 90px rgba(167, 139, 250, 0.45)
+            `,
+          }}
         >
-          {isLoading ? "REGISTERING..." : "ENTER THE FEST"}
+          {isLoading ? "REGISTERING..." : "CREATE ACCOUNT"}
         </button>
 
-        <p className="text-center text-sm text-purple-200 mt-3">
+        <p className="mt-[14px] text-center text-sm text-[#C7F5FF]">
           Already have an account?{" "}
-          <Link to="/signin" className="text-orange-400 hover:underline">
+          <Link
+            to="/signin"
+            className="underline text-[#9FE7FF] hover:text-[#7DF9FF] transition"
+          >
             Sign In
           </Link>
         </p>
