@@ -10,6 +10,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {AuthContext} from "../context/authContext.jsx";
 import { Crown } from "lucide-react"
+import { Users, Building2 } from 'lucide-react';
 
 
 function Contingent() {
@@ -295,8 +296,14 @@ const handleConfirmLeave = async () => {
         {conti && (
           <>
             {showLeaveModal && (
-              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-                <div className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-2xl relative popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/95 to-[#5f8a84]/80 text-center">
+              <div 
+                className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+                onClick={() => setShowLeaveModal(false)}
+              >
+                <div 
+                  className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-2xl relative popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/95 to-[#5f8a84]/80 text-center"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   
                   <span className="material-symbols-outlined !text-6xl text-red-500 mb-4 block">
                     warning
@@ -328,8 +335,14 @@ const handleConfirmLeave = async () => {
               </div>
   )}
             {showBarcodeModal && (
-              <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
-                <div className="w-full max-w-sm p-8 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative text-center popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/85 to-[#5f8a84]/65">
+              <div 
+                className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
+                onClick={() => setShowBarcodeModal(false)}
+              >
+                <div 
+                  className="w-full max-w-sm p-8 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative text-center popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/85 to-[#5f8a84]/65"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <button
                     onClick={() => setShowBarcodeModal(false)}
                     className="cursor-pointer absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
@@ -364,8 +377,14 @@ const handleConfirmLeave = async () => {
               </div>
             )}
             {showAddModal && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-                <div className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-2xl relative popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/80 to-[#5f8a84]/60">
+              <div 
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                onClick={() => setShowAddModal(false)}
+              >
+                <div 
+                  className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-2xl relative popup-anim backdrop-blur-md bg-gradient-to-r from-[#302e3b]/80 to-[#5f8a84]/60"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <button
                     onClick={() => setShowAddModal(false)}
                     className="cursor-pointer absolute top-4 right-4 text-white/50 hover:text-white"
@@ -469,18 +488,19 @@ const handleConfirmLeave = async () => {
               </button>
               </div>
                 </div>
-                <div className="bg-black/40 p-4 rounded-2xl border border-white/10 text-center"
-                style={{background:"linear-gradient(to right,#302e3b 0%, #5f8a84 100%)"}}>
+                <div className="bg-black/70 p-4 rounded-2xl border border-white/10 text-center">
                   <p className="font-['Jolly_Lodger'] text-white text-3xl opacity-70"
                   >Members</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {member.map((m, index) => (
-                    <div key={index} className="bg-white/5 border border-white/10 p-4 rounded-xl flex items-center justify-between"
-                    style={{background:"linear-gradient(to right,#302e3b 0%, #5f8a84 100%)"}}>
+                    <div 
+                      key={index} 
+                      className="bg-white/5 backdrop-blur-lg border border-white/10 p-4 rounded-xl flex items-center justify-between"
+                    >
                       <span className="text-white font-['Jolly_Lodger'] text-xl">
-                        <div className="text-4xl text-black flex items-center gap-2">
+                        <div className="text-4xl text-white flex items-center gap-2">
                             {m.name} 
                           </div>
                           {(m.id === data.leaderId) && (
@@ -520,11 +540,11 @@ const handleConfirmLeave = async () => {
 
         {
           token && !conti && !joinOn && !CreateOn &&
-  <div className="flex flex-col gap-6 bg-black/70 p-6 sm:p-10 w-[95%] sm:w-[90%] max-w-[550px] h-auto backdrop-blur-xl border border-purple-500/30 rounded-3xl shadow-[0_0_50px_rgba(139,92,246,0.3)] popup-anim relative">
+  <div className="flex flex-col gap-6 bg-black/70 p-6 sm:p-10 w-[95%] sm:w-[90%] max-w-[550px] h-auto backdrop-blur-xl border border-purple-500/30 rounded-3xl shadow-2xl popup-anim relative">
     {/* Back Button */}
     <button
       onClick={() => { navigate("/accommodation") }}
-      className="absolute top-4 left-4 p-2.5 rounded-full text-white/60 hover:text-white hover:bg-purple-500/20 transition-all z-10 hover:shadow-lg hover:shadow-purple-500/30"
+      className="absolute top-4 left-4 p-2.5 rounded-full text-white/60 hover:text-white hover:bg-white/20 transition-all z-10 hover:shadow-lg hover:shadow-purple-500/30"
     >
       <span className="material-symbols-outlined !text-[28px]">arrow_back</span>
     </button>
@@ -561,7 +581,11 @@ const handleConfirmLeave = async () => {
         {/* Content */}
         <div className="relative z-10 flex flex-row sm:flex-col items-center justify-center gap-4 sm:gap-3 p-4 sm:p-6 h-full">
           <div className="text-4xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">
-            🚪
+             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <rect x="30" y="45" width="40" height="30" fill="#FFFFFF"/>
+  <path d="M 25 45 L 50 25 L 75 45 Z" fill="#FFFFFF"/>
+  <rect x="60" y="32" width="6" height="10" fill="#FFFFFF"/>
+</svg>
           </div>
           <div className="flex flex-col items-center sm:items-center">
             <h2 className="font-['Jolly_Lodger'] text-3xl sm:text-4xl text-white text-center transition-colors duration-300" style={{color: "white"}}>
@@ -600,7 +624,41 @@ const handleConfirmLeave = async () => {
         {/* Content */}
         <div className="relative z-10 flex flex-row sm:flex-col items-center justify-center gap-4 sm:gap-3 p-4 sm:p-6 h-full">
           <div className="text-4xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">
-            ✨
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+              <rect x="15" y="25" width="18" height="50" fill="#FFFFFF"/>
+              <rect x="17" y="28" width="4" height="4" fill="#4A90E2"/>
+              <rect x="23" y="28" width="4" height="4" fill="#4A90E2"/>
+              <rect x="17" y="35" width="4" height="4" fill="#4A90E2"/>
+              <rect x="23" y="35" width="4" height="4" fill="#4A90E2"/>
+              <rect x="17" y="42" width="4" height="4" fill="#4A90E2"/>
+              <rect x="23" y="42" width="4" height="4" fill="#4A90E2"/>
+              <rect x="17" y="49" width="4" height="4" fill="#4A90E2"/>
+              <rect x="23" y="49" width="4" height="4" fill="#4A90E2"/>
+              <rect x="17" y="56" width="4" height="4" fill="#4A90E2"/>
+              <rect x="23" y="56" width="4" height="4" fill="#4A90E2"/>
+              <rect x="17" y="63" width="4" height="4" fill="#4A90E2"/>
+              <rect x="23" y="63" width="4" height="4" fill="#4A90E2"/>
+              
+              <rect x="36" y="45" width="18" height="30" fill="#FFFFFF"/>
+              <rect x="38" y="48" width="4" height="4" fill="#4A90E2"/>
+              <rect x="44" y="48" width="4" height="4" fill="#4A90E2"/>
+              <rect x="38" y="55" width="4" height="4" fill="#4A90E2"/>
+              <rect x="44" y="55" width="4" height="4" fill="#4A90E2"/>
+              <rect x="38" y="62" width="4" height="4" fill="#4A90E2"/>
+              <rect x="44" y="62" width="4" height="4" fill="#4A90E2"/>
+              
+              <rect x="57" y="35" width="18" height="40" fill="#FFFFFF"/>
+              <rect x="59" y="38" width="4" height="4" fill="#4A90E2"/>
+              <rect x="65" y="38" width="4" height="4" fill="#4A90E2"/>
+              <rect x="59" y="45" width="4" height="4" fill="#4A90E2"/>
+              <rect x="65" y="45" width="4" height="4" fill="#4A90E2"/>
+              <rect x="59" y="52" width="4" height="4" fill="#4A90E2"/>
+              <rect x="65" y="52" width="4" height="4" fill="#4A90E2"/>
+              <rect x="59" y="59" width="4" height="4" fill="#4A90E2"/>
+              <rect x="65" y="59" width="4" height="4" fill="#4A90E2"/>
+              <rect x="59" y="66" width="4" height="4" fill="#4A90E2"/>
+              <rect x="65" y="66" width="4" height="4" fill="#4A90E2"/>
+            </svg>
           </div>
           <div className="flex flex-col items-center sm:items-center">
             <h2 className="font-['Jolly_Lodger'] text-3xl sm:text-4xl text-white text-center transition-colors duration-300" style={{color: "white"}}>
