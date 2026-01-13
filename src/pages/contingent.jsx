@@ -11,6 +11,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import {AuthContext} from "../context/authContext.jsx";
 import { Crown } from "lucide-react"
 import { Users, Building2 } from 'lucide-react';
+import icon1 from "../assets/images/handshake_shield_transparent.png";
+import icon2 from "../assets/images/haunted_house_transparent_v2.png";
 
 
 function Contingent() {
@@ -581,11 +583,7 @@ const handleConfirmLeave = async () => {
         {/* Content */}
         <div className="relative z-10 flex flex-row sm:flex-col items-center justify-center gap-4 sm:gap-3 p-4 sm:p-6 h-full">
           <div className="text-4xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">
-             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-  <rect x="30" y="45" width="40" height="30" fill="#FFFFFF"/>
-  <path d="M 25 45 L 50 25 L 75 45 Z" fill="#FFFFFF"/>
-  <rect x="60" y="32" width="6" height="10" fill="#FFFFFF"/>
-</svg>
+             <img src = {icon1}/>
           </div>
           <div className="flex flex-col items-center sm:items-center">
             <h2 className="font-['Jolly_Lodger'] text-3xl sm:text-4xl text-white text-center transition-colors duration-300" style={{color: "white"}}>
@@ -624,41 +622,7 @@ const handleConfirmLeave = async () => {
         {/* Content */}
         <div className="relative z-10 flex flex-row sm:flex-col items-center justify-center gap-4 sm:gap-3 p-4 sm:p-6 h-full">
           <div className="text-4xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-              <rect x="15" y="25" width="18" height="50" fill="#FFFFFF"/>
-              <rect x="17" y="28" width="4" height="4" fill="#4A90E2"/>
-              <rect x="23" y="28" width="4" height="4" fill="#4A90E2"/>
-              <rect x="17" y="35" width="4" height="4" fill="#4A90E2"/>
-              <rect x="23" y="35" width="4" height="4" fill="#4A90E2"/>
-              <rect x="17" y="42" width="4" height="4" fill="#4A90E2"/>
-              <rect x="23" y="42" width="4" height="4" fill="#4A90E2"/>
-              <rect x="17" y="49" width="4" height="4" fill="#4A90E2"/>
-              <rect x="23" y="49" width="4" height="4" fill="#4A90E2"/>
-              <rect x="17" y="56" width="4" height="4" fill="#4A90E2"/>
-              <rect x="23" y="56" width="4" height="4" fill="#4A90E2"/>
-              <rect x="17" y="63" width="4" height="4" fill="#4A90E2"/>
-              <rect x="23" y="63" width="4" height="4" fill="#4A90E2"/>
-              
-              <rect x="36" y="45" width="18" height="30" fill="#FFFFFF"/>
-              <rect x="38" y="48" width="4" height="4" fill="#4A90E2"/>
-              <rect x="44" y="48" width="4" height="4" fill="#4A90E2"/>
-              <rect x="38" y="55" width="4" height="4" fill="#4A90E2"/>
-              <rect x="44" y="55" width="4" height="4" fill="#4A90E2"/>
-              <rect x="38" y="62" width="4" height="4" fill="#4A90E2"/>
-              <rect x="44" y="62" width="4" height="4" fill="#4A90E2"/>
-              
-              <rect x="57" y="35" width="18" height="40" fill="#FFFFFF"/>
-              <rect x="59" y="38" width="4" height="4" fill="#4A90E2"/>
-              <rect x="65" y="38" width="4" height="4" fill="#4A90E2"/>
-              <rect x="59" y="45" width="4" height="4" fill="#4A90E2"/>
-              <rect x="65" y="45" width="4" height="4" fill="#4A90E2"/>
-              <rect x="59" y="52" width="4" height="4" fill="#4A90E2"/>
-              <rect x="65" y="52" width="4" height="4" fill="#4A90E2"/>
-              <rect x="59" y="59" width="4" height="4" fill="#4A90E2"/>
-              <rect x="65" y="59" width="4" height="4" fill="#4A90E2"/>
-              <rect x="59" y="66" width="4" height="4" fill="#4A90E2"/>
-              <rect x="65" y="66" width="4" height="4" fill="#4A90E2"/>
-            </svg>
+            <img src = {icon2}/>
           </div>
           <div className="flex flex-col items-center sm:items-center">
             <h2 className="font-['Jolly_Lodger'] text-3xl sm:text-4xl text-white text-center transition-colors duration-300" style={{color: "white"}}>
