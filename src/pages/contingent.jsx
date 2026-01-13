@@ -15,7 +15,7 @@ import icon2 from "../assets/images/haunted_house_transparent_v2.png";
 // --- CONFIGURATION ---
 // Replace this with your actual Razorpay Key ID
 // For production, it is best to use import.meta.env.VITE_RAZORPAY_KEY_ID
-const RAZORPAY_KEY_ID = "rzp_live_RxuiK86UHqe4Ft"; 
+const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID; 
 
 function Contingent() {
   const navigate = useNavigate();
