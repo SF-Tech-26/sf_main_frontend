@@ -1,202 +1,234 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import faqBG from '../assets/faqBG.png';
+import faqCON from '../assets/faqCON.png';
+import faqHEAD from '../assets/faqHEAD.png';
+import wood from '../assets/wood.png';
 
 const faqData = [
-    {
-        category: "General",
-        questions: [
-            {
-                q: "What is Spring Fest?",
-                a: "Spring Fest is the annual socio-cultural festival of IIT Kharagpur, one of the largest college festivals in Asia. It features a diverse range of events including music, dance, drama, literary arts, and much more."
-            },
-            {
-                q: "When and where is Spring Fest held?",
-                a: "Spring Fest is held annually at the IIT Kharagpur campus. The exact dates are announced each year on our official website and social media channels."
-            },
-            {
-                q: "Who can participate in Spring Fest?",
-                a: "Spring Fest is open to students from colleges and universities across India. Some events may have specific eligibility criteria which will be mentioned in the event details."
-            }
-        ]
-    },
-    {
-        category: "Registration",
-        questions: [
-            {
-                q: "How do I register for Spring Fest?",
-                a: "You can register by creating an account on our website. Click on 'Sign Up', fill in your details, and you're ready to participate in various events."
-            },
-            {
-                q: "Is there a registration fee?",
-                a: "Basic registration is free. However, some premium events or accommodation may have separate charges. Check the specific event or accommodation page for details."
-            },
-            {
-                q: "Can I register as a team?",
-                a: "Yes! For group events, you can register as a team. The team leader should register first and then add team members through the dashboard."
-            }
-        ]
-    },
-    {
-        category: "Events",
-        questions: [
-            {
-                q: "What types of events are available?",
-                a: "We have a wide variety of events including music competitions, dance battles, drama performances, literary events, art exhibitions, gaming tournaments, and many more."
-            },
-            {
-                q: "How do I register for specific events?",
-                a: "After logging in, go to the Events page, browse through the categories, select your desired event, and click 'Register'. Make sure to read the rules and eligibility criteria."
-            },
-            {
-                q: "Can I participate in multiple events?",
-                a: "Yes, you can participate in multiple events as long as there are no scheduling conflicts. Check the event timings carefully before registering."
-            }
-        ]
-    },
-    {
-        category: "Accommodation",
-        questions: [
-            {
-                q: "Is accommodation provided for outstation participants?",
-                a: "Yes, we provide accommodation for outstation participants on a first-come-first-served basis. You can book accommodation through your dashboard after registration."
-            },
-            {
-                q: "What are the accommodation charges?",
-                a: "Accommodation charges vary based on the type and duration. Please check the Accommodation page on our website for detailed pricing."
-            },
-            {
-                q: "What facilities are included in accommodation?",
-                a: "Basic accommodation includes a bed, mattress, and access to common facilities. Meals can be purchased separately from the food stalls on campus."
-            }
-        ]
-    },
-    {
-        category: "Support",
-        questions: [
-            {
-                q: "How can I contact the organizers?",
-                a: "You can reach us through the Contact page on our website, email us at support@springfest.in, or reach out on our social media handles."
-            },
-            {
-                q: "I have a complaint. How do I report it?",
-                a: "You can submit a complaint through the Complaints section in your dashboard. Our team will address it as soon as possible."
-            },
-            {
-                q: "I forgot my password. What should I do?",
-                a: "Click on 'Forgot Password' on the Sign In page. Enter your email address and follow the instructions sent to your email to reset your password."
-            }
-        ]
-    }
+  {
+    category: "General",
+    questions: [
+      {
+        q: "What is Spring Fest?",
+        a: "Spring Fest is the annual socio-cultural festival of IIT Kharagpur, one of the largest college festivals in Asia. It features a diverse range of events including music, dance, drama, literary arts, and much more."
+      },
+      {
+        q: "When and where is Spring Fest held?",
+        a: "Spring Fest is held annually at the IIT Kharagpur campus. The exact dates are announced each year on our official website and social media channels."
+      },
+      {
+        q: "Who can participate in Spring Fest?",
+        a: "Spring Fest is open to students from colleges and universities across India. Some events may have specific eligibility criteria which will be mentioned in the event details."
+      }
+    ]
+  },
+  {
+    category: "Registration",
+    questions: [
+      {
+        q: "How do I register for Spring Fest?",
+        a: "You can register by creating an account on our website. Click on 'Sign Up', fill in your details, and you're ready to participate in various events."
+      },
+      {
+        q: "Is there a registration fee?",
+        a: "Basic registration is free. However, some premium events or accommodation may have separate charges. Check the specific event or accommodation page for details."
+      },
+      {
+        q: "Can I register as a team?",
+        a: "Yes! For group events, you can register as a team. The team leader should register first and then add team members through the dashboard."
+      }
+    ]
+  },
+  {
+    category: "Events",
+    questions: [
+      {
+        q: "What types of events are available?",
+        a: "We have a wide variety of events including music competitions, dance battles, drama performances, literary events, art exhibitions, gaming tournaments, and many more."
+      },
+      {
+        q: "How do I register for specific events?",
+        a: "After logging in, go to the Events page, browse through the categories, select your desired event, and click 'Register'. Make sure to read the rules and eligibility criteria."
+      },
+      {
+        q: "Can I participate in multiple events?",
+        a: "Yes, you can participate in multiple events as long as there are no scheduling conflicts. Check the event timings carefully before registering."
+      }
+    ]
+  },
+  {
+    category: "Accommodation",
+    questions: [
+      {
+        q: "Is accommodation provided for outstation participants?",
+        a: "Yes, we provide accommodation for outstation participants on a first-come-first-served basis. You can book accommodation through your dashboard after registration."
+      },
+      {
+        q: "What are the accommodation charges?",
+        a: "Accommodation charges vary based on the type and duration. Please check the Accommodation page on our website for detailed pricing."
+      },
+      {
+        q: "What facilities are included in accommodation?",
+        a: "Basic accommodation includes a bed, mattress, and access to common facilities. Meals can be purchased separately from the food stalls on campus."
+      }
+    ]
+  },
+  {
+    category: "Support",
+    questions: [
+      {
+        q: "How can I contact the organizers?",
+        a: "You can reach us through the Contact page on our website, email us at support@springfest.in, or reach out on our social media handles."
+      },
+      {
+        q: "I have a complaint. How do I report it?",
+        a: "You can submit a complaint through the Complaints section in your dashboard. Our team will address it as soon as possible."
+      },
+      {
+        q: "I forgot my password. What should I do?",
+        a: "Click on 'Forgot Password' on the Sign In page. Enter your email address and follow the instructions sent to your email to reset your password."
+      }
+    ]
+  }
 ];
 
 const FAQItem = ({ question, answer, isOpen, onClick }) => {
-    return (
-        <div className="faq-item">
-            <button className="faq-question" onClick={onClick}>
-                <span>{question}</span>
-                <motion.span
-                    className="faq-icon"
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                    transition={{ duration: 0.2 }}
-                >
-                    ▼
-                </motion.span>
-            </button>
-            <AnimatePresence>
-                {isOpen && (
-                    <motion.div
-                        className="faq-answer"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                    >
-                        <p>{answer}</p>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </div>
-    );
+  return (
+    <div className="faq-item">
+      <button className="faq-question" onClick={onClick}>
+        <span>{question}</span>
+        <motion.span
+          className="faq-icon"
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          ▼
+        </motion.span>
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="faq-answer"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <p>{answer}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 };
 
 export default function FAQ() {
-    const [openItems, setOpenItems] = useState({});
-    const [activeCategory, setActiveCategory] = useState("General");
+  const [openItems, setOpenItems] = useState({});
+  const [activeCategory, setActiveCategory] = useState(null);
 
-    const toggleItem = (categoryIndex, questionIndex) => {
-        const key = `${categoryIndex}-${questionIndex}`;
-        setOpenItems(prev => ({
-            ...prev,
-            [key]: !prev[key]
-        }));
-    };
+  const toggleItem = (categoryIndex, questionIndex) => {
+    const key = `${categoryIndex}-${questionIndex}`;
+    setOpenItems(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
+  };
 
-    const filteredData = faqData.filter(cat => cat.category === activeCategory);
+  const filteredData = activeCategory ? faqData.filter(cat => cat.category === activeCategory) : [];
 
-    return (
-        <div className="faq-page">
-            <div className="faq-container">
-                <motion.div
-                    className="faq-header"
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <Link to="/" className="faq-back-btn">← Back</Link>
-                    <h1 className="faq-title">Frequently Asked Questions</h1>
-                    <p className="faq-subtitle">Find answers to common questions about Spring Fest</p>
-                </motion.div>
+  return (
+    <div className="faq-page">
+      <div className="faq-container">
+        <motion.div
+          className="faq-header"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h1 className="faq-title">Frequently Asked Questions</h1>
+          <p className="faq-subtitle">Find answers to common questions about Spring Fest</p>
+        </motion.div>
 
-                <div className="faq-categories">
-                    {faqData.map((cat, idx) => (
-                        <button
-                            key={idx}
-                            className={`faq-category-btn ${activeCategory === cat.category ? 'active' : ''}`}
-                            onClick={() => setActiveCategory(cat.category)}
-                        >
-                            {cat.category}
-                        </button>
-                    ))}
-                </div>
+        <div className="faq-categories">
+          {faqData.map((cat, idx) => (
+            <div key={idx} className="scroll-wrapper">
+              {/* Scroll with category name */}
+              <button
+                className={`scroll-btn ${activeCategory === cat.category ? 'active' : ''}`}
+                onClick={() => setActiveCategory(activeCategory === cat.category ? null : cat.category)}
+              >
+                <div className="scroll-header">{cat.category}</div>
+              </button>
 
-                <motion.div
-                    className="faq-content"
-                    key={activeCategory}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3 }}
-                >
+              {/* Unfurling paper */}
+              <AnimatePresence>
+                {activeCategory === cat.category && (
+                  <motion.div
+                    className="paper-unfurl"
+                    initial={{ scaleY: 0, opacity: 0 }}
+                    animate={{ scaleY: 1, opacity: 1 }}
+                    exit={{ scaleY: 0, opacity: 0 }}
+                    transition={{
+                      duration: 0.5,
+                      ease: [0.4, 0.0, 0.2, 1]
+                    }}
+                    style={{ transformOrigin: 'top' }}
+                  >
+                    <button
+                      className="close-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveCategory(null);
+                      }}
+                    >
+                      ✕
+                    </button>
                     {filteredData.map((category, catIdx) => (
-                        <div key={catIdx} className="faq-category-section">
-                            {category.questions.map((item, qIdx) => (
-                                <FAQItem
-                                    key={qIdx}
-                                    question={item.q}
-                                    answer={item.a}
-                                    isOpen={openItems[`${catIdx}-${qIdx}`]}
-                                    onClick={() => toggleItem(catIdx, qIdx)}
-                                />
-                            ))}
-                        </div>
+                      <div key={catIdx} className="faq-category-section">
+                        {category.questions.map((item, qIdx) => (
+                          <FAQItem
+                            key={qIdx}
+                            question={item.q}
+                            answer={item.a}
+                            isOpen={openItems[`${catIdx}-${qIdx}`]}
+                            onClick={() => toggleItem(catIdx, qIdx)}
+                          />
+                        ))}
+                      </div>
                     ))}
-                </motion.div>
-
-                <div className="faq-contact">
-                    <p>Still have questions?</p>
-                    <Link to="/signin" className="faq-contact-btn">Contact Support</Link>
-                </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
+          ))}
+        </div>
 
-            <style>{`
+        <div className="faq-contact">
+          <p>Still have questions?</p>
+          <Link to="/signin" className="faq-contact-btn">Contact Support</Link>
+        </div>
+      </div>
+
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Lora:wght@400;500&display=swap');
+
         .faq-page {
           min-height: 100vh;
-          background: linear-gradient(135deg, #18181b 0%, #27272a 50%, #18181b 100%);
-          padding: 2rem;
+          background-image: 
+            linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(20, 15, 10, 0.35)),
+            url(${faqBG});
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-attachment: fixed;
+          padding: 6rem 1rem 2rem 1rem;
+          font-family: 'Cinzel', serif;
         }
 
         .faq-container {
-          max-width: 900px;
+          max-width: 550px;
           margin: 0 auto;
         }
 
@@ -206,81 +238,133 @@ export default function FAQ() {
           position: relative;
         }
 
-        .faq-back-btn {
-          position: absolute;
-          left: 0;
-          top: 0;
-          color: #a1a1aa;
-          text-decoration: none;
-          font-size: 0.9rem;
-          padding: 0.5rem 1rem;
-          border-radius: 8px;
-          background: rgba(39, 39, 42, 0.6);
-          border: 1px solid rgba(161, 161, 170, 0.2);
-          transition: all 0.2s;
-        }
-
-        .faq-back-btn:hover {
-          color: #fafafa;
-          border-color: rgba(161, 161, 170, 0.4);
-        }
-
         .faq-title {
           font-size: 2.5rem;
           font-weight: 700;
-          background: linear-gradient(135deg, #10b981, #34d399);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
           margin: 0 0 0.5rem 0;
+          font-family: 'Cinzel Decorative', serif;
+          letter-spacing: 3px;
+          background: linear-gradient(to right,
+            #a8c4a0 20%,
+            #c8e4c0 40%,
+            #c8e4c0 60%,
+            #a8c4a0 80%);
+          background-size: 200% auto;
+          color: transparent;
+          -webkit-background-clip: text;
+          background-clip: text;
+          animation: shimmer 3s linear infinite;
+          text-shadow: none;
+        }
+
+        @keyframes shimmer {
+          0% {
+            background-position: 200% center;
+          }
+          100% {
+            background-position: -200% center;
+          }
         }
 
         .faq-subtitle {
-          color: #a1a1aa;
-          font-size: 1.1rem;
+          color: #8a8272;
+          font-size: 0.8rem;
           margin: 0;
+          font-weight: 300;
+          letter-spacing: 0.5px;
         }
 
         .faq-categories {
           display: flex;
-          flex-wrap: wrap;
-          gap: 0.75rem;
-          justify-content: center;
-          margin-bottom: 2rem;
+          flex-direction: column;
+          gap: 1.25rem;
+          margin-bottom: 1.5rem;
         }
 
-        .faq-category-btn {
-          padding: 0.6rem 1.25rem;
-          border-radius: 20px;
-          border: 1px solid rgba(161, 161, 170, 0.2);
-          background: rgba(39, 39, 42, 0.4);
-          color: #a1a1aa;
-          font-size: 0.9rem;
+        .scroll-wrapper {
+          position: relative;
+        }
+
+        .scroll-btn {
+          width: 100%;
+          height: 85px;
+          border: none;
+          background-image: url(${faqHEAD});
+          background-size: 100% 100%;
+          background-position: center;
+          background-repeat: no-repeat;
           cursor: pointer;
-          transition: all 0.2s;
+          transition: all 0.3s;
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+          margin-bottom: 0;
         }
 
-        .faq-category-btn:hover {
-          border-color: rgba(16, 185, 129, 0.4);
-          color: #fafafa;
+        .scroll-btn:hover {
+          transform: translateY(-2px);
+          filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
         }
 
-        .faq-category-btn.active {
-          background: linear-gradient(135deg, #10b981, #059669);
-          border-color: transparent;
-          color: #fff;
+        .scroll-btn.active {
+          filter: drop-shadow(0 8px 16px rgba(168, 196, 160, 0.3));
+          margin-bottom: 0;
         }
 
-        .faq-content {
-          background: rgba(39, 39, 42, 0.6);
-          backdrop-filter: blur(12px);
-          border-radius: 16px;
-          border: 1px solid rgba(161, 161, 170, 0.1);
-          overflow: hidden;
+        .scroll-header {
+          font-family: 'Cinzel', serif;
+          font-size: 1.3rem;
+          font-weight: 700;
+          color: #2d2515;
+          letter-spacing: 1.5px;
+          text-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);
+          padding: 0 2rem;
+        }
+
+        .paper-unfurl {
+          margin-top: 0;
+          background-image: url(${faqCON});
+          background-size: 100% 100%;
+          background-position: center;
+          background-repeat: no-repeat;
+          border-radius: 0 0 8px 8px;
+          padding: 2.5rem 2rem 2rem 2rem;
+          position: relative;
+          filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4));
+          min-height: 200px;
+        }
+
+        .close-btn {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          background: rgba(60, 50, 40, 0.3);
+          border: 1px solid rgba(60, 50, 40, 0.5);
+          color: #3d3020;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 1.2rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s;
+          font-weight: 300;
+          line-height: 1;
+          z-index: 10;
+        }
+
+        .close-btn:hover {
+          background: rgba(60, 50, 40, 0.5);
+          transform: rotate(90deg);
         }
 
         .faq-item {
-          border-bottom: 1px solid rgba(161, 161, 170, 0.1);
+          border-bottom: 1px solid rgba(60, 50, 40, 0.2);
+          margin-bottom: 0.5rem;
         }
 
         .faq-item:last-child {
@@ -289,27 +373,29 @@ export default function FAQ() {
 
         .faq-question {
           width: 100%;
-          padding: 1.25rem 1.5rem;
+          padding: 1rem 1.25rem;
           display: flex;
           justify-content: space-between;
           align-items: center;
           background: transparent;
           border: none;
-          color: #fafafa;
+          color: #3d3020;
           font-size: 1rem;
-          font-weight: 500;
+          font-weight: 600;
           cursor: pointer;
           text-align: left;
-          transition: background 0.2s;
+          transition: all 0.2s;
+          font-family: 'Lora', serif;
+          border-radius: 4px;
         }
 
         .faq-question:hover {
-          background: rgba(255, 255, 255, 0.03);
+          background: rgba(60, 50, 40, 0.08);
         }
 
         .faq-icon {
-          color: #10b981;
-          font-size: 0.75rem;
+          color: #6d5d3d;
+          font-size: 0.7rem;
           margin-left: 1rem;
           flex-shrink: 0;
         }
@@ -319,78 +405,105 @@ export default function FAQ() {
         }
 
         .faq-answer p {
-          padding: 0 1.5rem 1.25rem 1.5rem;
+          padding: 0 1.25rem 1rem 1.25rem;
           margin: 0;
-          color: #a1a1aa;
-          line-height: 1.6;
+          color: #4d4030;
+          line-height: 1.7;
+          font-size: 0.95rem;
+          font-family: 'Lora', serif;
+          font-weight: 400;
         }
 
         .faq-contact {
           text-align: center;
-          margin-top: 2rem;
-          padding: 2rem;
-          background: rgba(39, 39, 42, 0.4);
-          border-radius: 16px;
-          border: 1px solid rgba(161, 161, 170, 0.1);
+          margin-top: 1.5rem;
+          padding: 1.5rem;
+          background: transparent;
+          border: none;
         }
 
         .faq-contact p {
-          color: #a1a1aa;
-          margin: 0 0 1rem 0;
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin: 0 0 0.75rem 0;
+          font-family: 'Cinzel Decorative', serif;
+          letter-spacing: 2px;
+          background: linear-gradient(to right,
+            #a8c4a0 20%,
+            #c8e4c0 40%,
+            #c8e4c0 60%,
+            #a8c4a0 80%);
+          background-size: 200% auto;
+          color: transparent;
+          -webkit-background-clip: text;
+          background-clip: text;
+          animation: shimmer 3s linear infinite;
         }
 
         .faq-contact-btn {
           display: inline-block;
-          padding: 0.75rem 2rem;
-          background: linear-gradient(135deg, #10b981, #059669);
-          color: #fff;
+          padding: 0.6rem 1.75rem;
+          background: rgba(168, 196, 160, 0.2);
+          color: #a8c4a0;
           text-decoration: none;
-          border-radius: 10px;
+          border-radius: 6px;
           font-weight: 600;
-          transition: all 0.2s;
+          transition: all 0.3s;
+          border: 1px solid rgba(168, 196, 160, 0.4);
+          font-family: 'Cinzel', serif;
+          letter-spacing: 1px;
+          font-size: 0.9rem;
         }
 
         .faq-contact-btn:hover {
           transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+          background: rgba(168, 196, 160, 0.3);
+          box-shadow: 0 4px 16px rgba(168, 196, 160, 0.4);
+          border-color: rgba(168, 196, 160, 0.6);
         }
 
         @media (max-width: 640px) {
           .faq-page {
-            padding: 1rem;
+            padding: 5rem 0.75rem 1rem 0.75rem;
+          }
+
+          .faq-container {
+            max-width: 100%;
           }
 
           .faq-title {
-            font-size: 1.75rem;
-            margin-top: 2.5rem;
+            font-size: 1.35rem;
+            margin-top: 1rem;
           }
 
           .faq-subtitle {
-            font-size: 0.95rem;
+            font-size: 0.75rem;
           }
 
-          .faq-back-btn {
-            position: static;
-            display: inline-block;
-            margin-bottom: 1rem;
+          .scroll-btn {
+            height: 80px;
+          }
+
+          .scroll-header {
+            font-size: 1rem;
+            padding: 0 1.5rem;
+          }
+
+          .paper-unfurl {
+            padding: 2rem 1.25rem 1.25rem 1.25rem;
           }
 
           .faq-question {
-            font-size: 0.95rem;
-            padding: 1rem;
+            font-size: 0.9rem;
+            padding: 0.9rem 1rem;
           }
 
           .faq-answer p {
-            padding: 0 1rem 1rem 1rem;
-            font-size: 0.9rem;
-          }
-
-          .faq-category-btn {
-            font-size: 0.8rem;
-            padding: 0.5rem 1rem;
+            padding: 0 1rem 0.9rem 1rem;
+            font-size: 0.85rem;
           }
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 }
