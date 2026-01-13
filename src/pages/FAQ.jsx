@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import faqBG from '../assets/faqBG.png';
-import faqCON from '../assets/faqCON.png';
-import faqHEAD from '../assets/faqHEAD.png';
-import wood from '../assets/wood.png';
+// import faqBG from '../assets/faqBG.png';
+// import faqCON from '../assets/faqCON.png';
+// import faqHEAD from '../assets/faqHEAD.png';
+// import wood from '../assets/wood.png';
 
 const faqData = [
   {
