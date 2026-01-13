@@ -15,7 +15,7 @@ import icon2 from "../assets/images/haunted_house_transparent_v2.png";
 // --- CONFIGURATION ---
 // Replace this with your actual Razorpay Key ID
 // For production, it is best to use import.meta.env.VITE_RAZORPAY_KEY_ID
-const RAZORPAY_KEY_ID = "YOUR_ACTUAL_RAZORPAY_KEY_ID_HERE"; 
+const RAZORPAY_KEY_ID = "rzp_live_RxuiK86UHqe4Ft"; 
 
 function Contingent() {
   const navigate = useNavigate();
@@ -122,45 +122,22 @@ function Contingent() {
       });
 
       if (response.data.code === 0) {
-        const { razorpay_order_id, amount, currency } = response.data.data;
+        const orderData = response.data.data;
 
         // Step 2: Open Razorpay
         const options = {
           key: RAZORPAY_KEY_ID, 
-          amount: amount,
-          currency: currency || "INR",
-          name: "Springfest 2026",
-          description: "Accommodation Payment",
-          order_id: razorpay_order_id,
-          handler: async function (razorpayResponse) {
-            // Step 3: Verify
-            try {
-              const verifyResponse = await axios.post("https://masterapi.springfest.in/api/payment/verify", {
-                token: token,
-                razorpay_order_id: razorpayResponse.razorpay_order_id,
-                razorpay_payment_id: razorpayResponse.razorpay_payment_id,
-                razorpay_signature: razorpayResponse.razorpay_signature
-              });
-
-              if (verifyResponse.data.code === 0) {
-                toast.success("Payment Successful!");
-                setShowPaymentModal(false);
-                setTimeout(() => window.location.reload(), 1500);
-              } else {
-                toast.error("Payment verification failed");
-              }
-            } catch (error) {
-              console.error("Verification error:", error);
-              toast.error("Payment verification failed");
-            }
-          },
+          amount: orderData.amount,
+          currency: "INR",
+          name: "Spring Fest 2026",
+          description: orderData.receipt,
+          order_id: orderData.id,
+          callback_url:"/dashboard",
           prefill: {
-            name: data?.contingent_name || "User",
-            email: "user@example.com", 
-            contact: paymentData.emergencyNumber
+            SF_Transaction_id:orderData.receipt,
           },
           theme: {
-            color: "#7c3aed"
+            color: "#3399cc"
           },
           modal: {
             ondismiss: function () {
@@ -233,48 +210,27 @@ function Contingent() {
       });
 
       if (response.data.code === 0) {
-        const { razorpay_order_id, amount, currency } = response.data.data;
+        const orderData = response.data.data;
 
         const options = {
           key: RAZORPAY_KEY_ID, 
-          amount: amount,
-          currency: currency || "INR",
-          name: "Springfest 2026",
-          description: `Contingent Payment for ${member.length} members`,
-          order_id: razorpay_order_id,
-          handler: async function (razorpayResponse) {
-            try {
-              const verifyResponse = await axios.post("https://masterapi.springfest.in/api/payment/verify", {
-                token: token,
-                razorpay_order_id: razorpayResponse.razorpay_order_id,
-                razorpay_payment_id: razorpayResponse.razorpay_payment_id,
-                razorpay_signature: razorpayResponse.razorpay_signature
-              });
-
-              if (verifyResponse.data.code === 0) {
-                toast.success(`Payment for ${member.length} members successful!`);
-                setShowContingentPayModal(false);
-                setTimeout(() => window.location.reload(), 1500);
-              } else {
-                toast.error("Payment verification failed");
-              }
-            } catch (error) {
-              console.error("Verification error:", error);
-              toast.error("Payment verification failed");
-            }
-          },
+          amount: orderData.amount,
+          currency: "INR",
+          name: "Spring Fest 2026",
+          description: orderData.receipt,
+          order_id: orderData.id,
+          callback_url:"/dashboard",
           prefill: {
-            name: data?.contingent_name || "Contingent Leader",
-            email: "leader@example.com",
-            contact: contingentPayData.emergencyNumber
+            SF_Transaction_id:orderData.receipt,
           },
           theme: {
-            color: "#16a34a"
+            color: "#3399cc"
           },
           modal: {
             ondismiss: function () {
               toast.info("Payment cancelled");
               setIsContingentPaying(false);
+             
             }
           }
         };
