@@ -17,6 +17,14 @@
     overflow: hidden;
     min-height: 100vh ;
 }
+@media screen and (max-width:700px)
+{
+.acco-main-container {
+    background: url("../assets/images/WhatsApp Image 2026-01-14 at 00.00.10.jpeg");
+    background-position: center;
+    background-attachment: fixed;
+}
+}
 
 ::-webkit-scrollbar {
     display: none;
@@ -93,7 +101,7 @@
 }
 .acco-card-loader{
     scale:0.7;
-    width:275px;
+    width:400px;
     height:400px;
     justify-items:center;
 }
@@ -150,7 +158,6 @@
     transform: translateY(-5px);
     filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
 }
-
 /* --- NAVIGATION CONTAINER --- */
 .acco-container-2 {
         justify-content: center;
