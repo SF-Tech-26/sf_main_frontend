@@ -31,9 +31,9 @@ export const getMembers = async (token, eventId) => {
     console.log("📡 API Call: getMembers", { eventId });
     const response = await axios.post(
       `${API_BASE_URL}/event/getMembers`,
-      { 
+      {
         token,
-        eventId 
+        eventId
       },
       {
         headers: {
@@ -96,7 +96,7 @@ export const deregisterMember = async (token, eventId, memberToDeregister) => {
         }
       }
     );
-    
+
     console.log("✅ deregisterMember response:", response.data);
     return response;
   } catch (error) {
@@ -184,16 +184,19 @@ export const getEventsByGenre = async (genre) => {
         'Content-Type': 'application/json',
       }
     });
-    
-    if (genre && response.data) {
-      const filteredEvents = response.data.filter(
+
+    // Check if we have the expected data structure
+    const events = response.data?.data || response.data; // Handle both wrapped and unwrapped
+
+    if (genre && Array.isArray(events)) {
+      const filteredEvents = events.filter(
         event => event.genre?.genre?.toLowerCase() === genre.toLowerCase() ||
-                event.genre?.toLowerCase() === genre.toLowerCase()
+          event.genre?.toLowerCase() === genre.toLowerCase()
       );
       console.log("✅ Filtered events by genre:", filteredEvents);
       return filteredEvents;
     }
-    
+
     return response.data;
   } catch (error) {
     console.error('❌ Error fetching events by genre:', error.response?.data || error);
@@ -210,13 +213,15 @@ export const getEventById = async (eventId) => {
         'Content-Type': 'application/json',
       }
     });
-    
-    if (response.data) {
-      const event = response.data.find(e => e.id === eventId);
+
+    const events = response.data?.data || response.data; // Handle both wrapped and unwrapped
+
+    if (Array.isArray(events)) {
+      const event = events.find(e => e.id === eventId);
       console.log("✅ Found event by ID:", event);
       return event;
     }
-    
+
     return null;
   } catch (error) {
     console.error('❌ Error fetching event by ID:', error.response?.data || error);

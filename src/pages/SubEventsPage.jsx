@@ -223,7 +223,12 @@ const SubEventsPage = () => {
                 setIsLoading(true);
                 const response = await getAllEvents();
                 if (response.code === 0 && response.data) {
-                    const genreEvents = getEventsByGenre(response, genreName);
+                    // Filter events locally since we already have all events
+                    const allEvents = response.data;
+                    const genreEvents = allEvents.filter(event =>
+                        event.genre?.toLowerCase() === genreName.toLowerCase() ||
+                        event.genre?.genre?.toLowerCase() === genreName.toLowerCase()
+                    );
                     const activeEvents = genreEvents.filter(e => e.event_status !== false);
                     setEvents(activeEvents);
                     if (activeEvents.length > 0) {
