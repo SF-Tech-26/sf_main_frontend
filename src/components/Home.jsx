@@ -117,77 +117,8 @@ const HomePage = ({ backgroundImage }) => {
         </Link>
      
 
-      {isPaid ? (
-  <button
-    disabled
-    className="
-      inline-flex items-center justify-center
-      w-[160px] h-[48px]
-
-      text-[14px]
-      font-semibold
-      tracking-[0.22em]
-      uppercase
-      text-[#9fe0b6]
-
-      bg-[#0f2a1d]
-      border border-[#2f6f4f]
-      rounded-[10px]
-
-      cursor-not-allowed
-      opacity-85
-      select-none
-    "
-  >
-    PAID
-  </button>
-) : (
-    <Link
-    to="/payment"
-    className="
-      inline-flex items-center justify-center
-      w-[160px] h-[48px]
-
-      text-[14px]
-      font-semibold
-      tracking-[0.22em]
-      uppercase
-      text-[#eafff2]
-
-      bg-gradient-to-b
-      from-[#1f7a4a]
-      to-[#0e3f28]
-
-      border border-[#2fbf7a]
-      rounded-[10px]
-
-      shadow-[0_10px_30px_rgba(0,0,0,0.6)]
-
-      hover:from-[#2a8f5b]
-      hover:to-[#145a3a]
-      hover:shadow-[0_14px_40px_rgba(0,0,0,0.85)]
-
-      active:scale-[0.97]
-      transition-all duration-300 ease-out
-
-      no-underline
-      outline-none
-      focus:outline-none
-      focus:ring-0
-      select-none
-    "
-  >
-    PAY NOW
-  </Link>
-)}
-
-
-
     </div>
-
-
-        
-      </main>
+         </main>
 
         
 
