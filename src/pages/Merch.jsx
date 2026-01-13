@@ -1,79 +1,116 @@
 import { useState, useEffect } from "react";
 
-// Import the background image
+// Background
 import bg from "../assets/merchbg.jpeg";
+
+// Hoodie Images
+import Yellowhoodie from "../assets/Yellowhoodie.png";
+import Bluehoodie from "../assets/Bluehoodie.png";
+import Orangehoodie from "../assets/Orangehoodie.png";
 
 /* PRODUCTS */
 const PRODUCTS = [
-    { id: "nw-hoodie", name: "Nightwalker Hoodie", price: 1299 },
-    { id: "nw-tee", name: "Nightwalker Tee", price: 1299 },
-    { id: "kr-hoodie", name: "Karma Rolls Hoodie", price: 1299 },
-    { id: "kr-tee", name: "Karma Rolls Tee", price: 1299 },
+    {
+        id: "rm-hoodie",
+        name: "RINGMASTER HOODIE",
+        shortName: "RGM",
+        price: 1299,
+        image: Yellowhoodie,
+    },
+    {
+        id: "nw-hoodie",
+        name: "Nightwalker Hoodie",
+        shortName: "NGW",
+        price: 1299,
+        image: Bluehoodie,
+    },
+    {
+        id: "kr-hoodie",
+        name: "KARMA ROLLS HOODIE",
+        shortName: "KRM",
+        price: 1299,
+        image: Orangehoodie,
+    },
 ];
+
+const SIZES = ["XS", "S", "M", "L", "XL"];
 
 export default function Merch() {
     const [page, setPage] = useState("merch");
     const [cart, setCart] = useState({});
     const [toast, setToast] = useState(null);
 
-    /* TOTAL ITEMS */
     const cartCount = Object.values(cart).reduce(
         (sum, i) => sum + i.qty,
         0
     );
 
-    /* ADD TO CART (ALWAYS TRIGGERS TOAST) */
-    const addToCart = (product) => {
+    const addToCart = (product, size) => {
+        const cartKey = `${product.id}-${size}`;
         setCart((prev) => ({
             ...prev,
-            [product.id]: {
+            [cartKey]: {
                 product,
-                qty: (prev[product.id]?.qty || 0) + 1,
+                size,
+                qty: (prev[cartKey]?.qty || 0) + 1,
             },
         }));
 
         setToast({
             id: Date.now(),
-            message: `${product.name} added to cart`,
+            message: `${product.name} (${size}) added to cart`,
         });
     };
 
-    /* AUTO HIDE TOAST */
+    // Helper to trigger warning toast
+    const showToast = (msg) => {
+        setToast({
+            id: Date.now(),
+            message: msg
+        });
+    };
+
     useEffect(() => {
         if (!toast) return;
         const t = setTimeout(() => setToast(null), 1200);
         return () => clearTimeout(t);
     }, [toast]);
 
-    /* UPDATE QUANTITY */
-    const updateQty = (id, delta) => {
+    const updateQty = (key, delta) => {
         setCart((prev) => {
-            const item = prev[id];
+            const item = prev[key];
             if (!item) return prev;
 
             const newQty = item.qty + delta;
             if (newQty <= 0) {
                 const copy = { ...prev };
-                delete copy[id];
+                delete copy[key];
                 return copy;
             }
 
             return {
                 ...prev,
-                [id]: { ...item, qty: newQty },
+                [key]: { ...item, qty: newQty },
             };
         });
     };
 
     return (
         <div
-            className="w-full min-h-screen bg-fixed bg-cover bg-center bg-no-repeat px-4 py-10 md:px-16 md:py-10 text-[#f5e9dc] overflow-y-auto"
-            style={{ backgroundImage: `url(${bg})`, fontFamily: '"Cinzel Decorative", serif' }}
+            className="w-full min-h-screen bg-fixed bg-cover bg-center bg-no-repeat
+                       px-4 pt-20 pb-10 md:px-16 md:pt-4
+                       text-[#f5e9dc]
+                       overflow-x-hidden"
+            style={{
+                backgroundImage: `url(${bg})`,
+                fontFamily: '"Cinzel Decorative", serif',
+            }}
         >
             {page === "merch" && (
                 <MerchPage
                     onViewCart={() => setPage("cart")}
                     onAdd={addToCart}
+                    onToast={showToast}
                     cartCount={cartCount}
                 />
             )}
@@ -86,12 +123,15 @@ export default function Merch() {
                 />
             )}
 
-            {/* TOAST */}
+            {/* 🔮 PURPLE TOAST */}
             {toast && (
-                <div
-                    key={toast.id}
-                    className="fixed top-5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-emerald-400 to-teal-400 text-emerald-950 px-6 py-3 rounded-xl font-cinzel text-sm font-semibold z-[9999] shadow-[0_0_18px_rgba(0,230,118,0.9),0_0_32px_rgba(0,230,118,0.6)] animate-toast-pop"
-                >
+                <div className="fixed top-5 left-1/2 -translate-x-1/2
+                                px-6 py-3 rounded-xl text-sm font-semibold
+                                bg-gradient-to-r from-purple-500 to-fuchsia-500
+                                text-white
+                                shadow-[0_0_30px_rgba(168,85,247,0.9)]
+                                z-[9999]"
+                    style={{ fontFamily: '"Space Grotesk", sans-serif' }}>
                     {toast.message}
                 </div>
             )}
@@ -101,19 +141,35 @@ export default function Merch() {
 
 /* ---------------- MERCH PAGE ---------------- */
 
-function MerchPage({ onViewCart, onAdd, cartCount }) {
+function MerchPage({ onViewCart, onAdd, onToast, cartCount }) {
     return (
         <>
-            {/* Top Bar - Cart Button */}
-            <div className="flex justify-end md:justify-end fixed md:relative top-4 right-4 md:top-0 md:right-0 z-50">
+            {/* Cart Button */}
+            <div className="fixed top-4 right-4 z-50">
+                {/* Desktop */}
                 <button
-                    className="relative bg-black/55 border border-orange-400 text-orange-200 px-4 py-2 rounded-md font-cinzel text-xs md:text-sm tracking-wider cursor-pointer transition-all duration-300 hover:shadow-[0_0_14px_rgba(255,160,90,0.7)] md:w-auto w-11 h-11 md:h-auto flex items-center justify-center"
+                    className="hidden md:flex relative bg-black/60 border border-orange-400
+                               text-orange-200 px-4 py-2 rounded-md text-sm"
                     onClick={onViewCart}
                 >
-                    <span className="hidden md:inline">🛒 VIEW CART</span>
-                    <span className="md:hidden text-xl">🛒</span>
+                    🛒 VIEW CART
                     {cartCount > 0 && (
-                        <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white w-5 h-5 rounded-full text-xs font-semibold flex items-center justify-center">
+                        <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white
+                                         w-5 h-5 rounded-full text-xs flex items-center justify-center">
+                            {cartCount}
+                        </span>
+                    )}
+                </button>
+
+                {/* Mobile */}
+                <button
+                    className="md:hidden relative bg-black/70 p-3 rounded-full"
+                    onClick={onViewCart}
+                >
+                    🛒
+                    {cartCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-red-500 text-white
+                                         w-5 h-5 rounded-full text-xs flex items-center justify-center">
                             {cartCount}
                         </span>
                     )}
@@ -121,146 +177,210 @@ function MerchPage({ onViewCart, onAdd, cartCount }) {
             </div>
 
             {/* Title */}
-            <div className="text-center mt-16 md:mt-0">
-                <h1 className="font-cinzel text-4xl md:text-6xl font-bold tracking-wider animate-float-slow text-shadow-[0_0_12px_rgba(255,200,140,0.6),0_0_26px_rgba(255,140,80,0.35)]">
-                    SPRING FEST
-                </h1>
-                <h2 className="mt-3 font-cinzel text-2xl md:text-4xl tracking-wider text-orange-300 animate-float-medium">
+            <div className="text-center mt-4">
+                <h1 className="text-3xl md:text-5xl font-bold animate-text-shimmer whitespace-nowrap">SPRING FEST</h1>
+                <h2 className="mt-4 text-xl md:text-3xl text-orange-300 whitespace-nowrap">
                     OFFICIAL MERCH
                 </h2>
             </div>
 
-            {/* Products Grid */}
-            <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
+            {/* Products */}
+            <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
+                            gap-8 justify-items-center">
                 {PRODUCTS.map((p) => (
-                    <div
-                        key={p.id}
-                        className="w-full max-w-[280px] h-auto md:h-[345px] p-4 flex flex-col bg-gradient-to-b from-purple-900/45 to-purple-950/55 backdrop-blur-md border-2 border-orange-400/55 rounded-2xl text-center shadow-[inset_0_0_18px_rgba(255,180,120,0.08),0_0_18px_rgba(255,120,60,0.25)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[inset_0_0_22px_rgba(255,180,120,0.12),0_0_26px_rgba(255,140,80,0.45)]"
-                    >
-                        {/* Image placeholder */}
-                        <div className="h-40 md:h-[165px] mb-3 rounded-xl border border-dashed border-orange-300/35 bg-black/20" />
-
-                        {/* Price */}
-                        <div className="mt-auto mb-2 font-cinzel text-lg md:text-xl font-semibold text-shadow-[0_0_6px_rgba(255,180,120,0.35)]">
-                            ₹ {p.price}
-                        </div>
-
-                        {/* Add to Cart Button */}
-                        <button
-                            className="w-full py-2.5 bg-gradient-to-r from-orange-400 to-orange-300 border-none rounded-lg font-cinzel text-sm md:text-base tracking-widest cursor-pointer transition-all duration-300 hover:shadow-[0_0_14px_rgba(255,160,90,0.8),0_0_26px_rgba(255,120,60,0.6)] text-black"
-                            onClick={() => onAdd(p)}
-                        >
-                            ADD TO CART
-                        </button>
-                    </div>
+                    <ProductCard key={p.id} product={p} onAdd={onAdd} onToast={onToast} />
                 ))}
             </div>
         </>
     );
 }
 
+/* ---------------- PRODUCT CARD (NEW) ---------------- */
+
+function ProductCard({ product, onAdd, onToast }) {
+    const [size, setSize] = useState(null);
+
+    const handleAdd = () => {
+        if (!size) {
+            onToast("Please select a size first!");
+            return;
+        }
+        onAdd(product, size);
+    };
+
+    return (
+        <div
+            className="group w-full max-w-[280px] p-6 pb-10 flex flex-col
+                       rounded-2xl text-center
+                       bg-gradient-to-b from-purple-900/45 to-purple-950/55
+                       border-2 border-orange-400/55
+                       animate-card-float
+                       hover:shadow-[0_0_30px_rgba(251,146,60,0.6)]
+                       transition-shadow duration-300"
+        >
+            <div className="flex items-center justify-center mb-6 overflow-hidden h-[220px]">
+                <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-auto h-full max-h-[220px] max-w-none
+                               scale-[1.8] translate-x-[-87px] translate-y-4
+                               object-contain
+                               brightness-110 contrast-130
+                               transition-transform duration-500"
+                />
+            </div>
+
+            <div className="text-lg font-bold mb-1 mt-auto">
+                {product.name}
+                <span className="md:hidden"> ({product.shortName})</span>
+            </div>
+            <div className="text-2xl text-orange-300 font-bold mb-4">₹ {product.price}</div>
+
+            {/* Size Selector */}
+            <div className="flex justify-center gap-2 mb-6">
+                {SIZES.map((s) => (
+                    <button
+                        key={s}
+                        onClick={() => setSize(s)}
+                        className={`size-btn ${size === s ? "active" : ""}`}
+                    >
+                        {s}
+                    </button>
+                ))}
+            </div>
+
+            <button
+                className="w-full py-2.5 rounded-lg text-black
+                           bg-gradient-to-r from-orange-400 to-orange-300
+                           hover:shadow-[0_0_22px_rgba(255,160,0,0.9)]
+                           font-bold tracking-wide"
+                onClick={handleAdd}
+            >
+                ADD TO CART
+            </button>
+        </div>
+    );
+}
+
+
+
 /* ---------------- CART PAGE ---------------- */
 
 function CartPage({ cart, onBack, onQtyChange }) {
-    const items = Object.values(cart);
+    const items = Object.entries(cart);
 
     const subtotal = items.reduce(
-        (sum, i) => sum + i.product.price * i.qty,
+        (sum, [_, item]) => sum + item.product.price * item.qty,
         0
     );
 
     return (
-        <div className="max-w-5xl mx-auto pt-10">
-            {/* Cart Title */}
-            <h1 className="text-center my-8 font-cinzel text-4xl md:text-6xl tracking-wider animate-float-slow text-shadow-[0_0_12px_rgba(255,200,140,0.6),0_0_26px_rgba(255,140,80,0.35)]">
+        <div className="max-w-6xl mx-auto pt-12 overflow-x-hidden">
+            <h1 className="text-center mb-10 text-3xl md:text-5xl font-bold animate-text-shimmer tracking-widest whitespace-nowrap">
                 YOUR CART
             </h1>
 
-            {/* Cart Table */}
-            <div className="flex flex-col mt-5">
-                {/* Header - Hidden on mobile */}
-                <div className="hidden md:grid grid-cols-[2.5fr_1fr_1fr_1fr] items-center py-4 border-b border-orange-400/30 font-cinzel text-base tracking-wide opacity-85">
-                    <span>PRODUCT</span>
-                    <span>PRICE</span>
-                    <span>QUANTITY</span>
-                    <span>TOTAL</span>
-                </div>
+            {/* Header */}
+            <div className="grid grid-cols-4 md:grid-cols-5
+                            px-1 md:px-3 mb-4 text-xs md:text-sm uppercase font-bold tracking-wider">
+                <span className="md:text-center">Product</span>
+                <span className="text-center">Size</span>
+                <span className="text-center hidden md:block">Price</span>
+                <span className="text-center">Qty</span>
+                <span className="text-right pr-4 md:text-center md:pr-0">Total</span>
+            </div>
 
-                {/* Cart Items */}
-                <div className="max-h-80 overflow-y-auto pr-1.5 scrollbar-thin scrollbar-thumb-orange-400/50">
-                    {items.length === 0 && (
-                        <div className="text-center py-10 text-orange-200/70 font-cinzel text-lg">
-                            Your cart is empty
-                        </div>
-                    )}
-
-                    {items.map(({ product, qty }) => (
+            {/* Scrollable Items Container */}
+            <div className="max-h-[260px] md:max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
+                {items.map(([key, { product, size, qty }]) => {
+                    const liveProduct = PRODUCTS.find(p => p.id === product.id) || product;
+                    return (
                         <div
-                            key={product.id}
-                            className="grid grid-cols-1 md:grid-cols-[2.5fr_1fr_1fr_1fr] items-center gap-3 py-4 border-b border-orange-400/30 md:bg-transparent bg-gradient-to-b from-purple-900/70 to-purple-950/75 md:rounded-none rounded-2xl md:border-0 md:border-b md:p-0 p-4 mb-4 md:mb-0"
+                            key={key}
+                            className="grid grid-cols-4 md:grid-cols-5
+                               items-center text-xs md:text-sm
+                               px-1 py-4 md:px-3 md:py-3 mb-3
+                               bg-gradient-to-r from-purple-900/70 to-purple-950/80
+                               rounded-xl"
                         >
-                            {/* Product */}
-                            <div className="flex items-center gap-4 font-cinzel text-base md:text-lg">
-                                <div className="w-12 h-16 rounded-md bg-black/30 border border-orange-400/40" />
-                                <span>{product.name}</span>
+                            <span className="truncate pr-1 md:hidden">{liveProduct.shortName}</span>
+                            <span className="truncate pr-1 hidden md:block md:text-center">{liveProduct.name}</span>
+
+                            <span className="text-center text-orange-300/80 font-bold">
+                                {size}
+                            </span>
+
+                            <span className="text-center hidden md:block text-base font-semibold text-orange-200">
+                                ₹ {liveProduct.price}
+                            </span>
+
+                            <div className="flex justify-center items-center gap-1 md:gap-2">
+                                <button
+                                    onClick={() => onQtyChange(key, -1)}
+                                    className="w-5 h-5 md:w-7 md:h-7 flex items-center justify-center rounded-md border border-orange-400/40"
+                                >
+                                    −
+                                </button>
+                                <span className="w-6 text-center">{qty}</span>
+                                <button
+                                    onClick={() => onQtyChange(key, +1)}
+                                    className="w-5 h-5 md:w-7 md:h-7 flex items-center justify-center rounded-md border border-orange-400/40"
+                                >
+                                    +
+                                </button>
                             </div>
 
-                            {/* Price */}
-                            <div className="flex justify-between md:block">
-                                <span className="md:hidden text-orange-200/55 text-sm">Price</span>
-                                <span>₹ {product.price}</span>
-                            </div>
-
-                            {/* Quantity */}
-                            <div className="flex justify-between md:justify-start items-center">
-                                <span className="md:hidden text-orange-200/55 text-sm">Qty</span>
-                                <div className="flex items-center gap-3">
-                                    <button
-                                        className="w-8 h-8 rounded-md bg-black/40 border border-orange-400 text-orange-200 text-lg cursor-pointer transition-all duration-200 hover:shadow-[0_0_10px_rgba(255,160,90,0.7)]"
-                                        onClick={() => onQtyChange(product.id, -1)}
-                                    >
-                                        −
-                                    </button>
-                                    <span className="text-lg font-medium">{qty}</span>
-                                    <button
-                                        className="w-8 h-8 rounded-md bg-black/40 border border-orange-400 text-orange-200 text-lg cursor-pointer transition-all duration-200 hover:shadow-[0_0_10px_rgba(255,160,90,0.7)]"
-                                        onClick={() => onQtyChange(product.id, +1)}
-                                    >
-                                        +
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Total */}
-                            <div className="flex justify-between md:block">
-                                <span className="md:hidden text-orange-200/55 text-sm">Total</span>
-                                <span>₹ {product.price * qty}</span>
-                            </div>
+                            <span className="text-right pr-4 md:text-center md:pr-0 font-bold text-orange-300">
+                                ₹ {liveProduct.price * qty}
+                            </span>
                         </div>
-                    ))}
-                </div>
+                    )
+                })}
             </div>
 
-            {/* Cart Bottom */}
-            <div className="mt-7 flex flex-col md:flex-row items-center justify-between gap-4">
-                {/* Subtotal */}
-                <div className="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500/45 to-teal-400/20 border border-emerald-400/75 font-cinzel text-lg font-semibold text-emerald-100 shadow-[0_0_10px_rgba(211,230,0,0.55),0_0_18px_rgba(199,230,0,0.51)]">
-                    Subtotal &nbsp; ₹ {subtotal}
+            {items.length === 0 && (
+                <div className="text-center py-10 text-white/50">
+                    Your cart is empty.
                 </div>
+            )}
 
-                {/* Action Buttons */}
-                <div className="flex gap-4 w-full md:w-auto">
-                    <button
-                        className="flex-1 md:flex-none px-5 py-3 bg-black/50 border border-orange-400 text-orange-200 rounded-lg font-cinzel text-sm tracking-wider transition-all duration-300 hover:shadow-[0_0_10px_rgba(255,160,90,0.5)]"
-                        onClick={onBack}
-                    >
-                        CONTINUE SHOPPING
-                    </button>
-                    <button className="flex-1 md:flex-none px-7 py-3 bg-gradient-to-r from-orange-400 to-orange-300 border-none rounded-lg font-cinzel text-sm tracking-wider text-black transition-all duration-300 hover:shadow-[0_0_14px_rgba(255,160,90,0.8)]">
-                        CHECKOUT
-                    </button>
+            {/* Bottom */}
+            {items.length > 0 && (
+                <div className="mt-8 flex flex-col items-center gap-4 md:flex-row md:justify-between md:gap-2">
+                    <div className="px-3 py-2 md:px-6 md:py-3 rounded-xl
+                                    bg-gradient-to-r from-emerald-500 to-teal-400
+                                    text-emerald-950 font-semibold text-xs md:text-base whitespace-nowrap">
+                        Subtotal ₹ {subtotal}
+                    </div>
+
+                    <div className="flex flex-col w-full gap-3 md:flex-row md:w-auto md:gap-4 md:justify-center">
+                        <button
+                            onClick={onBack}
+                            className="w-full md:w-auto px-3 py-2 md:px-6 md:py-3 rounded-lg text-black
+                                       bg-gradient-to-r from-orange-400 to-orange-300
+                                       text-xs md:text-base font-bold whitespace-nowrap"
+                        >
+                            CONTINUE SHOPPING
+                        </button>
+
+                        <button
+                            className="w-full md:w-auto px-3 py-2 md:px-6 md:py-3 rounded-lg text-black
+                                       bg-gradient-to-r from-orange-400 to-orange-300
+                                       text-xs md:text-base font-bold"
+                        >
+                            CHECKOUT
+                        </button>
+                    </div>
                 </div>
-            </div>
+            )}
+            {items.length === 0 && (
+                <button
+                    onClick={onBack}
+                    className="mt-4 px-6 py-2 rounded-lg border border-orange-400 text-orange-300 mx-auto block"
+                >
+                    Go Back
+                </button>
+            )}
         </div>
     );
 }

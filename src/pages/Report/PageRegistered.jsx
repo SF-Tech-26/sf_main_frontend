@@ -3,6 +3,8 @@
 
 import React, { useState, useEffect } from "react";
 import { submitComplaint } from "../../api/complaintApi";
+import { useEvents } from "../../context/EventContext";
+
 
 const PageRegistered = ({ token, goBack, reload }) => {
   const [events, setEvents] = useState([]);
@@ -10,22 +12,37 @@ const PageRegistered = ({ token, goBack, reload }) => {
   const [issueType, setIssueType] = useState("");
   const [issue, setIssue] = useState("");
   const [loading, setLoading] = useState(false);
+  const { events: contextEvents, isLoadingEvents } = useEvents();
+
 
   // Load registered events (placeholder - replace with actual API)
-  useEffect(() => {
-    const loadEvents = async () => {
-      // TODO: Replace with actual registered events API call
-      // For now, using mock data
-      const mockEvents = [
-        { eventId: 1, name: "Solo Dance Competition" },
-        { eventId: 2, name: "Group Music Performance" },
-        { eventId: 3, name: "Drama Workshop" },
-      ];
-      setEvents(mockEvents);
-    };
+  // useEffect(() => {
+  //   const loadEvents = async () => {
+  //     // TODO: Replace with actual registered events API call
+  //     // For now, using mock data
+  //     const mockEvents = [
+  //       { eventId: 1, name: "Solo Dance Competition" },
+  //       { eventId: 2, name: "Group Music Performance" },
+  //       { eventId: 3, name: "Drama Workshop" },
+  //     ];
+  //     setEvents(mockEvents);
+  //   };
 
-    loadEvents();
-  }, []);
+  //   loadEvents();
+  // }, []);
+  useEffect(() => {
+    if (!isLoadingEvents && contextEvents.length > 0) {
+      const allEvents = contextEvents.flatMap((genre) =>
+        genre.events.map((ev) => ({
+          eventId: ev.id,
+          name: ev.name,
+        }))
+      );
+
+      setEvents(allEvents);
+    }
+  }, [contextEvents, isLoadingEvents]);
+
 
   const handleSubmit = async () => {
     if (!selectedEvent || !issueType || !issue.trim()) {
@@ -37,17 +54,17 @@ const PageRegistered = ({ token, goBack, reload }) => {
     try {
       const eventName = events.find((e) => e.eventId == selectedEvent)?.name;
       const type = `Event: ${eventName} - ${issueType}`;
-      
+
       const response = await submitComplaint(token, type, issue);
-      
+
       if (response.code === 0) {
         alert("Complaint submitted successfully");
-        
+
         // Reset form
         setSelectedEvent("");
         setIssueType("");
         setIssue("");
-        
+
         // Reload complaints and go back
         await reload();
         goBack();
@@ -77,12 +94,12 @@ const PageRegistered = ({ token, goBack, reload }) => {
         <div className="absolute w-0.5 h-0.5 bg-white/70 rounded-full top-[42%] left-[25%] animate-[twinkle_3.8s_ease-in-out_infinite]" />
         <div className="absolute w-0.5 h-0.5 bg-white/70 rounded-full top-[72%] left-[88%] animate-[twinkle_3.3s_ease-in-out_infinite]" />
         <div className="absolute w-0.5 h-0.5 bg-white/70 rounded-full top-[92%] left-[35%] animate-[twinkle_4.2s_ease-in-out_infinite]" />
-        
+
         {/* Floating Orbs */}
         <div className="absolute w-20 h-20 bg-purple-500/20 rounded-full top-[10%] left-[5%] blur-xl animate-[float_6s_ease-in-out_infinite]" />
         <div className="absolute w-24 h-24 bg-pink-500/20 rounded-full top-[60%] right-[8%] blur-xl animate-[float_8s_ease-in-out_infinite]" style={{ animationDelay: '-3s' }} />
         <div className="absolute w-16 h-16 bg-blue-500/20 rounded-full bottom-[15%] left-[15%] blur-xl animate-[float_7s_ease-in-out_infinite]" style={{ animationDelay: '-5s' }} />
-        
+
         {/* Nebula Effect */}
         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5 animate-[nebula_12s_ease-in-out_infinite]" />
         <div className="absolute inset-0 bg-gradient-to-tl from-transparent via-blue-500/5 to-transparent animate-[nebula_18s_ease-in-out_infinite]" style={{ animationDelay: '-6s' }} />

@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+
 import { getAllEvents } from '../services/eventService';
 import { useEvents } from '../context/eventContext';
+import eventsDesktopBg from '../assets/eventsdesktopbg.jpeg';
+import eventsMobileBg from '../assets/eventsmobilebg.jpeg';
+import GlassSurface from '../components/GlassSurface';
 
 const slugToGenre = {
     'dance': 'Dance',
@@ -32,21 +36,33 @@ const genreToSlug = {
     'Game Fest': 'game-fest',
 };
 
-const cardImages = [
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-];
+// Genre icons/emojis for each category
+const genreIcons = {
+    'Dance': '🩰',
+    'Music': '🎸',
+    'Dramatics': '🎭',
+    'Literary': '📖',
+    'Film Fest': '🎬',
+    'Quiz': '🧠',
+    'Fine Arts': '🎨',
+    'Humor Fest': '😂',
+    'Fashion': '👗',
+    'Culinary Arts': '🍳',
+    'Game Fest': '🎮',
+};
 
 const CARDS_PER_PAGE = 5;
 
-// Ethereal Background Component
+// Ethereal Background Component with responsive images
 const EtherealBackground = () => {
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     // Generate random stars
     const stars = [...Array(100)].map((_, i) => ({
         id: i,
@@ -59,19 +75,11 @@ const EtherealBackground = () => {
 
     return (
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
-            {/* Deep space gradient */}
+            {/* Responsive background image */}
             <div
-                className="absolute inset-0"
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{
-                    background: 'radial-gradient(ellipse at center, #1a0a2e 0%, #0d0015 50%, #000000 100%)'
-                }}
-            />
-
-            {/* Nebula clouds */}
-            <div
-                className="absolute top-0 left-0 w-full h-full opacity-30"
-                style={{
-                    background: 'radial-gradient(ellipse at 20% 30%, rgba(139, 92, 246, 0.3) 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(236, 72, 153, 0.2) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 60%)'
+                    backgroundImage: `url(${isMobile ? eventsMobileBg : eventsDesktopBg})`,
                 }}
             />
 
@@ -139,18 +147,11 @@ const EtherealBackground = () => {
                     background: 'linear-gradient(to top, rgba(139, 92, 246, 0.1) 0%, transparent 100%)'
                 }}
             />
-
-            {/* Subtle grid pattern */}
-            <div
-                className="absolute inset-0 opacity-5"
-                style={{
-                    backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-                    backgroundSize: '50px 50px'
-                }}
-            />
         </div>
     );
 };
+
+
 
 const TarotCard = ({ genre, index, totalCards, globalIndex, onClick }) => {
     const [isSmallScreen, setIsSmallScreen] = useState(false);
@@ -166,21 +167,23 @@ const TarotCard = ({ genre, index, totalCards, globalIndex, onClick }) => {
     }, []);
 
     const centerIndex = (totalCards - 1) / 2;
-    const rotation = (index - centerIndex) * 8;
-    const translateX = (index - centerIndex) * 150;
-    const translateY = Math.abs(index - centerIndex) * 10;
+    const rotation = (index - centerIndex) * 10;
+    const translateX = (index - centerIndex) * 170;
+    const translateY = Math.abs(index - centerIndex) * 25;
+
+    const icon = genreIcons[genre] || '✨';
 
     return (
         <motion.div
             className={isSmallScreen ? 'relative cursor-pointer' : 'absolute cursor-pointer'}
             style={isSmallScreen ? {
-                width: window.innerWidth < 480 ? '140px' : '160px',
-                height: window.innerWidth < 480 ? '210px' : '240px',
+                width: window.innerWidth < 480 ? '150px' : '170px',
+                height: window.innerWidth < 480 ? '225px' : '255px',
             } : {
-                width: '220px',
-                height: '330px',
+                width: '200px',
+                height: '300px',
                 left: '50%',
-                marginLeft: '-110px',
+                marginLeft: '-100px',
                 transformOrigin: 'bottom center',
             }}
             initial={{ opacity: 0, y: 80, rotate: isSmallScreen ? 0 : rotation, x: isSmallScreen ? 0 : translateX }}
@@ -194,44 +197,55 @@ const TarotCard = ({ genre, index, totalCards, globalIndex, onClick }) => {
             exit={{ opacity: 0, y: -50, transition: { duration: 0.2 } }}
             transition={{ duration: 0.4, delay: index * 0.08, ease: 'easeOut' }}
             whileHover={{
-                y: isSmallScreen ? -8 : translateY - 40,
+                y: isSmallScreen ? -15 : translateY - 50,
                 scale: 1.08,
                 zIndex: 50,
                 rotate: 0,
-                transition: { duration: 0.2 }
+                transition: { duration: 0.25 }
             }}
             onClick={onClick}
         >
-            <div
-                className="w-full h-full rounded-xl overflow-hidden"
+            <GlassSurface
+                width="100%"
+                height="100%"
+                borderRadius={16}
+                displace={20}
+                distortionScale={30}
+                opacity={0.8}
+                brightness={40}
+                className="rounded-2xl overflow-hidden border border-teal-500/20 shadow-2xl"
                 style={{
-                    backgroundImage: `url('${cardImages[globalIndex % cardImages.length]}')`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    boxShadow: '0 0 30px rgba(139, 92, 246, 0.3), 0 15px 35px rgba(0,0,0,0.5)',
-                    border: '1px solid rgba(139, 92, 246, 0.3)'
+                    background: 'linear-gradient(180deg, rgba(26, 61, 61, 0.2) 0%, rgba(19, 42, 45, 0.3) 50%, rgba(10, 28, 31, 0.4) 100%)',
                 }}
             >
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                <div className="w-full h-full relative">
+                    {/* Icon container */}
+                    <div className="flex items-center justify-center h-3/5 pt-6">
+                        <span
+                            className="text-7xl md:text-8xl transform hover:scale-110 transition-transform duration-300"
+                            style={{
+                                filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.5))'
+                            }}
+                        >
+                            {icon}
+                        </span>
+                    </div>
 
-                {/* Ethereal glow on hover */}
-                <div
-                    className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300"
-                    style={{
-                        boxShadow: 'inset 0 0 30px rgba(139, 92, 246, 0.4)'
-                    }}
-                />
-
-                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="font-bold text-xl mt-3 leading-tight" style={{ fontFamily: 'Cinzel, serif' }}>
-                        {genre}
-                    </h3>
+                    {/* Category name */}
+                    <div className="absolute bottom-0 left-0 right-0 p-5 text-center">
+                        <h3
+                            className="font-bold text-lg md:text-xl tracking-wider uppercase"
+                            style={{
+                                fontFamily: 'Cinzel, serif',
+                                color: '#7dd3fc', // Sky-300
+                                textShadow: '0 2px 10px rgba(0,0,0,0.9)'
+                            }}
+                        >
+                            {genre}
+                        </h3>
+                    </div>
                 </div>
-
-                <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-purple-500/50 backdrop-blur-sm flex items-center justify-center text-xs font-bold border border-purple-400/30">
-                    {globalIndex + 1}
-                </div>
-            </div>
+            </GlassSurface>
         </motion.div>
     );
 };
@@ -299,28 +313,45 @@ const EventsPage = () => {
 
             <div className="relative z-10 container mx-auto px-4 py-6">
                 {/* Header */}
-                <header className="text-center mb-8">
+                <header className="text-center mb-8 pt-4">
                     <motion.h1
-                        className="text-4xl md:text-6xl font-bold mb-4"
+                        className="text-5xl md:text-7xl font-bold mb-1"
                         style={{
-                            fontFamily: 'Cinzel, serif',
-                            background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #8b5cf6 100%)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            textShadow: '0 0 60px rgba(168, 85, 247, 0.5)'
+                            fontFamily: '"Cinzel Decorative", Cinzel, serif',
+                            color: '#c9e4e4',
+                            textShadow: '0 0 30px rgba(100, 180, 180, 0.4), 0 4px 20px rgba(0,0,0,0.5)'
                         }}
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                     >
-                        Event Categories
+                        SPRINGFEST
                     </motion.h1>
-                    <p className="text-purple-300 text-sm tracking-widest uppercase">
-                        {genres.length} Mystical Realms
-                    </p>
+                    <motion.p
+                        className="text-sm md:text-base tracking-[0.3em] uppercase mb-6"
+                        style={{ color: 'rgba(180, 200, 200, 0.7)' }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                    >
+                        — IIT KHARAGPUR —
+                    </motion.p>
+                    <motion.h2
+                        className="text-2xl md:text-4xl font-bold tracking-wide"
+                        style={{
+                            fontFamily: 'Cinzel, serif',
+                            color: '#e8f4f4',
+                            textShadow: '0 2px 10px rgba(0,0,0,0.3)'
+                        }}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                    >
+                        Event Categories
+                    </motion.h2>
                 </header>
 
                 {/* Tarot Card Spread */}
-                <div className="relative h-auto md:h-[450px] flex items-center justify-center" style={{ marginTop: '3rem' }}>
+                <div className="relative h-auto md:h-[450px] flex items-center justify-center" style={{ marginTop: '0rem' }}>
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={currentPage}
@@ -345,24 +376,33 @@ const EventsPage = () => {
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                    <div className="flex items-center justify-center gap-4 mt-6">
+                    <div className="flex items-center justify-center gap-5 mt-8">
                         <button
                             onClick={() => goToPage(currentPage - 1)}
                             disabled={currentPage === 0}
-                            className="p-2 rounded-full bg-purple-500/20 hover:bg-purple-500/40 disabled:opacity-30 transition-colors border border-purple-500/30"
+                            className="w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-30 transition-all duration-300 hover:scale-110"
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(100, 180, 180, 0.3) 0%, rgba(60, 140, 140, 0.4) 100%)',
+                                border: '1px solid rgba(100, 180, 180, 0.4)',
+                                boxShadow: '0 4px 15px rgba(0, 100, 100, 0.3)'
+                            }}
                         >
-                            <span className="material-icons">chevron_left</span>
+                            <span className="material-icons text-cyan-300">chevron_left</span>
                         </button>
 
-                        <div className="flex gap-2">
+                        <div className="flex gap-3 items-center">
                             {[...Array(totalPages)].map((_, i) => (
                                 <button
                                     key={i}
                                     onClick={() => goToPage(i)}
-                                    className={`w-2.5 h-2.5 rounded-full transition-all ${i === currentPage
-                                        ? 'bg-purple-400 scale-125 shadow-lg shadow-purple-500/50'
-                                        : 'bg-purple-500/30 hover:bg-purple-500/50'
-                                        }`}
+                                    className="w-3 h-3 rounded-full transition-all duration-300"
+                                    style={{
+                                        background: i === currentPage
+                                            ? 'linear-gradient(135deg, #db7093 0%, #c06080 100%)'
+                                            : 'rgba(180, 200, 200, 0.3)',
+                                        transform: i === currentPage ? 'scale(1.3)' : 'scale(1)',
+                                        boxShadow: i === currentPage ? '0 0 12px rgba(219, 112, 147, 0.6)' : 'none'
+                                    }}
                                 />
                             ))}
                         </div>
@@ -370,14 +410,22 @@ const EventsPage = () => {
                         <button
                             onClick={() => goToPage(currentPage + 1)}
                             disabled={currentPage === totalPages - 1}
-                            className="p-2 rounded-full bg-purple-500/20 hover:bg-purple-500/40 disabled:opacity-30 transition-colors border border-purple-500/30"
+                            className="w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-30 transition-all duration-300 hover:scale-110"
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(100, 180, 180, 0.3) 0%, rgba(60, 140, 140, 0.4) 100%)',
+                                border: '1px solid rgba(100, 180, 180, 0.4)',
+                                boxShadow: '0 4px 15px rgba(0, 100, 100, 0.3)'
+                            }}
                         >
-                            <span className="material-icons">chevron_right</span>
+                            <span className="material-icons text-cyan-300">chevron_right</span>
                         </button>
                     </div>
                 )}
 
-                <p className="text-center text-purple-400/60 text-xs mt-4">
+                <p
+                    className="text-center text-sm mt-4 tracking-wider"
+                    style={{ color: 'rgba(180, 200, 200, 0.6)' }}
+                >
                     {currentPage * CARDS_PER_PAGE + 1}-{Math.min((currentPage + 1) * CARDS_PER_PAGE, genres.length)} of {genres.length}
                 </p>
             </div>
