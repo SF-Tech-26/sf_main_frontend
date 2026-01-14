@@ -85,16 +85,6 @@ const EtherealBackground = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Generate random stars
-    const stars = [...Array(100)].map((_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: Math.random() * 2 + 1,
-        delay: Math.random() * 3,
-        duration: 2 + Math.random() * 2,
-    }));
-
     return (
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
             {/* Responsive background image */}
@@ -103,63 +93,6 @@ const EtherealBackground = () => {
                 style={{
                     backgroundImage: `url(${isMobile ? eventsMobileBg : eventsDesktopBg})`,
                 }}
-            />
-
-            {/* Stars */}
-            {stars.map((star) => (
-                <motion.div
-                    key={star.id}
-                    className="absolute rounded-full bg-white"
-                    style={{
-                        left: `${star.x}%`,
-                        top: `${star.y}%`,
-                        width: star.size,
-                        height: star.size,
-                    }}
-                    animate={{
-                        opacity: [0.3, 1, 0.3],
-                        scale: [1, 1.2, 1],
-                    }}
-                    transition={{
-                        duration: star.duration,
-                        delay: star.delay,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                    }}
-                />
-            ))}
-
-            {/* Floating ethereal orbs */}
-            <motion.div
-                className="absolute w-64 h-64 rounded-full"
-                style={{
-                    background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)',
-                    left: '10%',
-                    top: '20%',
-                    filter: 'blur(40px)',
-                }}
-                animate={{
-                    x: [0, 30, 0],
-                    y: [0, -20, 0],
-                    scale: [1, 1.1, 1],
-                }}
-                transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-            />
-
-            <motion.div
-                className="absolute w-80 h-80 rounded-full"
-                style={{
-                    background: 'radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%)',
-                    right: '10%',
-                    bottom: '20%',
-                    filter: 'blur(50px)',
-                }}
-                animate={{
-                    x: [0, -20, 0],
-                    y: [0, 30, 0],
-                    scale: [1, 1.15, 1],
-                }}
-                transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
             />
 
             {/* Mystical mist at bottom */}
@@ -247,7 +180,7 @@ const TarotCard = ({ genre, index, totalCards, globalIndex, onClick }) => {
                             <img
                                 src={genreImages[genre]}
                                 alt={genre}
-                                className="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-500"
+                                className="w-[90%] h-[85%] object-cover rounded-xl opacity-90 shadow-lg hover:scale-105 transition-transform duration-500"
                             />
                         ) : (
                             <div className="flex items-center justify-center h-3/5 pt-6">
@@ -298,8 +231,13 @@ const EventsPage = () => {
                 setIsLoading(true);
                 const response = await getAllEvents();
                 if (response.code === 0 && response.data) {
-                    // Extract unique genres from events
-                    const uniqueGenres = [...new Set(response.data.map(event => event.genre))];
+                    // Filter genres that have at least one active event
+                    const genresWithActiveEvents = response.data.filter(genreGroup => {
+                        const activeEvents = genreGroup.events?.filter(e => e.event_status === true) || [];
+                        return activeEvents.length > 0;
+                    });
+                    const uniqueGenres = genresWithActiveEvents.map(genreGroup => genreGroup.genre);
+                    console.log('📋 Genres with active events:', uniqueGenres);
                     setGenres(uniqueGenres);
                 }
             } catch (err) {
