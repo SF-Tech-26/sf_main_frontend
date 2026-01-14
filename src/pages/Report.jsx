@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
-// Import from Report subfolder (one level down)
+import { useNavigate } from "react-router-dom";
 import PageSelectIssue from "./Report/PageSelectIssue";
 import PageRegistered from "./Report/PageRegistered";
 import PageOthers from "./Report/PageOthers";
-// Import from api folder (one level up)
 import { fetchComplaints, cancelComplaint } from "../api/complaintApi";
-import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Report = ({ onClose }) => {
-  // TODO: Replace with actual token from context/auth
-  // const token = "eyJhbGciOiJIUzI1NiJ9.eyJzZklkIjoiU0YwMDE2NDUiLCJpZCI6MTY0NSwiZW1haWwiOiJwdXNoa2FycmF0aG9yNzdAZ21haWwuY29tIiwibW9iaWxlIjoiNzY2NzMzMDMyNyIsImNvbGxlZ2UiOiJpaXQga2dwIiwiY2l0eSI6IlBhdG5hIiwibmFtZSI6InB1c2thciAiLCJkb2IiOiIyMDA0LTA1LTA4VDE4OjMwOjAwLjAwMFoiLCJ5b3AiOjIwMjgsImFkZHIiOiJub25lIiwic3RhdGUiOiJCaWhhciIsImdlbmRlciI6Ik0iLCJpc19jYSI6MCwic3RhdHVzIjoxLCJwYXltZW50X3N0YXR1cyI6MCwiZXhwIjoxNzY3OTc1OTc2fQ.9lZVrm5s_DR8AYCxZRXt0ywJVbwHc0Bac06cIJlzrGo";
-  //  const token = userToken || localStorage.getItem("token") || "";
   const token = localStorage.getItem("token");
-
   const navigate = useNavigate();
 
   const [page, setPage] = useState("select");
@@ -23,11 +19,9 @@ const Report = ({ onClose }) => {
     setLoading(true);
     try {
       const res = await fetchComplaints(token);
-      
       console.log("Fetch Complaints Response:", res);
       
       let complaintData = [];
-      
       if (res.code === 0 && res.data) {
         complaintData = Array.isArray(res.data) ? res.data : [];
       } else if (Array.isArray(res.data?.data)) {
@@ -40,6 +34,7 @@ const Report = ({ onClose }) => {
       setComplaints(complaintData);
     } catch (error) {
       console.error("Failed to load complaints:", error);
+      toast.error("Failed to load complaints");
       setComplaints([]);
     } finally {
       setLoading(false);
@@ -55,143 +50,86 @@ const Report = ({ onClose }) => {
   }, [token]);
 
   const handleCancel = async (id) => {
-    const confirmCancel = window.confirm(
-      "Are you sure you want to cancel this complaint?"
-    );
-    
+    const confirmCancel = window.confirm("Are you sure you want to cancel this complaint?");
     if (!confirmCancel) return;
 
     try {
       console.log("Cancelling complaint with ID:", id);
       const response = await cancelComplaint(token, id);
       console.log("Cancel response:", response);
-      
-      alert("Complaint cancelled successfully");
+      toast.success("Complaint cancelled successfully");
       await loadComplaints();
     } catch (error) {
       console.error("Failed to cancel complaint:", error);
-      alert("Failed to cancel complaint: " + error.message);
+      toast.error("Failed to cancel: " + error.message);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex justify-center items-center z-50 p-4">
-      <div className="relative w-full max-w-lg">
-        {/* Cosmic Background Container with Glowing Border */}
-        <div className="relative bg-gradient-to-br from-purple-900/80 via-indigo-900/80 to-purple-800/80 rounded-3xl border-2 border-purple-400/60 shadow-[0_0_60px_rgba(168,85,247,0.4)] overflow-hidden backdrop-blur-md">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex justify-center items-center z-50 p-2 sm:p-4">
+      <ToastContainer theme="dark" position="top-center" />
+      <div className="relative w-full max-w-lg lg:max-w-xl max-h-[95vh] overflow-hidden flex flex-col">
+        {/* Cosmic Background */}
+        <div className="relative flex-1 flex flex-col bg-gradient-to-br from-[#0a0f1e] via-[#050b14] to-[#0a0f1e] rounded-[2rem] border-2 border-cyan-500/40 shadow-[0_0_60px_rgba(6,182,212,0.2)] overflow-hidden">
           
-          {/* Animated Stars Background */}
+          {/* Original Animated Background Elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {/* Large bright stars */}
-            <div className="absolute w-2 h-2 bg-white rounded-full top-[10%] left-[15%] animate-[twinkle_2s_ease-in-out_infinite] shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
-            <div className="absolute w-2 h-2 bg-white rounded-full top-[25%] left-[80%] animate-[twinkle_3s_ease-in-out_infinite] shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
-            <div className="absolute w-1.5 h-1.5 bg-white rounded-full top-[60%] left-[20%] animate-[twinkle_2.5s_ease-in-out_infinite] shadow-[0_0_6px_rgba(255,255,255,0.7)]" />
-            <div className="absolute w-2 h-2 bg-white rounded-full top-[85%] left-[70%] animate-[twinkle_2.8s_ease-in-out_infinite] shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
-            
-            {/* Medium stars */}
-            <div className="absolute w-1 h-1 bg-white/90 rounded-full top-[35%] left-[50%] animate-[twinkle_3.5s_ease-in-out_infinite]" />
-            <div className="absolute w-1 h-1 bg-white/90 rounded-full top-[50%] left-[90%] animate-[twinkle_2.3s_ease-in-out_infinite]" />
-            <div className="absolute w-1 h-1 bg-white/90 rounded-full top-[75%] left-[40%] animate-[twinkle_3.2s_ease-in-out_infinite]" />
-            
-            {/* Small distant stars */}
-            <div className="absolute w-0.5 h-0.5 bg-white/70 rounded-full top-[15%] left-[60%] animate-[twinkle_4s_ease-in-out_infinite]" />
-            <div className="absolute w-0.5 h-0.5 bg-white/70 rounded-full top-[40%] left-[30%] animate-[twinkle_3.8s_ease-in-out_infinite]" />
-            <div className="absolute w-0.5 h-0.5 bg-white/70 rounded-full top-[70%] left-[85%] animate-[twinkle_3.3s_ease-in-out_infinite]" />
-            <div className="absolute w-0.5 h-0.5 bg-white/70 rounded-full top-[90%] left-[25%] animate-[twinkle_4.2s_ease-in-out_infinite]" />
-            
-            {/* Nebula clouds - reduced opacity */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-400/5 via-transparent to-pink-400/5 animate-[nebula_10s_ease-in-out_infinite]" />
-            <div className="absolute inset-0 bg-gradient-to-tl from-transparent via-blue-400/3 to-transparent animate-[nebula_15s_ease-in-out_infinite]" style={{ animationDelay: '-5s' }} />
+            <div className="absolute w-2 h-2 bg-white rounded-full top-[10%] left-[15%] animate-[twinkle_2s_infinite] shadow-[0_0_8px_white]" />
+            <div className="absolute w-1.5 h-1.5 bg-white rounded-full top-[60%] left-[20%] animate-[twinkle_2.5s_infinite]" />
+            <div className="absolute w-1 h-1 bg-white/90 rounded-full top-[35%] left-[50%] animate-[twinkle_3.5s_infinite]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5 animate-[nebula_10s_infinite]" />
           </div>
 
           {/* Close Button */}
           <button
             onClick={() => {
-              if (page !== "select") {
-                setPage("select");
-              } else {
-                navigate("/dashboard");
-              }
+              if (page !== "select") setPage("select");
+              else navigate("/dashboard");
             }}
-            className="absolute top-4 right-4 bg-white text-purple-900 rounded-full w-9 h-9 flex items-center justify-center text-xl font-bold hover:bg-purple-100 transition z-20 shadow-lg border-2 border-purple-400"
+            className="absolute top-4 right-4 bg-white/10 text-cyan-400 rounded-full w-9 h-9 flex items-center justify-center text-xl font-bold hover:bg-white/20 transition z-50 border border-cyan-500/30"
           >
             ✕
           </button>
 
-          {/* Content Container */}
-          <div className="relative z-10 p-8">
-            
-            {/* Title */}
-            <h1 className="text-3xl font-bold text-center text-white mb-8 tracking-wide drop-shadow-[0_2px_8px_rgba(255,255,255,0.3)]">
+          {/* Content Container - Scrollable */}
+          <div className="relative z-10 p-4 sm:p-8 flex flex-col overflow-y-auto custom-scrollbar">
+            <h1 className="text-2xl sm:text-3xl font-bold text-center text-white mb-6 tracking-wide drop-shadow-[0_2px_8px_rgba(6,182,212,0.5)]">
               Report Issue
             </h1>
 
-            {/* Main Content Area */}
             {loading && page === "select" ? (
-              <div className="text-white text-center py-12">
-                <p className="text-lg">Loading complaints...</p>
+              <div className="text-cyan-400 text-center py-12 flex flex-col items-center gap-4">
+                <div className="w-8 h-8 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-lg tracking-widest animate-pulse">SYNCHRONIZING...</p>
               </div>
             ) : (
-              <>
+              <div className="flex-1">
                 {page === "select" && (
-                  <PageSelectIssue
-                    complaints={complaints}
-                    setPage={setPage}
-                    onCancel={handleCancel}
-                  />
+                  <PageSelectIssue complaints={complaints} setPage={setPage} onCancel={handleCancel} />
                 )}
-
                 {page === "registered" && (
-                  <PageRegistered
-                    token={token}
-                    goBack={() => setPage("select")}
-                    reload={loadComplaints}
-                  />
+                  <PageRegistered token={token} goBack={() => setPage("select")} reload={loadComplaints} />
                 )}
-
                 {page === "others" && (
-                  <PageOthers
-                    token={token}
-                    goBack={() => setPage("select")}
-                    reload={loadComplaints}
-                  />
+                  <PageOthers token={token} goBack={() => setPage("select")} reload={loadComplaints} />
                 )}
-              </>
+              </div>
             )}
 
-            {/* Bottom Decorative Text */}
-            <div className="mt-8 text-center">
-              <p className="text-purple-200/80 text-sm tracking-widest font-semibold">
-                Arcane Portal Accordion
+            <div className="mt-8 text-center border-t border-cyan-500/10 pt-4">
+              <p className="text-cyan-500/40 text-[10px] tracking-[0.4em] font-bold uppercase">
+                Arcane Portal Secure
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Keyframes for animations */}
       <style jsx>{`
-        @keyframes twinkle {
-          0%, 100% {
-            opacity: 0.3;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 1;
-            transform: scale(1.5);
-          }
-        }
-        
-        @keyframes nebula {
-          0%, 100% {
-            opacity: 0.2;
-            transform: translateX(0) translateY(0);
-          }
-          50% {
-            opacity: 0.4;
-            transform: translateX(20px) translateY(-20px);
-          }
-        }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.5); } }
+        @keyframes nebula { 0%, 100% { opacity: 0.2; transform: translate(0,0); } 50% { opacity: 0.4; transform: translate(20px, -20px); } }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #0891b2; border-radius: 10px; }
       `}</style>
     </div>
   );

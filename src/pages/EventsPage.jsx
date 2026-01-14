@@ -99,7 +99,7 @@ const EtherealBackground = () => {
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
             {/* Responsive background image */}
             <div
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                className="absolute inset-0  bg-cover bg-center bg-no-repeat"
                 style={{
                     backgroundImage: `url(${isMobile ? eventsMobileBg : eventsDesktopBg})`,
                 }}
@@ -252,7 +252,7 @@ const TarotCard = ({ genre, index, totalCards, globalIndex, onClick }) => {
                         ) : (
                             <div className="flex items-center justify-center h-3/5 pt-6">
                                 <span
-                                    className="text-7xl md:text-8xl transform hover:scale-110 transition-transform duration-300"
+                                    className="text-xl md:text-8xl transform hover:scale-110 transition-transform duration-300"
                                     style={{
                                         filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.5))'
                                     }}
