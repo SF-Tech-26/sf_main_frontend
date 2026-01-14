@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -8,16 +8,52 @@ export default function ForgotPassword() {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
 
   const [formData, setFormData] = useState({
     email: "",
-    security_question: "",
-    security_answer: "",
     otp: "",
     password: "",
   });
+  const [confirm, setConfirm] = useState("");
+  const handleConfirm = (e) => {
+    setConfirm(e.target.value);
+  };
+  
+  // Timer states for 5-minute cooldown
+  const [otpDisabled, setOtpDisabled] = useState(false);
+  const [remainingTime, setRemainingTime] = useState(0);
 
   const navigate = useNavigate();
+
+  // Timer effect - counts down every second
+  useEffect(() => {
+    let interval;
+    if (remainingTime > 0) {
+      interval = setInterval(() => {
+        setRemainingTime((prev) => {
+          if (prev <= 1) {
+            setOtpDisabled(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [remainingTime]);
+
+  // Format time as MM:SS
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const disableWithTimer = () => {
+    setOtpDisabled(true);
+    setRemainingTime(300); // 5 minutes = 300 seconds
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -31,16 +67,15 @@ export default function ForgotPassword() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/user/forgotPassword/requestOtp",
+        "https://masterapi.springfest.in/api/user/forgotPassword/otpRemoveQA",
         {
           email: formData.email,
-          security_question: formData.security_question,
-          security_answer: formData.security_answer,
         }
       );
 
       if (response.data.code === 0) {
         toast.success(response.data.message || "OTP Sent Successfully!");
+        disableWithTimer(); // Start 5-minute timer
         setStep(2);
       } else {
         setError(response.data.message || "Failed to send OTP");
@@ -48,10 +83,9 @@ export default function ForgotPassword() {
       }
     } catch (err) {
       console.error(err);
-      const msg = err.response?.data?.message || "Server Error";
+      const msg = err.response?.data?.message || "Failed to send OTP";
       setError(msg);
       
-      // Handle rate limiting
       if (msg.toLowerCase().includes("limit") || msg.toLowerCase().includes("hour")) {
         toast.error("Rate limit exceeded (5 requests/hour). Please try again later.");
       } else if (err.response?.status === 429) {
@@ -69,10 +103,17 @@ export default function ForgotPassword() {
     e.preventDefault();
     setError("");
     setIsLoading(true);
+    
+    // Validate password match
+    if (formData.password !== confirm) {
+      setIsLoading(false);
+      toast.error("Confirm password should match password");
+      return;
+    }
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/user/forgotPassword/verifyOtp",
+        "https://masterapi.springfest.in/api/user/forgotPassword/verifyOtp",
         {
           email: formData.email,
           otp: formData.otp,
@@ -86,11 +127,10 @@ export default function ForgotPassword() {
         // Clear form data for security
         setFormData({
           email: "",
-          security_question: "",
-          security_answer: "",
           otp: "",
           password: "",
         });
+        setConfirm("");
         navigate("/signin");
       } else {
         setError(response.data.message || "Verification Failed");
@@ -108,12 +148,51 @@ export default function ForgotPassword() {
       
       // Inform user that OTP is now invalid and they need a new one
       toast(
-        "❌ The OTP is now invalid. Please request a new OTP.",
+        "The OTP is now invalid. Please request a new OTP.",
         {
           icon: "⚠️",
           duration: 6000,
         }
       );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle Resend OTP
+  const handleResendOtp = async () => {
+    setError("");
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post(
+        "https://masterapi.springfest.in/api/user/forgotPassword/otpRemoveQA",
+        {
+          email: formData.email,
+        }
+      );
+
+      if (response.data.code === 0) {
+        toast.success(response.data.message || "OTP Resent Successfully!");
+        disableWithTimer(); // Start 5-minute timer again
+        // Clear OTP field
+        setFormData({ ...formData, otp: "" });
+      } else {
+        setError(response.data.message || "Failed to resend OTP");
+        toast.error(response.data.message || "Failed to resend OTP");
+      }
+    } catch (err) {
+      console.error(err);
+      const msg = err.response?.data?.message || "Failed to resend OTP";
+      setError(msg);
+      
+      if (msg.toLowerCase().includes("limit") || msg.toLowerCase().includes("hour")) {
+        toast.error("Rate limit exceeded (5 requests/hour). Please try again later.");
+      } else if (err.response?.status === 429) {
+        toast.error("Too many requests. Please wait before trying again.");
+      } else {
+        toast.error(msg);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -137,7 +216,7 @@ export default function ForgotPassword() {
       className="min-h-screen w-full flex items-center justify-center"
       style={{
         backgroundImage: `url(${bgImage})`,
-        backgroundAttachment:'fixed',
+        backgroundAttachment: 'fixed',
         backgroundSize: "cover",
         backgroundPosition: "center top",
         backgroundRepeat: "no-repeat",
@@ -195,33 +274,9 @@ export default function ForgotPassword() {
                     required
                   />
                 </div>
-                <div className="flex flex-col gap-[6px]">
-                  <label className="text-sm text-[#BEE9FF]">Security Question</label>
-                  <input
-                    name="security_question"
-                    type="text"
-                    placeholder="e.g. Pet's name?"
-                    value={formData.security_question}
-                    onChange={handleChange}
-                    className={inputStyle}
-                    required
-                  />
-                </div>
-                <div className="flex flex-col gap-[6px]">
-                  <label className="text-sm text-[#BEE9FF]">Security Answer</label>
-                  <input
-                    name="security_answer"
-                    type="text"
-                    placeholder="Answer"
-                    value={formData.security_answer}
-                    onChange={handleChange}
-                    className={inputStyle}
-                    required
-                  />
-                </div>
 
-                <div className="text-xs text-[#BEE9FF]/60 mt-1">
-                  ⚠️ Limited to 5 OTP requests per hour
+                <div className="text-xs text-[#BEE9FF]/60 mt-1 text-center">
+                  Limited to 5 OTP requests per hour
                 </div>
 
                 <button
@@ -264,9 +319,24 @@ export default function ForgotPassword() {
                   <input
                     name="password"
                     type="password"
-                    placeholder="New strong password"
+                    placeholder="New password"
                     value={formData.password}
                     onChange={handleChange}
+                    className={inputStyle}
+                    required
+                    pattern="^(?=.*[A-Z])(?=.*[\W_]).{8,}$"
+                    minLength={8}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-[6px]">
+                  <label className="text-sm text-[#BEE9FF]">Confirm Password</label>
+                  <input
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="Confirm password"
+                    value={confirm}
+                    onChange={handleConfirm}
                     className={inputStyle}
                     required
                     minLength={8}
@@ -288,14 +358,13 @@ export default function ForgotPassword() {
 
                 <button
                   type="button"
-                  onClick={() => {
-                    setStep(1);
-                    setError("");
-                    setFormData({ ...formData, otp: "", password: "" });
-                  }}
-                  className="text-xs text-[#5EEBFF] underline mt-2 hover:text-white transition"
+                  onClick={handleResendOtp}
+                  disabled={otpDisabled || isLoading}
+                  className="text-xs text-[#5EEBFF] underline mt-2 hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Request New OTP
+                  {otpDisabled 
+                    ? `Resend OTP in ${formatTime(remainingTime)}` 
+                    : "Resend OTP"}
                 </button>
               </form>
             )}
