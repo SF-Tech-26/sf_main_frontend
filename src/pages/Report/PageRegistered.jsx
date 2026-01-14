@@ -61,9 +61,9 @@ const PageRegistered = ({ token, goBack, reload }) => {
         ← Back
       </button>
       
-      <h2 className="text-xl font-bold text-white mb-4">Event Grievance</h2>
+      <h2 className="text-xl font-bold text-white mb-4">Registered Events</h2>
       
-      <label className="block text-xs font-bold text-cyan-300 uppercase mb-1">Select Ritual :</label>
+      <label className="block text-xs font-bold text-cyan-300 uppercase mb-1">Event Type :</label>
       <select className={inputStyles} value={selectedEvent} onChange={(e) => setSelectedEvent(e.target.value)}>
         <option value="">Select event</option>
         {events.map((ev) => (

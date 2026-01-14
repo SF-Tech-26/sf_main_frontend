@@ -1,4 +1,4 @@
-// src/pages/RegisteredEvents.jsx - Ethereal Enigma Theme
+// src/pages/RegisteredEvents.jsx - Ethereal Enigma Theme with Modal Confirmations
 
 import React, { useEffect, useState } from "react";
 import {
@@ -26,6 +26,11 @@ const RegisteredEvents = ({ onClose, userToken }) => {
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+
+  // Confirmation modal states
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmAction, setConfirmAction] = useState(null);
+  const [confirmMessage, setConfirmMessage] = useState({ title: "", description: "" });
 
   // Decode token to get user info
   useEffect(() => {
@@ -161,37 +166,63 @@ const RegisteredEvents = ({ onClose, userToken }) => {
     }
   }, [token, userInfo]);
 
-  const handleDeregisterSolo = async (eventId) => {
-    const confirm = window.confirm("Are you sure you want to deregister from this event?");
-    if (!confirm) return;
+  // Show confirmation modal
+  const showConfirmation = (title, description, action) => {
+    setConfirmMessage({ title, description });
+    setConfirmAction(() => action);
+    setShowConfirmModal(true);
+  };
 
-    try {
-      const event = soloEvents.find((e) => e.eventId === eventId);
-      if (!event || !event.members[0]) {
-        toast.error("Unable to deregister: Event information not found");
-        return;
-      }
-
-      const member = event.members[0];
-      if (!member.sfId || !member.email) {
-        toast.error("Unable to deregister: Missing member information");
-        return;
-      }
-
-      const response = await deregisterMember(token, eventId, [{
-        email: member.email,
-        sfId: member.sfId
-      }]);
-
-      if (response?.code === 0) {
-        toast.success("Successfully deregistered from the event!");
-        fetchEvents();
-      } else {
-        toast.error(response?.message || "Failed to deregister");
-      }
-    } catch (error) {
-      toast.error("Failed to deregister: " + (error.response?.data?.message || error.message));
+  // Handle confirmation
+  const handleConfirm = async () => {
+    setShowConfirmModal(false);
+    if (confirmAction) {
+      await confirmAction();
     }
+    setConfirmAction(null);
+  };
+
+  // Handle cancel
+  const handleCancelConfirm = () => {
+    setShowConfirmModal(false);
+    setConfirmAction(null);
+  };
+
+  const handleDeregisterSolo = async (eventId) => {
+    const event = soloEvents.find((e) => e.eventId === eventId);
+    if (!event || !event.members[0]) {
+      toast.error("Unable to deregister: Event information not found");
+      return;
+    }
+
+    const member = event.members[0];
+
+    showConfirmation(
+      "Deregister from Event?",
+      "Are you sure you want to deregister from this event? This action cannot be undone.",
+      async () => {
+        try {
+          if (!member.sfId || !member.email) {
+            toast.error("Unable to deregister: Missing member information");
+            return;
+          }
+
+          const response = await deregisterMember(token, eventId, [{
+            email: member.email,
+            sfId: member.sfId
+          }]);
+
+          if (response?.code === 0) {
+            toast.success("Successfully deregistered from the event!");
+            fetchEvents();
+          } else {
+            toast.error(response?.message || "Failed to deregister");
+          }
+        } catch (error) {
+          toast.error("Failed to deregister: " + (error.response?.data?.message || error.message));
+        }
+      }
+    );
   };
 
   const handleDeregisterTeam = async (eventId) => {
@@ -206,21 +237,24 @@ const RegisteredEvents = ({ onClose, userToken }) => {
       return;
     }
 
-    const confirm = window.confirm(`Are you sure you want to deregister the entire team from "${event.name}"?\n\nThis will remove all ${event.members.length} member(s) and cannot be undone.`);
-    if (!confirm) return;
+    showConfirmation(
+      "Deregister Entire Team?",
+      `This will remove all ${event.members.length} member(s) from "${event.name}" and cannot be undone.`,
+      async () => {
+        try {
+          const response = await deregisterTeam(token, eventId);
 
-    try {
-      const response = await deregisterTeam(token, eventId);
-
-      if (response?.code === 0) {
-        toast.success("Team deregistered successfully!");
-        fetchEvents();
-      } else {
-        toast.error(response?.message || "Failed to deregister team");
+          if (response?.code === 0) {
+            toast.success("Team deregistered successfully!");
+            fetchEvents();
+          } else {
+            toast.error(response?.message || "Failed to deregister team");
+          }
+        } catch (error) {
+          toast.error("Failed to deregister team: " + (error.response?.data?.message || error.message));
+        }
       }
-    } catch (error) {
-      toast.error("Failed to deregister team: " + (error.response?.data?.message || error.message));
-    }
+    );
   };
 
   const handleDeregisterMember = async (eventId, memberSfId) => {
@@ -257,22 +291,29 @@ const RegisteredEvents = ({ onClose, userToken }) => {
         return;
       }
 
-      const confirm = window.confirm(`Remove ${memberToRemove.name} (${memberToRemove.sfId}) from the team?`);
-      if (!confirm) return;
+      showConfirmation(
+        "Remove Team Member?",
+        `Remove ${memberToRemove.name} (${memberToRemove.sfId}) from the team?`,
+        async () => {
+          try {
+            const response = await deregisterMember(token, eventId, [{
+              email: memberToRemove.email,
+              sfId: memberToRemove.sfId
+            }]);
 
-      const response = await deregisterMember(token, eventId, [{
-        email: memberToRemove.email,
-        sfId: memberToRemove.sfId
-      }]);
-
-      if (response?.code === 0) {
-        toast.success("Member removed successfully!");
-        fetchEvents();
-      } else {
-        toast.error(response?.message || "Failed to remove member");
-      }
+            if (response?.code === 0) {
+              toast.success("Member removed successfully!");
+              fetchEvents();
+            } else {
+              toast.error(response?.message || "Failed to remove member");
+            }
+          } catch (error) {
+            toast.error("Failed to remove member: " + (error.response?.data?.message || error.message));
+          }
+        }
+      );
     } catch (error) {
-      toast.error("Failed to remove member: " + (error.response?.data?.message || error.message));
+      toast.error("Failed to process request: " + error.message);
     }
   };
 
@@ -335,8 +376,9 @@ const RegisteredEvents = ({ onClose, userToken }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50 p-2 sm:p-4 overflow-hidden">
+    <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50 p-2 sm:p-4 overflow-hidden pt-20">
       <ToastContainer theme="dark" position="top-center" autoClose={3000} />
+      
       {/* Floating particles animation */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="particle particle-1"></div>
@@ -346,23 +388,23 @@ const RegisteredEvents = ({ onClose, userToken }) => {
         <div className="particle particle-5"></div>
       </div>
 
-      <div className="relative w-full max-w-6xl h-[95vh] flex flex-col animate-fadeIn">
-        {/* Close Button */}
-        <button
-          onClick={() => {
-            if (showAddMemberModal) {
-              setShowAddMemberModal(false);
-            } else {
-              navigate("/dashboard");
-            }
-          }}
-          className="absolute -top-2 -right-2 sm:-top-4 sm:-right-4 bg-gradient-to-br from-blue-600/80 to-cyan-600/80 text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center text-2xl sm:text-3xl hover:from-blue-700/90 hover:to-cyan-700/90 transition z-20 shadow-2xl shadow-blue-500/50 font-bold border-2 border-blue-400/30 hover:scale-110 hover:rotate-90 duration-300"
-        >
-          ✕
-        </button>
-
+      <div className="relative w-full max-w-6xl h-[85vh] flex flex-col animate-fadeIn">
         {/* Header - Fixed */}
-        <div className="bg-gradient-to-r from-blue-900/50 via-cyan-900/50 to-blue-900/50 backdrop-blur-xl text-white py-4 sm:py-6 px-4 sm:px-8 rounded-t-3xl text-center border-2 border-blue-500/20 shadow-2xl shadow-blue-900/50 animate-glow">
+        <div className="bg-gradient-to-r from-blue-900/50 via-cyan-900/50 to-blue-900/50 backdrop-blur-xl text-white py-4 sm:py-6 px-4 sm:px-8 rounded-t-3xl text-center border-2 border-blue-500/20 shadow-2xl shadow-blue-900/50 animate-glow relative">
+          {/* Close Button - Inside Header */}
+          <button
+            onClick={() => {
+              if (showAddMemberModal) {
+                setShowAddMemberModal(false);
+              } else {
+                navigate("/dashboard");
+              }
+            }}
+            className="absolute top-4 right-4 bg-gradient-to-br from-blue-600/80 to-cyan-600/80 text-white rounded-full w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center text-xl sm:text-2xl hover:from-blue-700/90 hover:to-cyan-700/90 transition shadow-2xl shadow-blue-500/50 font-bold border-2 border-blue-400/30 hover:scale-110 hover:rotate-90 duration-300"
+          >
+            ✕
+          </button>
+          
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-300 via-cyan-300 to-blue-300 bg-clip-text text-transparent animate-pulse">
             Registered Events
           </h1>
@@ -426,6 +468,61 @@ const RegisteredEvents = ({ onClose, userToken }) => {
         )}
       </div>
 
+      {/* Confirmation Modal Popup */}
+      {showConfirmModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4">
+          <div className="bg-gradient-to-br from-blue-900/90 via-blue-950/90 to-blue-900/90 rounded-2xl border-2 border-blue-500/40 shadow-[0_0_60px_rgba(59,130,246,0.3)] p-6 sm:p-8 max-w-md w-full animate-[scaleIn_0.2s_ease-out] relative">
+            {/* Close Button - Inside Confirmation Modal */}
+            <button
+              onClick={handleCancelConfirm}
+              className="absolute top-4 right-4 bg-gradient-to-br from-gray-700/80 to-gray-800/80 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg hover:from-gray-600/90 hover:to-gray-700/90 transition shadow-lg font-bold border-2 border-gray-500/30 hover:scale-110 hover:rotate-90 duration-300"
+            >
+              ✕
+            </button>
+
+            {/* Animated Background */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-2xl">
+              <div className="absolute w-2 h-2 bg-white rounded-full top-[20%] left-[25%] animate-[twinkle_2s_infinite]" />
+              <div className="absolute w-1.5 h-1.5 bg-white rounded-full top-[70%] left-[75%] animate-[twinkle_2.5s_infinite]" />
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-cyan-500/5" />
+            </div>
+
+            <div className="relative">
+              {/* Icon */}
+              <div className="flex justify-center mb-4">
+                <div className="w-16 h-16 rounded-full bg-red-500/20 border-2 border-red-500/40 flex items-center justify-center">
+                  <span className="text-3xl">⚠️</span>
+                </div>
+              </div>
+
+              {/* Message */}
+              <h2 className="text-xl sm:text-2xl font-bold text-white text-center mb-3 drop-shadow-[0_2px_8px_rgba(59,130,246,0.5)]">
+                {confirmMessage.title}
+              </h2>
+              <p className="text-blue-200/80 text-center mb-6 text-sm sm:text-base">
+                {confirmMessage.description}
+              </p>
+
+              {/* Buttons */}
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={handleConfirm}
+                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 border border-red-500/30 shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)]"
+                >
+                  Yes, Confirm
+                </button>
+                <button
+                  onClick={handleCancelConfirm}
+                  className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 border border-gray-600/30"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <style jsx>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: scale(0.95); }
@@ -442,9 +539,14 @@ const RegisteredEvents = ({ onClose, userToken }) => {
           50% { transform: translateY(-20px) translateX(10px); }
         }
         
-        @keyframes pulse-slow {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.6; }
+        @keyframes twinkle { 
+          0%, 100% { opacity: 0.3; transform: scale(1); } 
+          50% { opacity: 1; transform: scale(1.5); } 
+        }
+        
+        @keyframes scaleIn { 
+          from { opacity: 0; transform: scale(0.9); } 
+          to { opacity: 1; transform: scale(1); } 
         }
         
         .animate-fadeIn {
