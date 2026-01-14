@@ -1,5 +1,5 @@
 import StaggeredMenu from './StaggeredMenu';
-import VerticalPillNav from './VerticalPillNav';
+import VerticalPillNav from './verticalPillNav';
 import { useLocation } from 'react-router-dom';
 
 export default function Navbar() {
