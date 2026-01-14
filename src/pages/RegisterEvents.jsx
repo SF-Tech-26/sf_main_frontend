@@ -1,4 +1,4 @@
-// src/pages/RegisteredEvents.jsx - FINAL WORKING VERSION
+// src/pages/RegisteredEvents.jsx - Ethereal Enigma Theme
 
 import React, { useEffect, useState } from "react";
 import {
@@ -13,6 +13,8 @@ import GroupEventsList from "./RegisteredEvents/GroupEventsList";
 import AddMemberModal from "./RegisteredEvents/AddMemberModal";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const RegisteredEvents = ({ onClose, userToken }) => {
   const token = userToken || localStorage.getItem("token") || "";
@@ -36,7 +38,6 @@ const RegisteredEvents = ({ onClose, userToken }) => {
           name: decoded.name,
           id: decoded.id
         });
-        console.log("✅ Decoded user info:", decoded);
       } catch (error) {
         console.error("❌ Failed to decode token:", error);
       }
@@ -49,41 +50,31 @@ const RegisteredEvents = ({ onClose, userToken }) => {
 
     setLoading(true);
     try {
-      console.log("📡 Fetching registered events...");
       const response = await getRegisteredEvents(token);
-      console.log("📥 Full API Response:", response);
 
       if (response && response.code === 0) {
-        // ========== MAP SOLO EVENTS ==========
-        const solo = (response.soloEventData || []).map(item => {
-          console.log("👤 Solo event raw:", item);
-          return {
-            eventId: item.event?.id,
-            name: item.event?.name,
-            genre: item.event?.genre?.genre || item.event?.genre,
-            eventCity: item.event_city,
-            members: [{
-              sfId: userInfo.sfId,
-              email: userInfo.email,
-              name: userInfo.name,
-              isAdmin: true
-            }]
-          };
-        });
+        // Map solo events
+        const solo = (response.soloEventData || []).map(item => ({
+          eventId: item.event?.id,
+          name: item.event?.name,
+          genre: item.event?.genre?.genre || item.event?.genre,
+          eventCity: item.event_city,
+          members: [{
+            sfId: userInfo.sfId,
+            email: userInfo.email,
+            name: userInfo.name,
+            isAdmin: true
+          }]
+        }));
 
-        // ========== MAP GROUP EVENTS ==========
+        // Map group events
         const groupPromises = (response.groupEventData || []).map(async (item) => {
-          console.log("👥 Group event raw:", item);
-
-          // Extract members from GroupMembers array (NEW STRUCTURE!)
           let detailedMembers = [];
 
           if (item.GroupMembers && item.GroupMembers.length > 0) {
-            console.log("✅ Found GroupMembers in response:", item.GroupMembers);
             detailedMembers = item.GroupMembers.map(gm => {
               const user = gm.user || gm;
               const isLeader = user.id === item.leader_id;
-              console.log("🔍 Processing GroupMember:", user, "Is Leader:", isLeader);
 
               return {
                 sfId: user.sfId || user.sf_id || user.SF_ID,
@@ -94,15 +85,11 @@ const RegisteredEvents = ({ onClose, userToken }) => {
               };
             });
           } else {
-            // Fallback: Try to fetch using getMembers API
             try {
-              console.log(`🔍 No GroupMembers, fetching via API for event ${item.event?.id}...`);
               const membersResponse = await getMembers(token, item.event?.id);
-              console.log("📥 getMembers API response:", membersResponse);
 
               if (membersResponse?.code === 0 && membersResponse?.data) {
                 const membersData = membersResponse.data;
-                console.log("✅ Members from API:", membersData);
 
                 detailedMembers = membersData.map(m => {
                   const user = m.user || m;
@@ -122,9 +109,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
             }
           }
 
-          // If still no members, create default entry
           if (detailedMembers.length === 0) {
-            console.log("⚠️ No members found, creating default entry");
             detailedMembers = [{
               sfId: userInfo.sfId,
               email: userInfo.email,
@@ -134,12 +119,8 @@ const RegisteredEvents = ({ onClose, userToken }) => {
             }];
           }
 
-          // Check if current user is admin
           const currentUserIsAdmin = userInfo.id === item.leader_id ||
             detailedMembers.some(m => m.userId === userInfo.id && m.isAdmin);
-
-          console.log("✅ Final processed members:", detailedMembers);
-          console.log("🔑 Current user is admin:", currentUserIsAdmin);
 
           return {
             eventId: item.event?.id,
@@ -157,18 +138,13 @@ const RegisteredEvents = ({ onClose, userToken }) => {
 
         const group = await Promise.all(groupPromises);
 
-        console.log("✅ Final Mapped Solo Events:", solo);
-        console.log("✅ Final Mapped Group Events:", group);
-
         setSoloEvents(solo);
         setGroupEvents(group);
       } else {
-        console.error("❌ API returned error:", response?.message);
-        alert(response?.message || "Failed to fetch events");
+        toast.error(response?.message || "Failed to fetch events");
       }
     } catch (error) {
-      console.error("❌ Failed to fetch events:", error);
-      alert("Failed to fetch events: " + error.message);
+      toast.error("Failed to fetch events: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -176,7 +152,7 @@ const RegisteredEvents = ({ onClose, userToken }) => {
 
   useEffect(() => {
     if (!token) {
-      alert("No authentication token found. Please login.");
+      toast.warn("No authentication token found. Please login.");
       setLoading(false);
       return;
     }
@@ -185,64 +161,48 @@ const RegisteredEvents = ({ onClose, userToken }) => {
     }
   }, [token, userInfo]);
 
-  // ========== DEREGISTER SOLO EVENT ==========
   const handleDeregisterSolo = async (eventId) => {
     const confirm = window.confirm("Are you sure you want to deregister from this event?");
     if (!confirm) return;
 
     try {
       const event = soloEvents.find((e) => e.eventId === eventId);
-
       if (!event || !event.members[0]) {
-        alert("Unable to deregister: Event information not found");
+        toast.error("Unable to deregister: Event information not found");
         return;
       }
 
       const member = event.members[0];
-
       if (!member.sfId || !member.email) {
-        alert("Unable to deregister: Missing member information");
+        toast.error("Unable to deregister: Missing member information");
         return;
       }
-
-      console.log("🗑️ Deregistering solo event:", {
-        eventId,
-        memberToDeregister: [{
-          email: member.email,
-          sfId: member.sfId
-        }]
-      });
 
       const response = await deregisterMember(token, eventId, [{
         email: member.email,
         sfId: member.sfId
       }]);
 
-      console.log("✅ Deregister response:", response);
-
       if (response?.code === 0) {
-        alert("Successfully deregistered from the event!");
+        toast.success("Successfully deregistered from the event!");
         fetchEvents();
       } else {
-        alert(response?.message || "Failed to deregister");
+        toast.error(response?.message || "Failed to deregister");
       }
     } catch (error) {
-      console.error("❌ Failed to deregister:", error);
-      alert("Failed to deregister: " + (error.response?.data?.message || error.message));
+      toast.error("Failed to deregister: " + (error.response?.data?.message || error.message));
     }
   };
 
-  // ========== DEREGISTER ENTIRE TEAM ==========
   const handleDeregisterTeam = async (eventId) => {
     const event = groupEvents.find(e => e.eventId === eventId);
-
     if (!event) {
-      alert("Event not found");
+      toast.error("Event not found");
       return;
     }
 
     if (!event.isAdmin) {
-      alert("Only the team leader can deregister the entire team");
+      toast.warn("Only the team leader can deregister the entire team");
       return;
     }
 
@@ -250,108 +210,86 @@ const RegisteredEvents = ({ onClose, userToken }) => {
     if (!confirm) return;
 
     try {
-      console.log("🗑️ Deregistering entire team for event:", eventId);
-
       const response = await deregisterTeam(token, eventId);
-      console.log("✅ Deregister team response:", response);
 
       if (response?.code === 0) {
-        alert("Team deregistered successfully!");
+        toast.success("Team deregistered successfully!");
         fetchEvents();
       } else {
-        alert(response?.message || "Failed to deregister team");
+        toast.error(response?.message || "Failed to deregister team");
       }
     } catch (error) {
-      console.error("❌ Failed to deregister team:", error);
-      alert("Failed to deregister team: " + (error.response?.data?.message || error.message));
+      toast.error("Failed to deregister team: " + (error.response?.data?.message || error.message));
     }
   };
 
-  // ========== DEREGISTER SINGLE MEMBER ==========
   const handleDeregisterMember = async (eventId, memberSfId) => {
     try {
       const event = groupEvents.find(e => e.eventId === eventId);
-
       if (!event) {
-        alert("Event not found");
+        toast.error("Event not found");
         return;
       }
 
       if (!event.isAdmin) {
-        alert("Only the team leader can remove members");
+        toast.warn("Only the team leader can remove members");
         return;
       }
 
-      // Check minimum member requirement
       if (event.members.length <= event.minMembers) {
-        alert(`Cannot remove member.\n\nTeam must have at least ${event.minMembers} member(s).\nCurrent members: ${event.members.length}\n\nTo remove this member, use "Deregister Team" to remove the entire team.`);
+        toast.error(`Cannot remove member. Team must have at least ${event.minMembers} members.`);
         return;
       }
 
       const memberToRemove = event.members.find(m => m.sfId === memberSfId);
-
       if (!memberToRemove) {
-        alert("Member not found in team");
+        toast.error("Member not found in team");
         return;
       }
 
-      // Prevent removing leader
       if (memberToRemove.isAdmin) {
-        alert("Cannot remove the team leader.\n\nUse 'Deregister Team' to remove the entire team instead.");
+        toast.warn("Cannot remove the team leader.");
         return;
       }
 
       if (!memberToRemove.email) {
-        alert("Cannot remove member: Email information missing");
+        toast.error("Cannot remove member: Email information missing");
         return;
       }
 
       const confirm = window.confirm(`Remove ${memberToRemove.name} (${memberToRemove.sfId}) from the team?`);
       if (!confirm) return;
 
-      console.log("🗑️ Removing member:", {
-        eventId,
-        memberToDeregister: [{
-          email: memberToRemove.email,
-          sfId: memberToRemove.sfId
-        }]
-      });
-
       const response = await deregisterMember(token, eventId, [{
         email: memberToRemove.email,
         sfId: memberToRemove.sfId
       }]);
 
-      console.log("✅ Remove member response:", response);
-
       if (response?.code === 0) {
-        alert("Member removed successfully!");
+        toast.success("Member removed successfully!");
         fetchEvents();
       } else {
-        alert(response?.message || "Failed to remove member");
+        toast.error(response?.message || "Failed to remove member");
       }
     } catch (error) {
-      console.error("❌ Failed to remove member:", error);
-      alert("Failed to remove member: " + (error.response?.data?.message || error.message));
+      toast.error("Failed to remove member: " + (error.response?.data?.message || error.message));
     }
   };
 
-  // ========== OPEN ADD MEMBER MODAL ==========
   const handleOpenAddMember = (eventId) => {
     const event = groupEvents.find(e => e.eventId === eventId);
-
     if (!event) {
-      alert("Event not found");
+      toast.error("Event not found");
       return;
     }
 
     if (!event.isAdmin) {
-      alert("Only the team leader can add members");
+      toast.warn("Only the team leader can add members");
       return;
     }
 
     if (event.members.length >= event.maxMembers) {
-      alert(`Team is full.\n\nMaximum members: ${event.maxMembers}\nCurrent members: ${event.members.length}`);
+      toast.warn(`Team is full. Max members: ${event.maxMembers}`);
       return;
     }
 
@@ -359,61 +297,56 @@ const RegisteredEvents = ({ onClose, userToken }) => {
     setShowAddMemberModal(true);
   };
 
-  // ========== ADD MEMBER ==========
   const handleAddMember = async (memberData) => {
     try {
       const event = groupEvents.find(e => e.eventId === selectedEventId);
-
       if (!event) {
-        alert("Event not found");
+        toast.error("Event not found");
         return;
       }
 
       if (!event.isAdmin) {
-        alert("Only the team leader can add members");
+        toast.warn("Only the team leader can add members");
         return;
       }
 
-      if (event.members.length >= event.maxMembers) {
-        alert(`Team is full. Maximum members: ${event.maxMembers}`);
-        return;
-      }
-
-      // Check if member already exists
       const memberExists = event.members.some(m =>
         m.sfId.toUpperCase() === memberData.sfId.toUpperCase() ||
         m.email.toLowerCase() === memberData.email.toLowerCase()
       );
 
       if (memberExists) {
-        alert("This member is already in the team");
+        toast.warn("This member is already in the team");
         return;
       }
 
-      console.log("➕ Adding member:", {
-        eventId: selectedEventId,
-        teamMembers: [memberData]
-      });
-
       const response = await addMember(token, selectedEventId, [memberData]);
-      console.log("✅ Add member response:", response);
 
       if (response?.code === 0) {
-        alert("Member added successfully!");
+        toast.success("Member added successfully!");
         setShowAddMemberModal(false);
         fetchEvents();
       } else {
-        alert(response?.message || "Failed to add member");
+        toast.error(response?.message || "Failed to add member");
       }
     } catch (error) {
-      console.error("❌ Failed to add member:", error);
-      alert("Failed to add member: " + (error.response?.data?.message || error.message));
+      toast.error("Failed to add member: " + (error.response?.data?.message || error.message));
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="relative w-full max-w-4xl my-8">
+    <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50 p-2 sm:p-4 overflow-hidden">
+      <ToastContainer theme="dark" position="top-center" autoClose={3000} />
+      {/* Floating particles animation */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="particle particle-1"></div>
+        <div className="particle particle-2"></div>
+        <div className="particle particle-3"></div>
+        <div className="particle particle-4"></div>
+        <div className="particle particle-5"></div>
+      </div>
+
+      <div className="relative w-full max-w-6xl h-[95vh] flex flex-col animate-fadeIn">
         {/* Close Button */}
         <button
           onClick={() => {
@@ -423,51 +356,66 @@ const RegisteredEvents = ({ onClose, userToken }) => {
               navigate("/dashboard");
             }
           }}
-          className="absolute -top-4 -right-4 bg-white text-black rounded-full w-12 h-12 flex items-center justify-center text-3xl hover:bg-gray-200 transition z-10 shadow-lg font-bold"
+          className="absolute -top-2 -right-2 sm:-top-4 sm:-right-4 bg-gradient-to-br from-blue-600/80 to-cyan-600/80 text-white rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center text-2xl sm:text-3xl hover:from-blue-700/90 hover:to-cyan-700/90 transition z-20 shadow-2xl shadow-blue-500/50 font-bold border-2 border-blue-400/30 hover:scale-110 hover:rotate-90 duration-300"
         >
           ✕
         </button>
 
-        {/* Header */}
-        <div className="bg-gradient-to-r from-purple-900 via-blue-900 to-pink-900 text-white py-6 px-8 rounded-t-3xl text-center border-2 border-white/30 border-b-0 mb-6">
-          <h1 className="text-4xl font-bold">Registered Events</h1>
+        {/* Header - Fixed */}
+        <div className="bg-gradient-to-r from-blue-900/50 via-cyan-900/50 to-blue-900/50 backdrop-blur-xl text-white py-4 sm:py-6 px-4 sm:px-8 rounded-t-3xl text-center border-2 border-blue-500/20 shadow-2xl shadow-blue-900/50 animate-glow">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-300 via-cyan-300 to-blue-300 bg-clip-text text-transparent animate-pulse">
+            Registered Events
+          </h1>
           {userInfo && (
-            <p className="text-sm text-gray-300 mt-2">
+            <p className="text-xs sm:text-sm text-cyan-200/80 mt-2 animate-fadeIn">
               Welcome, {userInfo.name} ({userInfo.sfId})
             </p>
           )}
         </div>
 
-        {loading ? (
-          <div className="bg-gradient-to-br from-purple-900/90 via-blue-900/90 to-pink-900/90 backdrop-blur-sm rounded-3xl border-2 border-white/30 p-12">
-            <div className="text-white text-center text-xl">Loading events...</div>
-          </div>
-        ) : !token ? (
-          <div className="bg-gradient-to-br from-purple-900/90 via-blue-900/90 to-pink-900/90 backdrop-blur-sm rounded-3xl border-2 border-white/30 p-12">
-            <div className="text-white text-center text-xl">Please login to view registered events</div>
-          </div>
-        ) : (soloEvents.length === 0 && groupEvents.length === 0) ? (
-          <div className="bg-gradient-to-br from-purple-900/90 via-blue-900/90 to-pink-900/90 backdrop-blur-sm rounded-3xl border-2 border-white/30 p-12">
-            <div className="text-white text-center text-xl">You haven't registered for any events yet</div>
-          </div>
-        ) : (
-          <>
-            {/* Solo Events */}
-            {soloEvents.length > 0 && (
-              <SoloEventsList events={soloEvents} onDeregister={handleDeregisterSolo} />
-            )}
+        {/* Content Area - Scrollable */}
+        <div className="flex-1 bg-gradient-to-br from-blue-950/30 via-black/40 to-blue-950/30 backdrop-blur-xl rounded-b-3xl border-2 border-t-0 border-blue-500/20 overflow-hidden shadow-2xl shadow-blue-900/30">
+          {loading ? (
+            <div className="h-full flex items-center justify-center">
+              <div className="text-white text-center">
+                <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-white mx-auto mb-4"></div>
+                <p className="text-lg sm:text-xl">Loading events...</p>
+              </div>
+            </div>
+          ) : !token ? (
+            <div className="h-full flex items-center justify-center p-4">
+              <div className="text-white text-center text-lg sm:text-xl">
+                Please login to view registered events
+              </div>
+            </div>
+          ) : (soloEvents.length === 0 && groupEvents.length === 0) ? (
+            <div className="h-full flex items-center justify-center p-4">
+              <div className="text-center">
+                <div className="text-6xl sm:text-8xl mb-4">🎭</div>
+                <div className="text-white text-lg sm:text-xl">
+                  You haven't registered for any events yet
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="h-full overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6 custom-scrollbar">
+              {/* Solo Events */}
+              {soloEvents.length > 0 && (
+                <SoloEventsList events={soloEvents} onDeregister={handleDeregisterSolo} />
+              )}
 
-            {/* Group Events */}
-            {groupEvents.length > 0 && (
-              <GroupEventsList
-                events={groupEvents}
-                onDeregisterTeam={handleDeregisterTeam}
-                onDeregisterMember={handleDeregisterMember}
-                onAddMember={handleOpenAddMember}
-              />
-            )}
-          </>
-        )}
+              {/* Group Events */}
+              {groupEvents.length > 0 && (
+                <GroupEventsList
+                  events={groupEvents}
+                  onDeregisterTeam={handleDeregisterTeam}
+                  onDeregisterMember={handleDeregisterMember}
+                  onAddMember={handleOpenAddMember}
+                />
+              )}
+            </div>
+          )}
+        </div>
 
         {/* Add Member Modal */}
         {showAddMemberModal && (
@@ -477,6 +425,60 @@ const RegisteredEvents = ({ onClose, userToken }) => {
           />
         )}
       </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+          50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+        }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) translateX(0px); }
+          50% { transform: translateY(-20px) translateX(10px); }
+        }
+        
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.6; }
+        }
+        
+        .animate-fadeIn {
+          animation: fadeIn 0.5s ease-out;
+        }
+        
+        .animate-glow {
+          animation: glow 3s ease-in-out infinite;
+        }
+        
+        .particle {
+          position: absolute;
+          background: radial-gradient(circle, rgba(59, 130, 246, 0.8), transparent);
+          border-radius: 50%;
+          pointer-events: none;
+          animation: float 8s ease-in-out infinite;
+        }
+        
+        .particle-1 { width: 4px; height: 4px; top: 10%; left: 10%; animation-delay: 0s; animation-duration: 10s; }
+        .particle-2 { width: 6px; height: 6px; top: 50%; right: 20%; animation-delay: 2s; animation-duration: 12s; }
+        .particle-3 { width: 3px; height: 3px; bottom: 20%; left: 30%; animation-delay: 4s; animation-duration: 9s; }
+        .particle-4 { width: 5px; height: 5px; top: 70%; right: 40%; animation-delay: 1s; animation-duration: 11s; }
+        .particle-5 { width: 4px; height: 4px; bottom: 40%; left: 60%; animation-delay: 3s; animation-duration: 13s; }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.5); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #3b82f6, #06b6d4);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(180deg, #2563eb, #0891b2);
+        }
+      `}</style>
     </div>
   );
 };
