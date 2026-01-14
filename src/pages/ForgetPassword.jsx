@@ -137,6 +137,7 @@ export default function ForgotPassword() {
       className="min-h-screen w-full flex items-center justify-center"
       style={{
         backgroundImage: `url(${bgImage})`,
+        backgroundAttachment:'fixed',
         backgroundSize: "cover",
         backgroundPosition: "center top",
         backgroundRepeat: "no-repeat",
