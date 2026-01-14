@@ -108,51 +108,56 @@ const EtherealBackground = () => {
 
 
 
-const TarotCard = ({ genre, index, totalCards, globalIndex, onClick }) => {
-    const [isSmallScreen, setIsSmallScreen] = useState(false);
+const TarotCard = ({ genre, index, totalCards, globalIndex, onClick, isMobileView }) => {
+    // If isMobileView is passed, use it. Otherwise default to internal check (or false)
+    // We kept the internal check in the original code, but now we can rely on the parent's state if we want consistent grid behavior.
 
-    useEffect(() => {
-        const mediaQuery = window.matchMedia('(max-width: 767px)');
-        setIsSmallScreen(mediaQuery.matches);
-
-        const handleChange = (e) => setIsSmallScreen(e.matches);
-        mediaQuery.addEventListener('change', handleChange);
-
-        return () => mediaQuery.removeEventListener('change', handleChange);
-    }, []);
-
+    // Calculate position for Desktop Tarot stack
     const centerIndex = (totalCards - 1) / 2;
     const rotation = (index - centerIndex) * 10;
-    const translateX = (index - centerIndex) * 200; // Increased spacing for wider cards
+    const translateX = (index - centerIndex) * 200;
     const translateY = Math.abs(index - centerIndex) * 25;
 
     const icon = genreIcons[genre] || '✨';
 
+    // Desktop Styles
+    const desktopStyle = {
+        width: '260px',
+        height: '390px',
+        left: '50%',
+        marginLeft: '-130px',
+        transformOrigin: 'bottom center',
+    };
+
+    // Mobile Grid Styles (Simple fluid width)
+    const mobileStyle = {
+        width: '100%',
+        height: '240px', // Slightly shorter for grid
+        position: 'relative'
+    };
+
     return (
         <motion.div
-            className={isSmallScreen ? 'relative cursor-pointer' : 'absolute cursor-pointer'}
-            style={isSmallScreen ? {
-                width: window.innerWidth < 480 ? '200px' : '220px',
-                height: window.innerWidth < 480 ? '300px' : '330px',
-            } : {
-                width: '260px',
-                height: '390px',
-                left: '50%',
-                marginLeft: '-130px', // Half of width
-                transformOrigin: 'bottom center',
-            }}
-            initial={{ opacity: 0, y: 80, rotate: isSmallScreen ? 0 : rotation, x: isSmallScreen ? 0 : translateX }}
-            animate={{
+            className={isMobileView ? 'cursor-pointer w-full' : 'absolute cursor-pointer'}
+            style={isMobileView ? mobileStyle : desktopStyle}
+            initial={isMobileView ? { opacity: 0, y: 20 } : { opacity: 0, y: 80, rotate: rotation, x: translateX }}
+            animate={isMobileView ? {
                 opacity: 1,
-                y: isSmallScreen ? 0 : translateY,
-                rotate: isSmallScreen ? 0 : rotation,
-                x: isSmallScreen ? 0 : translateX,
-                zIndex: isSmallScreen ? 10 + index : 10 + index
+                y: 0,
+                rotate: 0,
+                x: 0,
+                zIndex: 1
+            } : {
+                opacity: 1,
+                y: translateY,
+                rotate: rotation,
+                x: translateX,
+                zIndex: 10 + index
             }}
             exit={{ opacity: 0, y: -50, transition: { duration: 0.2 } }}
-            transition={{ duration: 0.4, delay: index * 0.08, ease: 'easeOut' }}
-            whileHover={{
-                y: isSmallScreen ? -15 : translateY - 50,
+            transition={{ duration: 0.4, delay: index * 0.05, ease: 'easeOut' }}
+            whileHover={isMobileView ? { scale: 1.05 } : {
+                y: translateY - 50,
                 scale: 1.08,
                 zIndex: 50,
                 rotate: 0,
@@ -180,12 +185,12 @@ const TarotCard = ({ genre, index, totalCards, globalIndex, onClick }) => {
                             <img
                                 src={genreImages[genre]}
                                 alt={genre}
-                                className="w-[90%] h-[85%] object-cover rounded-xl opacity-90 shadow-lg hover:scale-105 transition-transform duration-500"
+                                className="w-[90%] h-[85%] object-cover rounded-xl opacity-90 shadow-lg"
                             />
                         ) : (
                             <div className="flex items-center justify-center h-3/5 pt-6">
                                 <span
-                                    className="text-xl md:text-8xl transform hover:scale-110 transition-transform duration-300"
+                                    className="text-xl md:text-8xl"
                                     style={{
                                         filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.5))'
                                     }}
@@ -197,12 +202,12 @@ const TarotCard = ({ genre, index, totalCards, globalIndex, onClick }) => {
                     </div>
 
                     {/* Category name */}
-                    <div className="absolute bottom-0 left-0 right-0 p-5 text-center">
+                    <div className="absolute bottom-0 left-0 right-0 p-3 md:p-5 text-center bg-black/30 backdrop-blur-sm">
                         <h3
-                            className="font-bold text-lg md:text-xl tracking-wider uppercase"
+                            className="font-bold text-sm md:text-xl tracking-wider uppercase"
                             style={{
                                 fontFamily: 'Cinzel, serif',
-                                color: '#7dd3fc', // Sky-300
+                                color: '#7dd3fc',
                                 textShadow: '0 2px 10px rgba(0,0,0,0.9)'
                             }}
                         >
@@ -221,9 +226,17 @@ const EventsPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const totalPages = Math.ceil(genres.length / CARDS_PER_PAGE);
-    const currentGenres = genres.slice(currentPage * CARDS_PER_PAGE, (currentPage + 1) * CARDS_PER_PAGE);
+    // On mobile, show ALL genres. On desktop, simplify to current page slice.
+    const currentGenres = isMobile ? genres : genres.slice(currentPage * CARDS_PER_PAGE, (currentPage + 1) * CARDS_PER_PAGE);
 
     useEffect(() => {
         const fetchGenres = async () => {
@@ -231,13 +244,11 @@ const EventsPage = () => {
                 setIsLoading(true);
                 const response = await getAllEvents();
                 if (response.code === 0 && response.data) {
-                    // Filter genres that have at least one active event
                     const genresWithActiveEvents = response.data.filter(genreGroup => {
                         const activeEvents = genreGroup.events?.filter(e => e.event_status === true) || [];
                         return activeEvents.length > 0;
                     });
                     const uniqueGenres = genresWithActiveEvents.map(genreGroup => genreGroup.genre);
-                    console.log('📋 Genres with active events:', uniqueGenres);
                     setGenres(uniqueGenres);
                 }
             } catch (err) {
@@ -278,16 +289,16 @@ const EventsPage = () => {
     }
 
     return (
-        <div className="min-h-screen text-white overflow-hidden relative">
+        <div className="min-h-screen text-white overflow-x-hidden relative">
             <EtherealBackground />
 
-            <div className="relative z-10 container mx-auto px-4 py-6">
+            <div className="relative z-10 container mx-auto px-4 py-6 pb-20">
                 {/* Header */}
                 <header className="text-center mb-8 pt-4">
                     <motion.h1
                         className="text-5xl md:text-7xl font-bold mb-4"
                         style={{
-                            fontFamily: '"Cinzel Decorative", serif', // Changed font as requested
+                            fontFamily: '"Cinzel Decorative", serif',
                             color: '#c9e4e4',
                             textShadow: '0 0 30px rgba(100, 180, 180, 0.4), 0 4px 20px rgba(0,0,0,0.5)'
                         }}
@@ -296,7 +307,6 @@ const EventsPage = () => {
                     >
                         SPRINGFEST
                     </motion.h1>
-                    {/* Description removed as requested */}
                     <motion.h2
                         className="text-2xl md:text-4xl font-bold tracking-wide"
                         style={{
@@ -312,32 +322,56 @@ const EventsPage = () => {
                     </motion.h2>
                 </header>
 
-                {/* Tarot Card Spread */}
-                <div className="relative h-auto md:h-[450px] flex items-center justify-center" style={{ marginTop: '0rem' }}>
+                {/* Cards Container */}
+                <div
+                    className={isMobile
+                        ? "grid grid-cols-2 gap-4 place-items-center w-full max-w-lg mx-auto"
+                        : "relative h-auto md:h-[450px] flex items-center justify-center mt-0"
+                    }
+                >
                     <AnimatePresence mode="wait">
-                        <motion.div
-                            key={currentPage}
-                            className="relative w-full max-w-2xl h-full flex flex-wrap justify-center items-center gap-4 px-4"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                        >
-                            {currentGenres.map((genre, index) => (
-                                <TarotCard
-                                    key={genre}
-                                    genre={genre}
-                                    index={index}
-                                    totalCards={currentGenres.length}
-                                    globalIndex={currentPage * CARDS_PER_PAGE + index}
-                                    onClick={() => handleGenreClick(genre)}
-                                />
-                            ))}
-                        </motion.div>
+                        {isMobile ? (
+                            // Render ALL items in Grid for Mobile
+                            <>
+                                {currentGenres.map((genre, index) => (
+                                    <TarotCard
+                                        key={genre}
+                                        genre={genre}
+                                        index={index}
+                                        totalCards={currentGenres.length}
+                                        globalIndex={index}
+                                        onClick={() => handleGenreClick(genre)}
+                                        isMobileView={true}
+                                    />
+                                ))}
+                            </>
+                        ) : (
+                            // Use Wrapper for Paginated Tarot Stack on Desktop
+                            <motion.div
+                                key={currentPage}
+                                className="relative w-full max-w-2xl h-full flex flex-wrap justify-center items-center gap-4 px-4"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                            >
+                                {currentGenres.map((genre, index) => (
+                                    <TarotCard
+                                        key={genre}
+                                        genre={genre}
+                                        index={index}
+                                        totalCards={currentGenres.length}
+                                        globalIndex={currentPage * CARDS_PER_PAGE + index}
+                                        onClick={() => handleGenreClick(genre)}
+                                        isMobileView={false}
+                                    />
+                                ))}
+                            </motion.div>
+                        )}
                     </AnimatePresence>
                 </div>
 
-                {/* Pagination */}
-                {totalPages > 1 && (
+                {/* Pagination (Hide on Mobile) */}
+                {!isMobile && totalPages > 1 && (
                     <div className="flex items-center justify-center gap-5 mt-8">
                         <button
                             onClick={() => goToPage(currentPage - 1)}
@@ -384,12 +418,14 @@ const EventsPage = () => {
                     </div>
                 )}
 
-                <p
-                    className="text-center text-sm mt-4 tracking-wider"
-                    style={{ color: 'rgba(180, 200, 200, 0.6)' }}
-                >
-                    {currentPage * CARDS_PER_PAGE + 1}-{Math.min((currentPage + 1) * CARDS_PER_PAGE, genres.length)} of {genres.length}
-                </p>
+                {!isMobile && (
+                    <p
+                        className="text-center text-sm mt-4 tracking-wider"
+                        style={{ color: 'rgba(180, 200, 200, 0.6)' }}
+                    >
+                        {currentPage * CARDS_PER_PAGE + 1}-{Math.min((currentPage + 1) * CARDS_PER_PAGE, genres.length)} of {genres.length}
+                    </p>
+                )}
             </div>
         </div>
     );
