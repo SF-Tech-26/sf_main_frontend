@@ -22,6 +22,7 @@ import AftermoviePage from './pages/AftermoviePage';
 import Gallery from './pages/Gallery';
 import Merch from './pages/Merch';
 import Navbar from './components/Navbar';
+import ForgotPassword from './pages/ForgetPassword.jsx';
 // import Profile from './pages/Profile';
 
 
@@ -43,6 +44,7 @@ function App() {
           <Route path="/register" element={<RegisterEvent />} />
           <Route path="/report" element={<Report />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
           {/* Accommodation Routes */}
           <Route path="/accommodation" element={<Accommodation />} />
