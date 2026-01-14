@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 
-// Background
-import bg from "../assets/merchbg.jpeg";
+// Backgrounds
+import bgDesktop from "../assets/merchbg.jpeg";
+import bgMobile from "../assets/merchPHONE.jpeg";
 
 // Hoodie Images
 import Yellowhoodie from "../assets/Yellowhoodie.png";
@@ -36,9 +37,25 @@ const PRODUCTS = [
 const SIZES = ["XS", "S", "M", "L", "XL"];
 
 export default function Merch() {
+    const [bg, setBg] = useState(bgDesktop);
     const [page, setPage] = useState("merch");
     const [cart, setCart] = useState({});
     const [toast, setToast] = useState(null);
+
+    // Dynamic Background Switcher
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 768) {
+                setBg(bgMobile);
+            } else {
+                setBg(bgDesktop);
+            }
+        };
+
+        handleResize(); // Initial check
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     const cartCount = Object.values(cart).reduce(
         (sum, i) => sum + i.qty,
@@ -127,9 +144,9 @@ export default function Merch() {
             {toast && (
                 <div className="fixed top-5 left-1/2 -translate-x-1/2
                                 px-6 py-3 rounded-xl text-sm font-semibold
-                                bg-gradient-to-r from-purple-500 to-fuchsia-500
+                                bg-gradient-to-r from-orange-500 to-amber-500
                                 text-white
-                                shadow-[0_0_30px_rgba(168,85,247,0.9)]
+                                shadow-[0_0_30px_rgba(249,115,22,0.6)]
                                 z-[9999]"
                     style={{ fontFamily: '"Space Grotesk", sans-serif' }}>
                     {toast.message}
@@ -179,14 +196,14 @@ function MerchPage({ onViewCart, onAdd, onToast, cartCount }) {
             {/* Title */}
             <div className="text-center mt-4">
                 <h1 className="text-3xl md:text-5xl font-bold animate-text-shimmer whitespace-nowrap">SPRING FEST</h1>
-                <h2 className="mt-4 text-xl md:text-3xl text-orange-300 whitespace-nowrap">
+                <h2 className="mt-4 text-xl md:text-3xl text-cyan-300 md:text-orange-300 whitespace-nowrap">
                     OFFICIAL MERCH
                 </h2>
             </div>
 
             {/* Products */}
-            <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
-                            gap-8 justify-items-center">
+            <div className="mt-8 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 
+                            gap-6 md:gap-8 justify-items-center w-full max-w-7xl mx-auto">
                 {PRODUCTS.map((p) => (
                     <ProductCard key={p.id} product={p} onAdd={onAdd} onToast={onToast} />
                 ))}
@@ -210,20 +227,23 @@ function ProductCard({ product, onAdd, onToast }) {
 
     return (
         <div
-            className="group w-full max-w-[280px] p-6 pb-10 flex flex-col
+            className="group w-full max-w-[320px] sm:max-w-[280px] p-5 md:p-6 pb-8 md:pb-10 flex flex-col
                        rounded-2xl text-center
-                       bg-gradient-to-b from-purple-900/45 to-purple-950/55
-                       border-2 border-orange-400/55
+                       bg-gradient-to-b from-blue-900/45 to-blue-950/55
+                       md:from-purple-900/45 md:to-purple-950/55
+                       border-2 border-cyan-400/55
+                       md:border-orange-400/55
                        animate-card-float
-                       hover:shadow-[0_0_30px_rgba(251,146,60,0.6)]
-                       transition-shadow duration-300"
+                       hover:shadow-[0_0_30px_rgba(34,211,238,0.6)]
+                       md:hover:shadow-[0_0_30px_rgba(251,146,60,0.6)]
+                       transition-shadow duration-300 relative z-10"
         >
             <div className="flex items-center justify-center mb-6 overflow-hidden h-[220px]">
                 <img
                     src={product.image}
                     alt={product.name}
                     className="w-auto h-full max-h-[220px] max-w-none
-                               scale-[1.8] translate-x-[-87px] translate-y-4
+                               scale-[1.8] translate-x-[-92px] translate-y-4
                                object-contain
                                brightness-110 contrast-130
                                transition-transform duration-500"
@@ -234,7 +254,7 @@ function ProductCard({ product, onAdd, onToast }) {
                 {product.name}
                 <span className="md:hidden"> ({product.shortName})</span>
             </div>
-            <div className="text-2xl text-orange-300 font-bold mb-4">₹ {product.price}</div>
+            <div className="text-2xl text-cyan-300 md:text-orange-300 font-bold mb-4">₹ {product.price}</div>
 
             {/* Size Selector */}
             <div className="flex justify-center gap-2 mb-6">
@@ -251,8 +271,10 @@ function ProductCard({ product, onAdd, onToast }) {
 
             <button
                 className="w-full py-2.5 rounded-lg text-black
-                           bg-gradient-to-r from-orange-400 to-orange-300
-                           hover:shadow-[0_0_22px_rgba(255,160,0,0.9)]
+                           bg-gradient-to-r from-cyan-400 to-blue-400
+                           md:from-orange-400 md:to-orange-300
+                           hover:shadow-[0_0_22px_rgba(34,211,238,0.9)]
+                           md:hover:shadow-[0_0_22px_rgba(255,160,0,0.9)]
                            font-bold tracking-wide"
                 onClick={handleAdd}
             >
@@ -300,37 +322,45 @@ function CartPage({ cart, onBack, onQtyChange }) {
                             className="grid grid-cols-4 md:grid-cols-5
                                items-center text-xs md:text-sm
                                px-1 py-4 md:px-3 md:py-3 mb-3
-                               bg-gradient-to-r from-purple-900/70 to-purple-950/80
+                               bg-blue-900/40 backdrop-blur-md
+                               md:bg-purple-900/70 md:backdrop-blur-none
+                               border border-cyan-500/30
+                               md:border-orange-400/20
+                               text-[#f5e9dc]
+                               shadow-[0_4px_20px_rgba(0,0,0,0.3)]
+                               md:shadow-none
                                rounded-xl"
                         >
-                            <span className="truncate pr-1 md:hidden">{liveProduct.shortName}</span>
-                            <span className="truncate pr-1 hidden md:block md:text-center">{liveProduct.name}</span>
+                            <div className="text-center truncate">
+                                <span className="text-sm md:hidden">{liveProduct.shortName}</span>
+                                <span className="text-base hidden md:block">{liveProduct.name}</span>
+                            </div>
 
-                            <span className="text-center text-orange-300/80 font-bold">
+                            <span className="text-center text-cyan-300 md:text-orange-300 font-bold">
                                 {size}
                             </span>
 
-                            <span className="text-center hidden md:block text-base font-semibold text-orange-200">
+                            <span className="text-center hidden md:block text-base font-bold text-blue-200">
                                 ₹ {liveProduct.price}
                             </span>
 
                             <div className="flex justify-center items-center gap-1 md:gap-2">
                                 <button
                                     onClick={() => onQtyChange(key, -1)}
-                                    className="w-5 h-5 md:w-7 md:h-7 flex items-center justify-center rounded-md border border-orange-400/40"
+                                    className="w-5 h-5 md:w-7 md:h-7 flex items-center justify-center rounded-md border border-cyan-400/50 md:border-orange-400/40"
                                 >
                                     −
                                 </button>
                                 <span className="w-6 text-center">{qty}</span>
                                 <button
                                     onClick={() => onQtyChange(key, +1)}
-                                    className="w-5 h-5 md:w-7 md:h-7 flex items-center justify-center rounded-md border border-orange-400/40"
+                                    className="w-5 h-5 md:w-7 md:h-7 flex items-center justify-center rounded-md border border-cyan-400/50 md:border-orange-400/40"
                                 >
                                     +
                                 </button>
                             </div>
 
-                            <span className="text-right pr-4 md:text-center md:pr-0 font-bold text-orange-300">
+                            <span className="text-right pr-4 md:text-center md:pr-0 font-extrabold text-cyan-400 md:text-orange-300">
                                 ₹ {liveProduct.price * qty}
                             </span>
                         </div>
@@ -348,7 +378,8 @@ function CartPage({ cart, onBack, onQtyChange }) {
             {items.length > 0 && (
                 <div className="mt-8 flex flex-col items-center gap-4 md:flex-row md:justify-between md:gap-2">
                     <div className="px-3 py-2 md:px-6 md:py-3 rounded-xl
-                                    bg-gradient-to-r from-emerald-500 to-teal-400
+                                    bg-gradient-to-r from-lime-400 to-emerald-500
+                                    md:from-emerald-500 md:to-teal-400
                                     text-emerald-950 font-semibold text-xs md:text-base whitespace-nowrap">
                         Subtotal ₹ {subtotal}
                     </div>
@@ -357,7 +388,8 @@ function CartPage({ cart, onBack, onQtyChange }) {
                         <button
                             onClick={onBack}
                             className="w-full md:w-auto px-3 py-2 md:px-6 md:py-3 rounded-lg text-black
-                                       bg-gradient-to-r from-orange-400 to-orange-300
+                                       bg-gradient-to-r from-cyan-400 to-blue-400
+                                       md:from-orange-400 md:to-orange-300
                                        text-xs md:text-base font-bold whitespace-nowrap"
                         >
                             CONTINUE SHOPPING
@@ -365,7 +397,8 @@ function CartPage({ cart, onBack, onQtyChange }) {
 
                         <button
                             className="w-full md:w-auto px-3 py-2 md:px-6 md:py-3 rounded-lg text-black
-                                       bg-gradient-to-r from-orange-400 to-orange-300
+                                       bg-gradient-to-r from-cyan-400 to-blue-400
+                                       md:from-orange-400 md:to-orange-300
                                        text-xs md:text-base font-bold"
                         >
                             CHECKOUT
@@ -376,7 +409,7 @@ function CartPage({ cart, onBack, onQtyChange }) {
             {items.length === 0 && (
                 <button
                     onClick={onBack}
-                    className="mt-4 px-6 py-2 rounded-lg border border-orange-400 text-orange-300 mx-auto block"
+                    className="mt-4 px-6 py-2 rounded-lg border border-cyan-400 md:border-orange-400 text-cyan-300 md:text-orange-300 mx-auto block"
                 >
                     Go Back
                 </button>

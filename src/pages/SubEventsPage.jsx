@@ -11,6 +11,41 @@ import GlassSurface from '../components/GlassSurface';
 import PillNav from '../components/PillNav';
 import logo from '../assets/logo.png';
 
+// Import individual event images from eventImages folder
+import nrityakalaImg from '../assets/eventImages/Nrityakala.png';
+import sfmImg from '../assets/eventImages/SFm.png';
+import pictureTaleImg from '../assets/eventImages/a picture tale.png';
+import banterBoutImg from '../assets/eventImages/banter bout.png';
+import brainDImg from '../assets/eventImages/brain d.png';
+import canYouDuetImg from '../assets/eventImages/can you duet.png';
+import centrifugeImg from '../assets/eventImages/centifuge.png';
+import dumbCImg from '../assets/eventImages/dumb c.png';
+import dumbstuckImg from '../assets/eventImages/dumbstuck.png';
+import faceCanvasImg from '../assets/eventImages/face canvas.png';
+import frenzyFabricImg from '../assets/eventImages/frenzy fabric.png';
+import hilarityEnsuesImg from '../assets/eventImages/hilarity esues.png';
+import iMeMyselfImg from '../assets/eventImages/i me myself.png';
+import lakesideDreamsImg from '../assets/eventImages/lakeside dreams.png';
+import lightsCameraImg from '../assets/eventImages/lights camera sf.png';
+import motionTalesImg from '../assets/eventImages/motion tales.png';
+import nationalDebateImg from '../assets/eventImages/national level debate.png';
+import paintItImg from '../assets/eventImages/paint it.png';
+import poetrySlamImg from '../assets/eventImages/poetry slam.png';
+import quizEventImg from '../assets/eventImages/quiz.png';
+import rampmaniaImg from '../assets/eventImages/rampmania.png';
+import rangmanchImg from '../assets/eventImages/rangmanch.png';
+import rangoliImg from '../assets/eventImages/rangoli.png';
+import retrowaveImg from '../assets/eventImages/retrowave.png';
+import sfIdolImg from '../assets/eventImages/sf idol.png';
+import shakeALegImg from '../assets/eventImages/shake a leg.png';
+import shopaholicImg from '../assets/eventImages/shopaholic.png';
+import sketchItImg from '../assets/eventImages/sketch it.png';
+import spentImg from '../assets/eventImages/spent.png';
+import shuffleSoloImg from '../assets/eventImages/suffle solo.png?url';
+import shuffleTeamImg from '../assets/eventImages/suffle team.png?url';
+import twoForTangoImg from '../assets/eventImages/two for tango.png';
+import wildfireImg from '../assets/eventImages/wildfire.png';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEvents } from '../context/eventContext';
 
@@ -29,75 +64,90 @@ const slugToGenre = {
 };
 
 // Event data mapping for grimoire display
+// Event data mapping - removed image references, only metadata
 const eventData = {
     'dance': {
         icon: 'auto_awesome_motion',
         title: 'Rhythmic Rituals',
         name: 'Rhythmic',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDoYy96XvNIVLBFneD6WH3R-0YkiKxwC-MpSZ53xwxw4f9VE8LNOTpONjE_dHBZtaqbjLnToF4SsX9KSRbAHiSvxuHFDxtXZ8U79K6MA-5iJhFAjlJilyZcA7OcHC_7rz-LDkursluhx2zw-yCX4taUJrRXWahNsjotbZ-SFA05-aH5cyssVxlJIMiT6pGy-3ODJt83T73mbLXH0uDW-jSDUG0-KNWvngQNjj2B5iwrx0CcAjMrdsvktqLdKdg43eljGYGuWMwPq82h',
         description: 'Witness ancient movements and modern interpretations that transcend the ordinary.'
     },
     'music': {
         icon: 'music_note',
         title: 'Sonic Incantations',
         name: 'Sonic',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCWQTL2c7jLbEnnmnA8G7NTbTelv8Px_HKQ8r5isKs-3UqhDtitZLIWPW7KsIqIDecoDT_cCpvlkciyIo_oXlS4pmw1qgURXzLB0hGJkOJO9gLny0tu8mCnj1uQfoSDa19XcANAFq0AFERGpXJVGQwwrQV6phlnv783sUlePfxv60ULSDdKiVPHmBZpD-Sm7V_vucC62LVkbLPgDocPRGceL-mPfG9DLdD52Z72KdKzRSJFJNF7If0LXtOAc8XcB9nA6pwL_wWjHflb',
         description: 'Experience a symphony of sounds that range from ethereal whispers to thunderous crescendos.'
     },
     'dramatics': {
         icon: 'theater_comedy',
         title: 'Theatrical Visions',
         name: 'Drama',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA-CYQdN1tA2fb7ZIxV7PIx1czA-xIb3C3gR94IolZZkhT3HDCZmYyY46h2iraHXEvpdbXiCNEU6Ovrzar9HJEk33Bhj4L6_Q_SHMmo9-JHrzY6ufsL6mYc0n4afuTz_HLT_qwACKUiMG7n6XPUmjDcmDwMoYdwtrE6khzQuf5vjzxzeGj-lzOSR8-MSm35uEhhZ-7D-Jt5VmopgkEqk2jpYTdECsyjx--AwxrBI_lyPzbzIBHW6D2H0JoW4YezsGy2GJxmeTplIsW5',
         description: 'Step into realms of imagination where tales of old and new are brought to life.'
     },
     'literary': {
         icon: 'history_edu',
         title: 'Ancient Lore',
         name: 'Scrolls',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC8s-EY72H4mEJge9q44uRHumLxJYV180RP97CDWFzZkhSHzUyBdHT6rh8WQJZ2tH8_7l_5jLbLyhhCinpZkC1RSJk7B0q11BCchcsvbknv5x6cGghtW1Jybwe6Apd4uscurZjZapTapxMVE8feywijzp0eJtN7EMxfOLFZDNeI9zaQHI9f49-owcK21d6ewhkgdjPSrkl35MLYGfqbUbuJ8-qdKHGfucCa2Ifwi3N5Q-wp1rubCyq3uKZlVZX2GYoxMiWdWWR6b63z',
         description: 'Delve into the sacred texts and forgotten verses where words hold power.'
     },
-    'film': {
+    'filmfest': {
         icon: 'movie_filter',
         title: 'Cinematic Spells',
         name: 'Glyphs',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCTke3DWjuUVNcEqCQ8oPwdgoZav3grPFVMD6TaNIa7FbfvTEIBqwnsHl_yfXR-YC8GEqZi0uXEM3b8Ln_caZOmIq-dyQ2o0iI3ttP9iLrniChVaoueKXutLay1rlM1C1nj97VSt5iisYPOz_Ef1KuBnRtAWwBj-dwgJGGdmSx9FWtjvWgaMiZeGm92ZPcvc_vYl_mE9mDCgsFmDjF1vk43v2k354dYJ1LJnMbWlfN5jmmYV9iFiQn9YDFarEJlIAXaBSGlA4NOIGzB',
+        description: 'Gaze upon moving images that transport you to distant lands and fantastical futures.'
+    },
+    'film-fest': {
+        icon: 'movie_filter',
+        title: 'Cinematic Spells',
+        name: 'Glyphs',
         description: 'Gaze upon moving images that transport you to distant lands and fantastical futures.'
     },
     'quiz': {
         icon: 'science',
         title: 'Riddles of Knowledge',
         name: 'Potions',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAyFE_2VnOQlpayZyIvAXKQHuiYNQd9DHI9a2rh5eA2eaExkOZ14rJlrt25eGslfZtXddi0CDj4nBZDJhY9oW0u-gR3m4OGFmPm8KmiBEJFx-Yj-jrKiVYEDRzK-K02HkTBoxg0KwfqOUslkfA2Ef3tBge8t58xiWopoxIxIGZtPPbfbKPaIZIHAmq07u6JqFhQVkQAFMQ6hwEhXAkt52siW3bYiPH8a3MTJv-9GBD2IPVK5Gaj8IYzU2Te85tkfFEgUiWqKQEgEZ0g',
         description: 'Test your intellect and unravel the mysteries posed by our master riddlers.'
     },
     'finearts': {
         icon: 'brush',
         title: 'Alchemy of Art',
         name: 'Alchemy',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAnI1a9AyQ8Vu9fThXMsBmNGYkMRMbrL6cT7C9Pp2vAqqbBxAkx4cCmFbOhZdVwS7d8YrFgIWcHiLOq_Tgz9BGVpKvTYlJT1tDe37pptwV-PXITlvxTlO4avrEtdSz0DVlSnFrKXkaYv-qw2WSsZ5TGq31YwYCGQHy4qyO6m68LrwM1RXJGH1hG5SnsgZ44UnJ8agE3U1PDm95WfSpTn_bauOLqylATAvqysxHq-INhEeyDVsOVnAyOYGpmociYpYdRcXSL6ew2LN4C',
+        description: 'Behold creations that transmute the ordinary into the extraordinary.'
+    },
+    'fine-arts': {
+        icon: 'brush',
+        title: 'Alchemy of Art',
+        name: 'Alchemy',
         description: 'Behold creations that transmute the ordinary into the extraordinary.'
     },
     'humour': {
         icon: 'mood',
         title: 'Festive Revelry',
         name: 'Humour Fest',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCv2kBADXOYKsX0s_BXOL_3bhX5x9DKxxXKLdVr4jViD9xbpD4mvEe9sdQhf8nLbZiQ9fKGcabCnYlRyMDKh0XRrQrrHZRBq1iU3KhEUaHWQfI0HZrldga5q_55wl-H8VrNa9Gn2NUQ-D-A8j3eWlCRb5m3D3oqQeYdl24DTP6UvQVFpMoLlkM6ZJULinbN3YBaH_-m_TI__RyI4UoD4tREUAHp6THPLuJJo9KSWJslxkNNIs3aMg2lAbuasJAqTPDDBnXvvqeGArbX',
+        description: 'Embrace the lighter side of existence with performances that ignite joyful spirits.'
+    },
+    'humor-fest': {
+        icon: 'mood',
+        title: 'Festive Revelry',
+        name: 'Humour Fest',
+        description: 'Embrace the lighter side of existence with performances that ignite joyful spirits.'
+    },
+    'humorfest': {
+        icon: 'mood',
+        title: 'Festive Revelry',
+        name: 'Humour Fest',
         description: 'Embrace the lighter side of existence with performances that ignite joyful spirits.'
     },
     'fashion': {
         icon: 'checkroom',
         title: 'Runway Elegance',
         name: 'Fashion',
-        image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800',
         description: 'Style the runway and showcase creativity through fashion and design.'
     },
     'culinaryarts': {
         icon: 'restaurant',
         title: 'Culinary Mastery',
         name: 'Culinary Arts',
-        image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800',
         description: 'Master the kitchen and compete in cooking and food presentation.'
     }
 };
@@ -211,14 +261,122 @@ const SubEventsPage = () => {
         });
     };
 
+    // Event name to image mapping with variations
+    const eventImageMap = {
+        // Dance events
+        'nrityakala': nrityakalaImg,
+        'shake a leg': shakeALegImg,
+        'shake-a-leg': shakeALegImg,
+        'two for tango': twoForTangoImg,
+        'two-for-tango': twoForTangoImg,
+
+        // Music events
+        'sfm': sfmImg,
+        'sf idol': sfIdolImg,
+        'sf-idol': sfIdolImg,
+        'can you duet': canYouDuetImg,
+        'can-you-duet': canYouDuetImg,
+        'retrowave': retrowaveImg,
+
+        // Dramatics events
+        'rangmanch': rangmanchImg,
+        'i me myself': iMeMyselfImg,
+        'i-me-myself': iMeMyselfImg,
+
+        // Literary events
+        'banter bout': banterBoutImg,
+        'banter-bout': banterBoutImg,
+        'poetry slam': poetrySlamImg,
+        'poetry-slam': poetrySlamImg,
+        'national level debate': nationalDebateImg,
+        'national-level-debate': nationalDebateImg,
+        'spent': spentImg,
+
+        // Film Fest events
+        'a picture tale': pictureTaleImg,
+        'a-picture-tale': pictureTaleImg,
+        'lights camera sf': lightsCameraImg,
+        'lights-camera-sf': lightsCameraImg,
+        'motion tales': motionTalesImg,
+        'motion-tales': motionTalesImg,
+
+        // Quiz events
+        'brain drain': brainDImg,
+        'brain-drain': brainDImg,
+        'quiz': quizEventImg,
+        'centrifuge': centrifugeImg,
+
+        // Fine Arts events
+        'face canvas': faceCanvasImg,
+        'face-canvas': faceCanvasImg,
+        'paint it': paintItImg,
+        'paint-it': paintItImg,
+        'sketch it': sketchItImg,
+        'sketch-it': sketchItImg,
+        'rangoli': rangoliImg,
+
+        // Humor Fest events
+        'dumb charades': dumbCImg,
+        'dumb-charades': dumbCImg,
+        'dumbstruck': dumbstuckImg,
+        'hilarity ensues': hilarityEnsuesImg,
+        'hilarity-ensues': hilarityEnsuesImg,
+
+        // Fashion events
+        'rampmania': rampmaniaImg,
+        'frenzy fabric': frenzyFabricImg,
+        'frenzy-fabric': frenzyFabricImg,
+        'shopaholic': shopaholicImg,
+
+        // Game Fest / Other events - handle both shuffle and suffle spelling
+        'shuffle solo': shuffleSoloImg,
+        'shuffle-solo': shuffleSoloImg,
+        'shufflesolo': shuffleSoloImg,
+        'suffle solo': shuffleSoloImg,
+        'suffle-solo': shuffleSoloImg,
+        'sufflesolo': shuffleSoloImg,
+        'shuffle team': shuffleTeamImg,
+        'shuffle-team': shuffleTeamImg,
+        'shuffleteam': shuffleTeamImg,
+        'suffle team': shuffleTeamImg,
+        'suffle-team': shuffleTeamImg,
+        'suffleteam': shuffleTeamImg,
+
+        // Other events
+        'lakeside dreams': lakesideDreamsImg,
+        'lakeside-dreams': lakesideDreamsImg,
+        'wildfire': wildfireImg
+    };
+
+    // Fallback images - only from eventImages folder
+    const fallbackImages = [
+        nrityakalaImg, sfmImg, rangmanchImg, shakeALegImg,
+        retrowaveImg, lakesideDreamsImg, paintItImg, rangoliImg
+    ];
+
     const getEventDisplayData = (event) => {
         const genreKey = event.genre.toLowerCase().replace(/\s+/g, '');
         const genreInfo = eventData[genreKey] || {};
 
+        // Get event-specific image from eventImageMap
+        const eventKey = event.name.toLowerCase();
+        const eventSpecificImage = eventImageMap[eventKey];
+
+        // Use fallback from eventImages if no specific match
+        let finalImage = eventSpecificImage;
+        if (!finalImage && event.poster) {
+            finalImage = event.poster;
+        }
+        if (!finalImage) {
+            // Use hash to consistently pick a fallback from eventImages
+            const hash = event.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            finalImage = fallbackImages[hash % fallbackImages.length];
+        }
+
         return {
             name: event.name || event.genre,
             title: genreInfo.title || event.name || event.genre,
-            image: genreInfo.image || event.image || event.poster || 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800',
+            image: finalImage,
             description: event.writeup || genreInfo.description || event.description || `Join us for ${event.name || event.genre}!`,
             icon: genreInfo.icon || 'category',
             genre: event.genre,
@@ -264,6 +422,19 @@ const SubEventsPage = () => {
     return (
         <div className="font-body bg-background-dark text-slate-200 min-h-screen lg:h-screen relative overflow-y-auto lg:overflow-hidden selection:bg-deep-amber selection:text-white transition-colors duration-300 dark:bg-background-dark dark:text-slate-200">
             <EtherealBackground />
+
+            {/* Back Button */}
+            <motion.button
+                onClick={() => navigate('/events')}
+                className="fixed top-6 left-6 z-50 p-3 rounded-full bg-black/40 border border-white/10 text-white hover:bg-purple-500/80 hover:border-purple-500 transition-all duration-300 backdrop-blur-md"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3 }}
+            >
+                <span className="material-icons text-2xl">arrow_back</span>
+            </motion.button>
 
             {/* Main Content */}
             <main className="relative z-10 pt-8 pb-8 container mx-auto px-4 min-h-full lg:h-full flex flex-col items-center lg:justify-center">
@@ -323,20 +494,20 @@ const SubEventsPage = () => {
                                 <div className="flex flex-col lg:flex-row">
 
                                     {/* Left Section - Image */}
-                                    <div className="flex flex-row lg:flex-row">
-
+                                    <div className="w-full lg:w-auto lg:flex-shrink-0">
                                         {/* Image with Shiny Border */}
                                         <div
-                                            className="relative overflow-hidden flex-shrink-0 event-image-container"
+                                            className="relative overflow-hidden event-image-container"
                                             style={{
                                                 background: 'linear-gradient(135deg, rgba(180, 200, 220, 0.5) 0%, rgba(120, 150, 180, 0.3) 50%, rgba(180, 200, 220, 0.4) 100%)',
-                                                boxShadow: '0 0 20px rgba(150, 180, 210, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.1)'
+                                                boxShadow: '0 0 20px rgba(150, 180, 210, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.1)',
+                                                padding: '4px'
                                             }}
                                         >
                                             <img
                                                 alt={currentEvent.name}
-                                                src={isCentrifuge ? centrifugeBg : getEventDisplayData(currentEvent).image}
-                                                className="w-full h-full object-cover"
+                                                src={isCentrifuge ? centrifugeImg : getEventDisplayData(currentEvent).image}
+                                                className="w-full h-full object-cover rounded-lg"
                                             />
                                         </div>
                                     </div>
@@ -349,7 +520,7 @@ const SubEventsPage = () => {
                                         }}
                                     >
                                         {/* Header with Title and Mobile Register Button */}
-                                        <div className="flex flex-col lg:flex-row lg:justify-between items-start gap-4 mb-4">
+                                        <div className="flex flex-col items-start gap-4 mb-4">
                                             <div>
                                                 <h2
                                                     className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 leading-tight"
@@ -372,34 +543,16 @@ const SubEventsPage = () => {
                                                 </p>
                                             </div>
 
-                                            {/* Register Button - visible on all screens */}
-                                            {/* Register Button - visible on all screens */}
-                                            <div className="mt-4 mb-4">
-                                                <GlassSurface
-                                                    borderWidth={1}
-                                                    brightness={120}
-                                                    opacity={0.2}
-                                                    mixBlendMode="normal"
-                                                    displace={20}
-                                                    distortionScale={-140}
-                                                    redOffset={2}
-                                                    greenOffset={5}
-                                                    blueOffset={10}
-                                                    className="cursor-pointer font-bold uppercase tracking-widest hover:scale-105 active:scale-95 transition-all text-white group relative overflow-hidden"
+
+                                            {/* Register Button - simple and small */}
+                                            <div className="mt-2" style={{fontFamily:"Roboto"}}>
+                                                <button
                                                     onClick={handleRegisterClick}
-                                                    style={{
-                                                        padding: '10px 32px', // Reduced size as requested
-                                                        background: 'rgba(255, 255, 255, 0.05)',
-                                                        boxShadow: '0 0 20px rgba(100, 200, 255, 0.2)'
-                                                    }}
+                                                    className="px-6 py-2 rounded-lg bg-white hover:bg-white text-black  font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-purple-500/50 flex items-center gap-2" 
                                                 >
-                                                    <div className="flex items-center gap-2 text-xs md:text-sm z-10 relative">
-                                                        REGISTER
-                                                        <span className="material-icons text-base group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                                                    </div>
-                                                    {/* Gradient overlay for better visibility */}
-                                                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-600/20 opacity-50"></div>
-                                                </GlassSurface>
+                                                    Register
+                                                    <span className="material-icons text-base">arrow_forward</span>
+                                                </button>
                                             </div>
 
                                             {/* Event Type Badges */}
@@ -435,9 +588,9 @@ const SubEventsPage = () => {
                                                     About
                                                 </h4>
                                                 <p
-                                                    className="leading-relaxed text-sm"
+                                                    className="leading-relaxed text-m"
                                                     style={{
-                                                        fontFamily: '"Cormorant Garamond", serif',
+                                                        fontFamily: '"Ojuju","Cormorant Garamond" , serif',
                                                         color: 'rgba(200, 210, 220, 0.85)',
                                                         lineHeight: '1.7'
                                                     }}
