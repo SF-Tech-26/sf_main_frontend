@@ -9,7 +9,7 @@ import eventsMobileBg from '../assets/eventsmobilebg.jpeg';
 import centrifugeBg from '../assets/centrifugebg.jpeg';
 import GlassSurface from '../components/GlassSurface';
 import PillNav from '../components/PillNav';
-import logo from '../assets/logo.png';
+import logo from '../assets/sf_logo.png';
 
 // Import individual event images from eventImages folder
 import nrityakalaImg from '../assets/eventImages/Nrityakala.png';
@@ -204,14 +204,14 @@ const SubEventsPage = () => {
                 const genreEvents = await getEventsByGenre(genreName);
 
                 if (Array.isArray(genreEvents)) {
-                    const activeEvents = genreEvents.filter(e => e.event_status !== false);
-                    setEvents(activeEvents);
-                    if (activeEvents.length > 0) {
-                        setSelectedEvent(activeEvents[0]);
+                    setEvents(genreEvents);
+                    if (genreEvents.length > 0) {
+                        setSelectedEvent(genreEvents[0]);
                     }
                 } else if (genreEvents?.code === 0 && Array.isArray(genreEvents.data)) {
                     // Fallback in case it returns wrapped object
-                    const activeEvents = genreEvents.data.filter(e => e.event_status !== false);
+                    // filtering is now done in service, but if we get raw data structure here:
+                    const activeEvents = genreEvents.data.filter(e => e.event_status === true);
                     setEvents(activeEvents);
                     if (activeEvents.length > 0) {
                         setSelectedEvent(activeEvents[0]);
@@ -508,6 +508,7 @@ const SubEventsPage = () => {
                                                 alt={currentEvent.name}
                                                 src={isCentrifuge ? centrifugeImg : getEventDisplayData(currentEvent).image}
                                                 className="w-full h-full object-cover rounded-lg"
+                                                style={{ backgroundColor: '#1a1a2e' }}
                                             />
                                         </div>
                                     </div>
@@ -545,10 +546,10 @@ const SubEventsPage = () => {
 
 
                                             {/* Register Button - simple and small */}
-                                            <div className="mt-2" style={{fontFamily:"Roboto"}}>
+                                            <div className="mt-2" style={{ fontFamily: "Roboto" }}>
                                                 <button
                                                     onClick={handleRegisterClick}
-                                                    className="px-6 py-2 rounded-lg bg-white hover:bg-white text-black  font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-purple-500/50 flex items-center gap-2" 
+                                                    className="px-6 py-2 rounded-lg bg-white hover:bg-white text-black  font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-purple-500/50 flex items-center gap-2"
                                                 >
                                                     Register
                                                     <span className="material-icons text-base">arrow_forward</span>

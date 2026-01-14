@@ -229,9 +229,17 @@ export const getEventsByGenre = async (genre) => {
         group => group.genre?.toLowerCase() === genre.toLowerCase()
       );
 
-      const filteredEvents = matchingGroup ? matchingGroup.events : [];
+      const allEvents = matchingGroup ? matchingGroup.events : [];
+      console.log(`📋 All events for genre '${genre}' BEFORE filter:`, allEvents.length, allEvents.map(e => ({ id: e.id, name: e.name, event_status: e.event_status })));
 
-      console.log(`✅ Filtered events for genre '${genre}':`, filteredEvents);
+      const filteredEvents = allEvents.filter(e => e.event_status === true);
+      console.log(`✅ Filtered events for genre '${genre}' AFTER filter:`, filteredEvents.length, filteredEvents.map(e => ({ id: e.id, name: e.name, event_status: e.event_status })));
+
+      const removedEvents = allEvents.filter(e => e.event_status !== true);
+      if (removedEvents.length > 0) {
+        console.log(`🚫 REMOVED events (event_status !== true):`, removedEvents.map(e => ({ id: e.id, name: e.name, event_status: e.event_status })));
+      }
+
       return filteredEvents;
     }
 
