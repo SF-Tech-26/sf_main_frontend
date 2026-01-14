@@ -4,6 +4,27 @@ import axios from 'axios';
 
 const API_BASE_URL = 'https://masterapi.springfest.in/api';
 
+// ========== GET USER DETAILS ==========
+export const getUser = async (token) => {
+  try {
+    console.log("📡 API Call: getUser");
+    const response = await axios.post(
+      `${API_BASE_URL}/user/getUser`,
+      { token },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+    console.log("✅ getUser response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error('❌ Error fetching user details:', error.response?.data || error);
+    throw error;
+  }
+};
+
 // ========== GET REGISTERED EVENTS ==========
 export const getRegisteredEvents = async (token) => {
   try {

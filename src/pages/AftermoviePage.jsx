@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
-import hero from "../assets/pic.png";
 import logo from "../assets/logo.png";
-import playBtn from "../assets/play.png";
-import VideoModal from "./VideoModal";
 
 export default function AftermoviePage() {
     const [showTitle, setShowTitle] = useState(false);
-    const [videoOpen, setVideoOpen] = useState(false);
 
     // re-trigger type animation every mount
     useEffect(() => {
@@ -49,12 +45,12 @@ export default function AftermoviePage() {
                     </p>
 
                     <div
-                        className="flex items-center gap-5 mb-3 animate-fade-up"
+                        className="flex items-center gap-6 mb-3 animate-fade-up"
                         style={{ animationDelay: "0.1s" }}
                     >
-                        <img src={logo} className="w-18 h-20" />
+                        <img src={logo} className="w-24 h-28 object-contain" />
                         <span
-                            className="text-[22px] tracking-[0.22em] text-gray-200"
+                            className="text-[28px] tracking-[0.22em] text-gray-200"
                             style={{ fontFamily: "'Microsoft Yi Baiti'", fontWeight: 500 }}
                         >
                             66TH EDITION
@@ -88,36 +84,23 @@ export default function AftermoviePage() {
                         color, and moments that refused to fade.
                     </p>
 
-                    <button
-                        onClick={() => setVideoOpen(true)}
-                        className="relative z-20
-                      w-fit animate-fade-up
-                      transition-transform duration-300
-                      hover:scale-110 active:scale-95"
-                    >
-                        <img src={playBtn} className="h-[42px]" />
-                    </button>
-
                 </div>
 
-                {/* RIGHT IMAGE */}
-                <div className="relative flex-1 overflow-hidden">
-                    <img
-                        src={hero}
-                        className="absolute inset-0 w-full h-full
-                       object-cover object-[58%_50%]
-                       scale-[1.05]
-                       animate-image-reveal"
-                    />
+                {/* RIGHT VIDEO */}
+                <div className="relative flex-1 overflow-hidden h-full">
+                    <iframe
+                        className="w-full h-full object-cover"
+                        src="https://www.youtube.com/embed/wj2p4BIsR6w?autoplay=1&mute=1&loop=1&playlist=wj2p4BIsR6w&controls=0&showinfo=0&rel=0"
+                        title="Aftermovie"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    ></iframe>
 
-                    <div className="absolute inset-0 bg-black/25" />
-
+                    {/* Gradient Overlay - Desktop (Left Fade) */}
                     <div
-                        className="absolute inset-0"
-                        style={{
-                            background:
-                                "linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 20%, rgba(0,0,0,0) 65%)",
-                        }}
+                        className="absolute top-0 left-0 w-[40%] h-full pointer-events-none"
+                        style={{ background: 'linear-gradient(to right, #000000 0%, transparent 100%)' }}
                     />
                 </div>
             </div>
@@ -125,30 +108,26 @@ export default function AftermoviePage() {
             {/* ================= MOBILE LAYOUT ================= */}
             <div className="md:hidden flex flex-col min-h-screen">
 
-                {/* IMAGE TOP */}
+                {/* VIDEO TOP */}
                 <div className="relative h-[60vh] overflow-hidden">
-                    <img
-                        src={hero}
-                        className="absolute inset-0 w-full h-full
-                      object-cover object-[58%_50%]
-                      scale-[1.05]
-                      animate-image-reveal"
-                    />
+                    <iframe
+                        className="w-full h-full object-cover"
+                        src="https://www.youtube.com/embed/wj2p4BIsR6w?autoplay=1&mute=1&loop=1&playlist=wj2p4BIsR6w&controls=0&showinfo=0&rel=0"
+                        title="Aftermovie"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    ></iframe>
 
-                    <div className="absolute inset-0 bg-black/25 pointer-events-none" />
-
-                    {/* BOTTOM FADE INTO TEXT */}
+                    {/* Gradient Overlay - Mobile (Bottom Fade) */}
                     <div
-                        className="absolute bottom-0 left-0 right-0 h-[40%] pointer-events-none"
-                        style={{
-                            background:
-                                "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 35%, rgba(0,0,0,0.85) 70%, rgba(0,0,0,1) 100%)",
-                        }}
+                        className="absolute bottom-0 left-0 w-full h-[40%] pointer-events-none"
+                        style={{ background: 'linear-gradient(to top, #000000 10%, rgba(0,0,0,0.8) 50%, transparent 100%)' }}
                     />
                 </div>
 
                 {/* TEXT BELOW IMAGE */}
-                <div className="px-6 pb-10 bg-black">
+                <div className="px-6 pb-10 bg-black flex-1">
 
                     <p
                         className="text-[12px] tracking-[1.4em] text-gray-300 mb-4 animate-fade-up"
@@ -184,21 +163,8 @@ export default function AftermoviePage() {
                         color, and moments that refused to fade.
                     </p>
 
-                    <button
-                        onClick={() => setVideoOpen(true)}
-                        className="relative z-20
-                      w-fit animate-fade-up
-                      transition-transform duration-300
-                      hover:scale-110 active:scale-95"
-                    >
-                        <img src={playBtn} className="h-[42px]" />
-                    </button>
-
                 </div>
             </div>
-
-            {/* ================= VIDEO MODAL ================= */}
-            <VideoModal open={videoOpen} onClose={() => setVideoOpen(false)} />
         </section>
     );
 }

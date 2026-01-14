@@ -238,7 +238,7 @@ const StaggeredMenu = ({
             {!isOpen && (
                 <button
                     onClick={toggleMenu}
-                    className="fixed top-6 left-6 z-[10000] w-12 h-12 flex items-center justify-center focus:outline-none transition-all duration-300 group"
+                    className="fixed top-6 left-2 z-[10000] w-12 h-12 flex items-center justify-center focus:outline-none transition-all duration-300 group"
                     aria-label="Toggle Menu"
                 >
                     <div className="relative w-6 h-6 flex flex-col justify-center items-center gap-[6px]">
