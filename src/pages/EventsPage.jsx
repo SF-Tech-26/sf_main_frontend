@@ -185,7 +185,7 @@ const TarotCard = ({ genre, index, totalCards, globalIndex, onClick, isMobileVie
                             <img
                                 src={genreImages[genre]}
                                 alt={genre}
-                                className="w-[90%] h-[85%] object-cover rounded-xl opacity-90 shadow-lg"
+                                className={`object-cover rounded-xl opacity-90 shadow-lg ${genre === 'Music' ? 'w-[75%] h-[70%]' : 'w-[90%] h-[85%]'}`}
                             />
                         ) : (
                             <div className="flex items-center justify-center h-3/5 pt-6">
@@ -305,21 +305,8 @@ const EventsPage = () => {
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                     >
-                        SPRINGFEST
+                        EVENTS
                     </motion.h1>
-                    <motion.h2
-                        className="text-2xl md:text-4xl font-bold tracking-wide"
-                        style={{
-                            fontFamily: 'Cinzel, serif',
-                            color: '#e8f4f4',
-                            textShadow: '0 2px 10px rgba(0,0,0,0.3)'
-                        }}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                    >
-                        Event Categories
-                    </motion.h2>
                 </header>
 
                 {/* Cards Container */}
