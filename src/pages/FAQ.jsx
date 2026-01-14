@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import faqBG from '../assets/faqBG.png';
 import faqCON from '../assets/faqCON.png';
 import faqHEAD from '../assets/faqHEAD.PNG';
-import wood from '../assets/wood.png';
+import wood from '../assets/wood.PNG';
 
 const faqData = [
   {
