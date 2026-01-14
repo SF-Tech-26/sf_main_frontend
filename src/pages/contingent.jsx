@@ -12,9 +12,6 @@ import { Crown } from "lucide-react";
 import icon1 from "../assets/images/handshake_shield_transparent.png";
 import icon2 from "../assets/images/haunted_house_transparent_v2.png";
 
-// --- CONFIGURATION ---
-// Replace this with your actual Razorpay Key ID
-// For production, it is best to use import.meta.env.VITE_RAZORPAY_KEY_ID
 const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID; 
 
 function Contingent() {
@@ -97,13 +94,11 @@ function Contingent() {
       return;
     }
 
-    // Date Validation
     if (paymentData.checkIn >= paymentData.checkOut) {
         toast.error("Check-out date must be after Check-in date");
         return;
     }
     
-    // SDK Check
     if (!window.Razorpay) {
         toast.error("Payment SDK not loaded. Check your internet connection or reload the page.");
         return;
@@ -163,6 +158,7 @@ function Contingent() {
       toast.error(error.response?.data?.message || "Payment failed");
       setIsPaying(false);
     }
+    setShowPaymentModal(false);
   };
 
   // Contingent Payment Modal State
@@ -251,6 +247,7 @@ function Contingent() {
       toast.error(error.response?.data?.message || "Payment failed");
       setIsContingentPaying(false);
     }
+    setShowContingentPayModal(false);
   };
 
   const triggerLeaveConfirmation = () => {

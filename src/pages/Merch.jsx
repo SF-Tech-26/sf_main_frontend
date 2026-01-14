@@ -243,7 +243,7 @@ function ProductCard({ product, onAdd, onToast }) {
                     src={product.image}
                     alt={product.name}
                     className="w-auto h-full max-h-[220px] max-w-none
-                               scale-[1.8] translate-x-[-92px] translate-y-4
+                               scale-[1.3]
                                object-contain
                                brightness-110 contrast-130
                                transition-transform duration-500"

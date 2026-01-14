@@ -142,7 +142,7 @@ export default function SignUpForm() {
     <div
       className="
         w-[330px] max-w-[90%]
-        h-[50vh]
+        h-[60vh]
         overflow-y-auto
         backdrop-blur-[12px]
         border border-[#7DF9FF]
@@ -268,10 +268,10 @@ export default function SignUpForm() {
               boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
             }}
           >
-            <option value="">Select Gender</option>
-            <option value="M">Male</option>
-            <option value="F">Female</option>
-            <option value="O">Other</option>
+            <option value="" className="text-black">Select Gender</option>
+            <option value="M" className="text-black">Male</option>
+            <option value="F" className="text-black">Female</option>
+            <option value="O" className="text-black">Other</option>
           </select>
         </div>
 
