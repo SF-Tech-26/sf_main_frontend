@@ -18,7 +18,7 @@ import pictureTaleImg from '../assets/eventImages/a picture tale.png';
 import banterBoutImg from '../assets/eventImages/banter bout.png';
 import brainDImg from '../assets/eventImages/brain d.png';
 import canYouDuetImg from '../assets/eventImages/can you duet.png';
-import centrifugeImg from '../assets/eventImages/centifuge.png';
+import centrifugeImg from '../assets/eventImages/centrifuge.png';
 import dumbCImg from '../assets/eventImages/dumb c.png';
 import dumbstuckImg from '../assets/eventImages/dumbstuck.png';
 import faceCanvasImg from '../assets/eventImages/face canvas.png';
@@ -41,10 +41,13 @@ import shakeALegImg from '../assets/eventImages/shake a leg.png';
 import shopaholicImg from '../assets/eventImages/shopaholic.png';
 import sketchItImg from '../assets/eventImages/sketch it.png';
 import spentImg from '../assets/eventImages/spent.png';
-import shuffleSoloImg from '../assets/eventImages/suffle solo.png?url';
-import shuffleTeamImg from '../assets/eventImages/suffle team.png?url';
+import shuffleSoloImg from '../assets/eventImages/shuffle solo.png?url';
+import shuffleTeamImg from '../assets/eventImages/shuffle team.png?url';
 import twoForTangoImg from '../assets/eventImages/two for tango.png';
 import wildfireImg from '../assets/eventImages/wildfire.png';
+import pen from '../assets/eventImages/A Mighty Pen.png';
+import jumble from '../assets/eventImages/jumble the good word.png';
+import chef from '../assets/eventImages/chef.png';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEvents } from '../context/eventContext';
@@ -269,6 +272,9 @@ const SubEventsPage = () => {
         'shake-a-leg': shakeALegImg,
         'two for tango': twoForTangoImg,
         'two-for-tango': twoForTangoImg,
+       
+        'Shuffle - Solo': shuffleSoloImg,
+         'Shuffle - Team ': shuffleTeamImg,
 
         // Music events
         'sfm': sfmImg,
@@ -277,6 +283,7 @@ const SubEventsPage = () => {
         'can you duet': canYouDuetImg,
         'can-you-duet': canYouDuetImg,
         'retrowave': retrowaveImg,
+        'Shuffle-Solo': shuffleSoloImg,
 
         // Dramatics events
         'rangmanch': rangmanchImg,
@@ -291,6 +298,8 @@ const SubEventsPage = () => {
         'national level debate': nationalDebateImg,
         'national-level-debate': nationalDebateImg,
         'spent': spentImg,
+        'a mighty pen': pen,
+        'jumble the good word': jumble,
 
         // Film Fest events
         'a picture tale': pictureTaleImg,
@@ -304,7 +313,8 @@ const SubEventsPage = () => {
         'brain drain': brainDImg,
         'brain-drain': brainDImg,
         'quiz': quizEventImg,
-        'centrifuge': centrifugeImg,
+        
+        'Centrifuge': centrifugeImg,
 
         // Fine Arts events
         'face canvas': faceCanvasImg,
@@ -327,31 +337,27 @@ const SubEventsPage = () => {
         'frenzy fabric': frenzyFabricImg,
         'frenzy-fabric': frenzyFabricImg,
         'shopaholic': shopaholicImg,
+        'peek a who': quizEventImg,
 
         // Game Fest / Other events - handle both shuffle and suffle spelling
-        'shuffle solo': shuffleSoloImg,
-        'shuffle-solo': shuffleSoloImg,
-        'shufflesolo': shuffleSoloImg,
-        'suffle solo': shuffleSoloImg,
-        'suffle-solo': shuffleSoloImg,
+        
         'sufflesolo': shuffleSoloImg,
         'shuffle team': shuffleTeamImg,
-        'shuffle-team': shuffleTeamImg,
+        'Shuffle - Team': shuffleTeamImg,
         'shuffleteam': shuffleTeamImg,
-        'suffle team': shuffleTeamImg,
-        'suffle-team': shuffleTeamImg,
-        'suffleteam': shuffleTeamImg,
 
         // Other events
         'lakeside dreams': lakesideDreamsImg,
         'lakeside-dreams': lakesideDreamsImg,
-        'wildfire': wildfireImg
+        'wildfire': wildfireImg,
+        'top it to win it': spentImg,
+        "chef's corner": chef,
     };
 
     // Fallback images - only from eventImages folder
     const fallbackImages = [
         nrityakalaImg, sfmImg, rangmanchImg, shakeALegImg,
-        retrowaveImg, lakesideDreamsImg, paintItImg, rangoliImg
+        retrowaveImg, lakesideDreamsImg, quizEventImg, shuffleTeamImg
     ];
 
     const getEventDisplayData = (event) => {
