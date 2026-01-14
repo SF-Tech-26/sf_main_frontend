@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { getAllEvents, getEventsByGenre } from '../services/eventService';
@@ -194,8 +194,16 @@ const SubEventsPage = () => {
     const [error, setError] = useState(null);
 
     const [showRegistration, setShowRegistration] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     const genreName = slugToGenre[genreSlug] || genreSlug;
+
+    // Track mobile screen size
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
 
@@ -229,16 +237,20 @@ const SubEventsPage = () => {
         fetchEvents();
     }, [genreName]);
 
-    const handleEventClick = (event) => {
+    // Memoize the event click handler to prevent re-creating on every render
+    const handleEventClick = useCallback((event) => {
         setSelectedEvent(event);
-    };
+    }, []);
 
-    // Navigation items for PillNav - dynamically from events
-    const eventNavItems = events.map((event) => ({
-        label: event.name,
-        active: selectedEvent?.id === event.id,
-        onClick: () => handleEventClick(event)
-    }));
+    // Memoize navigation items to prevent PillNav re-renders
+    const eventNavItems = useMemo(() =>
+        events.map((event) => ({
+            label: event.name,
+            active: selectedEvent?.id === event.id,
+            onClick: () => handleEventClick(event)
+        })),
+        [events, selectedEvent?.id, handleEventClick]
+    );
 
 
 
@@ -272,9 +284,9 @@ const SubEventsPage = () => {
         'shake-a-leg': shakeALegImg,
         'two for tango': twoForTangoImg,
         'two-for-tango': twoForTangoImg,
-       
+
         'Shuffle - Solo': shuffleSoloImg,
-         'Shuffle - Team ': shuffleTeamImg,
+        'Shuffle - Team ': shuffleTeamImg,
 
         // Music events
         'sfm': sfmImg,
@@ -313,7 +325,7 @@ const SubEventsPage = () => {
         'brain drain': brainDImg,
         'brain-drain': brainDImg,
         'quiz': quizEventImg,
-        
+
         'Centrifuge': centrifugeImg,
 
         // Fine Arts events
@@ -340,7 +352,7 @@ const SubEventsPage = () => {
         'peek a who': quizEventImg,
 
         // Game Fest / Other events - handle both shuffle and suffle spelling
-        
+
         'sufflesolo': shuffleSoloImg,
         'shuffle team': shuffleTeamImg,
         'Shuffle - Team': shuffleTeamImg,
@@ -459,21 +471,50 @@ const SubEventsPage = () => {
                     </h1>
                 </header>
 
-                {/* PillNav for Subevent Navigation */}
+                {/* PillNav for Subevent Navigation with Scroll Indicators */}
                 {events.length > 1 && (
-                    <div className="mb-4 md:mb-6 w-full flex justify-center relative z-40">
-                        <PillNav
-                            logo={logo}
-                            logoAlt="Back to Events"
-                            items={eventNavItems}
-                            className="subevent-nav"
-                            ease="power2.easeOut"
-                            baseColor="#000000"
-                            pillColor="#ffffff"
-                            hoveredPillTextColor="#ffffff"
-                            pillTextColor="#000000"
-                            onItemClick={(item) => item.onClick?.()}
-                        />
+                    <div className="mb-4 md:mb-6 w-full relative">
+                        {/* Left Scroll Indicator - Only on small screens when scrolling is needed */}
+                        {events.length > 3 && isMobile && (
+                            <span
+                                className="material-icons text-cyan-300 absolute -left-4 sm:left-2 top-1/2 -translate-y-1/2 z-[100] pointer-events-none"
+                                style={{
+                                    fontSize: '36px',
+                                    animation: 'slideLeft 2s ease-in-out infinite'
+                                }}
+                            >
+                                chevron_left
+                            </span>
+                        )}
+
+                        {/* Right Scroll Indicator - Only on small screens when scrolling is needed */}
+                        {events.length > 3 && isMobile && (
+                            <span
+                                className="material-icons text-cyan-300 absolute -right-4 sm:right-2 top-1/2 -translate-y-1/2 z-[100] pointer-events-none"
+                                style={{
+                                    fontSize: '36px',
+                                    animation: 'slideRight 2s ease-in-out infinite'
+
+                                }}
+                            >
+                                chevron_right
+                            </span>
+                        )}
+
+                        <div className="flex justify-center relative z-40">
+                            <PillNav
+                                logo={logo}
+                                logoAlt="Back to Events"
+                                items={eventNavItems}
+                                className="subevent-nav"
+                                ease="power2.easeOut"
+                                baseColor="#000000"
+                                pillColor="#ffffff"
+                                hoveredPillTextColor="#ffffff"
+                                pillTextColor="#000000"
+                                onItemClick={(item) => item.onClick?.()}
+                            />
+                        </div>
                     </div>
                 )}
 
@@ -555,7 +596,7 @@ const SubEventsPage = () => {
                                             <div className="mt-2" style={{ fontFamily: "Roboto" }}>
                                                 <button
                                                     onClick={handleRegisterClick}
-                                                    className="px-6 py-2 rounded-lg bg-white hover:bg-white text-black  font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-purple-500/50 flex items-center gap-2"
+                                                    className="px-6 py-2 rounded-lg bg-gray-400/100 hover:bg-grey text-black  font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-purple-500/50 flex items-center gap-2"
                                                 >
                                                     Register
                                                     <span className="material-icons text-base">arrow_forward</span>
@@ -647,73 +688,6 @@ const SubEventsPage = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* Navigation Dots */}
-                {events.length > 1 && (
-                    <div className="flex items-center justify-center gap-4 mt-6">
-                        <button
-                            onClick={() => {
-                                const currentIndex = events.indexOf(currentEvent);
-                                const prevIndex = currentIndex > 0 ? currentIndex - 1 : events.length - 1;
-                                setSelectedEvent(events[prevIndex]);
-                            }}
-                            className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110"
-                            style={{
-                                background: 'rgba(50, 70, 100, 0.5)',
-                                border: '1px solid rgba(150, 180, 210, 0.3)'
-                            }}
-                        >
-                            <span className="material-icons text-gray-400 text-sm">chevron_left</span>
-                        </button>
-
-                        <div className="flex items-center gap-2">
-                            {events.map((event, index) => (
-                                <button
-                                    key={event.id}
-                                    onClick={() => setSelectedEvent(event)}
-                                    className={`transition-all duration-300 rounded-full ${selectedEvent?.id === event.id
-                                        ? 'w-3 h-3 scale-110'
-                                        : 'w-2 h-2 hover:scale-125'
-                                        }`}
-                                    style={{
-                                        background: selectedEvent?.id === event.id
-                                            ? 'linear-gradient(135deg, rgba(200, 220, 240, 0.9) 0%, rgba(150, 180, 210, 0.7) 100%)'
-                                            : 'rgba(100, 130, 160, 0.5)',
-                                        boxShadow: selectedEvent?.id === event.id
-                                            ? '0 0 10px rgba(150, 180, 210, 0.5)'
-                                            : 'none'
-                                    }}
-                                />
-                            ))}
-                        </div>
-
-                        <button
-                            onClick={() => {
-                                const currentIndex = events.indexOf(currentEvent);
-                                const nextIndex = currentIndex < events.length - 1 ? currentIndex + 1 : 0;
-                                setSelectedEvent(events[nextIndex]);
-                            }}
-                            className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110"
-                            style={{
-                                background: 'rgba(50, 70, 100, 0.5)',
-                                border: '1px solid rgba(150, 180, 210, 0.3)'
-                            }}
-                        >
-                            <span className="material-icons text-gray-400 text-sm">chevron_right</span>
-                        </button>
-                    </div>
-                )}
-
-                {/* Event Number Display */}
-                <p
-                    className="text-center mt-4 text-xs tracking-[0.3em]"
-                    style={{
-                        fontFamily: '"Cormorant Garamond", serif',
-                        color: 'rgba(150, 180, 210, 0.5)'
-                    }}
-                >
-                    {events.indexOf(currentEvent) + 1} of {events.length}
-                </p>
             </main>
 
 
@@ -788,6 +762,29 @@ const SubEventsPage = () => {
                     .event-image-container img {
                         height: 100% !important; /* Restore full height for desktop aspect ratio box */
                         object-fit: cover;
+                    }
+                }
+
+                /* Scroll Indicator Animations */
+                @keyframes slideLeft {
+                    0%, 100% {
+                        transform: translateX(0);
+                        opacity: 0.6;
+                    }
+                    50% {
+                        transform: translateX(-5px);
+                        opacity: 1;
+                    }
+                }
+
+                @keyframes slideRight {
+                    0%, 100% {
+                        transform: translateX(0);
+                        opacity: 0.6;
+                    }
+                    50% {
+                        transform: translateX(5px);
+                        opacity: 1;
                     }
                 }
             `}</style>
