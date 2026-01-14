@@ -1,5 +1,5 @@
 import SignUpForm from "../components/SignUpForm";
-import bgImage from "../assets/images/bgpic.jpg";
+import bgImage from "../assets/images/homeBg.webp";
 
 export default function SignUpPage() {
   return (
@@ -17,7 +17,7 @@ export default function SignUpPage() {
     display: "flex",
     justifyContent: "center",   // locks X center
     width: "100%",
-    transform: "translateY(clamp(100px, 10vh, 120px))", // Y only
+   
   }}
 >
   <SignUpForm />
