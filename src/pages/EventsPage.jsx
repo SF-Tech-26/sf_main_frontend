@@ -16,6 +16,7 @@ import quizImg from '../assets/Quiz.png';
 import fineArtsImg from '../assets/Fine Arts.png';
 import humorImg from '../assets/Humor.png';
 import fashionImg from '../assets/Fashion.png';
+import culinaryImg from '../assets/culinaryarts.png';
 
 const slugToGenre = {
     'dance': 'Dance',
@@ -56,6 +57,7 @@ const genreImages = {
     'Fine Arts': fineArtsImg,
     'Humor Fest': humorImg,
     'Fashion': fashionImg,
+    'Culinary Arts': culinaryImg,
 };
 
 // Fallback genre icons/emojis
