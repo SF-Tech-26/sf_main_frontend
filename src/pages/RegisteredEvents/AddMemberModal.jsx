@@ -1,7 +1,5 @@
-// src/pages/RegisteredEvents/AddMemberModal.jsx
-
 import React, { useState } from "react";
-import { UserPlus, X } from "lucide-react";
+import { UserPlus, X, Sparkles, Wand2 } from "lucide-react";
 
 const AddMemberModal = ({ onClose, onSubmit }) => {
   const [memberData, setMemberData] = useState({
@@ -16,13 +14,12 @@ const AddMemberModal = ({ onClose, onSubmit }) => {
       ...prev,
       [name]: value,
     }));
-    setError(""); // Clear error when user types
+    setError("");
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Validation
     if (!memberData.email.trim()) {
       setError("Email is required");
       return;
@@ -33,14 +30,12 @@ const AddMemberModal = ({ onClose, onSubmit }) => {
       return;
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(memberData.email)) {
       setError("Please enter a valid email address");
       return;
     }
 
-    // SF ID format validation (should start with SF)
     if (!memberData.sfId.toUpperCase().startsWith("SF")) {
       setError("SF ID should start with 'SF' (e.g., SF000001)");
       return;
@@ -50,32 +45,35 @@ const AddMemberModal = ({ onClose, onSubmit }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[60] p-4">
-      <div className="bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900 rounded-3xl border-2 border-white/30 p-8 max-w-md w-full shadow-2xl relative">
-        {/* Close Button */}
+    <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-[70] p-4">
+      <div className="bg-[#050b14] border-2 border-blue-500/40 rounded-3xl p-6 sm:p-10 max-w-md w-full relative shadow-[0_0_60px_rgba(30,58,138,0.4)] overflow-hidden">
+        {/* Glow Decor */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-600/10 rounded-full blur-[80px]"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-600/10 rounded-full blur-[80px]"></div>
+
         <button
           onClick={onClose}
-          className="absolute -top-3 -right-3 bg-white text-black rounded-full w-10 h-10 flex items-center justify-center hover:bg-gray-200 transition shadow-lg"
+          className="absolute top-4 right-4 text-blue-300/50 hover:text-white transition-colors"
         >
           <X className="w-6 h-6" />
         </button>
 
-        {/* Header */}
-        <div className="text-center mb-6">
-          <div className="bg-gradient-to-br from-green-500 to-blue-500 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-            <UserPlus className="w-8 h-8 text-white" />
+        <div className="text-center mb-8 relative z-10">
+          <div className="w-16 h-16 bg-blue-900/30 border border-blue-500/50 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <Wand2 className="w-8 h-8 text-cyan-400 animate-pulse" />
           </div>
-          <h2 className="text-3xl font-bold text-white mb-2">Add Team Member</h2>
-          <p className="text-gray-300 text-sm">
-            Enter the member's details to add them to your team
+          <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tighter uppercase flex items-center justify-center gap-2">
+            Add Member 
+            <Sparkles className="w-5 h-5 text-blue-400" />
+          </h2>
+          <p className="text-blue-300/60 text-sm mt-2">
+            
           </p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email Input */}
+        <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
           <div>
-            <label className="block text-white font-semibold mb-2 text-sm">
+            <label className="block text-xs font-bold text-blue-400 uppercase tracking-widest mb-2 ml-1">
               Email Address
             </label>
             <input
@@ -84,14 +82,13 @@ const AddMemberModal = ({ onClose, onSubmit }) => {
               value={memberData.email}
               onChange={handleInputChange}
               placeholder="member@example.com"
-              className="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-pink-500 transition-all"
+              className="w-full px-4 py-3 bg-black/50 border border-blue-900 focus:border-cyan-500 rounded-xl text-white outline-none transition-all shadow-inner"
               required
             />
           </div>
 
-          {/* SF ID Input */}
           <div>
-            <label className="block text-white font-semibold mb-2 text-sm">
+            <label className="block text-xs font-bold text-blue-400 uppercase tracking-widest mb-2 ml-1">
               SF ID
             </label>
             <input
@@ -100,33 +97,28 @@ const AddMemberModal = ({ onClose, onSubmit }) => {
               value={memberData.sfId}
               onChange={handleInputChange}
               placeholder="SF000001"
-              className="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-pink-500 transition-all uppercase"
+              className="w-full px-4 py-3 bg-black/50 border border-blue-900 focus:border-cyan-500 rounded-xl text-white outline-none transition-all uppercase"
               required
             />
-            <p className="text-gray-400 text-xs mt-1">
-              Format: SF followed by numbers (e.g., SF000001)
-            </p>
           </div>
 
-          {/* Error Message */}
           {error && (
-            <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 text-red-200 text-sm">
+            <div className="bg-red-950/50 border border-red-500/50 rounded-lg p-3 text-red-200 text-xs text-center font-bold animate-pulse">
               {error}
             </div>
           )}
 
-          {/* Action Buttons */}
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-3 pt-2">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-semibold transition-all border border-white/20"
+              className="flex-1 bg-white/5 hover:bg-white/10 text-white py-3 rounded-xl font-bold transition-all border border-white/10"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-green-500/50 flex items-center justify-center gap-2"
+              className="flex-[2] bg-gradient-to-r from-blue-700 to-cyan-700 hover:from-blue-600 hover:to-cyan-600 text-white py-3 rounded-xl font-black shadow-lg shadow-blue-900/40 transition-all flex items-center justify-center gap-2 uppercase tracking-wider"
             >
               <UserPlus className="w-5 h-5" />
               Add Member
