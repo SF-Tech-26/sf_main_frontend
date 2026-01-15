@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import NavVideo from '../assets/NavVideo.mp4';
-import BackToPageImg from '../assets/backtopage.Webp';
+import BackToPageImg from '../assets/backtopage.webp';
 
 const StaggeredMenu = ({
     items = [],
