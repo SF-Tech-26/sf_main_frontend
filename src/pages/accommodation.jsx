@@ -1,6 +1,6 @@
-import React, { StrictMode, useState } from "react";
+import React, { StrictMode, useState, useEffect } from "react";
 import "./accommodation.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation} from "react-router-dom";
 
 function Accommodation() {
     const info = [
@@ -22,7 +22,7 @@ function Accommodation() {
   {
     id: 4,
     heading: "REGISTRATION CHARGES",
-    content: "Registration Charges at Spring Fest, IIT Kharagpur, is charged ₹2449 INR only- per head for 3 Days and 4 Nights package with 3 pronites passes, complimentary accommodation and SF Kit. From 22 January 2026 08:00 A.M. to 25 January 2026 10:00 A.M"
+    content: "Registration Charges at Spring Fest, IIT Kharagpur, is charged ₹2449 INR only- per head for 3 Days and 4 Nights package with 3 pronites passes, complimentary accommodation and SF Kit. From 22 January 2026 08:00 A.M. to 27 January 2026 10:00 A.M"
   },
   {
     id: 5,
@@ -260,6 +260,7 @@ const rules = [
     const [selectedCard, setSelectedCard] = useState(null);
     const [activeTab, setActiveTab] = useState("Information");
     const navigate = useNavigate();
+    const location = useLocation()
 
     const handleCategoryChange = (categoryData, tabName) => {
         setCard(categoryData);
@@ -275,16 +276,41 @@ const rules = [
         setShowModal(false);
     };
 
+     useEffect(() => {
+    if (location.state && location.state.section) {
+      const targetSection = location.state.section;
+      
+      // Update state based on the message
+      switch (targetSection) {
+        case "Information":
+          handleCategoryChange(info, "Information");
+          break;
+        case "FAQ's":
+          handleCategoryChange(faq, "FAQ's");
+          break;
+        case "Rules":
+          handleCategoryChange(rules, "Rules");
+          break;
+        case "MAP":
+          handleCategoryChange(map, "MAP");
+          break;
+        default:
+          break;
+      }
+      
+      // Optional: Clear the state so it doesn't persist on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location])
+
     return (
-        <StrictMode>
             <div className="acco-main-container">
                 <div className="acco-container-1">
                     
                     {/* Separate Container for Heading */}
                     <div className="acco-info-box">
                         <h1 className="acco-head acco-heading">
-                            <span>ACCOMMODATIONS</span>
-                            <p style={{fontFamily: 'Jolly Lodger', color: '#ff4d4d', fontSize: '1.5rem', marginTop: '5px'}}>{activeTab}</p>
+                            <span>ACCOMMODATION</span>
                         </h1>
                     </div>
 
@@ -292,6 +318,14 @@ const rules = [
 
                     <div className="acco-container-2">
                         <div className="acco-bnt-con">
+                            <button 
+                                className="acco-nav-btn"
+                                id="btn-contingent"
+                                onClick={() => {navigate("/Contingent")}}
+                            >
+                                <i className="fa-solid fa-users-rays"></i>
+                                <span>Contingent</span>
+                            </button>
                             <button 
                                 className={`acco-nav-btn ${activeTab === "Information" ? "acco-active" : ""}`} 
                                 onClick={() => handleCategoryChange(info, "Information")}
@@ -317,14 +351,6 @@ const rules = [
                                 <i className="fa-solid fa-map-location-dot"></i> <span>MAP</span>
                             </button>
                             
-                            <button 
-                                className="acco-nav-btn"
-                                id="btn-contingent"
-                                onClick={() => {navigate("/Contingent")}}
-                            >
-                                <i className="fa-solid fa-users-rays"></i>
-                                <span>Contingent</span>
-                            </button>
                         </div>
                     </div>
 
@@ -372,7 +398,6 @@ const rules = [
                     </div>
                 )}
             </div>
-        </StrictMode>
     );
 }
 

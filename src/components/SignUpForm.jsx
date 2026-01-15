@@ -140,24 +140,25 @@ export default function SignUpForm() {
   
   return (
     <div
-      className="
-        w-[330px] max-w-[90%]
-        h-[50vh]
-        overflow-y-auto
-        backdrop-blur-[12px]
-        border border-[#7DF9FF]
-        rounded-[40px]
-        text-[#E6FBFF]
-        px-[32px] py-[40px]
-      "
-      style={{
-        background: "rgba(10, 20, 44, 0.92)",
-        boxShadow: `
-          0 0 35px rgba(125, 249, 255, 0.55),
-          0 0 80px rgba(56, 189, 248, 0.35),
-          0 0 140px rgba(167, 139, 250, 0.18)
-        `,
-      }}
+     className="
+  w-[330px] max-w-[90%]
+  h-[60vh]
+  overflow-y-auto
+  backdrop-blur-[12px]
+  border border-[#7DF9FF]/60
+  rounded-[40px]
+  text-[#E6FBFF]
+  px-[32px] py-[40px]
+"
+style={{
+  background: "rgba(10, 20, 44, 0.92)",
+  boxShadow: `
+    0 0 20px rgba(125, 249, 255, 0.30),
+    0 0 45px rgba(56, 189, 248, 0.22),
+    0 0 90px rgba(167, 139, 250, 0.10)
+  `,
+}}
+
     >
       <h1
         className="
@@ -268,10 +269,10 @@ export default function SignUpForm() {
               boxShadow: "inset 0 0 12px rgba(125, 249, 255, 0.15)",
             }}
           >
-            <option value="">Select Gender</option>
-            <option value="M">Male</option>
-            <option value="F">Female</option>
-            <option value="O">Other</option>
+            <option value="" className="text-black">Select Gender</option>
+            <option value="M" className="text-black">Male</option>
+            <option value="F" className="text-black">Female</option>
+            <option value="O" className="text-black">Other</option>
           </select>
         </div>
 
@@ -444,33 +445,33 @@ export default function SignUpForm() {
           />
         </div>
 
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="
-            mt-[12px]
-            h-[46px]
-            mx-auto
-            w-full max-w-[300px]
-            rounded-full
-            font-semibold
-            tracking-wider
-            text-[#020617]
-            bg-gradient-to-r from-[#38BDF8] via-[#7DF9FF] to-[#A78BFA]
-            hover:scale-[1.03]
-            transition
-            disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-          "
-          style={{
-            boxShadow: `
-              0 0 22px rgba(125, 249, 255, 0.9),
-              0 0 50px rgba(56, 189, 248, 0.65),
-              0 0 90px rgba(167, 139, 250, 0.45)
-            `,
-          }}
-        >
-          {isLoading ? "REGISTERING..." : "CREATE ACCOUNT"}
-        </button>
+       <button
+  type="submit"
+  disabled={isLoading}
+  className="
+    mt-[12px]
+    h-[46px]
+    mx-auto
+    w-full max-w-[300px]
+    rounded-full
+    font-semibold
+    tracking-wider
+    text-[#001B2E]
+    bg-gradient-to-r from-[#38BDF8] via-[#5EEBFF] to-[#22D3EE]
+    hover:scale-[1.03]
+    transition
+    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+  "
+  style={{
+    boxShadow: `
+      0 0 10px rgba(94, 235, 255, 0.30),
+      0 0 22px rgba(56, 189, 248, 0.22)
+    `,
+  }}
+>
+  {isLoading ? "REGISTERING..." : "CREATE ACCOUNT"}
+</button>
+
 
         <p className="mt-[14px] text-center text-sm text-[#C7F5FF]">
           Already have an account?{" "}

@@ -1,5 +1,5 @@
 import Home from "../components/Home";
-import bgImage from "../assets/images/homeBg.png";
+import bgImage from "../assets/images/homeBg.webp";
 
 export default function HomePage() {
   return (

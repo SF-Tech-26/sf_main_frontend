@@ -48,23 +48,25 @@ export default function SignInForm() {
     <div className="w-full flex justify-center">
       <div
         className="
-          w-[350px] max-w-[90%]
-          min-h-[420px]
-          flex flex-col
-          rounded-[40px]
-          border border-[#5EEBFF]
-          backdrop-blur-[12px]
-          text-[#CFF6FF]
-        "
-        style={{
-          background: "rgba(14, 26, 48, 0.88)", // deep space blue glass
-          boxShadow: `
-            0 0 40px rgba(94, 235, 255, 0.45),
-            0 0 80px rgba(56, 189, 248, 0.25)
-          `,
-          padding: "40px 32px",
-        }}
+  w-[350px] max-w-[90%]
+  min-h-[420px]
+  flex flex-col
+  rounded-[40px]
+  border border-[#5EEBFF]/60
+  backdrop-blur-[12px]
+  text-[#CFF6FF]
+"
+style={{
+  background: "rgba(14, 26, 48, 0.88)",
+  boxShadow: `
+    0 0 22px rgba(94, 235, 255, 0.28),
+    0 0 50px rgba(56, 189, 248, 0.18)
+  `,
+  padding: "40px 32px",
+}}
+
       >
+
       <h1
           className="text-center font-bold tracking-wider mb-[26px]"
           style={{
@@ -135,28 +137,29 @@ export default function SignInForm() {
           </div>
 
            <button
-           type="submit"
-          disabled={isLoading}
-            className="
-              mt-[8px]
-              h-[46px]
-              rounded-full
-              font-semibold
-              tracking-[1px]
-              text-[#001B2E]
-              bg-gradient-to-r from-[#38BDF8] via-[#5EEBFF] to-[#22D3EE]
-              hover:scale-[1.03]
-              transition
-            "
-            style={{
-              boxShadow: `
-                0 0 18px rgba(94, 235, 255, 0.7),
-                0 0 36px rgba(56, 189, 248, 0.45)
-              `,
-            }}
-          >
-            {isLoading ? "SIGNING IN..." : "ENTER THE FEST"}
-        </button>
+  type="submit"
+  disabled={isLoading}
+  className="
+    mt-[8px]
+    h-[46px]
+    rounded-full
+    font-semibold
+    tracking-[1px]
+    text-[#001B2E]
+    bg-gradient-to-r from-[#38BDF8] via-[#5EEBFF] to-[#22D3EE]
+    hover:scale-[1.03]
+    transition
+  "
+  style={{
+    boxShadow: `
+      0 0 10px rgba(94, 235, 255, 0.30),
+      0 0 22px rgba(56, 189, 248, 0.22)
+    `,
+  }}
+>
+  {isLoading ? "SIGNING IN..." : "SIGN IN"}
+</button>
+
 
         {/* Links */}
           <div className="mt-[10px] text-center text-[14px] flex flex-col gap-[6px] items-center">
