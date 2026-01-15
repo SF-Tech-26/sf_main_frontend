@@ -593,7 +593,6 @@ function Contingent() {
                           <option value="2026-01-23">23-01-2026</option>
                           <option value="2026-01-24">24-01-2026</option>
                           <option value="2026-01-25">25-01-2026</option>
-                          <option value="2026-01-26">26-01-2026</option>
                         </select>
                         <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400 pointer-events-none">
                           expand_more
@@ -617,7 +616,6 @@ function Contingent() {
                           <option value="2026-01-24">24-01-2026</option>
                           <option value="2026-01-25">25-01-2026</option>
                           <option value="2026-01-26">26-01-2026</option>
-                          <option value="2026-01-27">27-01-2026</option>
                         </select>
                         <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400 pointer-events-none">
                           expand_more
@@ -699,7 +697,6 @@ function Contingent() {
                           <option value="2026-01-23">23-01-2026</option>
                           <option value="2026-01-24">24-01-2026</option>
                           <option value="2026-01-25">25-01-2026</option>
-                          <option value="2026-01-26">26-01-2026</option>
                         </select>
                         <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400 pointer-events-none">
                           expand_more
@@ -723,7 +720,6 @@ function Contingent() {
                           <option value="2026-01-24">24-01-2026</option>
                           <option value="2026-01-25">25-01-2026</option>
                           <option value="2026-01-26">26-01-2026</option>
-                          <option value="2026-01-27">27-01-2026</option>
                         </select>
                         <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400 pointer-events-none">
                           expand_more
@@ -974,8 +970,8 @@ function Contingent() {
             <div className="h-[150px] mt-[50px] w-full max-w-[350px] rounded-2xl shadow-xl "
               style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Jolly Lodger', color: "white", fontSize: '4rem' }}>
               Contingent</div>
-            <div className="h-auto w-[80%] sm:w-[73%] max-w-[600.25px] backdrop-blur-xl bg-[#121212]/80 border border-white/10 rounded-2xl shadow-2xl justify-items-center relative popup-anim">
-              <h2 className="text-5xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-5">
+            <div className="h-auto w-[80%] sm:w-[73%] max-w-[600.25px] backdrop-blur-xl bg-[#121212]/50 border border-white/10 rounded-2xl shadow-2xl justify-items-center relative popup-anim">
+              <h2 className="text-4xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-5">
                 Join Contingents
               </h2>
 
@@ -989,7 +985,7 @@ function Contingent() {
                       placeholder="Your Contingent ID..."
                       onChange={(e) => setJoinId(e.target.value)}
                       value={joinId}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
+                      className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
                   </div>
                   <div>
                     <label className="block text-gray-400 text-center font-['Jolly_lodger'] text-3xl mb-1 ml-1">Contingent Code</label>
@@ -998,14 +994,14 @@ function Contingent() {
                       placeholder="Your Contingent Code"
                       onChange={(e) => setJoinCode(e.target.value)}
                       value={joinCode}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
+                      className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
                   </div>
 
                 </div>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="cursor-pointer w-full py-3 text-xl text-white font-sans font-bold tracking-widest border border-white/20 rounded-xl hover:bg-white/10 hover:border-white/40 bg-white/5 transition-all duration-300 active:scale-95"
+                  className="cursor-pointer w-full py-3 text-[1rem] text-white font-sans font-bold tracking-widest border border-white/20 rounded-xl hover:bg-white/10 hover:border-white/40 bg-white/5 transition-all duration-300 active:scale-95"
                 >
                   {isSubmitting ? "JOINING..." : "JOIN CONTINGENT"}
 
@@ -1020,7 +1016,7 @@ function Contingent() {
             <div className="h-[150px] w-full mt-[50px] max-w-[350px] rounded-2xl shadow-xl "
               style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Jolly Lodger', color: "white", fontSize: '4rem' }}>
               Contingent</div>
-            <div className="h-auto w-[80%] sm:w-[73%] max-w-[600.25px] backdrop-blur-xl bg-[#121212]/80 border border-white/10 rounded-2xl shadow-2xl justify-items-center relative popup-anim">
+            <div className="h-auto w-[80%] sm:w-[73%] max-w-[600.25px] backdrop-blur-xl bg-[#121212]/50 border border-white/10 rounded-2xl shadow-2xl justify-items-center relative popup-anim">
               <h2 className="text-5xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-5">
                 Create A Contingents
               </h2>
@@ -1036,14 +1032,14 @@ function Contingent() {
                       value={newContingentName}
                       onChange={(e) => setNewContingentName(e.target.value)}
                       required
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
+                      className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
                   </div>
 
                 </div>
                 <button
                   type="submit"
                   disabled={isCreating}
-                  className="cursor-pointer w-full py-3 text-xl text-white font-sans font-bold tracking-widest border border-white/20 rounded-xl hover:bg-white/10 hover:border-white/40 bg-white/5 transition-all duration-300 active:scale-95"
+                  className="cursor-pointer w-full py-3 text-[0.8rem] text-white font-sans font-bold tracking-widest border border-white/20 rounded-xl hover:bg-white/10 hover:border-white/40 bg-white/5 transition-all duration-300 active:scale-95"
                 >
                   {isCreating ? "CREATING..." : "CREATE CONTINGENT"}
                 </button>
