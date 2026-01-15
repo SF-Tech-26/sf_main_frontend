@@ -4,18 +4,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import { getAllEvents } from '../services/eventService';
 import { useEvents } from '../context/eventContext';
-import eventsDesktopBg from '../assets/eventsdesktopbg.webp';
-import eventsMobileBg from '../assets/eventsmobilebg.webp';
-import danceImg from '../assets/Dance.webp';
-import musicImg from '../assets/Music.webp';
-import dramaticsImg from '../assets/Dramatics.webp';
-import literaryImg from '../assets/Literary.webp';
-import filmImg from '../assets/Film Fest.webp';
-import quizImg from '../assets/Quiz.webp';
-import fineArtsImg from '../assets/Fine Arts.webp';
-import humorImg from '../assets/Humor.webp';
-import fashionImg from '../assets/Fashion.webp';
-import culinaryImg from '../assets/culinaryarts.webp';
+import eventsDesktopBg from '../assets/eventsdesktopbg.Webp';
+import eventsMobileBg from '../assets/eventsmobilebg.Webp';
+import danceImg from '../assets/Dance.Webp';
+import musicImg from '../assets/Music.Webp';
+import dramaticsImg from '../assets/Dramatics.Webp';
+import literaryImg from '../assets/Literary.Webp';
+import filmImg from '../assets/Film Fest.Webp';
+import quizImg from '../assets/Quiz.Webp';
+import fineArtsImg from '../assets/Fine Arts.Webp';
+import humorImg from '../assets/Humor.Webp';
+import fashionImg from '../assets/Fashion.Webp';
+import culinaryImg from '../assets/culinaryarts.Webp';
 
 const slugToGenre = {
     'dance': 'Dance',
