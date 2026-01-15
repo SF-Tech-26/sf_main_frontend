@@ -10,6 +10,7 @@ export default function HomePage() {
         backgroundSize: "cover",
         backgroundPosition: "center top",
         backgroundRepeat: "no-repeat",
+        overflow: "hidden",
       }}
     >
 
