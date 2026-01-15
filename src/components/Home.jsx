@@ -121,7 +121,7 @@ const HomePage = ({ backgroundImage }) => {
               <span className="material-symbols-outlined">close</span>
             </button>
 
-            <h2 className="text-5xl text-white font-['Jolly_Lodger'] mb-1 tracking-widest">
+            <h2 className="text-3xl text-white font-['Jolly_Lodger'] mb-1 tracking-widest">
               Make Payment
             </h2>
             <p className="text-gray-300 font-sans text-lg mb-6 border-b border-white/10 pb-4">

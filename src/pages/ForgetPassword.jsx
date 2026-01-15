@@ -228,7 +228,7 @@ export default function ForgotPassword() {
       }}
     >
       {/* Ambient Glow Background behind card */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-purple-600/30 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-purple-600/15 rounded-full blur-[100px] pointer-events-none"></div>
 
       <div style={{ transform: "translateY(clamp(40px, 10vh, 120px))" }} className="relative z-10">
         <div className="w-full flex justify-center">
