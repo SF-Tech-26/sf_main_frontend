@@ -19,7 +19,7 @@ export default function VerticalPillNav({
     return (
         <nav
             ref={containerRef}
-            className="fixed left-4 top-1/2 -translate-y-1/2 z-[10000] flex flex-col gap-10 p-2 rounded-2xl backdrop-blur-xl border border-white/10 shadow-2xl"
+            className="fixed left-4 top-4 z-[10000] flex flex-col gap-10 p-2 rounded-2xl backdrop-blur-xl border border-white/10 shadow-2xl"
             style={{ backgroundColor: baseColor }}
         >
             {items.map((item, index) => {
