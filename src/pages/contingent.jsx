@@ -376,31 +376,74 @@ function Contingent() {
       setIsAdding(false);
     }
   };
+  //  const [cards, setCard] = useState(info);
+  //   const [activeTab, setActiveTab] = useState("Information");
+  
+  //     const handleCategoryChange = (categoryData, tabName) => {
+  //         setCard(categoryData);
+  //         setActiveTab(tabName);
+  //     };
 
   return (
-    <StrictMode>
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
-
-      <div
+      <><ToastContainer
+      position="top-center"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="dark" /><div
         className="min-h-screen flex flex-col flex-1 items-center justify-center bg-center bg-no-repeat bg-cover"
-        style={{ backgroundImage: `url(${contin})`, backgroundAttachment: "fixed", backgroundPosition: "bottom" }}
+        style={{ backgroundImage: `url(${contin})`, backgroundAttachment: "fixed", backgroundPosition: "center" }}
       >
+        <div className="acco-container-2">
+  <div className="acco-bnt-con">
+    <button
+      className="acco-nav-btn"
+      id="btn-contingent"
+      onClick={() => { navigate("/Contingent") }}
+    >
+      <i className="fa-solid fa-users-rays"></i>
+      <span>Contingent</span>
+    </button>
+    
+    <button
+      className="acco-nav-btn"
+      onClick={() => navigate("/accommodation", { state: { section: "Information" } })}
+    >
+      <i className="fa-solid fa-circle-info"></i> <span>INFO</span>
+    </button>
+    
+    <button
+      className="acco-nav-btn"
+      onClick={() => navigate("/accommodation", { state: { section: "FAQ's" } })}
+    >
+      <i className="fa-solid fa-circle-question"></i> <span>FAQ</span>
+    </button>
+    
+    <button
+      className="acco-nav-btn"
+      onClick={() => navigate("/accommodation", { state: { section: "Rules" } })}
+    >
+      <i className="fa-solid fa-scroll"></i> <span>RULES</span>
+    </button>
+    
+    <button
+      className="acco-nav-btn"
+      onClick={() => navigate("/accommodation", { state: { section: "MAP" } })}
+    >
+      <i className="fa-solid fa-map-location-dot"></i> <span>MAP</span>
+    </button>
+  </div>
+</div>
 
         {!token && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-md">
             <div className="w-full max-w-md p-10 rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] text-center relative overflow-hidden popup-anim backdrop-blur-xl bg-[#1a1a1a]/90">
-              
+
               <span className="material-symbols-outlined !text-7xl text-purple-400 mb-4 block">
                 lock_person
               </span>
@@ -497,8 +540,7 @@ function Contingent() {
                       height={60}
                       displayValue={false}
                       lineColor="#000000"
-                      background="#ffffff"
-                    />
+                      background="#ffffff" />
                     <div className="mt-4 border-t border-gray-200 pt-2">
                       <p className="text-black font-mono text-sm font-bold tracking-[0.3em]">
                         {data.id}
@@ -595,8 +637,7 @@ function Contingent() {
                         placeholder="10 digit mobile number"
                         value={paymentData.emergencyNumber}
                         onChange={(e) => setPaymentData({ ...paymentData, emergencyNumber: e.target.value.replace(/\D/g, '') })}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors placeholder:text-gray-600"
-                      />
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors placeholder:text-gray-600" />
                     </div>
 
                     <button
@@ -702,8 +743,7 @@ function Contingent() {
                         placeholder="10 digit mobile number"
                         value={contingentPayData.emergencyNumber}
                         onChange={(e) => setContingentPayData({ ...contingentPayData, emergencyNumber: e.target.value.replace(/\D/g, '') })}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors placeholder:text-gray-600"
-                      />
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors placeholder:text-gray-600" />
                     </div>
 
                     <button
@@ -747,8 +787,7 @@ function Contingent() {
                         value={newMemberSfId}
                         onChange={(e) => setNewMemberSfId(e.target.value)}
                         placeholder="SF00XXX"
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors"
-                      />
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
                     </div>
 
                     <div>
@@ -759,8 +798,7 @@ function Contingent() {
                         value={newMemberEmail}
                         onChange={(e) => setNewMemberEmail(e.target.value)}
                         placeholder="member@email.com"
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors"
-                      />
+                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
                     </div>
 
                     <button
@@ -776,13 +814,13 @@ function Contingent() {
             )}
 
             <div
-              className="h-[100px] w-full flex mt-[50px] items-center justify-center font-['Jolly_Lodger'] text-white text-5xl sm:text-7xl"
+              className="h-[100px] top-0 w-full flex items-center justify-center font-['Jolly_Lodger'] text-white text-5xl sm:text-7xl "
             >
               Contingent
             </div>
 
-            <div className="h-[550px] overflow-auto w-[95%] sm:w-[85%] max-w-[800px] backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl relative p-6 mx-auto popup-anim bg-[#121212]/80">
-              
+            <div className="h-[550px] overflow-auto w-[95%] sm:w-[60%] max-w-[800px] backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl relative p-6 mx-auto popup-anim bg-[#121212]/80">
+
 
               <h2 className="text-4xl sm:text-6xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-0 mb-2">
                 {data.contingent_name}
@@ -883,7 +921,7 @@ function Contingent() {
 
         {token && !conti && !joinOn && !CreateOn &&
           <div className="flex flex-col gap-6 bg-[#121212]/80 p-6 sm:p-10 w-[95%] sm:w-[90%] max-w-[550px] h-auto backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl popup-anim relative">
-            
+
 
             <div className="text-center mt-[50px] pb-2 sm:pb-2">
               <h1 className="font-['Jolly_Lodger'] text-5xl sm:text-6xl md:text-7xl text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
@@ -928,8 +966,7 @@ function Contingent() {
                 </div>
               </div>
             </div>
-          </div>
-        }
+          </div>}
 
 
         {!conti && !CreateOn && joinOn &&
@@ -952,8 +989,7 @@ function Contingent() {
                       placeholder="Your Contingent ID..."
                       onChange={(e) => setJoinId(e.target.value)}
                       value={joinId}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors"
-                    />
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
                   </div>
                   <div>
                     <label className="block text-gray-400 text-center font-['Jolly_lodger'] text-3xl mb-1 ml-1">Contingent Code</label>
@@ -962,8 +998,7 @@ function Contingent() {
                       placeholder="Your Contingent Code"
                       onChange={(e) => setJoinCode(e.target.value)}
                       value={joinCode}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors"
-                    />
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
                   </div>
 
                 </div>
@@ -978,8 +1013,7 @@ function Contingent() {
 
               </form>
             </div>
-          </>
-        }
+          </>}
 
         {!conti && CreateOn && !joinOn &&
           <>
@@ -1002,8 +1036,7 @@ function Contingent() {
                       value={newContingentName}
                       onChange={(e) => setNewContingentName(e.target.value)}
                       required
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors"
-                    />
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
                   </div>
 
                 </div>
@@ -1017,11 +1050,9 @@ function Contingent() {
 
               </form>
             </div>
-          </>
-        }
+          </>}
 
-      </div>
-    </StrictMode>
+      </div></>
   );
 }
 

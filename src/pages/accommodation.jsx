@@ -1,6 +1,6 @@
-import React, { StrictMode, useState } from "react";
+import React, { StrictMode, useState, useEffect } from "react";
 import "./accommodation.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation} from "react-router-dom";
 
 function Accommodation() {
     const info = [
@@ -260,6 +260,7 @@ const rules = [
     const [selectedCard, setSelectedCard] = useState(null);
     const [activeTab, setActiveTab] = useState("Information");
     const navigate = useNavigate();
+    const location = useLocation()
 
     const handleCategoryChange = (categoryData, tabName) => {
         setCard(categoryData);
@@ -275,8 +276,34 @@ const rules = [
         setShowModal(false);
     };
 
+     useEffect(() => {
+    if (location.state && location.state.section) {
+      const targetSection = location.state.section;
+      
+      // Update state based on the message
+      switch (targetSection) {
+        case "Information":
+          handleCategoryChange(info, "Information");
+          break;
+        case "FAQ's":
+          handleCategoryChange(faq, "FAQ's");
+          break;
+        case "Rules":
+          handleCategoryChange(rules, "Rules");
+          break;
+        case "MAP":
+          handleCategoryChange(map, "MAP");
+          break;
+        default:
+          break;
+      }
+      
+      // Optional: Clear the state so it doesn't persist on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location])
+
     return (
-        <StrictMode>
             <div className="acco-main-container">
                 <div className="acco-container-1">
                     
@@ -371,7 +398,6 @@ const rules = [
                     </div>
                 )}
             </div>
-        </StrictMode>
     );
 }
 
