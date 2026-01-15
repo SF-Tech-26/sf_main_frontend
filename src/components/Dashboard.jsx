@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import bg from "../assets/dashBG.png";
-import mobileBg from "../assets/mobile.png";
-import maleAvatar from "../assets/male2 face.png";
-import femaleAvatar from "../assets/female1 face.png";
-import yellowLantern from "../assets/yellowlantern.png";
-import pinkLantern from "../assets/pinklantern.png";
-import blueLantern from "../assets/bluelantern.png";
+import bg from "../assets/dashBG.webp";
+import mobileBg from "../assets/mobile.webp";
+import maleAvatar from "../assets/male2 face.webp";
+import femaleAvatar from "../assets/female1 face.webp";
+import yellowLantern from "../assets/yellowlantern.webp";
+import pinkLantern from "../assets/pinklantern.webp";
+import blueLantern from "../assets/bluelantern.webp";
 
 function LanternButton({ title, icon, path, glowColor, isMobile }) {
   const navigate = useNavigate();
