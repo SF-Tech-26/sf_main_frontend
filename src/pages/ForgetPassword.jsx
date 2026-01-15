@@ -1,0 +1,385 @@
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
+import bgImage from "../assets/images/homeBg.webp";
+
+export default function ForgotPassword() {
+  const [step, setStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+
+  const [formData, setFormData] = useState({
+    email: "",
+    otp: "",
+    password: "",
+  });
+  const [confirm, setConfirm] = useState("");
+  const handleConfirm = (e) => {
+    setConfirm(e.target.value);
+  };
+  
+  // Timer states for 5-minute cooldown
+  const [otpDisabled, setOtpDisabled] = useState(false);
+  const [remainingTime, setRemainingTime] = useState(0);
+
+  const navigate = useNavigate();
+
+  // Timer effect - counts down every second
+  useEffect(() => {
+    let interval;
+    if (remainingTime > 0) {
+      interval = setInterval(() => {
+        setRemainingTime((prev) => {
+          if (prev <= 1) {
+            setOtpDisabled(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [remainingTime]);
+
+  // Format time as MM:SS
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const disableWithTimer = () => {
+    setOtpDisabled(true);
+    setRemainingTime(300); // 5 minutes = 300 seconds
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // API 1: Request OTP
+  const handleRequestOtp = async (e) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post(
+        "https://masterapi.springfest.in/api/user/forgotPassword/otpRemoveQA",
+        {
+          email: formData.email,
+        }
+      );
+
+      if (response.data.code === 0) {
+        toast.success(response.data.message || "OTP Sent Successfully!");
+        disableWithTimer(); // Start 5-minute timer
+        setStep(2);
+      } else {
+        setError(response.data.message || "Failed to send OTP");
+        toast.error(response.data.message || "Failed to send OTP");
+      }
+    } catch (err) {
+      console.error(err);
+      const msg = err.response?.data?.message || "Failed to send OTP";
+      setError(msg);
+      
+      if (msg.toLowerCase().includes("limit") || msg.toLowerCase().includes("hour")) {
+        toast.error("Rate limit exceeded (5 requests/hour). Please try again later.");
+      } else if (err.response?.status === 429) {
+        toast.error("Too many requests. Please wait before trying again.");
+      } else {
+        toast.error(msg);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // API 2: Verify OTP & Reset Password
+  const handleVerifyReset = async (e) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+    
+    // Validate password match
+    if (formData.password !== confirm) {
+      setIsLoading(false);
+      toast.error("Confirm password should match password");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "https://masterapi.springfest.in/api/user/forgotPassword/verifyOtp",
+        {
+          email: formData.email,
+          otp: formData.otp,
+          password: formData.password,
+        }
+      );
+
+      // Success handling - check both code and status
+      if (response.data.code === 0 || response.status === 200) {
+        toast.success("Password Reset Successfully!");
+        // Clear form data for security
+        setFormData({
+          email: "",
+          otp: "",
+          password: "",
+        });
+        setConfirm("");
+        navigate("/signin");
+      } else {
+        setError(response.data.message || "Verification Failed");
+        toast.error(response.data.message || "Verification Failed");
+      }
+    } catch (err) {
+      console.error(err);
+      const msg = err.response?.data?.message || "Invalid OTP or Server Error";
+      setError(msg);
+      
+      // Clear OTP field on failure since it's now invalid
+      setFormData({ ...formData, otp: "" });
+      
+      toast.error("OTP verification failed");
+      
+      // Inform user that OTP is now invalid and they need a new one
+      toast(
+        "The OTP is now invalid. Please request a new OTP.",
+        {
+          icon: "⚠️",
+          duration: 6000,
+        }
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle Resend OTP
+  const handleResendOtp = async () => {
+    setError("");
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post(
+        "https://masterapi.springfest.in/api/user/forgotPassword/otpRemoveQA",
+        {
+          email: formData.email,
+        }
+      );
+
+      if (response.data.code === 0) {
+        toast.success(response.data.message || "OTP Resent Successfully!");
+        disableWithTimer(); // Start 5-minute timer again
+        // Clear OTP field
+        setFormData({ ...formData, otp: "" });
+      } else {
+        setError(response.data.message || "Failed to resend OTP");
+        toast.error(response.data.message || "Failed to resend OTP");
+      }
+    } catch (err) {
+      console.error(err);
+      const msg = err.response?.data?.message || "Failed to resend OTP";
+      setError(msg);
+      
+      if (msg.toLowerCase().includes("limit") || msg.toLowerCase().includes("hour")) {
+        toast.error("Rate limit exceeded (5 requests/hour). Please try again later.");
+      } else if (err.response?.status === 429) {
+        toast.error("Too many requests. Please wait before trying again.");
+      } else {
+        toast.error(msg);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const inputStyle = `
+    h-[46px] px-[14px] py-[12px] rounded-[10px] bg-transparent
+    border border-[#5EEBFF] text-[#E0F7FF] outline-none
+    focus:ring-2 focus:ring-[#38BDF8] indent-[8px] w-full
+  `;
+
+  const buttonStyle = {
+    boxShadow: `
+      0 0 18px rgba(94, 235, 255, 0.7),
+      0 0 36px rgba(56, 189, 248, 0.45)
+    `,
+  };
+
+  return (
+    <div
+      className="min-h-screen w-full flex items-center justify-center"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundAttachment: 'fixed',
+        backgroundSize: "cover",
+        backgroundPosition: "center top",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <div style={{ transform: "translateY(clamp(40px, 10vh, 120px))" }}>
+        <div className="w-full flex justify-center">
+          <div
+            className="
+              w-[350px] max-w-[90%] min-h-[420px] flex flex-col
+              rounded-[40px] border border-[#5EEBFF] backdrop-blur-[12px]
+              text-[#CFF6FF]
+            "
+            style={{
+              background: "rgba(14, 26, 48, 0.88)",
+              boxShadow: `
+                0 0 40px rgba(94, 235, 255, 0.45),
+                0 0 80px rgba(56, 189, 248, 0.25)
+              `,
+              padding: "40px 32px",
+            }}
+          >
+            <h1
+              className="text-center font-bold tracking-wider mb-[26px]"
+              style={{
+                fontSize: "28px",
+                color: "#E0F7FF",
+                textShadow: `
+                  0 0 8px rgba(94, 235, 255, 0.9),
+                  0 0 18px rgba(56, 189, 248, 0.6),
+                  0 0 36px rgba(56, 189, 248, 0.4)
+                `,
+              }}
+            >
+              {step === 1 ? "RECOVER ACCOUNT" : "RESET PASSWORD"}
+            </h1>
+
+            {error && (
+              <div className="mb-4 bg-red-500/20 border border-red-500 text-red-200 px-3 py-2 rounded-lg text-sm text-center">
+                {error}
+              </div>
+            )}
+
+            {step === 1 && (
+              <form onSubmit={handleRequestOtp} className="flex flex-col gap-[18px] flex-grow">
+                <div className="flex flex-col gap-[6px]">
+                  <label className="text-sm text-[#BEE9FF]">Email</label>
+                  <input
+                    name="email"
+                    type="email"
+                    placeholder="abc@gmail.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={inputStyle}
+                    required
+                  />
+                </div>
+
+                <div className="text-xs text-[#BEE9FF]/60 mt-1 text-center">
+                  Limited to 5 OTP requests per hour
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="
+                    mt-[8px] h-[46px] rounded-full font-semibold tracking-[1px]
+                    text-[#001B2E] bg-gradient-to-r from-[#38BDF8] via-[#5EEBFF] to-[#22D3EE]
+                    hover:scale-[1.03] transition disabled:opacity-70 disabled:cursor-not-allowed
+                  "
+                  style={buttonStyle}
+                >
+                  {isLoading ? "SENDING..." : "GET OTP"}
+                </button>
+              </form>
+            )}
+
+            {step === 2 && (
+              <form onSubmit={handleVerifyReset} className="flex flex-col gap-[18px] flex-grow">
+                <p className="text-center text-xs text-[#BEE9FF]/70">
+                  OTP sent to {formData.email}
+                </p>
+                
+                <div className="flex flex-col gap-[6px]">
+                  <label className="text-sm text-[#BEE9FF]">Enter OTP</label>
+                  <input
+                    name="otp"
+                    type="text"
+                    placeholder="123456"
+                    value={formData.otp}
+                    onChange={handleChange}
+                    className={inputStyle}
+                    required
+                    maxLength={6}
+                  />
+                </div>
+                
+                <div className="flex flex-col gap-[6px]">
+                  <label className="text-sm text-[#BEE9FF]">New Password</label>
+                  <input
+                    name="password"
+                    type="password"
+                    placeholder="New password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={inputStyle}
+                    required
+                    pattern="^(?=.*[A-Z])(?=.*[\W_]).{8,}$"
+                    minLength={8}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-[6px]">
+                  <label className="text-sm text-[#BEE9FF]">Confirm Password</label>
+                  <input
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="Confirm password"
+                    value={confirm}
+                    onChange={handleConfirm}
+                    className={inputStyle}
+                    required
+                    minLength={8}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="
+                    mt-[8px] h-[46px] rounded-full font-semibold tracking-[1px]
+                    text-[#001B2E] bg-gradient-to-r from-[#38BDF8] via-[#5EEBFF] to-[#22D3EE]
+                    hover:scale-[1.03] transition disabled:opacity-70 disabled:cursor-not-allowed
+                  "
+                  style={buttonStyle}
+                >
+                  {isLoading ? "VERIFYING..." : "RESET PASSWORD"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  disabled={otpDisabled || isLoading}
+                  className="text-xs text-[#5EEBFF] underline mt-2 hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {otpDisabled 
+                    ? `Resend OTP in ${formatTime(remainingTime)}` 
+                    : "Resend OTP"}
+                </button>
+              </form>
+            )}
+
+            <div className="mt-[20px] text-center text-[14px] flex flex-col gap-[6px] items-center">
+              <Link
+                to="/signin"
+                className="text-[#9FE7FF] hover:text-[#5EEBFF] transition flex items-center gap-2"
+              >
+                ← Back to Login
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
