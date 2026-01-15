@@ -8,7 +8,7 @@ export default function ForgotPassword() {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(''); // Kept as per your original code
 
   const [formData, setFormData] = useState({
     email: "",
@@ -198,22 +198,27 @@ export default function ForgotPassword() {
     }
   };
 
+  // Updated Theme Styles
   const inputStyle = `
-    h-[46px] px-[14px] py-[12px] rounded-[10px] bg-transparent
-    border border-[#5EEBFF] text-[#E0F7FF] outline-none
-    focus:ring-2 focus:ring-[#38BDF8] indent-[8px] w-full
+    h-[46px] px-[14px] py-[12px] rounded-[10px] w-full
+    bg-black/20
+    border border-purple-500/20
+    text-purple-50
+    placeholder-purple-300/20
+    outline-none
+    transition-all
+    duration-300
+    focus:border-purple-400/60
+    focus:bg-purple-900/10
+    focus:shadow-[0_0_20px_rgba(168,85,247,0.15)]
+    indent-[4px]
   `;
 
-  const buttonStyle = {
-    boxShadow: `
-      0 0 18px rgba(94, 235, 255, 0.7),
-      0 0 36px rgba(56, 189, 248, 0.45)
-    `,
-  };
+  const labelStyle = "text-xs font-semibold text-purple-200/60 uppercase tracking-widest ml-1 drop-shadow-sm";
 
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center"
+      className="min-h-screen w-full flex items-center justify-center relative overflow-hidden"
       style={{
         backgroundImage: `url(${bgImage})`,
         backgroundAttachment: 'fixed',
@@ -222,40 +227,38 @@ export default function ForgotPassword() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div style={{ transform: "translateY(clamp(40px, 10vh, 120px))" }}>
+      {/* Ambient Glow Background behind card */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-purple-600/30 rounded-full blur-[100px] pointer-events-none"></div>
+
+      <div style={{ transform: "translateY(clamp(40px, 10vh, 120px))" }} className="relative z-10">
         <div className="w-full flex justify-center">
           <div
             className="
               w-[350px] max-w-[90%] min-h-[420px] flex flex-col
-              rounded-[40px] border border-[#5EEBFF] backdrop-blur-[12px]
-              text-[#CFF6FF]
+              rounded-[24px] border border-purple-500/20 backdrop-blur-xl
+              text-gray-200
+              bg-black/30
             "
             style={{
-              background: "rgba(14, 26, 48, 0.88)",
-              boxShadow: `
-                0 0 40px rgba(94, 235, 255, 0.45),
-                0 0 80px rgba(56, 189, 248, 0.25)
-              `,
+              
               padding: "40px 32px",
             }}
           >
             <h1
-              className="text-center font-bold tracking-wider mb-[26px]"
+              className="
+                text-center font-bold tracking-wider mb-[26px]
+                bg-clip-text text-transparent bg-gradient-to-r from-purple-200 via-pink-200 to-purple-200
+                drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]
+              "
               style={{
                 fontSize: "28px",
-                color: "#E0F7FF",
-                textShadow: `
-                  0 0 8px rgba(94, 235, 255, 0.9),
-                  0 0 18px rgba(56, 189, 248, 0.6),
-                  0 0 36px rgba(56, 189, 248, 0.4)
-                `,
               }}
             >
               {step === 1 ? "RECOVER ACCOUNT" : "RESET PASSWORD"}
             </h1>
 
             {error && (
-              <div className="mb-4 bg-red-500/20 border border-red-500 text-red-200 px-3 py-2 rounded-lg text-sm text-center">
+              <div className="mb-4 bg-red-500/10 border border-red-500/30 text-red-300 px-3 py-2 rounded-xl text-xs text-center shadow-[0_0_10px_rgba(239,68,68,0.2)]">
                 {error}
               </div>
             )}
@@ -263,7 +266,7 @@ export default function ForgotPassword() {
             {step === 1 && (
               <form onSubmit={handleRequestOtp} className="flex flex-col gap-[18px] flex-grow">
                 <div className="flex flex-col gap-[6px]">
-                  <label className="text-sm text-[#BEE9FF]">Email</label>
+                  <label className={labelStyle}>Email</label>
                   <input
                     name="email"
                     type="email"
@@ -275,7 +278,7 @@ export default function ForgotPassword() {
                   />
                 </div>
 
-                <div className="text-xs text-[#BEE9FF]/60 mt-1 text-center">
+                <div className="text-xs text-purple-200/40 mt-1 text-center">
                   Limited to 5 OTP requests per hour
                 </div>
 
@@ -283,11 +286,16 @@ export default function ForgotPassword() {
                   type="submit"
                   disabled={isLoading}
                   className="
-                    mt-[8px] h-[46px] rounded-full font-semibold tracking-[1px]
-                    text-[#001B2E] bg-gradient-to-r from-[#38BDF8] via-[#5EEBFF] to-[#22D3EE]
-                    hover:scale-[1.03] transition disabled:opacity-70 disabled:cursor-not-allowed
+                    mt-[8px] h-[46px] rounded-xl font-semibold tracking-[1px]
+                    text-white
+                    bg-gradient-to-r from-violet-600 to-fuchsia-600
+                    hover:from-violet-500 hover:to-fuchsia-500
+                    hover:scale-[1.03] transition-all duration-300
+                    shadow-[0_0_20px_rgba(139,92,246,0.3)]
+                    hover:shadow-[0_0_30px_rgba(192,38,211,0.5)]
+                    border border-white/10
+                    disabled:opacity-70 disabled:cursor-not-allowed
                   "
-                  style={buttonStyle}
                 >
                   {isLoading ? "SENDING..." : "GET OTP"}
                 </button>
@@ -296,12 +304,12 @@ export default function ForgotPassword() {
 
             {step === 2 && (
               <form onSubmit={handleVerifyReset} className="flex flex-col gap-[18px] flex-grow">
-                <p className="text-center text-xs text-[#BEE9FF]/70">
-                  OTP sent to {formData.email}
+                <p className="text-center text-xs text-purple-200/60 bg-purple-500/10 py-2 rounded-lg border border-purple-500/20">
+                  OTP sent to <span className="text-purple-200 font-semibold">{formData.email}</span>
                 </p>
                 
                 <div className="flex flex-col gap-[6px]">
-                  <label className="text-sm text-[#BEE9FF]">Enter OTP</label>
+                  <label className={labelStyle}>Enter OTP</label>
                   <input
                     name="otp"
                     type="text"
@@ -315,7 +323,7 @@ export default function ForgotPassword() {
                 </div>
                 
                 <div className="flex flex-col gap-[6px]">
-                  <label className="text-sm text-[#BEE9FF]">New Password</label>
+                  <label className={labelStyle}>New Password</label>
                   <input
                     name="password"
                     type="password"
@@ -330,7 +338,7 @@ export default function ForgotPassword() {
                 </div>
 
                 <div className="flex flex-col gap-[6px]">
-                  <label className="text-sm text-[#BEE9FF]">Confirm Password</label>
+                  <label className={labelStyle}>Confirm Password</label>
                   <input
                     name="confirmPassword"
                     type="password"
@@ -347,11 +355,16 @@ export default function ForgotPassword() {
                   type="submit"
                   disabled={isLoading}
                   className="
-                    mt-[8px] h-[46px] rounded-full font-semibold tracking-[1px]
-                    text-[#001B2E] bg-gradient-to-r from-[#38BDF8] via-[#5EEBFF] to-[#22D3EE]
-                    hover:scale-[1.03] transition disabled:opacity-70 disabled:cursor-not-allowed
+                    mt-[8px] h-[46px] rounded-xl font-semibold tracking-[1px]
+                    text-white
+                    bg-gradient-to-r from-violet-600 to-fuchsia-600
+                    hover:from-violet-500 hover:to-fuchsia-500
+                    hover:scale-[1.03] transition-all duration-300
+                    shadow-[0_0_20px_rgba(139,92,246,0.3)]
+                    hover:shadow-[0_0_30px_rgba(192,38,211,0.5)]
+                    border border-white/10
+                    disabled:opacity-70 disabled:cursor-not-allowed
                   "
-                  style={buttonStyle}
                 >
                   {isLoading ? "VERIFYING..." : "RESET PASSWORD"}
                 </button>
@@ -360,7 +373,7 @@ export default function ForgotPassword() {
                   type="button"
                   onClick={handleResendOtp}
                   disabled={otpDisabled || isLoading}
-                  className="text-xs text-[#5EEBFF] underline mt-2 hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="text-xs text-fuchsia-400/80 underline mt-2 hover:text-fuchsia-300 decoration-fuchsia-500/30 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {otpDisabled 
                     ? `Resend OTP in ${formatTime(remainingTime)}` 
@@ -372,7 +385,7 @@ export default function ForgotPassword() {
             <div className="mt-[20px] text-center text-[14px] flex flex-col gap-[6px] items-center">
               <Link
                 to="/signin"
-                className="text-[#9FE7FF] hover:text-[#5EEBFF] transition flex items-center gap-2"
+                className="text-purple-300/50 hover:text-purple-200 transition-colors hover:drop-shadow-[0_0_8px_rgba(232,121,249,0.5)] flex items-center gap-2"
               >
                 ← Back to Login
               </Link>
