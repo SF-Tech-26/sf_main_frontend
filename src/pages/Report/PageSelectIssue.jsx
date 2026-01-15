@@ -16,6 +16,7 @@ const PageSelectIssue = ({ complaints, setPage, onCancel }) => {
         <select
           className="w-full bg-white/95 text-black font-medium p-3 rounded-xl focus:outline-none shadow-lg"
           onChange={(e) => {
+            
             const value = e.target.value;
             if (value === "registered") setPage("registered");
             if (value === "others") setPage("others");
