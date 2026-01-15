@@ -13,6 +13,8 @@ export default function Navbar() {
     { label: 'Accommodation', ariaLabel: 'Accommodation details', link: '/accommodation' },
     { label: 'Merch', ariaLabel: 'Buy merchandise', link: '/merch' },
     { label: 'FAQ', ariaLabel: 'Frequently Asked Questions', link: '/faq' },
+    { label: 'SPONSORS', ariaLabel: 'SPONSORS', link: 'https://sponsors.springfest.in/',target: "_blank"},
+    { label: 'OUR TEAM', ariaLabel: 'OUR TEAM', link: 'https://teams.springfest.in/',target: "_blank" },
   ];
 
   return (
