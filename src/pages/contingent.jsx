@@ -1,5 +1,5 @@
 import React, { StrictMode, useContext, useEffect, useState } from "react";
-import contin from "../assets/images/WhatsApp Image 2026-01-14 at 00.00.10.jpeg";
+import contin from "../assets/images/WhatsApp Image 2026-01-14 at 00.00.10.webp";
 import "./accommodation.css";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -9,8 +9,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthContext } from "../context/authContext.jsx";
 import { Crown } from "lucide-react";
-import icon1 from "../assets/images/handshake_shield_transparent.png";
-import icon2 from "../assets/images/haunted_house_transparent_v2.png";
+import icon1 from "../assets/images/handshake_shield_transparent.webp";
+import icon2 from "../assets/images/haunted_house_transparent_v2.webp";
 
 const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID; 
 

@@ -4,92 +4,64 @@ import toast from 'react-hot-toast';
 import { getAllEvents, getEventsByGenre } from '../services/eventService';
 import { useAuth } from '../context/authContext';
 import RegistrationForm from '../components/events/RegistrationForm';
-import eventsDesktopBg from '../assets/eventsdesktopbg.jpeg';
-import eventsMobileBg from '../assets/eventsmobilebg.jpeg';
-import centrifugeBg from '../assets/centrifugebg.jpeg';
+import eventsDesktopBg from '../assets/eventsdesktopbg.webp';
+import eventsMobileBg from '../assets/eventsmobilebg.webp';
+import centrifugeBg from '../assets/centrifugebg.webp';
 import GlassSurface from '../components/GlassSurface';
 import PillNav from '../components/PillNav';
-import logo from '../assets/sf_logo.png';
+import logo from '../assets/sf_logo.webp';
 
-// --- DESKTOP IMAGES (eventImages) ---
-import nrityakalaImg from '../assets/eventImages/Nrityakala.png';
-import pictureTaleImg from '../assets/eventImages/a picture tale.png';
-import banterBoutImg from '../assets/eventImages/banter bout.png';
-import brainDImg from '../assets/eventImages/brain d.png';
-import centrifugeImg from '../assets/eventImages/centrifuge.png';
-import dumbCImg from '../assets/eventImages/dumb c.png';
-import dumbstuckImg from '../assets/eventImages/dumbstuck.png';
-import faceCanvasImg from '../assets/eventImages/face canvas.png';
-import frenzyFabricImg from '../assets/eventImages/frenzy fabric.png';
-import hilarityEnsuesImg from '../assets/eventImages/hilarity esues.png';
-import iMeMyselfImg from '../assets/eventImages/i me myself.png';
-import lightsCameraImg from '../assets/eventImages/lights camera sf.png';
-import motionTalesImg from '../assets/eventImages/motion tales.png';
-import nationalDebateImg from '../assets/eventImages/national level debate.png';
-import paintItImg from '../assets/eventImages/paint it.png';
-import poetrySlamImg from '../assets/eventImages/poetry slam.png';
-import quizEventImg from '../assets/eventImages/quiz.png';
-import rampmaniaImg from '../assets/eventImages/rampmania.png';
-import rangmanchImg from '../assets/eventImages/rangmanch.png';
-import rangoliImg from '../assets/eventImages/rangoli.png';
-import shakeALegImg from '../assets/eventImages/shake a leg.png';
-import shopaholicImg from '../assets/eventImages/shopaholic.png';
-import sketchItImg from '../assets/eventImages/sketch it.png';
-import spentImg from '../assets/eventImages/spent.png';
-import shuffleSoloImg from '../assets/eventImages/shuffle solo.png';
-import shuffleTeamImg from '../assets/eventImages/shuffle team.png';
-import twoForTangoImg from '../assets/eventImages/two for tango.png';
-import penImg from '../assets/eventImages/A Mighty Pen.png';
-import jumbleImg from '../assets/eventImages/jumble the good word.png';
-import chefImg from '../assets/eventImages/chef.png';
-import sfIdolImg from '../assets/eventImages/sf idol.png';
-import lakesideImg from '../assets/eventImages/lakeside dreams.png';
-import wildfireImg from '../assets/eventImages/wildfire.png';
-import retrowaveImg from '../assets/eventImages/retrowave.png';
-import canYouDuetImg from '../assets/eventImages/can you duet.png';
-import sfmImg from '../assets/eventImages/SFM.png';
-
-// --- MOBILE IMAGES (EventImg) ---
+// Import individual event images from eventImages folder
+import nrityakalaImg from '../assets/eventImages/Nrityakala.webp';
 import nrityakalaMobile from '../assets/EventImg/dance/Nrityakala.webp';
-import shakeALegMobile from '../assets/EventImg/dance/ShakeALeg.webp';
-import centrifugeMobile from '../assets/EventImg/dance/Centrifuge.webp';
-import shuffleSoloMobile from '../assets/EventImg/dance/Shuffle Solo.webp';
-import shuffleTeamMobile from '../assets/EventImg/dance/Shuffle team.webp';
-import twoForTangoMobile from '../assets/EventImg/dance/TwoForATango (1).webp';
-
-import sfIdolMobile from '../assets/EventImg/music/SFidol.webp';
-import canYouDuetMobile from '../assets/EventImg/music/can you duet.webp';
-import retrowaveMobile from '../assets/EventImg/music/Retrowave.webp';
-import beatItMobile from '../assets/EventImg/music/BeatIT.webp';
-import rapmaniaMobile from '../assets/EventImg/music/Rapmania.webp';
-import wildfireMobile from '../assets/EventImg/music/Wildfire.webp';
-import lakesideMobile from '../assets/EventImg/music/LakesideDreamsGroup.webp';
-
-import rangmanchMobile from '../assets/EventImg/dramatics/Rangmanch.webp';
-import iMeMyselfMobile from '../assets/EventImg/dramatics/iMeMyself.webp';
-import dumbstruckMobile from '../assets/EventImg/dramatics/Dumbstruck.webp';
-import nukkadMobile from '../assets/EventImg/dramatics/Nukkad.webp';
-
-import penMobile from '../assets/EventImg/literary/AMightyPen.webp';
-import jumbleMobile from '../assets/EventImg/literary/JumbleTheGoodWord.webp';
-import nationalDebateMobile from '../assets/EventImg/literary/NationalLevelDebate.webp';
-import dumbCMobile from '../assets/EventImg/literary/DumbC.webp';
-import poetrySlamMobile from '../assets/EventImg/literary/EnglishPoetrySlam (1).webp';
-
+import pictureTaleImg from '../assets/eventImages/a picture tale.webp';
 import pictureTaleMobile from '../assets/EventImg/film fest/APictureTale.webp';
-import lightsCameraMobile from '../assets/EventImg/film fest/LightsCameraSF.webp';
-import motionTalesMobile from '../assets/EventImg/film fest/MotionTales.webp';
-import sfmMobile from '../assets/EventImg/film fest/SFM.webp';
-
-import brainDMobile from '../assets/EventImg/fine arts/Bran-D.webp';
-import faceCanvasMobile from '../assets/EventImg/fine arts/FaceCanvas.webp';
-import paintItMobile from '../assets/EventImg/fine arts/PaintIt.webp';
-import rangoliMobile from '../assets/EventImg/fine arts/Rangoli.webp';
-import frenzyFabricMobile from '../assets/EventImg/fine arts/frenzy fabric.webp';
-
+import banterBoutImg from '../assets/eventImages/banter bout.webp';
 import banterBoutMobile from '../assets/EventImg/humor fest/BanterBout.webp';
+import brainDImg from '../assets/eventImages/brain d.webp';
+import brainDMobile from '../assets/EventImg/fine arts/Bran-D.webp';
+import centrifugeImg from '../assets/eventImages/centrifuge.webp';
+import centrifugeMobile from '../assets/EventImg/dance/Centrifuge.webp';
+import dumbCImg from '../assets/eventImages/dumb c.webp';
+import dumbCMobile from '../assets/EventImg/literary/DumbC.webp';
+import dumbstuckImg from '../assets/eventImages/dumbstuck.webp';
+import faceCanvasImg from '../assets/eventImages/face canvas.webp';
+import faceCanvasMobile from '../assets/EventImg/fine arts/FaceCanvas.webp';
+import frenzyFabricImg from '../assets/eventImages/frenzy fabric.webp';
+import frenzyFabricMobile from '../assets/EventImg/fine arts/frenzy fabric.webp';
+import hilarityEnsuesImg from '../assets/eventImages/hilarity esues.webp';
 import hilarityEnsuesMobile from '../assets/EventImg/humor fest/HilarityEnsues.webp';
-
+import iMeMyselfImg from '../assets/eventImages/i me myself.webp';
+import lightsCameraImg from '../assets/eventImages/lights camera sf.webp';
+import lightsCameraMobile from '../assets/EventImg/film fest/LightsCameraSF.webp';
+import motionTalesImg from '../assets/eventImages/motion tales.webp';
+import motionTalesMobile from '../assets/EventImg/film fest/MotionTales.webp';
+import nationalDebateImg from '../assets/eventImages/national level debate.webp';
+import nationalDebateMobile from '../assets/EventImg/literary/NationalLevelDebate.webp';
+import paintItImg from '../assets/eventImages/paint it.webp';
+import paintItMobile from '../assets/EventImg/fine arts/PaintIt.webp';
+import poetrySlamImg from '../assets/eventImages/poetry slam.webp';
+import quizEventImg from '../assets/eventImages/quiz.webp';
+import rampmaniaImg from '../assets/eventImages/rampmania.webp';
+import rangmanchImg from '../assets/eventImages/rangmanch.webp';
+import rangoliImg from '../assets/eventImages/rangoli.webp';
+import rangoliMobile from '../assets/EventImg/fine arts/Rangoli.webp';
+import shakeALegImg from '../assets/eventImages/shake a leg.webp';
+import shakeALegMobile from '../assets/EventImg/dance/ShakeALeg.webp';
+import shopaholicImg from '../assets/eventImages/shopaholic.webp';
+import sketchItImg from '../assets/eventImages/sketch it.webp';
+import spentImg from '../assets/eventImages/spent.webp';
+ //import spentMobile from '../assets/EventImg/Quiz/SpEnt.webp';
+import shuffleSoloImg from '../assets/eventImages/shuffle solo.webp?url';
+import shuffleSoloMobile from '../assets/EventImg/dance/Shuffle Solo.webp';
+import shuffleTeamImg from '../assets/eventImages/shuffle team.webp?url';
+import shuffleTeamMobile from '../assets/EventImg/dance/Shuffle team.webp';
+import twoForTangoImg from '../assets/eventImages/two for tango.webp';
+import pen from '../assets/eventImages/A Mighty Pen.webp';
+import penMobile from '../assets/EventImg/literary/AMightyPen.webp';
+import jumble from '../assets/eventImages/jumble the good word.webp';
+import jumbleMobile from '../assets/EventImg/literary/JumbleTheGoodWord.webp';
+import chef from '../assets/eventImages/chef.webp';
 import chefMobile from '../assets/EventImg/culinary arts/Chef\'sCorner.webp';
 import spentMobile from '../assets/EventImg/Quiz/SpEnt.webp';
 import biztechMobile from '../assets/EventImg/Quiz/BIZTECH.webp';
@@ -340,7 +312,7 @@ const SubEventsPage = () => {
         'shuffle - team': { desktop: shuffleTeamImg, mobile: shuffleTeamMobile },
         'suffle-solo': { desktop: shuffleSoloImg, mobile: shuffleSoloMobile },
         'suffle-team': { desktop: shuffleTeamImg, mobile: shuffleTeamMobile },
-        'centrifuge': { desktop: centrifugeImg, mobile: centrifugeMobile },
+        'Centrifuge': { desktop: centrifugeImg, mobile: centrifugeMobile },
 
         // Music events
         'sfidol': { desktop: sfIdolImg, mobile: sfIdolMobile },
@@ -484,7 +456,7 @@ const SubEventsPage = () => {
 
     if (isLoading) {
         return (
-            <div className="font-body bg-background-dark text-slate-200 min-h-screen relative overflow-x-hidden flex items-center justify-center" style={{ backgroundColor: '#050210' }}>
+            <div className="font-body bg-background-dark text-slate-200 min-h-screen relative overflow-x-hidden flex items-center justify-center" style={{ backgroundColor: '#050210', }}>
                 <div className="relative z-10 flex flex-col items-center gap-4">
                     <div className="w-12 h-12 border-4 border-deep-amber border-t-transparent rounded-full animate-spin"></div>
                     <p className="text-[#d2b48c]">Loading events...</p>
@@ -603,7 +575,7 @@ const SubEventsPage = () => {
                                 <div className="flex flex-col lg:flex-row">
 
                                     {/* Left Section - Image */}
-                                    <div className="w-full lg:w-[320px] xl:w-[380px] flex-shrink-0 bg-black/10 flex items-center justify-center h-[220px] sm:h-[280px] lg:h-[450px]">
+                                    <div className={`w-full lg:w-[320px] xl:w-[380px] flex-shrink-0 ${isMobile ? '' : 'bg-black/10'} flex items-center justify-center h-[180px] sm:h-[280px] lg:h-[450px]`}>
                                         <div className="relative w-full h-full flex items-center justify-center p-4 sm:p-6 lg:p-8 overflow-hidden">
                                             <AnimatePresence mode="wait">
                                                 <motion.img
@@ -611,7 +583,7 @@ const SubEventsPage = () => {
                                                     alt={currentEvent.name}
                                                     src={getEventDisplayData(currentEvent).image}
                                                     initial={{ opacity: 0, scale: 0.9 }}
-                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    animate={{ opacity: 1, scale: isMobile ? 0.75 : 1 }}
                                                     exit={{ opacity: 0, scale: 1.1 }}
                                                     transition={{ duration: 0.4 }}
                                                     className="max-w-full max-h-full object-contain rounded-lg drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] transition-transform duration-500 hover:scale-105"

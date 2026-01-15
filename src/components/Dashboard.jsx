@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import bg from "../assets/dashBG.png";
-import mobileBg from "../assets/mobile.png";
-import maleAvatar from "../assets/male2 face.png";
-import femaleAvatar from "../assets/female1 face.png";
-import yellowLantern from "../assets/yellowlantern.png";
-import pinkLantern from "../assets/pinklantern.png";
-import blueLantern from "../assets/bluelantern.png";
+import bg from "../assets/dashBG.webp";
+import mobileBg from "../assets/mobile.webp";
+import maleAvatar from "../assets/male2 face.webp";
+import femaleAvatar from "../assets/female1 face.webp";
+import yellowLantern from "../assets/yellowlantern.webp";
+import pinkLantern from "../assets/pinklantern.webp";
+import blueLantern from "../assets/bluelantern.webp";
 
 function LanternButton({ title, icon, path, glowColor, isMobile }) {
   const navigate = useNavigate();
@@ -133,7 +133,7 @@ export default function Dashboard() {
       {/* Logout Button */}
       <button
         onClick={handleLogout}
-        className={`absolute ${isMobile ? "top-3 right-4 text-xs px-3 py-1.5" : "top-6 right-6 text-sm px-4 py-2"} bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 hover:scale-105 z-50`}
+        className={`absolute ${isMobile ? "top-3 right-1 text-xs px-3 py-1.5" : "top-6 right-6 text-sm px-4 py-2"} bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-300 hover:scale-105 z-50`}
       >
         Logout
       </button>

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import DomeGallery from "../components/DomeGallery";
 
 /* Background */
-import bgImage from "../assets/gallerybg.png";
+import bgImage from "../assets/gallerybg.webp";
 
 const allImagesMapped = import.meta.glob('../assets/*.{png,jpg,jpeg,webp,PNG,JPG,JPEG,Webp}', { eager: true, import: 'default' });
 const allImages = Object.entries(allImagesMapped)
