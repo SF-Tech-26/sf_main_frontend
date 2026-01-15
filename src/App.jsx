@@ -1,9 +1,10 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/authContext';
 import { EventProvider } from './context/eventContext';
 import Contingent from './pages/contingent';
-
+import BackButton from './components/BackButton';
 // Page imports
 import EventsPage from './pages/EventsPage';
 import SubEventsPage from './pages/SubEventsPage';
@@ -30,6 +31,7 @@ function App() {
   return (
     <AuthProvider>
       <EventProvider>
+        <BackButton/>
         <Navbar />
         <Toaster position="top-center" />
         <Routes>
