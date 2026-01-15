@@ -117,6 +117,7 @@ const TarotCard = ({ genre, index, totalCards, globalIndex, onClick, isMobileVie
     const centerIndex = (totalCards - 1) / 2;
     const rotation = (index - centerIndex) * 10;
     const translateX = (index - centerIndex) * 200;
+
     const translateY = Math.abs(index - centerIndex) * 25;
 
     const icon = genreIcons[genre] || '✨';

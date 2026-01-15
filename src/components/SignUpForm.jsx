@@ -1,7 +1,10 @@
 import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
-import { registerUser } from "../services/authService";
+import { registerUser, googleLogin } from "../services/authService";
+import { useAuth } from "../context/authContext";
+import { useGoogleLogin } from "@react-oauth/google";
+import { FcGoogle } from "react-icons/fc";
 import toast from "react-hot-toast";
 
 // Production reCAPTCHA site key
@@ -29,6 +32,7 @@ export default function SignUpForm() {
   const [error, setError] = useState("");
   const recaptchaRef = useRef(null);
 
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -137,10 +141,34 @@ export default function SignUpForm() {
     indent-[8px]
     disabled:opacity-50
   `;
-  
+
+  const handleGoogleSuccess = async (tokenResponse) => {
+    setIsLoading(true);
+    try {
+      const response = await googleLogin(tokenResponse.access_token);
+      if (response.code === 0) {
+        const { token, data } = response.data;
+        login(token, data);
+        toast.success("Registration successful!");
+        navigate("/");
+      } else {
+        setError(response.message || "Google registration failed.");
+      }
+    } catch (err) {
+      setError("Google registration failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loginWithGoogle = useGoogleLogin({
+    onSuccess: handleGoogleSuccess,
+    onError: () => setError("Google Login Failed"),
+  });
+
   return (
     <div
-     className="
+      className="
   w-[330px] max-w-[90%]
   h-[60vh]
   overflow-y-auto
@@ -150,14 +178,14 @@ export default function SignUpForm() {
   text-[#E6FBFF]
   px-[32px] py-[40px]
 "
-style={{
-  background: "rgba(10, 20, 44, 0.92)",
-  boxShadow: `
+      style={{
+        background: "rgba(10, 20, 44, 0.92)",
+        boxShadow: `
     0 0 20px rgba(125, 249, 255, 0.30),
     0 0 45px rgba(56, 189, 248, 0.22),
     0 0 90px rgba(167, 139, 250, 0.10)
   `,
-}}
+      }}
 
     >
       <h1
@@ -445,10 +473,10 @@ style={{
           />
         </div>
 
-       <button
-  type="submit"
-  disabled={isLoading}
-  className="
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="
     mt-[12px]
     h-[46px]
     mx-auto
@@ -462,15 +490,54 @@ style={{
     transition
     disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
   "
-  style={{
-    boxShadow: `
+          style={{
+            boxShadow: `
       0 0 10px rgba(94, 235, 255, 0.30),
       0 0 22px rgba(56, 189, 248, 0.22)
     `,
-  }}
->
-  {isLoading ? "REGISTERING..." : "CREATE ACCOUNT"}
-</button>
+          }}
+        >
+          {isLoading ? "REGISTERING..." : "CREATE ACCOUNT"}
+        </button>
+
+        <div className="flex items-center gap-4 my-4 w-full max-w-[300px] mx-auto">
+          <div className="h-[1px] bg-[#7DF9FF]/30 flex-1"></div>
+          <span className="text-[#7DF9FF]/70 text-sm">OR</span>
+          <div className="h-[1px] bg-[#7DF9FF]/30 flex-1"></div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => loginWithGoogle()}
+          disabled={isLoading}
+          className="
+    h-[46px]
+    mx-auto
+    w-full max-w-[300px]
+    rounded-full
+    font-semibold
+    tracking-wider
+    text-[#001B2E]
+    bg-[#E0F7FF]
+    hover:bg-[#FFFFFF]
+    hover:scale-[1.03]
+    transition
+    flex
+    items-center
+    justify-center
+    gap-2
+    disabled:opacity-50
+  "
+          style={{
+            boxShadow: `
+      0 0 10px rgba(224, 247, 255, 0.30),
+      0 0 22px rgba(224, 247, 255, 0.22)
+    `,
+          }}
+        >
+          <FcGoogle size={20} />
+          SIGN UP WITH GOOGLE
+        </button>
 
 
         <p className="mt-[14px] text-center text-sm text-[#C7F5FF]">

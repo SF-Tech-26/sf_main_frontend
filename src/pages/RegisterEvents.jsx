@@ -1,4 +1,4 @@
-// src/pages/RegisteredEvents.jsx - Ethereal Enigma Theme with Modal Confirmations
+// src/pages/RegisteredEvents.jsx - Cosmic Theme matching Report.jsx
 
 import React, { useEffect, useState } from "react";
 import {
@@ -376,22 +376,24 @@ const RegisteredEvents = ({ onClose, userToken }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50 p-2 sm:p-4 overflow-hidden pt-20">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex justify-center items-center z-50 p-2 sm:p-4">
       <ToastContainer theme="dark" position="top-center" autoClose={3000} />
       
-      {/* Floating particles animation */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="particle particle-1"></div>
-        <div className="particle particle-2"></div>
-        <div className="particle particle-3"></div>
-        <div className="particle particle-4"></div>
-        <div className="particle particle-5"></div>
-      </div>
+      <div className="relative w-full max-w-6xl max-h-[60vh] sm:max-h-[95vh] overflow-hidden flex flex-col">
+        {/* Cosmic Background */}
+        <div className="relative flex-1 flex flex-col bg-gradient-to-br from-[#0a0f1e] via-[#050b14] to-[#0a0f1e] rounded-[2rem] border-2 border-cyan-500/40 shadow-[0_0_60px_rgba(6,182,212,0.2)] overflow-hidden">
+          
+          {/* Original Animated Background Elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute w-2 h-2 bg-white rounded-full top-[10%] left-[15%] animate-[twinkle_2s_infinite] shadow-[0_0_8px_white]" />
+            <div className="absolute w-1.5 h-1.5 bg-white rounded-full top-[60%] left-[20%] animate-[twinkle_2.5s_infinite]" />
+            <div className="absolute w-1 h-1 bg-white/90 rounded-full top-[35%] left-[50%] animate-[twinkle_3.5s_infinite]" />
+            <div className="absolute w-2 h-2 bg-white rounded-full top-[80%] right-[15%] animate-[twinkle_2.8s_infinite]" />
+            <div className="absolute w-1.5 h-1.5 bg-white rounded-full top-[25%] right-[30%] animate-[twinkle_3s_infinite]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5 animate-[nebula_10s_infinite]" />
+          </div>
 
-      <div className="relative w-full max-w-6xl h-[85vh] flex flex-col animate-fadeIn">
-        {/* Header - Fixed */}
-        <div className="bg-gradient-to-r from-blue-900/50 via-cyan-900/50 to-blue-900/50 backdrop-blur-xl text-white py-4 sm:py-6 px-4 sm:px-8 rounded-t-3xl text-center border-2 border-blue-500/20 shadow-2xl shadow-blue-900/50 animate-glow relative">
-          {/* Close Button - Inside Header */}
+          {/* Close Button */}
           <button
             onClick={() => {
               if (showAddMemberModal) {
@@ -400,91 +402,84 @@ const RegisteredEvents = ({ onClose, userToken }) => {
                 navigate("/dashboard");
               }
             }}
-            className="absolute top-4 right-4 bg-gradient-to-br from-blue-600/80 to-cyan-600/80 text-white rounded-full w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center text-xl sm:text-2xl hover:from-blue-700/90 hover:to-cyan-700/90 transition shadow-2xl shadow-blue-500/50 font-bold border-2 border-blue-400/30 hover:scale-110 hover:rotate-90 duration-300"
+            className="absolute top-4 right-4 bg-white/10 text-cyan-400 rounded-full w-9 h-9 flex items-center justify-center text-xl font-bold hover:bg-white/20 transition z-50 border border-cyan-500/30"
           >
             ✕
           </button>
-          
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-300 via-cyan-300 to-blue-300 bg-clip-text text-transparent animate-pulse">
-            Registered Events
-          </h1>
-          {userInfo && (
-            <p className="text-xs sm:text-sm text-cyan-200/80 mt-2 animate-fadeIn">
-              Welcome, {userInfo.name} ({userInfo.sfId})
-            </p>
-          )}
-        </div>
 
-        {/* Content Area - Scrollable */}
-        <div className="flex-1 bg-gradient-to-br from-blue-950/30 via-black/40 to-blue-950/30 backdrop-blur-xl rounded-b-3xl border-2 border-t-0 border-blue-500/20 overflow-hidden shadow-2xl shadow-blue-900/30">
-          {loading ? (
-            <div className="h-full flex items-center justify-center">
-              <div className="text-white text-center">
-                <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-white mx-auto mb-4"></div>
-                <p className="text-lg sm:text-xl">Loading events...</p>
+          {/* Content Container - Scrollable */}
+          <div className="relative z-10 p-4 sm:p-8 flex flex-col overflow-y-auto custom-scrollbar">
+            <h1 className="text-2xl sm:text-3xl font-bold text-center text-white mb-6 tracking-wide drop-shadow-[0_2px_8px_rgba(6,182,212,0.5)]">
+              Registered Events
+            </h1>
+
+            {userInfo && (
+              <p className="text-cyan-400/80 text-center text-sm mb-6 tracking-wider">
+                Welcome, {userInfo.name} ({userInfo.sfId})
+              </p>
+            )}
+
+            {loading ? (
+              <div className="text-cyan-400 text-center py-12 flex flex-col items-center gap-4">
+                <div className="w-8 h-8 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-lg tracking-widest animate-pulse">SYNCHRONIZING...</p>
               </div>
-            </div>
-          ) : !token ? (
-            <div className="h-full flex items-center justify-center p-4">
-              <div className="text-white text-center text-lg sm:text-xl">
+            ) : !token ? (
+              <div className="text-cyan-400 text-center py-12 text-lg tracking-wider">
                 Please login to view registered events
               </div>
-            </div>
-          ) : (soloEvents.length === 0 && groupEvents.length === 0) ? (
-            <div className="h-full flex items-center justify-center p-4">
-              <div className="text-center">
-                <div className="text-6xl sm:text-8xl mb-4">🎭</div>
-                <div className="text-white text-lg sm:text-xl">
+            ) : (soloEvents.length === 0 && groupEvents.length === 0) ? (
+              <div className="text-center py-12">
+                <div className="text-6xl mb-4">🎭</div>
+                <div className="text-cyan-400/80 text-lg tracking-wide">
                   You haven't registered for any events yet
                 </div>
               </div>
-            </div>
-          ) : (
-            <div className="h-full overflow-y-auto p-3 sm:p-6 space-y-4 sm:space-y-6 custom-scrollbar">
-              {/* Solo Events */}
-              {soloEvents.length > 0 && (
-                <SoloEventsList events={soloEvents} onDeregister={handleDeregisterSolo} />
-              )}
+            ) : (
+              <div className="flex-1 space-y-6">
+                {/* Solo Events */}
+                {soloEvents.length > 0 && (
+                  <SoloEventsList events={soloEvents} onDeregister={handleDeregisterSolo} />
+                )}
 
-              {/* Group Events */}
-              {groupEvents.length > 0 && (
-                <GroupEventsList
-                  events={groupEvents}
-                  onDeregisterTeam={handleDeregisterTeam}
-                  onDeregisterMember={handleDeregisterMember}
-                  onAddMember={handleOpenAddMember}
-                />
-              )}
+                {/* Group Events */}
+                {groupEvents.length > 0 && (
+                  <GroupEventsList
+                    events={groupEvents}
+                    onDeregisterTeam={handleDeregisterTeam}
+                    onDeregisterMember={handleDeregisterMember}
+                    onAddMember={handleOpenAddMember}
+                  />
+                )}
+              </div>
+            )}
+
+            <div className="mt-8 text-center border-t border-cyan-500/10 pt-4">
+              <p className="text-cyan-500/40 text-[10px] tracking-[0.4em] font-bold uppercase">
+                
+              </p>
             </div>
-          )}
+          </div>
         </div>
-
-        {/* Add Member Modal */}
-        {showAddMemberModal && (
-          <AddMemberModal
-            onClose={() => setShowAddMemberModal(false)}
-            onSubmit={handleAddMember}
-          />
-        )}
       </div>
+
+      {/* Add Member Modal */}
+      {showAddMemberModal && (
+        <AddMemberModal
+          onClose={() => setShowAddMemberModal(false)}
+          onSubmit={handleAddMember}
+        />
+      )}
 
       {/* Confirmation Modal Popup */}
       {showConfirmModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[60] p-4">
-          <div className="bg-gradient-to-br from-blue-900/90 via-blue-950/90 to-blue-900/90 rounded-2xl border-2 border-blue-500/40 shadow-[0_0_60px_rgba(59,130,246,0.3)] p-6 sm:p-8 max-w-md w-full animate-[scaleIn_0.2s_ease-out] relative">
-            {/* Close Button - Inside Confirmation Modal */}
-            <button
-              onClick={handleCancelConfirm}
-              className="absolute top-4 right-4 bg-gradient-to-br from-gray-700/80 to-gray-800/80 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg hover:from-gray-600/90 hover:to-gray-700/90 transition shadow-lg font-bold border-2 border-gray-500/30 hover:scale-110 hover:rotate-90 duration-300"
-            >
-              ✕
-            </button>
-
+          <div className="bg-gradient-to-br from-[#0a0f1e] via-[#050b14] to-[#0a0f1e] rounded-2xl border-2 border-cyan-500/40 shadow-[0_0_60px_rgba(6,182,212,0.3)] p-6 sm:p-8 max-w-md w-full animate-[scaleIn_0.2s_ease-out] relative">
             {/* Animated Background */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-2xl">
               <div className="absolute w-2 h-2 bg-white rounded-full top-[20%] left-[25%] animate-[twinkle_2s_infinite]" />
               <div className="absolute w-1.5 h-1.5 bg-white rounded-full top-[70%] left-[75%] animate-[twinkle_2.5s_infinite]" />
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-cyan-500/5" />
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5" />
             </div>
 
             <div className="relative">
@@ -496,10 +491,10 @@ const RegisteredEvents = ({ onClose, userToken }) => {
               </div>
 
               {/* Message */}
-              <h2 className="text-xl sm:text-2xl font-bold text-white text-center mb-3 drop-shadow-[0_2px_8px_rgba(59,130,246,0.5)]">
+              <h2 className="text-xl sm:text-2xl font-bold text-white text-center mb-3 drop-shadow-[0_2px_8px_rgba(6,182,212,0.5)]">
                 {confirmMessage.title}
               </h2>
-              <p className="text-blue-200/80 text-center mb-6 text-sm sm:text-base">
+              <p className="text-cyan-200/80 text-center mb-6 text-sm sm:text-base">
                 {confirmMessage.description}
               </p>
 
@@ -524,62 +519,11 @@ const RegisteredEvents = ({ onClose, userToken }) => {
       )}
 
       <style jsx>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: scale(0.95); }
-          to { opacity: 1; transform: scale(1); }
-        }
-        
-        @keyframes glow {
-          0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
-          50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
-        }
-        
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) translateX(0px); }
-          50% { transform: translateY(-20px) translateX(10px); }
-        }
-        
-        @keyframes twinkle { 
-          0%, 100% { opacity: 0.3; transform: scale(1); } 
-          50% { opacity: 1; transform: scale(1.5); } 
-        }
-        
-        @keyframes scaleIn { 
-          from { opacity: 0; transform: scale(0.9); } 
-          to { opacity: 1; transform: scale(1); } 
-        }
-        
-        .animate-fadeIn {
-          animation: fadeIn 0.5s ease-out;
-        }
-        
-        .animate-glow {
-          animation: glow 3s ease-in-out infinite;
-        }
-        
-        .particle {
-          position: absolute;
-          background: radial-gradient(circle, rgba(59, 130, 246, 0.8), transparent);
-          border-radius: 50%;
-          pointer-events: none;
-          animation: float 8s ease-in-out infinite;
-        }
-        
-        .particle-1 { width: 4px; height: 4px; top: 10%; left: 10%; animation-delay: 0s; animation-duration: 10s; }
-        .particle-2 { width: 6px; height: 6px; top: 50%; right: 20%; animation-delay: 2s; animation-duration: 12s; }
-        .particle-3 { width: 3px; height: 3px; bottom: 20%; left: 30%; animation-delay: 4s; animation-duration: 9s; }
-        .particle-4 { width: 5px; height: 5px; top: 70%; right: 40%; animation-delay: 1s; animation-duration: 11s; }
-        .particle-5 { width: 4px; height: 4px; bottom: 40%; left: 60%; animation-delay: 3s; animation-duration: 13s; }
-
-        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.5); border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: linear-gradient(180deg, #3b82f6, #06b6d4);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(180deg, #2563eb, #0891b2);
-        }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.5); } }
+        @keyframes nebula { 0%, 100% { opacity: 0.2; transform: translate(0,0); } 50% { opacity: 0.4; transform: translate(20px, -20px); } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #0891b2; border-radius: 10px; }
       `}</style>
     </div>
   );
