@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { getAllEvents, getEventsByGenre } from '../services/eventService';
@@ -13,41 +13,63 @@ import logo from '../assets/sf_logo.png';
 
 // Import individual event images from eventImages folder
 import nrityakalaImg from '../assets/eventImages/Nrityakala.png';
-import sfmImg from '../assets/eventImages/SFm.png';
+import nrityakalaMobile from '../assets/EventImg/dance/Nrityakala.webp';
 import pictureTaleImg from '../assets/eventImages/a picture tale.png';
+import pictureTaleMobile from '../assets/EventImg/film fest/APictureTale.webp';
 import banterBoutImg from '../assets/eventImages/banter bout.png';
+import banterBoutMobile from '../assets/EventImg/humor fest/BanterBout.webp';
 import brainDImg from '../assets/eventImages/brain d.png';
-import canYouDuetImg from '../assets/eventImages/can you duet.png';
+import brainDMobile from '../assets/EventImg/fine arts/Bran-D.webp';
 import centrifugeImg from '../assets/eventImages/centrifuge.png';
+import centrifugeMobile from '../assets/EventImg/dance/Centrifuge.webp';
 import dumbCImg from '../assets/eventImages/dumb c.png';
+import dumbCMobile from '../assets/EventImg/literary/DumbC.webp';
 import dumbstuckImg from '../assets/eventImages/dumbstuck.png';
 import faceCanvasImg from '../assets/eventImages/face canvas.png';
+import faceCanvasMobile from '../assets/EventImg/fine arts/FaceCanvas.webp';
 import frenzyFabricImg from '../assets/eventImages/frenzy fabric.png';
+import frenzyFabricMobile from '../assets/EventImg/fine arts/frenzy fabric.webp';
 import hilarityEnsuesImg from '../assets/eventImages/hilarity esues.png';
+import hilarityEnsuesMobile from '../assets/EventImg/humor fest/HilarityEnsues.webp';
 import iMeMyselfImg from '../assets/eventImages/i me myself.png';
-import lakesideDreamsImg from '../assets/eventImages/lakeside dreams.png';
 import lightsCameraImg from '../assets/eventImages/lights camera sf.png';
+import lightsCameraMobile from '../assets/EventImg/film fest/LightsCameraSF.webp';
 import motionTalesImg from '../assets/eventImages/motion tales.png';
+import motionTalesMobile from '../assets/EventImg/film fest/MotionTales.webp';
 import nationalDebateImg from '../assets/eventImages/national level debate.png';
+import nationalDebateMobile from '../assets/EventImg/literary/NationalLevelDebate.webp';
 import paintItImg from '../assets/eventImages/paint it.png';
+import paintItMobile from '../assets/EventImg/fine arts/PaintIt.webp';
 import poetrySlamImg from '../assets/eventImages/poetry slam.png';
 import quizEventImg from '../assets/eventImages/quiz.png';
 import rampmaniaImg from '../assets/eventImages/rampmania.png';
 import rangmanchImg from '../assets/eventImages/rangmanch.png';
 import rangoliImg from '../assets/eventImages/rangoli.png';
-import retrowaveImg from '../assets/eventImages/retrowave.png';
-import sfIdolImg from '../assets/eventImages/sf idol.png';
+import rangoliMobile from '../assets/EventImg/fine arts/Rangoli.webp';
 import shakeALegImg from '../assets/eventImages/shake a leg.png';
+import shakeALegMobile from '../assets/EventImg/dance/ShakeALeg.webp';
 import shopaholicImg from '../assets/eventImages/shopaholic.png';
 import sketchItImg from '../assets/eventImages/sketch it.png';
 import spentImg from '../assets/eventImages/spent.png';
+import spentMobile from '../assets/EventImg/Quiz/SpEnt.webp';
 import shuffleSoloImg from '../assets/eventImages/shuffle solo.png?url';
+import shuffleSoloMobile from '../assets/EventImg/dance/Shuffle Solo.webp';
 import shuffleTeamImg from '../assets/eventImages/shuffle team.png?url';
+import shuffleTeamMobile from '../assets/EventImg/dance/Shuffle team.webp';
 import twoForTangoImg from '../assets/eventImages/two for tango.png';
-import wildfireImg from '../assets/eventImages/wildfire.png';
 import pen from '../assets/eventImages/A Mighty Pen.png';
+import penMobile from '../assets/EventImg/literary/AMightyPen.webp';
 import jumble from '../assets/eventImages/jumble the good word.png';
+import jumbleMobile from '../assets/EventImg/literary/JumbleTheGoodWord.webp';
 import chef from '../assets/eventImages/chef.png';
+import chefMobile from '../assets/EventImg/culinary arts/Chef\'sCorner.webp';
+import beatItLogo from '../assets/EventImg/music/BeatIT.webp';
+import lakesideLogo from '../assets/EventImg/music/LakesideDreamsGroup.webp';
+import rapmaniaLogo from '../assets/EventImg/music/Rapmania.webp';
+import retrowaveLogo from '../assets/EventImg/music/Retrowave.webp';
+import sfIdolLogo from '../assets/EventImg/music/SFidol.webp';
+import wildfireLogo from '../assets/EventImg/music/Wildfire.webp';
+import canYouDuetLogo from '../assets/EventImg/music/can you duet.webp';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEvents } from '../context/eventContext';
@@ -194,8 +216,16 @@ const SubEventsPage = () => {
     const [error, setError] = useState(null);
 
     const [showRegistration, setShowRegistration] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     const genreName = slugToGenre[genreSlug] || genreSlug;
+
+    // Track mobile screen size
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
 
@@ -229,16 +259,20 @@ const SubEventsPage = () => {
         fetchEvents();
     }, [genreName]);
 
-    const handleEventClick = (event) => {
+    // Memoize the event click handler to prevent re-creating on every render
+    const handleEventClick = useCallback((event) => {
         setSelectedEvent(event);
-    };
+    }, []);
 
-    // Navigation items for PillNav - dynamically from events
-    const eventNavItems = events.map((event) => ({
-        label: event.name,
-        active: selectedEvent?.id === event.id,
-        onClick: () => handleEventClick(event)
-    }));
+    // Memoize navigation items to prevent PillNav re-renders
+    const eventNavItems = useMemo(() =>
+        events.map((event) => ({
+            label: event.name,
+            active: selectedEvent?.id === event.id,
+            onClick: () => handleEventClick(event)
+        })),
+        [events, selectedEvent?.id, handleEventClick]
+    );
 
 
 
@@ -267,22 +301,27 @@ const SubEventsPage = () => {
     // Event name to image mapping with variations
     const eventImageMap = {
         // Dance events
-        'nrityakala': nrityakalaImg,
-        'shake a leg': shakeALegImg,
-        'shake-a-leg': shakeALegImg,
+        'nrityakala': { desktop: nrityakalaImg, mobile: nrityakalaMobile },
+        'shake a leg': { desktop: shakeALegImg, mobile: shakeALegMobile },
+        'shake-a-leg': { desktop: shakeALegImg, mobile: shakeALegMobile },
         'two for tango': twoForTangoImg,
         'two-for-tango': twoForTangoImg,
-       
-        'Shuffle - Solo': shuffleSoloImg,
-         'Shuffle - Team ': shuffleTeamImg,
+
+        'Shuffle - Solo': { desktop: shuffleSoloImg, mobile: shuffleSoloMobile },
+        'Shuffle - Team ': { desktop: shuffleTeamImg, mobile: shuffleTeamMobile },
 
         // Music events
-        'sfm': sfmImg,
-        'sf idol': sfIdolImg,
-        'sf-idol': sfIdolImg,
-        'can you duet': canYouDuetImg,
-        'can-you-duet': canYouDuetImg,
-        'retrowave': retrowaveImg,
+        'sf idol': sfIdolLogo,
+        'sf-idol': sfIdolLogo,
+        'can you duet': canYouDuetLogo,
+        'can-you-duet': canYouDuetLogo,
+        'retrowave': retrowaveLogo,
+        'beat it': beatItLogo,
+        'beat-it': beatItLogo,
+        'rapmania': rapmaniaLogo,
+        'wildfire': wildfireLogo,
+        'lakeside dreams': lakesideLogo,
+        'lakeside-dreams': lakesideLogo,
         'Shuffle-Solo': shuffleSoloImg,
 
         // Dramatics events
@@ -291,73 +330,70 @@ const SubEventsPage = () => {
         'i-me-myself': iMeMyselfImg,
 
         // Literary events
-        'banter bout': banterBoutImg,
-        'banter-bout': banterBoutImg,
+        'banter bout': { desktop: banterBoutImg, mobile: banterBoutMobile },
+        'banter-bout': { desktop: banterBoutImg, mobile: banterBoutMobile },
         'poetry slam': poetrySlamImg,
         'poetry-slam': poetrySlamImg,
-        'national level debate': nationalDebateImg,
-        'national-level-debate': nationalDebateImg,
-        'spent': spentImg,
-        'a mighty pen': pen,
-        'jumble the good word': jumble,
+        'national level debate': { desktop: nationalDebateImg, mobile: nationalDebateMobile },
+        'national-level-debate': { desktop: nationalDebateImg, mobile: nationalDebateMobile },
+        'spent': { desktop: spentImg, mobile: spentMobile },
+        'a mighty pen': { desktop: pen, mobile: penMobile },
+        'jumble the good word': { desktop: jumble, mobile: jumbleMobile },
 
         // Film Fest events
-        'a picture tale': pictureTaleImg,
-        'a-picture-tale': pictureTaleImg,
-        'lights camera sf': lightsCameraImg,
-        'lights-camera-sf': lightsCameraImg,
-        'motion tales': motionTalesImg,
-        'motion-tales': motionTalesImg,
+        'a picture tale': { desktop: pictureTaleImg, mobile: pictureTaleMobile },
+        'a-picture-tale': { desktop: pictureTaleImg, mobile: pictureTaleMobile },
+        'lights camera sf': { desktop: lightsCameraImg, mobile: lightsCameraMobile },
+        'lights-camera-sf': { desktop: lightsCameraImg, mobile: lightsCameraMobile },
+        'motion tales': { desktop: motionTalesImg, mobile: motionTalesMobile },
+        'motion-tales': { desktop: motionTalesImg, mobile: motionTalesMobile },
 
         // Quiz events
         'brain drain': brainDImg,
         'brain-drain': brainDImg,
         'quiz': quizEventImg,
-        
-        'Centrifuge': centrifugeImg,
+
+        'Centrifuge': { desktop: centrifugeImg, mobile: centrifugeMobile },
 
         // Fine Arts events
-        'face canvas': faceCanvasImg,
-        'face-canvas': faceCanvasImg,
-        'paint it': paintItImg,
-        'paint-it': paintItImg,
+        'face canvas': { desktop: faceCanvasImg, mobile: faceCanvasMobile },
+        'face-canvas': { desktop: faceCanvasImg, mobile: faceCanvasMobile },
+        'paint it': { desktop: paintItImg, mobile: paintItMobile },
+        'paint-it': { desktop: paintItImg, mobile: paintItMobile },
         'sketch it': sketchItImg,
         'sketch-it': sketchItImg,
-        'rangoli': rangoliImg,
+        'rangoli': { desktop: rangoliImg, mobile: rangoliMobile },
 
         // Humor Fest events
-        'dumb charades': dumbCImg,
-        'dumb-charades': dumbCImg,
+        'dumb charades': { desktop: dumbCImg, mobile: dumbCMobile },
+        'dumb-charades': { desktop: dumbCImg, mobile: dumbCMobile },
         'dumbstruck': dumbstuckImg,
-        'hilarity ensues': hilarityEnsuesImg,
-        'hilarity-ensues': hilarityEnsuesImg,
+        'hilarity ensues': { desktop: hilarityEnsuesImg, mobile: hilarityEnsuesMobile },
+        'hilarity-ensues': { desktop: hilarityEnsuesImg, mobile: hilarityEnsuesMobile },
 
         // Fashion events
         'rampmania': rampmaniaImg,
-        'frenzy fabric': frenzyFabricImg,
-        'frenzy-fabric': frenzyFabricImg,
+        'frenzy fabric': { desktop: frenzyFabricImg, mobile: frenzyFabricMobile },
+        'frenzy-fabric': { desktop: frenzyFabricImg, mobile: frenzyFabricMobile },
         'shopaholic': shopaholicImg,
         'peek a who': quizEventImg,
 
         // Game Fest / Other events - handle both shuffle and suffle spelling
-        
+
         'sufflesolo': shuffleSoloImg,
         'shuffle team': shuffleTeamImg,
         'Shuffle - Team': shuffleTeamImg,
         'shuffleteam': shuffleTeamImg,
 
         // Other events
-        'lakeside dreams': lakesideDreamsImg,
-        'lakeside-dreams': lakesideDreamsImg,
-        'wildfire': wildfireImg,
         'top it to win it': spentImg,
-        "chef's corner": chef,
+        "chef's corner": { desktop: chef, mobile: chefMobile },
     };
 
     // Fallback images - only from eventImages folder
     const fallbackImages = [
-        nrityakalaImg, sfmImg, rangmanchImg, shakeALegImg,
-        retrowaveImg, lakesideDreamsImg, quizEventImg, shuffleTeamImg
+        nrityakalaImg, rangmanchImg, shakeALegImg,
+        retrowaveLogo, lakesideLogo, quizEventImg, shuffleTeamImg
     ];
 
     const getEventDisplayData = (event) => {
@@ -366,10 +402,19 @@ const SubEventsPage = () => {
 
         // Get event-specific image from eventImageMap
         const eventKey = event.name.toLowerCase();
-        const eventSpecificImage = eventImageMap[eventKey];
+        const eventImageData = eventImageMap[eventKey];
+
+        // Pick between desktop and mobile image
+        let finalImage = null;
+        if (eventImageData) {
+            if (typeof eventImageData === 'object' && eventImageData.desktop) {
+                finalImage = isMobile ? (eventImageData.mobile || eventImageData.desktop) : eventImageData.desktop;
+            } else {
+                finalImage = eventImageData;
+            }
+        }
 
         // Use fallback from eventImages if no specific match
-        let finalImage = eventSpecificImage;
         if (!finalImage && event.poster) {
             finalImage = event.poster;
         }
@@ -459,21 +504,50 @@ const SubEventsPage = () => {
                     </h1>
                 </header>
 
-                {/* PillNav for Subevent Navigation */}
+                {/* PillNav for Subevent Navigation with Scroll Indicators */}
                 {events.length > 1 && (
-                    <div className="mb-4 md:mb-6 w-full flex justify-center relative z-40">
-                        <PillNav
-                            logo={logo}
-                            logoAlt="Back to Events"
-                            items={eventNavItems}
-                            className="subevent-nav"
-                            ease="power2.easeOut"
-                            baseColor="#000000"
-                            pillColor="#ffffff"
-                            hoveredPillTextColor="#ffffff"
-                            pillTextColor="#000000"
-                            onItemClick={(item) => item.onClick?.()}
-                        />
+                    <div className="mb-4 md:mb-6 w-full relative">
+                        {/* Left Scroll Indicator - Only on small screens when scrolling is needed */}
+                        {/* {events.length > 3 && isMobile && (
+                            <span
+                                className="material-icons text-cyan-300 absolute -left-4 sm:left-2 top-1/2 -translate-y-1/2 z-[100] pointer-events-none"
+                                style={{
+                                    fontSize: '36px',
+                                    animation: 'slideLeft 2s ease-in-out infinite'
+                                }}
+                            >
+                                chevron_left
+                            </span>
+                        )} */}
+
+                        {/* Right Scroll Indicator - Only on small screens when scrolling is needed */}
+                        {events.length > 3 && isMobile && (
+                            <span
+                                className="material-icons text-black absolute right-4 sm:right-2 top-1/2 -translate-y-1/2 z-[100] pointer-events-none"
+                                style={{
+                                    fontSize: '36px',
+                                    animation: 'slideRight 2s ease-in-out infinite'
+
+                                }}
+                            >
+                                chevron_right
+                            </span>
+                        )}
+
+                        <div className="flex justify-center relative z-40">
+                            <PillNav
+                                logo={logo}
+                                logoAlt="Back to Events"
+                                items={eventNavItems}
+                                className="subevent-nav"
+                                ease="power2.easeOut"
+                                baseColor="#000000"
+                                pillColor="#ffffff"
+                                hoveredPillTextColor="#ffffff"
+                                pillTextColor="#000000"
+                                onItemClick={(item) => item.onClick?.()}
+                            />
+                        </div>
                     </div>
                 )}
 
@@ -505,16 +579,17 @@ const SubEventsPage = () => {
                                         <div
                                             className="relative overflow-hidden event-image-container"
                                             style={{
-                                                background: 'linear-gradient(135deg, rgba(180, 200, 220, 0.5) 0%, rgba(120, 150, 180, 0.3) 50%, rgba(180, 200, 220, 0.4) 100%)',
-                                                boxShadow: '0 0 20px rgba(150, 180, 210, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.1)',
-                                                padding: '4px'
+                                                padding: '0px'
                                             }}
                                         >
                                             <img
                                                 alt={currentEvent.name}
-                                                src={isCentrifuge ? centrifugeImg : getEventDisplayData(currentEvent).image}
-                                                className="w-full h-full object-cover rounded-lg"
-                                                style={{ backgroundColor: '#1a1a2e' }}
+                                                src={getEventDisplayData(currentEvent).image}
+                                                className="w-full h-full object-contain rounded-lg p-12 lg:p-4"
+                                                style={{
+                                                    filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.2))',
+                                                    mixBlendMode: 'screen'
+                                                }}
                                             />
                                         </div>
                                     </div>
@@ -555,7 +630,7 @@ const SubEventsPage = () => {
                                             <div className="mt-2" style={{ fontFamily: "Roboto" }}>
                                                 <button
                                                     onClick={handleRegisterClick}
-                                                    className="px-6 py-2 rounded-lg bg-white hover:bg-white text-black  font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-purple-500/50 flex items-center gap-2"
+                                                    className="px-6 py-2 rounded-lg bg-gray-400/100 hover:bg-grey text-black  font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-purple-500/50 flex items-center gap-2"
                                                 >
                                                     Register
                                                     <span className="material-icons text-base">arrow_forward</span>
@@ -647,73 +722,6 @@ const SubEventsPage = () => {
                         </div>
                     </div>
                 </div>
-
-                {/* Navigation Dots */}
-                {events.length > 1 && (
-                    <div className="flex items-center justify-center gap-4 mt-6">
-                        <button
-                            onClick={() => {
-                                const currentIndex = events.indexOf(currentEvent);
-                                const prevIndex = currentIndex > 0 ? currentIndex - 1 : events.length - 1;
-                                setSelectedEvent(events[prevIndex]);
-                            }}
-                            className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110"
-                            style={{
-                                background: 'rgba(50, 70, 100, 0.5)',
-                                border: '1px solid rgba(150, 180, 210, 0.3)'
-                            }}
-                        >
-                            <span className="material-icons text-gray-400 text-sm">chevron_left</span>
-                        </button>
-
-                        <div className="flex items-center gap-2">
-                            {events.map((event, index) => (
-                                <button
-                                    key={event.id}
-                                    onClick={() => setSelectedEvent(event)}
-                                    className={`transition-all duration-300 rounded-full ${selectedEvent?.id === event.id
-                                        ? 'w-3 h-3 scale-110'
-                                        : 'w-2 h-2 hover:scale-125'
-                                        }`}
-                                    style={{
-                                        background: selectedEvent?.id === event.id
-                                            ? 'linear-gradient(135deg, rgba(200, 220, 240, 0.9) 0%, rgba(150, 180, 210, 0.7) 100%)'
-                                            : 'rgba(100, 130, 160, 0.5)',
-                                        boxShadow: selectedEvent?.id === event.id
-                                            ? '0 0 10px rgba(150, 180, 210, 0.5)'
-                                            : 'none'
-                                    }}
-                                />
-                            ))}
-                        </div>
-
-                        <button
-                            onClick={() => {
-                                const currentIndex = events.indexOf(currentEvent);
-                                const nextIndex = currentIndex < events.length - 1 ? currentIndex + 1 : 0;
-                                setSelectedEvent(events[nextIndex]);
-                            }}
-                            className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110"
-                            style={{
-                                background: 'rgba(50, 70, 100, 0.5)',
-                                border: '1px solid rgba(150, 180, 210, 0.3)'
-                            }}
-                        >
-                            <span className="material-icons text-gray-400 text-sm">chevron_right</span>
-                        </button>
-                    </div>
-                )}
-
-                {/* Event Number Display */}
-                <p
-                    className="text-center mt-4 text-xs tracking-[0.3em]"
-                    style={{
-                        fontFamily: '"Cormorant Garamond", serif',
-                        color: 'rgba(150, 180, 210, 0.5)'
-                    }}
-                >
-                    {events.indexOf(currentEvent) + 1} of {events.length}
-                </p>
             </main>
 
 
@@ -780,14 +788,35 @@ const SubEventsPage = () => {
 
                 @media (min-width: 1024px) {
                     .event-image-container {
-                        width: clamp(200px, 35vw, 320px);
-                        aspect-ratio: 3/4;
-                        max-height: none;
-                        margin: 1rem;
+                        width: clamp(200px, 30vw, 300px);
+                        margin: 1.5rem;
                     }
                     .event-image-container img {
-                        height: 100% !important; /* Restore full height for desktop aspect ratio box */
-                        object-fit: cover;
+                        height: 100% !important;
+                        object-fit: contain;
+                    }
+                }
+
+                /* Scroll Indicator Animations */
+                @keyframes slideLeft {
+                    0%, 100% {
+                        transform: translateX(0);
+                        opacity: 0.6;
+                    }
+                    50% {
+                        transform: translateX(-5px);
+                        opacity: 1;
+                    }
+                }
+
+                @keyframes slideRight {
+                    0%, 100% {
+                        transform: translateX(0);
+                        opacity: 0.6;
+                    }
+                    50% {
+                        transform: translateX(5px);
+                        opacity: 1;
                     }
                 }
             `}</style>

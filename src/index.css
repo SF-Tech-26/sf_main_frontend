@@ -7,13 +7,8 @@
 @import "@fontsource/libre-baskerville/400.css";
 @import "@fontsource/space-grotesk/500.css";
 
-<<<<<<< HEAD
 /* ================= BASE RESET ================= */
 
-=======
-
-/* Base Styles */
->>>>>>> 105fcaab9d5b8efd6ea052fe679808d79fc46f2e
 * {
     box-sizing: border-box;
     overscroll-behavior: none;

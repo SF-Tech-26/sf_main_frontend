@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-import bgImage from "../assets/images/bgpic.jpg";
+import bgImage from "../assets/images/homeBg.webp";
 
 export default function ForgotPassword() {
   const [step, setStep] = useState(1);

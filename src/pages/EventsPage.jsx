@@ -6,7 +6,6 @@ import { getAllEvents } from '../services/eventService';
 import { useEvents } from '../context/eventContext';
 import eventsDesktopBg from '../assets/eventsdesktopbg.jpeg';
 import eventsMobileBg from '../assets/eventsmobilebg.jpeg';
-import GlassSurface from '../components/GlassSurface';
 import danceImg from '../assets/Dance.png';
 import musicImg from '../assets/Music.png';
 import dramaticsImg from '../assets/Dramatics.png';
@@ -16,6 +15,7 @@ import quizImg from '../assets/Quiz.png';
 import fineArtsImg from '../assets/Fine Arts.png';
 import humorImg from '../assets/Humor.png';
 import fashionImg from '../assets/Fashion.png';
+import culinaryImg from '../assets/culinaryarts.png';
 
 const slugToGenre = {
     'dance': 'Dance',
@@ -56,6 +56,7 @@ const genreImages = {
     'Fine Arts': fineArtsImg,
     'Humor Fest': humorImg,
     'Fashion': fashionImg,
+    'Culinary Arts': culinaryImg,
 };
 
 // Fallback genre icons/emojis
@@ -116,6 +117,7 @@ const TarotCard = ({ genre, index, totalCards, globalIndex, onClick, isMobileVie
     const centerIndex = (totalCards - 1) / 2;
     const rotation = (index - centerIndex) * 10;
     const translateX = (index - centerIndex) * 200;
+
     const translateY = Math.abs(index - centerIndex) * 25;
 
     const icon = genreIcons[genre] || '✨';
@@ -165,17 +167,13 @@ const TarotCard = ({ genre, index, totalCards, globalIndex, onClick, isMobileVie
             }}
             onClick={onClick}
         >
-            <GlassSurface
-                width="100%"
-                height="100%"
-                borderRadius={16}
-                displace={20}
-                distortionScale={30}
-                opacity={0.8}
-                brightness={40}
-                className="rounded-2xl overflow-hidden border border-teal-500/20 shadow-2xl"
+            {/* Lightweight CSS Glass Effect - No heavy rendering */}
+            <div
+                className="w-full h-full rounded-2xl overflow-hidden border border-teal-500/20 shadow-2xl relative"
                 style={{
                     background: 'linear-gradient(180deg, rgba(26, 61, 61, 0.2) 0%, rgba(19, 42, 45, 0.3) 50%, rgba(10, 28, 31, 0.4) 100%)',
+                    backdropFilter: 'blur(10px)',
+                    WebkitBackdropFilter: 'blur(10px)',
                 }}
             >
                 <div className="w-full h-full relative">
@@ -215,7 +213,7 @@ const TarotCard = ({ genre, index, totalCards, globalIndex, onClick, isMobileVie
                         </h3>
                     </div>
                 </div>
-            </GlassSurface>
+            </div>
         </motion.div>
     );
 };
@@ -414,6 +412,42 @@ const EventsPage = () => {
                     </p>
                 )}
             </div>
+
+            {/* Critical Performance Optimizations */}
+            <style>{`
+                /* Force GPU acceleration for smooth animations */
+                .cursor-pointer {
+                    will-change: transform, opacity;
+                    transform: translateZ(0) translate3d(0, 0, 0);
+                    backface-visibility: hidden;
+                    -webkit-backface-visibility: hidden;
+                }
+
+                /* Optimize rendering */
+                * {
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                }
+
+                /* Reduce repaints during animations */
+                .absolute, .relative {
+                    will-change: transform;
+                    transform: translateZ(0);
+                }
+
+                /* Optimize images */
+                img {
+                    image-rendering: -webkit-optimize-contrast;
+                    image-rendering: crisp-edges;
+                }
+
+                /* Disable expensive effects during animation */
+                @media (prefers-reduced-motion: no-preference) {
+                    * {
+                        animation-timing-function: ease-out !important;
+                    }
+                }
+            `}</style>
         </div>
     );
 };

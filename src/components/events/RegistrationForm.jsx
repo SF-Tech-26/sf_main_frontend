@@ -77,8 +77,7 @@ const RegistrationForm = ({ event, onSuccess, onCancel }) => {
 
     const isSolo = event.min_participation === 1 && event.max_participation === 1;
 
-    // const handleAddMember = () => { ... } - REMOVED
-    // const handleRemoveMember = () => { ... } - REMOVED
+   
 
     const handleMemberChange = (index, field, value) => {
         const updated = [...teamMembers];
@@ -196,7 +195,7 @@ const RegistrationForm = ({ event, onSuccess, onCancel }) => {
                 {/* Close Button */}
                 <button
                     onClick={onCancel}
-                    className="absolute top-3 right-3 md:top-2 md:right-2 z-30 p-2 bg-black/30 md:bg-transparent rounded-full text-white md:text-[#b8860b] hover:text-white transition-all hover:scale-110 active:scale-90 backdrop-blur-sm"
+                    className="absolute -top-[2.7rem] right-[0.1rem] md:-top-[4rem] md:right-0 z-30 p-2 bg-black/30 md:bg-transparent rounded-full text-white md:text-[#b8860b] hover:text-white transition-all hover:scale-110 active:scale-90 backdrop-blur-sm"
                     title="Close form"
                 >
                     <span className="material-icons text-2xl md:text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">close</span>
@@ -285,7 +284,7 @@ const RegistrationForm = ({ event, onSuccess, onCancel }) => {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Scrollable Team Members Container */}
+                    {/* Scrollable Team Members Container with Register Button */}
                     <div className="max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-purple-600 scrollbar-track-white/5">
                         {/* Team Members Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 sm:gap-x-8 gap-y-4 sm:gap-y-6">
@@ -323,26 +322,26 @@ const RegistrationForm = ({ event, onSuccess, onCancel }) => {
                                 </div>
                             ))}
                         </div>
-                    </div>
 
-                    {/* Submit Button */}
-                    <div className="flex justify-center mt-8 sm:mt-12 mb-4">
-                        <button
-                            type="submit"
-                            disabled={isLoading || isRegistered}
-                            className={`
-                             px-12 sm:px-16 py-3 sm:py-4 rounded-xl text-white text-sm font-bold tracking-[0.2em] uppercase transition-all duration-300
-                             ${isLoading || isRegistered
-                                    ? 'bg-gray-600 opacity-50 cursor-not-allowed'
-                                    : 'bg-purple-600 hover:bg-purple-700 hover:shadow-[0_0_30px_rgba(139,92,246,0.6)] hover:scale-105 active:scale-95 shadow-[0_4px_20px_rgba(139,92,246,0.5)]'}
-                         `}
-                            style={{
-                                marginTop: '0.5rem',
-                                marginBottom: '2rem'
-                            }}
-                        >
-                            {isLoading ? 'Registering...' : (isRegistered ? 'Registered' : 'Register Now')}
-                        </button>
+                        {/* Submit Button - Now inside scrollable area */}
+                        <div className="flex justify-center mt-8 sm:mt-12 mb-4">
+                            <button
+                                type="submit"
+                                disabled={isLoading || isRegistered}
+                                className={`
+                                 px-12 sm:px-16 py-3 sm:py-4 rounded-xl text-white text-sm font-bold tracking-[0.2em] uppercase transition-all duration-300
+                                 ${isLoading || isRegistered
+                                        ? 'bg-gray-600 opacity-50 cursor-not-allowed'
+                                        : 'bg-purple-600 hover:bg-purple-700 hover:shadow-[0_0_30px_rgba(139,92,246,0.6)] hover:scale-105 active:scale-95 shadow-[0_4px_20px_rgba(139,92,246,0.5)]'}
+                             `}
+                                style={{
+                                    marginTop: '0.5rem',
+                                    marginBottom: '2rem'
+                                }}
+                            >
+                                {isLoading ? 'Registering...' : (isRegistered ? 'Registered' : 'Register Now')}
+                            </button>
+                        </div>
                     </div>
 
 
