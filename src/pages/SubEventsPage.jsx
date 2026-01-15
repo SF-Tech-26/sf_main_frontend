@@ -84,6 +84,8 @@ import panacheMobile from '../assets/EventImg/fashion/Panache.webp';
 import peekawhoMobile from '../assets/EventImg/fashion/PeekAWho.webp';
 import sargamMobile from '../assets/EventImg/music/Sargam (1).webp';
 
+
+
 // Restored Missing Desktop Imports
 import sfIdolImg from '../assets/eventImages/sf idol.webp';
 import canYouDuetImg from '../assets/eventImages/can you duet.webp';
