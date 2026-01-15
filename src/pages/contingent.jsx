@@ -593,7 +593,6 @@ function Contingent() {
                           <option value="2026-01-23">23-01-2026</option>
                           <option value="2026-01-24">24-01-2026</option>
                           <option value="2026-01-25">25-01-2026</option>
-                          <option value="2026-01-26">26-01-2026</option>
                         </select>
                         <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400 pointer-events-none">
                           expand_more
@@ -617,7 +616,6 @@ function Contingent() {
                           <option value="2026-01-24">24-01-2026</option>
                           <option value="2026-01-25">25-01-2026</option>
                           <option value="2026-01-26">26-01-2026</option>
-                          <option value="2026-01-27">27-01-2026</option>
                         </select>
                         <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400 pointer-events-none">
                           expand_more
@@ -699,7 +697,6 @@ function Contingent() {
                           <option value="2026-01-23">23-01-2026</option>
                           <option value="2026-01-24">24-01-2026</option>
                           <option value="2026-01-25">25-01-2026</option>
-                          <option value="2026-01-26">26-01-2026</option>
                         </select>
                         <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400 pointer-events-none">
                           expand_more
@@ -723,7 +720,6 @@ function Contingent() {
                           <option value="2026-01-24">24-01-2026</option>
                           <option value="2026-01-25">25-01-2026</option>
                           <option value="2026-01-26">26-01-2026</option>
-                          <option value="2026-01-27">27-01-2026</option>
                         </select>
                         <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400 pointer-events-none">
                           expand_more

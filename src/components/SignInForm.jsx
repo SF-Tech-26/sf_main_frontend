@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
-import { loginUser } from "../services/authService";
+import { loginUser, googleLogin } from "../services/authService";
+import { useGoogleLogin } from "@react-oauth/google";
 import toast from "react-hot-toast";
+import { FcGoogle } from "react-icons/fc";
 
 export default function SignInForm() {
   const [email, setEmail] = useState("");
@@ -44,6 +46,30 @@ export default function SignInForm() {
     }
   };
 
+  const handleGoogleSuccess = async (tokenResponse) => {
+    setIsLoading(true);
+    try {
+      const response = await googleLogin(tokenResponse.access_token);
+      if (response.code === 0) {
+        const { token, data } = response.data;
+        login(token, data);
+        toast.success("Welcome back!");
+        navigate("/");
+      } else {
+        setError(response.message || "Google Login failed.");
+      }
+    } catch (err) {
+      setError("Google Login failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loginWithGoogle = useGoogleLogin({
+    onSuccess: handleGoogleSuccess,
+    onError: () => setError("Google Login Failed"),
+  });
+
   return (
     <div className="w-full flex justify-center">
       <div
@@ -56,18 +82,18 @@ export default function SignInForm() {
   backdrop-blur-[12px]
   text-[#CFF6FF]
 "
-style={{
-  background: "rgba(14, 26, 48, 0.88)",
-  boxShadow: `
+        style={{
+          background: "rgba(14, 26, 48, 0.88)",
+          boxShadow: `
     0 0 22px rgba(94, 235, 255, 0.28),
     0 0 50px rgba(56, 189, 248, 0.18)
   `,
-  padding: "40px 32px",
-}}
+          padding: "40px 32px",
+        }}
 
       >
 
-      <h1
+        <h1
           className="text-center font-bold tracking-wider mb-[26px]"
           style={{
             fontSize: "34px",
@@ -82,25 +108,25 @@ style={{
           SIGN IN
         </h1>
 
-      <form onSubmit={handleSubmit}>
-        {error && (
-          <div className="bg-red-500/20 border border-red-500 text-red-200 px-4 py-2 rounded-lg text-sm">
-            {error}
-          </div>
-        )}
+        <form onSubmit={handleSubmit}>
+          {error && (
+            <div className="bg-red-500/20 border border-red-500 text-red-200 px-4 py-2 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
 
-        
-<div className="flex flex-col gap-[18px] flex-grow">
-          {/* Email */}
-          <div className="flex flex-col gap-[6px]">
-            <label className="text-sm text-[#BEE9FF]">Email</label>
-            <input
-              type="email"
-              value={email}
-              placeholder="abc@gmail.com"
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={isLoading}
-              className="
+
+          <div className="flex flex-col gap-[18px] flex-grow">
+            {/* Email */}
+            <div className="flex flex-col gap-[6px]">
+              <label className="text-sm text-[#BEE9FF]">Email</label>
+              <input
+                type="email"
+                value={email}
+                placeholder="abc@gmail.com"
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
+                className="
                 h-[46px]
                 px-[14px] py-[12px]
                 rounded-[10px]
@@ -111,18 +137,18 @@ style={{
                 focus:ring-2 focus:ring-[#38BDF8]
                 indent-[8px]
               "
-            />
-          </div>
+              />
+            </div>
 
-        <div className="flex flex-col gap-[6px]">
-            <label className="text-sm text-[#BEE9FF]">Password</label>
-            <input
-              type="password"
-              placeholder="********"
-              value={password}
-              disabled={isLoading}
-               onChange={(e) => setPassword(e.target.value)}
-              className="
+            <div className="flex flex-col gap-[6px]">
+              <label className="text-sm text-[#BEE9FF]">Password</label>
+              <input
+                type="password"
+                placeholder="********"
+                value={password}
+                disabled={isLoading}
+                onChange={(e) => setPassword(e.target.value)}
+                className="
                 h-[46px]
                 px-[14px] py-[12px]
                 rounded-[10px]
@@ -133,13 +159,13 @@ style={{
                 focus:ring-2 focus:ring-[#38BDF8]
                 indent-[8px]
               "
-            />
-          </div>
+              />
+            </div>
 
-           <button
-  type="submit"
-  disabled={isLoading}
-  className="
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="
     mt-[8px]
     h-[46px]
     rounded-full
@@ -150,38 +176,74 @@ style={{
     hover:scale-[1.03]
     transition
   "
-  style={{
-    boxShadow: `
+              style={{
+                boxShadow: `
       0 0 10px rgba(94, 235, 255, 0.30),
       0 0 22px rgba(56, 189, 248, 0.22)
     `,
-  }}
->
-  {isLoading ? "SIGNING IN..." : "SIGN IN"}
-</button>
-
-
-        {/* Links */}
-          <div className="mt-[10px] text-center text-[14px] flex flex-col gap-[6px] items-center">
-            <Link
-              to="/forgot-password"
-              className="text-[#9FE7FF] underline hover:text-[#5EEBFF] transition"
+              }}
             >
-              Forgot Password?
-            </Link>
+              {isLoading ? "SIGNING IN..." : "SIGN IN"}
+            </button>
 
-            <Link
-              to="/signup"
-              className="text-[#9FE7FF] underline hover:text-[#5EEBFF] transition"
+            <div className="flex items-center gap-4 my-2">
+              <div className="h-[1px] bg-[#5EEBFF]/30 flex-1"></div>
+              <span className="text-[#5EEBFF]/70 text-sm">OR</span>
+              <div className="h-[1px] bg-[#5EEBFF]/30 flex-1"></div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => loginWithGoogle()}
+              disabled={isLoading}
+              className="
+    h-[46px]
+    rounded-full
+    font-semibold
+    tracking-[1px]
+    text-[#001B2E]
+    bg-[#E0F7FF]
+    hover:bg-[#FFFFFF]
+    hover:scale-[1.03]
+    transition
+    flex
+    items-center
+    justify-center
+    gap-2
+  "
+              style={{
+                boxShadow: `
+      0 0 10px rgba(224, 247, 255, 0.30),
+      0 0 22px rgba(224, 247, 255, 0.22)
+    `,
+              }}
             >
-              Create New Account
-            </Link>
+              <FcGoogle size={20} />
+              SIGN IN WITH GOOGLE
+            </button>
+
+
+            {/* Links */}
+            <div className="mt-[10px] text-center text-[14px] flex flex-col gap-[6px] items-center">
+              <Link
+                to="/forgot-password"
+                className="text-[#9FE7FF] underline hover:text-[#5EEBFF] transition"
+              >
+                Forgot Password?
+              </Link>
+
+              <Link
+                to="/signup"
+                className="text-[#9FE7FF] underline hover:text-[#5EEBFF] transition"
+              >
+                Create New Account
+              </Link>
+            </div>
           </div>
-        </div>
-     </form>
+        </form>
       </div>
     </div>
   );
 }
 
-     
+

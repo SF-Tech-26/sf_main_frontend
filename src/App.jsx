@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { BrowserRouter } from "react-router-dom";
+
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/authContext';
 import { EventProvider } from './context/eventContext';
@@ -29,7 +29,6 @@ import ForgotPassword from './pages/ForgetPassword.jsx';
 
 function App() {
   return (
-    <BrowserRouter>
     <AuthProvider>
       <EventProvider>
         <BackButton/>
@@ -74,7 +73,6 @@ function App() {
         </Routes>
       </EventProvider>
     </AuthProvider>
-    </BrowserRouter>
   );
 }
 

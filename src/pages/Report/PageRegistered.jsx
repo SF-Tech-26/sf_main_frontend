@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { submitComplaint } from "../../api/complaintApi";
-import { useEvents } from "../../context/EventContext";
+import { useEvents } from '../../context/eventContext';
 import { toast } from "react-toastify";
 
 const PageRegistered = ({ token, goBack, reload }) => {
@@ -60,9 +60,9 @@ const PageRegistered = ({ token, goBack, reload }) => {
       <button onClick={goBack} className="text-cyan-400 text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-1">
         ← Back
       </button>
-      
+
       <h2 className="text-xl font-bold text-white mb-4">Registered Events</h2>
-      
+
       <label className="block text-xs font-bold text-cyan-300 uppercase mb-1">Event Type :</label>
       <select className={inputStyles} value={selectedEvent} onChange={(e) => setSelectedEvent(e.target.value)}>
         <option value="">Select event</option>

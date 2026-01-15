@@ -194,7 +194,7 @@ const StaggeredMenu = ({
                                         delay: 1.6 + (items.length * 0.1) + 0.3 // Start floating after reveal
                                     }
                                 }}
-                                className="mt-[36px] p-0 border-none bg-transparent transition-transform hover:scale-110 active:scale-95"
+                                className="-mt-4 p-0 border-none bg-transparent transition-transform hover:scale-110 active:scale-95"
                                 aria-label="Back to Page"
                             >
                                 <img
@@ -238,7 +238,7 @@ const StaggeredMenu = ({
             {!isOpen && (
                 <button
                     onClick={toggleMenu}
-                    className="fixed top-6 left-2 z-[10000] w-12 h-12 flex items-center justify-center focus:outline-none transition-all duration-300 group"
+                    className="fixed top-1 left-1 z-[10000] w-12 h-12 flex items-center justify-center focus:outline-none transition-all duration-300 group"
                     aria-label="Toggle Menu"
                 >
                     <div className="relative w-6 h-6 flex flex-col justify-center items-center gap-[6px]">
