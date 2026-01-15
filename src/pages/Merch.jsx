@@ -227,7 +227,7 @@ function ProductCard({ product, onAdd, onToast }) {
 
     return (
         <div
-            className="group w-full max-w-[320px] sm:max-w-[280px] p-5 md:p-6 pb-8 md:pb-10 flex flex-col
+            className="group w-full max-w-[240px] sm:max-w-[280px] p-3 md:p-6 pb-6 md:pb-10 flex flex-col
                        rounded-2xl text-center
                        bg-gradient-to-b from-blue-900/45 to-blue-950/55
                        md:from-purple-900/45 md:to-purple-950/55
@@ -238,11 +238,11 @@ function ProductCard({ product, onAdd, onToast }) {
                        md:hover:shadow-[0_0_30px_rgba(251,146,60,0.6)]
                        transition-shadow duration-300 relative z-10"
         >
-            <div className="flex items-center justify-center mb-6 overflow-hidden h-[220px]">
+            <div className="flex items-center justify-center mb-6 overflow-hidden h-[160px] md:h-[220px]">
                 <img
                     src={product.image}
                     alt={product.name}
-                    className="w-auto h-full max-h-[220px] max-w-none
+                    className="w-auto h-full max-h-[160px] md:max-h-[220px] max-w-none
                                scale-[1.3]
                                object-contain
                                brightness-110 contrast-130

@@ -896,7 +896,7 @@ function Contingent() {
                   ))}
                 </div>
 
-                <div className={(myUserId === data.leaderId) ? "grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-[600px] mx-auto" : "grid grid-cols-1 gap-4 w-[250px] mx-auto"}>
+                <div className={(myUserId === data.leaderId) ? "grid grid-cols-1 m-[70px] sm:grid-cols-2 gap-4 w-full max-w-[600px] mx-auto" : "grid grid-cols-1 gap-4 w-[250px] mx-auto"}>
                   <button
                     disabled={isDeleting}
                     className={`cursor-pointer h-[60px] bg-red-950 backdrop-blur-md border border-white/10 rounded-xl text-white font-sans font-bold text-lg tracking-wider hover:bg-red-900 transition-all ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}

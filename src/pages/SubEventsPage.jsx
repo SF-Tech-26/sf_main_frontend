@@ -312,7 +312,7 @@ const SubEventsPage = () => {
         'shuffle - team': { desktop: shuffleTeamImg, mobile: shuffleTeamMobile },
         'suffle-solo': { desktop: shuffleSoloImg, mobile: shuffleSoloMobile },
         'suffle-team': { desktop: shuffleTeamImg, mobile: shuffleTeamMobile },
-        'centrifuge': { desktop: centrifugeImg, mobile: centrifugeMobile },
+        'Centrifuge': { desktop: centrifugeImg, mobile: centrifugeMobile },
 
         // Music events
         'sfidol': { desktop: sfIdolImg, mobile: sfIdolMobile },
@@ -456,7 +456,7 @@ const SubEventsPage = () => {
 
     if (isLoading) {
         return (
-            <div className="font-body bg-background-dark text-slate-200 min-h-screen relative overflow-x-hidden flex items-center justify-center" style={{ backgroundColor: '#050210' }}>
+            <div className="font-body bg-background-dark text-slate-200 min-h-screen relative overflow-x-hidden flex items-center justify-center" style={{ backgroundColor: '#050210', }}>
                 <div className="relative z-10 flex flex-col items-center gap-4">
                     <div className="w-12 h-12 border-4 border-deep-amber border-t-transparent rounded-full animate-spin"></div>
                     <p className="text-[#d2b48c]">Loading events...</p>
@@ -575,7 +575,7 @@ const SubEventsPage = () => {
                                 <div className="flex flex-col lg:flex-row">
 
                                     {/* Left Section - Image */}
-                                    <div className="w-full lg:w-[320px] xl:w-[380px] flex-shrink-0 bg-black/10 flex items-center justify-center h-[220px] sm:h-[280px] lg:h-[450px]">
+                                    <div className={`w-full lg:w-[320px] xl:w-[380px] flex-shrink-0 ${isMobile ? '' : 'bg-black/10'} flex items-center justify-center h-[180px] sm:h-[280px] lg:h-[450px]`}>
                                         <div className="relative w-full h-full flex items-center justify-center p-4 sm:p-6 lg:p-8 overflow-hidden">
                                             <AnimatePresence mode="wait">
                                                 <motion.img
@@ -583,7 +583,7 @@ const SubEventsPage = () => {
                                                     alt={currentEvent.name}
                                                     src={getEventDisplayData(currentEvent).image}
                                                     initial={{ opacity: 0, scale: 0.9 }}
-                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    animate={{ opacity: 1, scale: isMobile ? 0.75 : 1 }}
                                                     exit={{ opacity: 0, scale: 1.1 }}
                                                     transition={{ duration: 0.4 }}
                                                     className="max-w-full max-h-full object-contain rounded-lg drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] transition-transform duration-500 hover:scale-105"
