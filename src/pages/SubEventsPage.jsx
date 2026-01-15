@@ -51,17 +51,17 @@ import shakeALegMobile from '../assets/EventImg/dance/ShakeALeg.webp';
 import shopaholicImg from '../assets/eventImages/shopaholic.webp';
 import sketchItImg from '../assets/eventImages/sketch it.webp';
 import spentImg from '../assets/eventImages/spent.webp';
- //import spentMobile from '../assets/EventImg/Quiz/SpEnt.webp';
+//import spentMobile from '../assets/EventImg/Quiz/SpEnt.webp';
 import shuffleSoloImg from '../assets/eventImages/shuffle solo.webp?url';
 import shuffleSoloMobile from '../assets/EventImg/dance/Shuffle Solo.webp';
 import shuffleTeamImg from '../assets/eventImages/shuffle team.webp?url';
 import shuffleTeamMobile from '../assets/EventImg/dance/Shuffle team.webp';
 import twoForTangoImg from '../assets/eventImages/two for tango.webp';
-import pen from '../assets/eventImages/A Mighty Pen.webp';
+import penImg from '../assets/eventImages/A Mighty Pen.webp';
 import penMobile from '../assets/EventImg/literary/AMightyPen.webp';
-import jumble from '../assets/eventImages/jumble the good word.webp';
+import jumbleImg from '../assets/eventImages/jumble the good word.webp';
 import jumbleMobile from '../assets/EventImg/literary/JumbleTheGoodWord.webp';
-import chef from '../assets/eventImages/chef.webp';
+import chefImg from '../assets/eventImages/chef.webp';
 import chefMobile from '../assets/EventImg/culinary arts/Chef\'sCorner.webp';
 import spentMobile from '../assets/EventImg/Quiz/SpEnt.webp';
 import biztechMobile from '../assets/EventImg/Quiz/BIZTECH.webp';
@@ -83,6 +83,30 @@ import navyataMobile from '../assets/EventImg/fashion/Navyata.webp';
 import panacheMobile from '../assets/EventImg/fashion/Panache.webp';
 import peekawhoMobile from '../assets/EventImg/fashion/PeekAWho.webp';
 import sargamMobile from '../assets/EventImg/music/Sargam (1).webp';
+
+// Restored Missing Desktop Imports
+import sfIdolImg from '../assets/eventImages/sf idol.webp';
+import canYouDuetImg from '../assets/eventImages/can you duet.webp';
+import retrowaveImg from '../assets/eventImages/retrowave.webp';
+import wildfireImg from '../assets/eventImages/wildfire.webp';
+import lakesideImg from '../assets/eventImages/lakeside dreams.webp';
+import sfmImg from '../assets/eventImages/SFm.webp';
+
+// Restored Missing Mobile Imports
+import twoForTangoMobile from '../assets/EventImg/dance/TwoForATango (1).webp';
+import sfIdolMobile from '../assets/EventImg/music/SFidol.webp';
+import canYouDuetMobile from '../assets/EventImg/music/can you duet.webp';
+import retrowaveMobile from '../assets/EventImg/music/Retrowave.webp';
+import beatItMobile from '../assets/EventImg/music/BeatIT.webp';
+import rapmaniaMobile from '../assets/EventImg/music/Rapmania.webp';
+import wildfireMobile from '../assets/EventImg/music/Wildfire.webp';
+import lakesideMobile from '../assets/EventImg/music/LakesideDreamsGroup.webp';
+import rangmanchMobile from '../assets/EventImg/dramatics/Rangmanch.webp';
+import iMeMyselfMobile from '../assets/EventImg/dramatics/iMeMyself.webp';
+import dumbstruckMobile from '../assets/EventImg/dramatics/Dumbstruck.webp';
+import nukkadMobile from '../assets/EventImg/dramatics/Nukkad.webp';
+import sfmMobile from '../assets/EventImg/film fest/SFM.webp';
+import poetrySlamMobile from '../assets/EventImg/literary/EnglishPoetrySlam (1).webp';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEvents } from '../context/eventContext';
