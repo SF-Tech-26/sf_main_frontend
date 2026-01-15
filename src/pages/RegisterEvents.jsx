@@ -375,15 +375,32 @@ const RegisteredEvents = ({ onClose, userToken }) => {
     }
   };
 
+  const handleClose = () => {
+    if (showAddMemberModal) {
+      setShowAddMemberModal(false);
+    } else {
+      navigate("/dashboard");
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex justify-center items-center z-50 p-2 sm:p-4">
+    <div 
+      className="fixed inset-0 flex justify-center items-center z-50 p-2 sm:p-4"
+      onClick={handleClose}
+    >
+      {/* Blurred Background Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0a0f1e]/80 via-[#06182d]/85 to-[#0a1628]/80 backdrop-blur-2xl"></div>
+      
       <ToastContainer theme="dark" position="top-center" autoClose={3000} />
       
-      <div className="relative w-full max-w-6xl max-h-[60vh] sm:max-h-[95vh] overflow-hidden flex flex-col">
-        {/* Cosmic Background */}
+      <div 
+        className="relative w-full max-w-6xl max-h-[60vh] sm:max-h-[95vh] overflow-hidden flex flex-col z-10"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Cosmic Modal Container */}
         <div className="relative flex-1 flex flex-col bg-gradient-to-br from-[#0a0f1e] via-[#050b14] to-[#0a0f1e] rounded-[2rem] border-2 border-cyan-500/40 shadow-[0_0_60px_rgba(6,182,212,0.2)] overflow-hidden">
           
-          {/* Original Animated Background Elements */}
+          {/* Animated Background Elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute w-2 h-2 bg-white rounded-full top-[10%] left-[15%] animate-[twinkle_2s_infinite] shadow-[0_0_8px_white]" />
             <div className="absolute w-1.5 h-1.5 bg-white rounded-full top-[60%] left-[20%] animate-[twinkle_2.5s_infinite]" />
@@ -393,16 +410,10 @@ const RegisteredEvents = ({ onClose, userToken }) => {
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5 animate-[nebula_10s_infinite]" />
           </div>
 
-          {/* Close Button */}
+          {/* Close Button - No Circle Background */}
           <button
-            onClick={() => {
-              if (showAddMemberModal) {
-                setShowAddMemberModal(false);
-              } else {
-                navigate("/dashboard");
-              }
-            }}
-            className="absolute top-4 right-4 bg-white/10 text-cyan-400 rounded-full w-9 h-9 flex items-center justify-center text-xl font-bold hover:bg-white/20 transition z-50 border border-cyan-500/30"
+            onClick={handleClose}
+            className="absolute top-4 right-4 text-cyan-400 text-2xl font-bold hover:text-cyan-300 hover:scale-110 transition-all z-50"
           >
             ✕
           </button>
@@ -522,8 +533,8 @@ const RegisteredEvents = ({ onClose, userToken }) => {
         @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.5); } }
         @keyframes nebula { 0%, 100% { opacity: 0.2; transform: translate(0,0); } 50% { opacity: 0.4; transform: translate(20px, -20px); } }
         @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #0891b2; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 0px; display: none; }
+        .custom-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
     </div>
   );
