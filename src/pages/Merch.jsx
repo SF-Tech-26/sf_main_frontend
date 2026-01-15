@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 
 // Backgrounds
-import bgDesktop from "../assets/merchbg.jpeg";
-import bgMobile from "../assets/merchPHONE.jpeg";
+import bgDesktop from "../assets/merchbg.webp";
+import bgMobile from "../assets/merchPHONE.webp";
 
 // Hoodie Images
-import Yellowhoodie from "../assets/Yellowhoodie.png";
-import Bluehoodie from "../assets/Bluehoodie.png";
-import Orangehoodie from "../assets/Orangehoodie.png";
+import Yellowhoodie from "../assets/Yellowhoodie.webp";
+import Bluehoodie from "../assets/Bluehoodie.webp";
+import Orangehoodie from "../assets/Orangehoodie.webp";
 
 /* PRODUCTS */
 const PRODUCTS = [
