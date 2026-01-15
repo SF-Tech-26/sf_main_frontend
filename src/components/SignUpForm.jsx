@@ -137,10 +137,12 @@ export default function SignUpForm() {
     indent-[8px]
     disabled:opacity-50
   `;
-  
+
+
+
   return (
     <div
-     className="
+      className="
   w-[330px] max-w-[90%]
   h-[60vh]
   overflow-y-auto
@@ -150,14 +152,14 @@ export default function SignUpForm() {
   text-[#E6FBFF]
   px-[32px] py-[40px]
 "
-style={{
-  background: "rgba(10, 20, 44, 0.92)",
-  boxShadow: `
+      style={{
+        background: "rgba(10, 20, 44, 0.92)",
+        boxShadow: `
     0 0 20px rgba(125, 249, 255, 0.30),
     0 0 45px rgba(56, 189, 248, 0.22),
     0 0 90px rgba(167, 139, 250, 0.10)
   `,
-}}
+      }}
 
     >
       <h1
@@ -445,10 +447,10 @@ style={{
           />
         </div>
 
-       <button
-  type="submit"
-  disabled={isLoading}
-  className="
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="
     mt-[12px]
     h-[46px]
     mx-auto
@@ -462,15 +464,17 @@ style={{
     transition
     disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
   "
-  style={{
-    boxShadow: `
+          style={{
+            boxShadow: `
       0 0 10px rgba(94, 235, 255, 0.30),
       0 0 22px rgba(56, 189, 248, 0.22)
     `,
-  }}
->
-  {isLoading ? "REGISTERING..." : "CREATE ACCOUNT"}
-</button>
+          }}
+        >
+          {isLoading ? "REGISTERING..." : "CREATE ACCOUNT"}
+        </button>
+
+
 
 
         <p className="mt-[14px] text-center text-sm text-[#C7F5FF]">

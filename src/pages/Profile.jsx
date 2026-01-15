@@ -19,7 +19,7 @@ const Profile = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      
+
       if (!token) {
         toast.error('No authentication token found');
         navigate('/signin');
@@ -27,7 +27,7 @@ const Profile = () => {
       }
 
       const response = await getUser(token);
-      
+
       if (response && response.code === 0 && response.data) {
         setUserData(response.data);
         console.log('User data set:', response.data);
@@ -47,14 +47,29 @@ const Profile = () => {
     navigate('/signin');
   };
 
+  const handleBackdropClick = (e) => {
+    // Only navigate if clicking the backdrop itself, not the modal content
+    if (e.target === e.currentTarget) {
+      navigate('/dashboard');
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex justify-center items-center z-50 p-2 sm:p-4">
+    <div className="fixed inset-0 bg-gradient-to-br from-[#0a0f1e]/95 via-[#050b14]/95 to-[#0a0f1e]/95 backdrop-blur-xl flex justify-center items-center z-50 p-2 sm:p-4" onClick={handleBackdropClick}>
       <ToastContainer theme="dark" position="top-center" autoClose={3000} />
-      
+
+      {/* Logout Button - Outside Modal, Top Right */}
+      <button
+        onClick={handleLogout}
+        className="fixed top-3 right-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-1 px-4 sm:px-6 rounded-lg transition-all duration-300 border border-red-500/30 shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] text-sm z-[60]"
+      >
+        Logout
+      </button>
+
       <div className="relative w-full max-w-6xl max-h-[60vh] sm:max-h-[95vh] overflow-hidden flex flex-col">
         {/* Cosmic Background */}
         <div className="relative flex-1 flex flex-col bg-gradient-to-br from-[#0a0f1e] via-[#050b14] to-[#0a0f1e] rounded-[2rem] border-2 border-cyan-500/40 shadow-[0_0_60px_rgba(6,182,212,0.2)] overflow-hidden">
-          
+
           {/* Animated Background Elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute w-2 h-2 bg-white rounded-full top-[10%] left-[15%] animate-[twinkle_2s_infinite] shadow-[0_0_8px_white]" />
@@ -65,22 +80,14 @@ const Profile = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5 animate-[nebula_10s_infinite]" />
           </div>
 
-          {/* Top Bar with Close and Logout */}
-          <div className="relative z-10 flex items-center justify-between p-4 border-b border-cyan-500/20">
+          {/* Top Bar with Close Button */}
+          <div className="relative z-10 flex items-center justify-end p-4 border-b border-cyan-500/20">
             {/* Close Button */}
             <button
               onClick={() => navigate('/dashboard')}
-              className="bg-white/10 text-cyan-400 rounded-full w-9 h-9 flex items-center justify-center text-xl font-bold hover:bg-white/20 transition border border-cyan-500/30"
+              className="text-cyan-400 text-2xl font-bold hover:text-cyan-300 transition"
             >
               ✕
-            </button>
-
-            {/* Logout Button */}
-            <button
-              onClick={handleLogout}
-              className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 border border-red-500/30 shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] text-sm"
-            >
-              Logout
             </button>
           </div>
 
@@ -182,11 +189,10 @@ const Profile = () => {
                   <label className="block text-cyan-400/70 text-xs uppercase tracking-wider mb-2 font-semibold">
                     Payment Status
                   </label>
-                  <p className={`text-base sm:text-lg font-bold ${
-                    userData?.payment_status === 1 ? 'text-green-400' :
-                    userData?.payment_status === 0 ? 'text-yellow-400' :
-                    'text-red-400'
-                  }`}>
+                  <p className={`text-base sm:text-lg font-bold ${userData?.payment_status === 1 ? 'text-green-400' :
+                      userData?.payment_status === 0 ? 'text-yellow-400' :
+                        'text-red-400'
+                    }`}>
                     {userData?.payment_status === 1 ? 'Completed' : userData?.payment_status === 0 ? 'Pending' : 'N/A'}
                   </p>
                 </div>
@@ -196,9 +202,8 @@ const Profile = () => {
                   <label className="block text-cyan-400/70 text-xs uppercase tracking-wider mb-2 font-semibold">
                     Campus Ambassador
                   </label>
-                  <p className={`text-base sm:text-lg font-bold ${
-                    userData?.is_ca === 1 ? 'text-green-400' : 'text-gray-400'
-                  }`}>
+                  <p className={`text-base sm:text-lg font-bold ${userData?.is_ca === 1 ? 'text-green-400' : 'text-gray-400'
+                    }`}>
                     {userData?.is_ca === 1 ? 'Yes' : 'No'}
                   </p>
                 </div>
