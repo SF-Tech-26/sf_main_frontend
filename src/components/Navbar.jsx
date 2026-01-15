@@ -18,7 +18,7 @@ export default function Navbar() {
   return (
     <>
       {/* MOBILE NAV (Hamburger) */}
-      <div className="md:hidden left-0.5">
+      <div className="md:hidden">
         <StaggeredMenu
           position="left"
           items={menuItems}
