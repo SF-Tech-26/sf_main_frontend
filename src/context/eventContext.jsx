@@ -52,7 +52,10 @@ export const EventProvider = ({ children }) => {
 
     // Helper function to get events by genre
     const getEventsByGenre = useCallback((genre) => {
-        const genreData = events.find(g => g.genre === genre);
+        if (!genre) return [];
+        const genreData = events.find(g =>
+            g.genre?.toLowerCase().trim() === genre.toLowerCase().trim()
+        );
         return genreData?.events || [];
     }, [events]);
 
