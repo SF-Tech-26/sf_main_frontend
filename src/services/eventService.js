@@ -247,7 +247,7 @@ export const getEventsByGenre = async (genre) => {
     if (genre && Array.isArray(genreGroups)) {
       // Find the group that matches the requested genre
       const matchingGroup = genreGroups.find(
-        group => group.genre?.toLowerCase() === genre.toLowerCase()
+        group => group.genre?.toLowerCase().trim() === genre.toLowerCase().trim()
       );
 
       const allEvents = matchingGroup ? matchingGroup.events : [];

@@ -11,65 +11,106 @@ import GlassSurface from '../components/GlassSurface';
 import PillNav from '../components/PillNav';
 import logo from '../assets/sf_logo.png';
 
-// Import individual event images from eventImages folder
+// --- DESKTOP IMAGES (eventImages) ---
 import nrityakalaImg from '../assets/eventImages/Nrityakala.png';
-import nrityakalaMobile from '../assets/EventImg/dance/Nrityakala.webp';
 import pictureTaleImg from '../assets/eventImages/a picture tale.png';
-import pictureTaleMobile from '../assets/EventImg/film fest/APictureTale.webp';
 import banterBoutImg from '../assets/eventImages/banter bout.png';
-import banterBoutMobile from '../assets/EventImg/humor fest/BanterBout.webp';
 import brainDImg from '../assets/eventImages/brain d.png';
-import brainDMobile from '../assets/EventImg/fine arts/Bran-D.webp';
 import centrifugeImg from '../assets/eventImages/centrifuge.png';
-import centrifugeMobile from '../assets/EventImg/dance/Centrifuge.webp';
 import dumbCImg from '../assets/eventImages/dumb c.png';
-import dumbCMobile from '../assets/EventImg/literary/DumbC.webp';
 import dumbstuckImg from '../assets/eventImages/dumbstuck.png';
 import faceCanvasImg from '../assets/eventImages/face canvas.png';
-import faceCanvasMobile from '../assets/EventImg/fine arts/FaceCanvas.webp';
 import frenzyFabricImg from '../assets/eventImages/frenzy fabric.png';
-import frenzyFabricMobile from '../assets/EventImg/fine arts/frenzy fabric.webp';
 import hilarityEnsuesImg from '../assets/eventImages/hilarity esues.png';
-import hilarityEnsuesMobile from '../assets/EventImg/humor fest/HilarityEnsues.webp';
 import iMeMyselfImg from '../assets/eventImages/i me myself.png';
 import lightsCameraImg from '../assets/eventImages/lights camera sf.png';
-import lightsCameraMobile from '../assets/EventImg/film fest/LightsCameraSF.webp';
 import motionTalesImg from '../assets/eventImages/motion tales.png';
-import motionTalesMobile from '../assets/EventImg/film fest/MotionTales.webp';
 import nationalDebateImg from '../assets/eventImages/national level debate.png';
-import nationalDebateMobile from '../assets/EventImg/literary/NationalLevelDebate.webp';
 import paintItImg from '../assets/eventImages/paint it.png';
-import paintItMobile from '../assets/EventImg/fine arts/PaintIt.webp';
 import poetrySlamImg from '../assets/eventImages/poetry slam.png';
 import quizEventImg from '../assets/eventImages/quiz.png';
 import rampmaniaImg from '../assets/eventImages/rampmania.png';
 import rangmanchImg from '../assets/eventImages/rangmanch.png';
 import rangoliImg from '../assets/eventImages/rangoli.png';
-import rangoliMobile from '../assets/EventImg/fine arts/Rangoli.webp';
 import shakeALegImg from '../assets/eventImages/shake a leg.png';
-import shakeALegMobile from '../assets/EventImg/dance/ShakeALeg.webp';
 import shopaholicImg from '../assets/eventImages/shopaholic.png';
 import sketchItImg from '../assets/eventImages/sketch it.png';
 import spentImg from '../assets/eventImages/spent.png';
-import spentMobile from '../assets/EventImg/Quiz/SpEnt.webp';
-import shuffleSoloImg from '../assets/eventImages/shuffle solo.png?url';
-import shuffleSoloMobile from '../assets/EventImg/dance/Shuffle Solo.webp';
-import shuffleTeamImg from '../assets/eventImages/shuffle team.png?url';
-import shuffleTeamMobile from '../assets/EventImg/dance/Shuffle team.webp';
+import shuffleSoloImg from '../assets/eventImages/shuffle solo.png';
+import shuffleTeamImg from '../assets/eventImages/shuffle team.png';
 import twoForTangoImg from '../assets/eventImages/two for tango.png';
-import pen from '../assets/eventImages/A Mighty Pen.png';
+import penImg from '../assets/eventImages/A Mighty Pen.png';
+import jumbleImg from '../assets/eventImages/jumble the good word.png';
+import chefImg from '../assets/eventImages/chef.png';
+import sfIdolImg from '../assets/eventImages/sf idol.png';
+import lakesideImg from '../assets/eventImages/lakeside dreams.png';
+import wildfireImg from '../assets/eventImages/wildfire.png';
+import retrowaveImg from '../assets/eventImages/retrowave.png';
+import canYouDuetImg from '../assets/eventImages/can you duet.png';
+import sfmImg from '../assets/eventImages/SFM.png';
+
+// --- MOBILE IMAGES (EventImg) ---
+import nrityakalaMobile from '../assets/EventImg/dance/Nrityakala.webp';
+import shakeALegMobile from '../assets/EventImg/dance/ShakeALeg.webp';
+import centrifugeMobile from '../assets/EventImg/dance/Centrifuge.webp';
+import shuffleSoloMobile from '../assets/EventImg/dance/Shuffle Solo.webp';
+import shuffleTeamMobile from '../assets/EventImg/dance/Shuffle team.webp';
+import twoForTangoMobile from '../assets/EventImg/dance/TwoForATango (1).webp';
+
+import sfIdolMobile from '../assets/EventImg/music/SFidol.webp';
+import canYouDuetMobile from '../assets/EventImg/music/can you duet.webp';
+import retrowaveMobile from '../assets/EventImg/music/Retrowave.webp';
+import beatItMobile from '../assets/EventImg/music/BeatIT.webp';
+import rapmaniaMobile from '../assets/EventImg/music/Rapmania.webp';
+import wildfireMobile from '../assets/EventImg/music/Wildfire.webp';
+import lakesideMobile from '../assets/EventImg/music/LakesideDreamsGroup.webp';
+
+import rangmanchMobile from '../assets/EventImg/dramatics/Rangmanch.webp';
+import iMeMyselfMobile from '../assets/EventImg/dramatics/iMeMyself.webp';
+import dumbstruckMobile from '../assets/EventImg/dramatics/Dumbstruck.webp';
+import nukkadMobile from '../assets/EventImg/dramatics/Nukkad.webp';
+
 import penMobile from '../assets/EventImg/literary/AMightyPen.webp';
-import jumble from '../assets/eventImages/jumble the good word.png';
 import jumbleMobile from '../assets/EventImg/literary/JumbleTheGoodWord.webp';
-import chef from '../assets/eventImages/chef.png';
+import nationalDebateMobile from '../assets/EventImg/literary/NationalLevelDebate.webp';
+import dumbCMobile from '../assets/EventImg/literary/DumbC.webp';
+import poetrySlamMobile from '../assets/EventImg/literary/EnglishPoetrySlam (1).webp';
+
+import pictureTaleMobile from '../assets/EventImg/film fest/APictureTale.webp';
+import lightsCameraMobile from '../assets/EventImg/film fest/LightsCameraSF.webp';
+import motionTalesMobile from '../assets/EventImg/film fest/MotionTales.webp';
+import sfmMobile from '../assets/EventImg/film fest/SFM.webp';
+
+import brainDMobile from '../assets/EventImg/fine arts/Bran-D.webp';
+import faceCanvasMobile from '../assets/EventImg/fine arts/FaceCanvas.webp';
+import paintItMobile from '../assets/EventImg/fine arts/PaintIt.webp';
+import rangoliMobile from '../assets/EventImg/fine arts/Rangoli.webp';
+import frenzyFabricMobile from '../assets/EventImg/fine arts/frenzy fabric.webp';
+
+import banterBoutMobile from '../assets/EventImg/humor fest/BanterBout.webp';
+import hilarityEnsuesMobile from '../assets/EventImg/humor fest/HilarityEnsues.webp';
+
 import chefMobile from '../assets/EventImg/culinary arts/Chef\'sCorner.webp';
-import beatItLogo from '../assets/EventImg/music/BeatIT.webp';
-import lakesideLogo from '../assets/EventImg/music/LakesideDreamsGroup.webp';
-import rapmaniaLogo from '../assets/EventImg/music/Rapmania.webp';
-import retrowaveLogo from '../assets/EventImg/music/Retrowave.webp';
-import sfIdolLogo from '../assets/EventImg/music/SFidol.webp';
-import wildfireLogo from '../assets/EventImg/music/Wildfire.webp';
-import canYouDuetLogo from '../assets/EventImg/music/can you duet.webp';
+import spentMobile from '../assets/EventImg/Quiz/SpEnt.webp';
+import biztechMobile from '../assets/EventImg/Quiz/BIZTECH.webp';
+import cinemaniaMobile from '../assets/EventImg/Quiz/Cinemania.webp';
+import mbtMobile from '../assets/EventImg/Quiz/MaryBucknelTrophy(MBT).webp';
+import otkaunMobile from '../assets/EventImg/Quiz/otkaun quiz.webp';
+
+import impromptuMobile from '../assets/EventImg/literary/Impromptu.webp';
+import indiaCallingMobile from '../assets/EventImg/literary/IndiaCalling.webp';
+import tellATaleMobile from '../assets/EventImg/literary/TellaTale.webp';
+
+import junkArtMobile from '../assets/EventImg/fine arts/JunkArt.webp';
+import soapaholicMobile from '../assets/EventImg/fine arts/Soapaholic.webp';
+import fingerdabMobile from '../assets/EventImg/fine arts/FingerDab.webp';
+import sketchItMobile from '../assets/EventImg/fine arts/Sketchit.webp';
+
+import mrandmsMobile from '../assets/EventImg/fashion/MrandMsSPRINGFEST.webp';
+import navyataMobile from '../assets/EventImg/fashion/Navyata.webp';
+import panacheMobile from '../assets/EventImg/fashion/Panache.webp';
+import peekawhoMobile from '../assets/EventImg/fashion/PeekAWho.webp';
+import sargamMobile from '../assets/EventImg/music/Sargam (1).webp';
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEvents } from '../context/eventContext';
@@ -233,21 +274,12 @@ const SubEventsPage = () => {
         const fetchEvents = async () => {
             try {
                 setIsLoading(true);
-                // Use getEventsByGenre directly as it now handles the API response correctly
                 const genreEvents = await getEventsByGenre(genreName);
 
                 if (Array.isArray(genreEvents)) {
                     setEvents(genreEvents);
                     if (genreEvents.length > 0) {
                         setSelectedEvent(genreEvents[0]);
-                    }
-                } else if (genreEvents?.code === 0 && Array.isArray(genreEvents.data)) {
-                    // Fallback in case it returns wrapped object
-                    // filtering is now done in service, but if we get raw data structure here:
-                    const activeEvents = genreEvents.data.filter(e => e.event_status === true);
-                    setEvents(activeEvents);
-                    if (activeEvents.length > 0) {
-                        setSelectedEvent(activeEvents[0]);
                     }
                 }
             } catch (err) {
@@ -302,113 +334,119 @@ const SubEventsPage = () => {
     const eventImageMap = {
         // Dance events
         'nrityakala': { desktop: nrityakalaImg, mobile: nrityakalaMobile },
-        'shake a leg': { desktop: shakeALegImg, mobile: shakeALegMobile },
-        'shake-a-leg': { desktop: shakeALegImg, mobile: shakeALegMobile },
-        'two for tango': twoForTangoImg,
-        'two-for-tango': twoForTangoImg,
-
-        'Shuffle - Solo': { desktop: shuffleSoloImg, mobile: shuffleSoloMobile },
-        'Shuffle - Team ': { desktop: shuffleTeamImg, mobile: shuffleTeamMobile },
+        'shakealeg': { desktop: shakeALegImg, mobile: shakeALegMobile },
+        'twoforatango': { desktop: twoForTangoImg, mobile: twoForTangoMobile },
+        'shufflesolo': { desktop: shuffleSoloImg, mobile: shuffleSoloMobile },
+        'shuffle - team': { desktop: shuffleTeamImg, mobile: shuffleTeamMobile },
+        'suffle-solo': { desktop: shuffleSoloImg, mobile: shuffleSoloMobile },
+        'suffle-team': { desktop: shuffleTeamImg, mobile: shuffleTeamMobile },
+        'centrifuge': { desktop: centrifugeImg, mobile: centrifugeMobile },
 
         // Music events
-        'sf idol': sfIdolLogo,
-        'sf-idol': sfIdolLogo,
-        'can you duet': canYouDuetLogo,
-        'can-you-duet': canYouDuetLogo,
-        'retrowave': retrowaveLogo,
-        'beat it': beatItLogo,
-        'beat-it': beatItLogo,
-        'rapmania': rapmaniaLogo,
-        'wildfire': wildfireLogo,
-        'lakeside dreams': lakesideLogo,
-        'lakeside-dreams': lakesideLogo,
-        'Shuffle-Solo': shuffleSoloImg,
+        'sfidol': { desktop: sfIdolImg, mobile: sfIdolMobile },
+        'canyouduet': { desktop: canYouDuetImg, mobile: canYouDuetMobile },
+        'retrowave': { desktop: retrowaveImg, mobile: retrowaveMobile },
+        'beatit': { desktop: null, mobile: beatItMobile },
+        'beatdrop': { desktop: null, mobile: beatItMobile },
+        'rapmania': { desktop: null, mobile: rapmaniaMobile },
+        'wildfire': { desktop: wildfireImg, mobile: wildfireMobile },
+        'lakesidedreams': { desktop: lakesideImg, mobile: lakesideMobile },
+        'Sargam': { desktop: lakesideImg, mobile: sargamMobile },
 
         // Dramatics events
-        'rangmanch': rangmanchImg,
-        'i me myself': iMeMyselfImg,
-        'i-me-myself': iMeMyselfImg,
+        'rangmanch': { desktop: rangmanchImg, mobile: rangmanchMobile },
+        'imemyself': { desktop: iMeMyselfImg, mobile: iMeMyselfMobile },
+        'dumbstruck': { desktop: dumbstuckImg, mobile: dumbstruckMobile },
+        'nukkad': { desktop: null, mobile: nukkadMobile },
 
         // Literary events
-        'banter bout': { desktop: banterBoutImg, mobile: banterBoutMobile },
-        'banter-bout': { desktop: banterBoutImg, mobile: banterBoutMobile },
-        'poetry slam': poetrySlamImg,
-        'poetry-slam': poetrySlamImg,
-        'national level debate': { desktop: nationalDebateImg, mobile: nationalDebateMobile },
-        'national-level-debate': { desktop: nationalDebateImg, mobile: nationalDebateMobile },
+        'banterbout': { desktop: banterBoutImg, mobile: banterBoutMobile },
+        'poetryslam': { desktop: poetrySlamImg, mobile: poetrySlamMobile },
+        'nationalleveldebate': { desktop: nationalDebateImg, mobile: nationalDebateMobile },
         'spent': { desktop: spentImg, mobile: spentMobile },
-        'a mighty pen': { desktop: pen, mobile: penMobile },
-        'jumble the good word': { desktop: jumble, mobile: jumbleMobile },
+        'amightypen': { desktop: penImg, mobile: penMobile },
+        'jumblethegoodword': { desktop: jumbleImg, mobile: jumbleMobile },
+        'dumbc': { desktop: dumbCImg, mobile: dumbCMobile },
 
         // Film Fest events
-        'a picture tale': { desktop: pictureTaleImg, mobile: pictureTaleMobile },
-        'a-picture-tale': { desktop: pictureTaleImg, mobile: pictureTaleMobile },
-        'lights camera sf': { desktop: lightsCameraImg, mobile: lightsCameraMobile },
-        'lights-camera-sf': { desktop: lightsCameraImg, mobile: lightsCameraMobile },
-        'motion tales': { desktop: motionTalesImg, mobile: motionTalesMobile },
-        'motion-tales': { desktop: motionTalesImg, mobile: motionTalesMobile },
-
-        // Quiz events
-        'brain drain': brainDImg,
-        'brain-drain': brainDImg,
-        'quiz': quizEventImg,
-
-        'Centrifuge': { desktop: centrifugeImg, mobile: centrifugeMobile },
+        'apicturetale': { desktop: pictureTaleImg, mobile: pictureTaleMobile },
+        'lightscamerasf': { desktop: lightsCameraImg, mobile: lightsCameraMobile },
+        'motiontales': { desktop: motionTalesImg, mobile: motionTalesMobile },
+        'sfm': { desktop: sfmImg, mobile: sfmMobile },
 
         // Fine Arts events
-        'face canvas': { desktop: faceCanvasImg, mobile: faceCanvasMobile },
-        'face-canvas': { desktop: faceCanvasImg, mobile: faceCanvasMobile },
-        'paint it': { desktop: paintItImg, mobile: paintItMobile },
-        'paint-it': { desktop: paintItImg, mobile: paintItMobile },
-        'sketch it': sketchItImg,
-        'sketch-it': sketchItImg,
+        'brand': { desktop: brainDImg, mobile: brainDMobile },
+        'quiz': { desktop: quizEventImg, mobile: null },
+        'facecanvas': { desktop: faceCanvasImg, mobile: faceCanvasMobile },
+        'paintit': { desktop: paintItImg, mobile: paintItMobile },
+        'Sketch It': { desktop: sketchItImg, mobile: sketchItMobile },
+        'finger dab': { desktop: null, mobile: fingerdabMobile },
         'rangoli': { desktop: rangoliImg, mobile: rangoliMobile },
+        'frenzyfabric': { desktop: frenzyFabricImg, mobile: frenzyFabricMobile },
 
         // Humor Fest events
-        'dumb charades': { desktop: dumbCImg, mobile: dumbCMobile },
-        'dumb-charades': { desktop: dumbCImg, mobile: dumbCMobile },
-        'dumbstruck': dumbstuckImg,
-        'hilarity ensues': { desktop: hilarityEnsuesImg, mobile: hilarityEnsuesMobile },
-        'hilarity-ensues': { desktop: hilarityEnsuesImg, mobile: hilarityEnsuesMobile },
+        'hilarityensues': { desktop: hilarityEnsuesImg, mobile: hilarityEnsuesMobile },
 
         // Fashion events
-        'rampmania': rampmaniaImg,
-        'frenzy fabric': { desktop: frenzyFabricImg, mobile: frenzyFabricMobile },
-        'frenzy-fabric': { desktop: frenzyFabricImg, mobile: frenzyFabricMobile },
-        'shopaholic': shopaholicImg,
-        'peek a who': quizEventImg,
+        'rampmania': { desktop: rampmaniaImg, mobile: null },
+        'shopaholic': { desktop: shopaholicImg, mobile: null },
 
-        // Game Fest / Other events - handle both shuffle and suffle spelling
+        // Literary events (more)
+        'impromptu': { desktop: null, mobile: impromptuMobile },
+        'indiacalling': { desktop: null, mobile: indiaCallingMobile },
+        'tellatale': { desktop: null, mobile: tellATaleMobile },
 
-        'sufflesolo': shuffleSoloImg,
-        'shuffle team': shuffleTeamImg,
-        'Shuffle - Team': shuffleTeamImg,
-        'shuffleteam': shuffleTeamImg,
+        // Fine Arts events (more)
+        'junkart': { desktop: null, mobile: junkArtMobile },
+        'soapaholic': { desktop: null, mobile: soapaholicMobile },
 
-        // Other events
-        'top it to win it': spentImg,
-        "chef's corner": { desktop: chef, mobile: chefMobile },
+        // Fashion events (more)
+        'mrandmsspringfest': { desktop: null, mobile: mrandmsMobile },
+        'navyata': { desktop: null, mobile: navyataMobile },
+        'panache': { desktop: null, mobile: panacheMobile },
+        'peekawho': { desktop: null, mobile: peekawhoMobile },
+
+        // Quiz events (more)
+        'biztech': { desktop: null, mobile: biztechMobile },
+        'cinemania': { desktop: null, mobile: cinemaniaMobile },
+        'Mary Bucknel Trophy(MBT)': { desktop: null, mobile: mbtMobile },
+        'mbt': { desktop: null, mobile: mbtMobile },
+        'Otakon Quest': { desktop: null, mobile: otkaunMobile },
+
+        // Culinary Arts
+        "chefscorner": { desktop: chefImg, mobile: chefMobile },
     };
 
-    // Fallback images - only from eventImages folder
+    // Fallback images - different sets for desktop and mobile
     const fallbackImages = [
         nrityakalaImg, rangmanchImg, shakeALegImg,
-        retrowaveLogo, lakesideLogo, quizEventImg, shuffleTeamImg
+        retrowaveImg, lakesideImg, quizEventImg, shuffleTeamImg
+    ];
+
+    const mobileFallbackImages = [
+        nrityakalaMobile, rangmanchMobile, shakeALegMobile,
+        centrifugeMobile, lakesideMobile, pictureTaleMobile, brainDMobile
     ];
 
     const getEventDisplayData = (event) => {
-        const genreKey = event.genre.toLowerCase().replace(/\s+/g, '');
+        const normalize = (str) => str?.toLowerCase().replace(/[^a-z0-9]/g, '') || '';
+
+        const genreKey = normalize(event.genre);
         const genreInfo = eventData[genreKey] || {};
 
         // Get event-specific image from eventImageMap
-        const eventKey = event.name.toLowerCase();
+        const eventKey = normalize(event.name);
         const eventImageData = eventImageMap[eventKey];
 
         // Pick between desktop and mobile image
         let finalImage = null;
         if (eventImageData) {
-            if (typeof eventImageData === 'object' && eventImageData.desktop) {
-                finalImage = isMobile ? (eventImageData.mobile || eventImageData.desktop) : eventImageData.desktop;
+            if (typeof eventImageData === 'object' && (eventImageData.desktop || eventImageData.mobile)) {
+                if (isMobile) {
+                    finalImage = eventImageData.mobile || eventImageData.desktop;
+                } else {
+                    finalImage = eventImageData.desktop || eventImageData.mobile;
+                }
             } else {
                 finalImage = eventImageData;
             }
@@ -419,9 +457,13 @@ const SubEventsPage = () => {
             finalImage = event.poster;
         }
         if (!finalImage) {
-            // Use hash to consistently pick a fallback from eventImages
+            // Use hash to consistently pick a fallback image
             const hash = event.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-            finalImage = fallbackImages[hash % fallbackImages.length];
+            if (isMobile) {
+                finalImage = mobileFallbackImages[hash % mobileFallbackImages.length];
+            } else {
+                finalImage = fallbackImages[hash % fallbackImages.length];
+            }
         }
 
         return {
@@ -473,19 +515,6 @@ const SubEventsPage = () => {
     return (
         <div className="font-body bg-background-dark text-slate-200 min-h-screen lg:h-screen relative overflow-y-auto lg:overflow-hidden selection:bg-deep-amber selection:text-white transition-colors duration-300 dark:bg-background-dark dark:text-slate-200">
             <EtherealBackground />
-
-            {/* Back Button */}
-            <motion.button
-                onClick={() => navigate('/events')}
-                className="fixed top-6 left-6 z-50 p-3 rounded-full bg-black/40 border border-white/10 text-white hover:bg-purple-500/80 hover:border-purple-500 transition-all duration-300 backdrop-blur-md"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3 }}
-            >
-                <span className="material-icons text-2xl">arrow_back</span>
-            </motion.button>
 
             {/* Main Content */}
             <main className="relative z-10 pt-8 pb-8 container mx-auto px-4 min-h-full lg:h-full flex flex-col items-center lg:justify-center">
@@ -574,23 +603,20 @@ const SubEventsPage = () => {
                                 <div className="flex flex-col lg:flex-row">
 
                                     {/* Left Section - Image */}
-                                    <div className="w-full lg:w-auto lg:flex-shrink-0">
-                                        {/* Image with Shiny Border */}
-                                        <div
-                                            className="relative overflow-hidden event-image-container"
-                                            style={{
-                                                padding: '0px'
-                                            }}
-                                        >
-                                            <img
-                                                alt={currentEvent.name}
-                                                src={getEventDisplayData(currentEvent).image}
-                                                className="w-full h-full object-contain rounded-lg p-12 lg:p-4"
-                                                style={{
-                                                    filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.2))',
-                                                    mixBlendMode: 'screen'
-                                                }}
-                                            />
+                                    <div className="w-full lg:w-[320px] xl:w-[380px] flex-shrink-0 bg-black/10 flex items-center justify-center h-[220px] sm:h-[280px] lg:h-[450px]">
+                                        <div className="relative w-full h-full flex items-center justify-center p-4 sm:p-6 lg:p-8 overflow-hidden">
+                                            <AnimatePresence mode="wait">
+                                                <motion.img
+                                                    key={currentEvent.id}
+                                                    alt={currentEvent.name}
+                                                    src={getEventDisplayData(currentEvent).image}
+                                                    initial={{ opacity: 0, scale: 0.9 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    exit={{ opacity: 0, scale: 1.1 }}
+                                                    transition={{ duration: 0.4 }}
+                                                    className="max-w-full max-h-full object-contain rounded-lg drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] transition-transform duration-500 hover:scale-105"
+                                                />
+                                            </AnimatePresence>
                                         </div>
                                     </div>
 
@@ -630,7 +656,7 @@ const SubEventsPage = () => {
                                             <div className="mt-2" style={{ fontFamily: "Roboto" }}>
                                                 <button
                                                     onClick={handleRegisterClick}
-                                                    className="px-6 py-2 rounded-lg bg-gray-400/100 hover:bg-grey text-black  font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-purple-500/50 flex items-center gap-2"
+                                                    className="px-6 py-2 rounded-lg bg-gray-400/90 hover:bg-gray-400 text-black font-bold text-sm uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-purple-500/50 flex items-center gap-2"
                                                 >
                                                     Register
                                                     <span className="material-icons text-base">arrow_forward</span>
@@ -707,7 +733,7 @@ const SubEventsPage = () => {
                                                                         lineHeight: '1.4'
                                                                     }}
                                                                 >
-                                                                    {rule.replace(/^\d+[\.\)]\s*/, '')}
+                                                                    {typeof rule === 'string' ? rule.replace(/^\d+[\.\)]\s*/, '') : rule}
                                                                 </span>
                                                             </li>
                                                         ))}
