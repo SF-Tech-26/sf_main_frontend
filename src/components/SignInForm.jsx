@@ -147,18 +147,12 @@ style={{
               focus:ring-2
               indent-[2px]
             "
-<<<<<<< HEAD
-          >
-            {isLoading ? "Logging in" : "Log in"}
-          </button>
-=======
             style={{
               borderColor: "rgba(230, 217, 162, 0.35)",
               boxShadow: "inset 0 0 0 rgba(0,0,0,0)",
             }}
           />
         </div>
->>>>>>> 204529a (signin signup done)
 
         {/* Password */}
         <div className="flex flex-col gap-[6px]">
