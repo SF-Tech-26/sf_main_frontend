@@ -15,21 +15,6 @@ export default function AftermoviePage() {
         <section className="relative min-h-screen w-full bg-black text-white overflow-hidden">
 
             {/* ================= MOBILE FLOATING BADGE ================= */}
-            <div
-                className="absolute top-0 left-0 z-30
-                   flex items-center gap-3
-                   bg-black/90 px-3 py-2
-                   animate-fade-up
-                   md:hidden"
-            >
-                <img src={logo} className="w-9 h-9" />
-                <span
-                    className="text-xs tracking-[0.28em]"
-                    style={{ fontFamily: "'Microsoft Yi Baiti'", fontWeight: 500 }}
-                >
-                    66TH EDITION
-                </span>
-            </div>
 
             {/* ================= DESKTOP LAYOUT ================= */}
             <div className="hidden md:flex h-screen">
@@ -125,6 +110,22 @@ export default function AftermoviePage() {
                         style={{ background: 'linear-gradient(to top, #000000 10%, rgba(0,0,0,0.8) 50%, transparent 100%)' }}
                     />
                 </div>
+
+                <div
+                className="z-30
+                   flex items-center gap-3
+                   bg-black/90 px-3 py-2
+                   animate-fade-up
+                   md:hidden mb-[10px]"
+            >
+                <img src={logo} className="w-9 h-9" />
+                <span
+                    className="text-xs tracking-[0.28em]"
+                    style={{ fontFamily: "'Microsoft Yi Baiti'", fontWeight: 500 }}
+                >
+                    66TH EDITION
+                </span>
+            </div>
 
                 {/* TEXT BELOW IMAGE */}
                 <div className="px-6 pb-10 bg-black flex-1">

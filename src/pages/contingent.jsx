@@ -385,17 +385,7 @@ function Contingent() {
   //     };
 
   return (
-      <><ToastContainer
-      position="top-center"
-      autoClose={3000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="dark" /><div
+      <><div
         className="min-h-screen flex flex-col flex-1 items-center justify-center bg-center bg-no-repeat bg-cover"
         style={{ backgroundImage: `url(${contin})`, backgroundAttachment: "fixed", backgroundPosition: "center" }}
       >
@@ -586,7 +576,7 @@ function Contingent() {
                           required
                           value={paymentData.checkIn}
                           onChange={(e) => setPaymentData({ ...paymentData, checkIn: e.target.value })}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer"
+                          className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer"
                         >
                           <option value="" disabled>Select Check-in</option>
                           <option value="2026-01-22">22-01-2026</option>
@@ -609,7 +599,7 @@ function Contingent() {
                           required
                           value={paymentData.checkOut}
                           onChange={(e) => setPaymentData({ ...paymentData, checkOut: e.target.value })}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer"
+                          className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer"
                         >
                           <option value="" disabled>Select Check-out</option>
                           <option value="2026-01-23">23-01-2026</option>
@@ -690,7 +680,7 @@ function Contingent() {
                           required
                           value={contingentPayData.checkIn}
                           onChange={(e) => setContingentPayData({ ...contingentPayData, checkIn: e.target.value })}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer"
+                          className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer"
                         >
                           <option value="" disabled>Select Check-in</option>
                           <option value="2026-01-22">22-01-2026</option>
@@ -713,7 +703,7 @@ function Contingent() {
                           required
                           value={contingentPayData.checkOut}
                           onChange={(e) => setContingentPayData({ ...contingentPayData, checkOut: e.target.value })}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer"
+                          className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer"
                         >
                           <option value="" disabled>Select Check-out</option>
                           <option value="2026-01-23">23-01-2026</option>

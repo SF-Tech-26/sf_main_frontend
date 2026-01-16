@@ -188,7 +188,7 @@ export default function SignInForm() {
               border border-white/10
             "
           >
-            {isLoading ? "logging in" : "Enter fest"}
+            {isLoading ? "Logging in" : "Log in"}
           </button>
 
           <div className="flex items-center gap-4 my-1">

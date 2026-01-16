@@ -230,7 +230,7 @@ const EventDetailPage = () => {
                                             {event.is_group ? 'Group Event' : 'Solo Event'}
                                         </span>
                                         <span className="px-4 py-1 mem rounded-full text-base font-medium bg-white/10">
-                                            {event.min_participation}-{event.max_participation} members
+                                            {event.is_group ? `${event.min_participation} : ${event.max_participation} members` :`1 member`} 
                                         </span>
                                     </div>
 

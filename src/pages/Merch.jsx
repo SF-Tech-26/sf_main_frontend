@@ -203,7 +203,7 @@ function MerchPage({ onViewCart, onAdd, onToast, cartCount }) {
 
             {/* Products */}
             <div className="mt-8 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 
-                            gap-6 md:gap-8 justify-items-center w-full max-w-7xl mx-auto">
+                            gap-6 md:gap-8 justify-items-center w-[95%] max-w-5xl mx-auto">
                 {PRODUCTS.map((p) => (
                     <ProductCard key={p.id} product={p} onAdd={onAdd} onToast={onToast} />
                 ))}
@@ -216,6 +216,14 @@ function MerchPage({ onViewCart, onAdd, onToast, cartCount }) {
 
 function ProductCard({ product, onAdd, onToast }) {
     const [size, setSize] = useState(null);
+    const setS = (s)=>{
+        if(size ===s){
+            setSize(null);
+        }
+        else{
+            setSize(s);
+        }
+    }
 
     const handleAdd = () => {
         if (!size) {
@@ -261,7 +269,7 @@ function ProductCard({ product, onAdd, onToast }) {
                 {SIZES.map((s) => (
                     <button
                         key={s}
-                        onClick={() => setSize(s)}
+                        onClick={() => setS(s)}
                         className={`size-btn ${size === s ? "active" : ""}`}
                     >
                         {s}
