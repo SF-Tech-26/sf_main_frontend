@@ -20,91 +20,44 @@ const slugToGenre = {
     'game-fest': 'Game Fest',
 };
 
-const EtherealBackground = () => {
-    // Generate random stars
-    const stars = [...Array(100)].map((_, i) => ({
-        id: i,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        size: Math.random() * 2 + 1,
-        delay: Math.random() * 3,
-        duration: 2 + Math.random() * 2,
-    }));
-
-    return (
-        <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-            {/* Deep space gradient */}
-            <div
-                className="absolute inset-0"
-                style={{
-                    background: 'radial-gradient(ellipse at center, #1a0a2e 0%, #0d0015 50%, #000000 100%)'
-                }}
-            />
-
-            {/* Nebula clouds */}
-            <div
-                className="absolute top-0 left-0 w-full h-full opacity-30"
-                style={{
-                    background: 'radial-gradient(ellipse at 20% 30%, rgba(139, 92, 246, 0.3) 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(236, 72, 153, 0.2) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 60%)'
-                }}
-            />
-
-            {/* Stars */}
-            {stars.map((star) => (
-                <motion.div
-                    key={star.id}
-                    className="absolute rounded-full bg-white"
-                    style={{
-                        left: `${star.x}%`,
-                        top: `${star.y}%`,
-                        width: star.size,
-                        height: star.size,
-                    }}
-                    animate={{
-                        opacity: [0.3, 1, 0.3],
-                        scale: [1, 1.2, 1],
-                    }}
-                    transition={{
-                        duration: star.duration,
-                        delay: star.delay,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                    }}
-                />
-            ))}
-
-            {/* Floating ethereal orbs */}
-            <motion.div
-                className="absolute w-96 h-96 rounded-full"
-                style={{
-                    background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)',
-                    top: '-10%',
-                    right: '20%',
-                    filter: 'blur(60px)',
-                }}
-                animate={{
-                    scale: [1, 1.1, 1],
-                    opacity: [0.3, 0.5, 0.3],
-                }}
-                transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-            />
-            <motion.div
-                className="absolute w-[500px] h-[500px] rounded-full"
-                style={{
-                    background: 'radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%)',
-                    bottom: '-20%',
-                    left: '-10%',
-                    filter: 'blur(80px)',
-                }}
-                animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.2, 0.4, 0.2],
-                }}
-                transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-            />
-        </div>
-    );
-};
+// Simplified ethereal background with static gradients
+const EtherealBackground = () => (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        {/* Deep space gradient */}
+        <div
+            className="absolute inset-0"
+            style={{
+                background: 'radial-gradient(ellipse at center, #1a0a2e 0%, #0d0015 50%, #000000 100%)'
+            }}
+        />
+        {/* Nebula clouds */}
+        <div
+            className="absolute top-0 left-0 w-full h-full opacity-30"
+            style={{
+                background: 'radial-gradient(ellipse at 20% 30%, rgba(139, 92, 246, 0.3) 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(236, 72, 153, 0.2) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 60%)'
+            }}
+        />
+        {/* Static ethereal orbs */}
+        <div
+            className="absolute w-96 h-96 rounded-full"
+            style={{
+                background: 'radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)',
+                top: '-10%',
+                right: '20%',
+                filter: 'blur(60px)',
+            }}
+        />
+        <div
+            className="absolute w-[500px] h-[500px] rounded-full"
+            style={{
+                background: 'radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%)',
+                bottom: '-20%',
+                left: '-10%',
+                filter: 'blur(80px)',
+            }}
+        />
+    </div>
+);
 
 const EventDetailPage = () => {
     const { genre: genreSlug, eventId } = useParams();
@@ -215,7 +168,7 @@ const EventDetailPage = () => {
                                 {/* Left Section */}
                                 <div className="lg:w-2/5 p-10 lg:p-16 border-b lg:border-b-0 lg:border-r border-white/5 flex flex-col items-center lg:items-start justify-center text-center lg:text-left relative">
                                     <h1
-                                        className="text-5xl lg:text-5xl font-bold text-white mb-8 relative z-10"
+                                        className="text-5xl font-bold text-white mb-8 relative z-10"
                                         style={{ fontFamily: 'Cinzel, serif', margin: '1rem', marginTop: 0, textShadow: '0 0 10px rgba(168, 85, 247, 0.8), 0 0 20px rgba(217, 70, 239, 0.5)' }}
                                     >
                                         {event.name.toUpperCase()}
@@ -226,23 +179,21 @@ const EventDetailPage = () => {
                                     </p>
 
                                     <div className="flex gap-10 mb-12 relative z-10" style={{ marginBottom: '1.5rem', marginLeft: '1.5rem' }}>
-                                        <span className={`px-4  group py-1 rounded-full text-base font-medium ${event.is_group ? 'bg-purple-500/60' : 'bg-emerald-500/60'}`} >
+                                        <span className={`px-4 py-1 rounded-full text-base font-medium ${event.is_group ? 'bg-purple-500/60' : 'bg-emerald-500/60'}`}>
                                             {event.is_group ? 'Group Event' : 'Solo Event'}
                                         </span>
-                                        <span className="px-4 py-1 mem rounded-full text-base font-medium bg-white/10">
-                                            {event.is_group ? `${event.min_participation} : ${event.max_participation} members` :`1 member`} 
+                                        <span className="px-4 py-1 rounded-full text-base font-medium bg-white/10">
+                                            {event.max_participation !== '1' ? `${event.min_participation}-${event.max_participation} members` : `${event.max_participation} member`}
                                         </span>
                                     </div>
 
                                     {!showRegistration && (
-                                        <div className="relative group cursor-pointer z-10 mt-8 " style={{ marginBottom: '1rem', marginLeft: '1rem' }}>
-                                            <div className="absolute inset-0 bg-purple-500 rounded-rounded  blur-2xl opacity-40 group-hover:opacity-70 transition-opacity duration-500 animate-pulse" />
+                                        <div className="relative group cursor-pointer z-10 mt-8" style={{ marginBottom: '1rem', marginLeft: '1rem' }}>
+                                            <div className="absolute inset-0 bg-purple-500 rounded-full blur-2xl opacity-40 group-hover:opacity-70 transition-opacity duration-500 animate-pulse" />
                                             <motion.button
                                                 onClick={handleRegisterClick}
-                                                className="w-32 h-32 rounded-full flex items-center justify-center text-white font-bold  p-5 text-sm tracking-wider relative z-10 border border-white/20"
+                                                className="px-8 py-2 rounded-full flex items-center justify-center text-white font-bold text-sm tracking-wider relative z-10 border border-white/20"
                                                 style={{
-                                                    width: '8rem',
-                                                    height: '2rem',
                                                     fontFamily: 'Cinzel, serif',
                                                     background: 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8) 0%, rgba(217, 70, 239, 1) 20%, rgba(139, 92, 246, 1) 50%, rgba(76, 29, 149, 1) 100%)',
                                                     boxShadow: '0 0 30px rgba(217, 70, 239, 0.5), 0 0 60px rgba(139, 92, 246, 0.3)'
@@ -250,7 +201,7 @@ const EventDetailPage = () => {
                                                 whileHover={{ scale: 1.05 }}
                                                 whileTap={{ scale: 0.95 }}
                                             >
-                                                REGISTER<br />NOW
+                                                REGISTER NOW
                                             </motion.button>
                                         </div>
                                     )}
@@ -313,7 +264,7 @@ const EventDetailPage = () => {
                 </div>
 
                 <footer className="relative z-10 text-center py-6 text-slate-500 text-xs md:text-sm tracking-widest uppercase opacity-60" style={{ fontFamily: 'Cinzel, serif' }}>
-                    © 2025 SF Ethereal Enigma. All Rights Reserved.
+                    © 2026 SF Ethereal Enigma. All Rights Reserved.
                 </footer>
             </div>
         </div>
