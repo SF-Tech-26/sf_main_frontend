@@ -95,14 +95,14 @@ export default function AftermoviePage() {
 
                 {/* VIDEO TOP */}
                 <div className="relative h-[60vh] overflow-hidden">
-                    <iframe
+                    {false && <iframe
                         className="w-full h-full object-cover"
                         src="https://www.youtube.com/embed/wj2p4BIsR6w?autoplay=1&mute=1&loop=1&playlist=wj2p4BIsR6w&controls=0&showinfo=0&rel=0"
                         title="Aftermovie"
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
-                    ></iframe>
+                    ></iframe>}
 
                     {/* Gradient Overlay - Mobile (Bottom Fade) */}
                     <div
