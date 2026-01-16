@@ -306,7 +306,7 @@ function CartPage({ cart, onBack, onQtyChange }) {
 
     return (
         <div className="max-w-6xl mx-auto pt-12 overflow-x-hidden">
-            <h1 className="text-center mb-10 text-3xl md:text-5xl font-bold animate-text-shimmer tracking-widest whitespace-nowrap">
+            <h1 className="text-center mb-10 text-3xl md:text-5xl font-bold tracking-widest whitespace-nowrap">
                 YOUR CART
             </h1>
 
