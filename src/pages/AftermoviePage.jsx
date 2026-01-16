@@ -222,6 +222,7 @@ export default function AftermoviePage() {
                         color, and moments that refused to fade.
                     </p>
 
+
                 </div>
             </div>
         </section>
