@@ -14,6 +14,7 @@
 * {
     box-sizing: border-box;
     overscroll-behavior: none;
+  box-sizing: border-box; /* Ensures padding doesn't add extra width/height */
 }
 
 html,
@@ -26,6 +27,10 @@ body,
     /* 🔒 Prevent mobile screen movement */
 }
 
+body {
+       overscroll-behavior: none;
+       touch-action: pan-y;
+   }
 body {
     font-family: 'Lato', sans-serif;
     -webkit-font-smoothing: antialiased;

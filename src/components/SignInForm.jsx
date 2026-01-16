@@ -1,51 +1,16 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
-import { loginUser, googleLogin } from "../services/authService";
-import { useGoogleLogin } from "@react-oauth/google";
+
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
+import { loginUser, googleLogin } from "../services/authService";
+import { useGoogleLogin } from "@react-oauth/google";
+
 
 export default function SignInForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  const { login } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-
-    if (!email || !password) {
-      setError("Please fill in all fields");
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      const response = await loginUser(email, password);
-
-      if (response.code === 0) {
-        const { token, data } = response.data;
-        login(token, data);
-        toast.success("Welcome back!");
-        navigate("/");
-      } else {
-        setError(response.message || "Login failed. Please try again.");
-      }
-    } catch (err) {
-      const message = err.response?.data?.message || "Login failed.";
-      setError(message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleGoogleSuccess = async (tokenResponse) => {
+const handleGoogleSuccess = async (tokenResponse) => {
     setIsLoading(true);
     try {
       const response = await googleLogin(tokenResponse.access_token);
@@ -69,135 +34,188 @@ export default function SignInForm() {
     onError: () => setError("Google Login Failed"),
   });
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!email || !password) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await loginUser(email, password);
+
+      if (response.code === 0) {
+        // Login successful
+        const { token, data } = response.data;
+        login(token, data);
+        toast.success("Welcome back!");
+        navigate("/");
+      } else {
+        setError(response.message || "Login failed. Please try again.");
+      }
+    } catch (err) {
+      const message = err.response?.data?.message || "Login failed. Please check your credentials.";
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="w-full flex justify-center py-10 relative overflow-hidden">
-      {/* Decorative ambient glow behind the card */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] bg-purple-600/30 rounded-full blur-[100px] pointer-events-none"></div>
+   <div className="w-full flex justify-center">
+  <div
+    className="
+      w-[300px] max-w-[80%]
+      min-h-[400px]
+      flex flex-col
+      rounded-[40px]
+      border
+      backdrop-blur-[12px]
+      text-[#e4ece8]
+    "
+   
+style={{
+  padding: "25px 25px",
+  background: "rgba(10,14,11,0.92)",
+  borderRadius: "36px",
 
-      <div
-        className="
-          relative
-          w-[95%]
-          max-w-[400px]
-          max-h-[550px]
-          flex flex-col
-          rounded-[24px]
-          border border-purple-500/20
-          backdrop-blur-xl
-          text-gray-200
-          overflow-auto
-          shadow-2xl
-          bg-black/70
-        "
-        style={{
-          // Deep magical gradient background
-          // Mystical purple glow shadow
-          
-          padding: "48px 32px",
-        }}
-      >
-        <h1
-          className="text-center font-bold tracking-tight mb-[30px] bg-clip-text text-transparent bg-gradient-to-r from-black via-indigo-700 to-blue-950 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]"
-          style={{
-            fontSize: "30px",
-            letterSpacing: "-0.5px",
-          }}
-        >
-          Sign In
-        </h1>
+  /* Inner stroke */
+  border: "1px solid rgba(214,210,184,0.35)",
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          {error && (
-            <div className="bg-red-500/10 border border-red-500/30 text-red-300 px-4 py-2 rounded-xl text-xs text-center shadow-[0_0_10px_rgba(239,68,68,0.2)]">
-              {error}
-            </div>
-          )}
+  /* Depth + glow */
+  boxShadow: `
+    inset 0 0 0 1px rgba(214,210,184,0.12),
+    0 0 18px rgba(214,210,184,0.25),
+    0 0 80px rgba(0,0,0,0.9)
+  `,
+}}
 
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-semibold text-purple-200/60 uppercase tracking-widest ml-1 drop-shadow-sm">
-              Email Address
-            </label>
-            <input
-              type="email"
-              value={email}
-              placeholder="user@guild.com"
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={isLoading}
-              className="
-                h-[50px]
-                px-4
-                rounded-xl
-                bg-black/20
-                border border-purple-500/20
-                text-purple-50
-                placeholder-purple-300/20
-                outline-none
-                transition-all
-                duration-300
-                focus:border-purple-400/60
-                focus:bg-purple-900/10
-                focus:shadow-[0_0_20px_rgba(168,85,247,0.15)]
-              "
-            />
-          </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-semibold text-purple-200/60 uppercase tracking-widest ml-1 drop-shadow-sm">
-              Password
-            </label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              disabled={isLoading}
-              onChange={(e) => setPassword(e.target.value)}
-              className="
-                h-[50px]
-                px-4
-                rounded-xl
-                bg-black/20
-                border border-purple-500/20
-                text-purple-50
-                placeholder-purple-300/20
-                outline-none
-                transition-all
-                duration-300
-                focus:border-purple-400/60
-                focus:bg-purple-900/10
-                focus:shadow-[0_0_20px_rgba(168,85,247,0.15)]
-              "
-            />
-          </div>
+  >
+    <h1
+      className="text-center font-bold tracking-wider mb-[15px]"
+      style={{
+        fontSize: "34px",
+        color: "#e6d9a2",
+        textShadow: `
+          0 0 6px rgba(230, 217, 162, 0.6),
+          0 0 14px rgba(180, 170, 120, 0.4),
+          0 0 28px rgba(90, 110, 95, 0.35)
+        `,
+      }}
+    >
+      SIGN IN
+    </h1>
 
-          <button
-            type="submit"
+    <form onSubmit={handleSubmit}>
+      {error && (
+        <div className="bg-red-900/30 border border-red-700/50 text-red-200 px-4 py-2 rounded-lg text-sm">
+          {error}
+        </div>
+      )}
+
+      <div className="flex flex-col gap-[14px] flex-grow">
+        {/* Email */}
+        <div className="flex flex-col gap-[6px]">
+          <label className="text-sm text-[#9fb3a4]">Email</label>
+          <input
+            type="email"
+            value={email}
+            placeholder="abc@gmail.com"
+            onChange={(e) => setEmail(e.target.value)}
             disabled={isLoading}
             className="
-              mt-2
-              h-[50px]
-              rounded-xl
-              font-bold
-              text-white
-              bg-gradient-to-r from-indigo-950 to-blue-900
-              hover:from-blue-700 hover:to-indigo-800
-              active:scale-[0.98]
-              transition-all
-              duration-300
-              shadow-[0_0_20px_rgba(139,92,246,0.3)]
-              hover:shadow-[0_0_30px_rgba(192,38,211,0.5)]
-              border border-white/10
+              h-[46px]
+              px-[14px] py-[12px]
+              rounded-[10px]
+              bg-transparent
+              border
+              text-[#e4ece8]
+              outline-none
+              focus:ring-2
+              indent-[2px]
             "
-          >
-            {isLoading ? "Logging in" : "Log in"}
-          </button>
+            style={{
+              borderColor: "rgba(230, 217, 162, 0.35)",
+              boxShadow: "inset 0 0 0 rgba(0,0,0,0)",
+            }}
+          />
+        </div>
 
-          <div className="flex items-center gap-4 my-1">
-            <div className="h-[1px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent flex-1"></div>
-            <span className="text-purple-300/40 text-[10px] font-bold tracking-widest uppercase">OR</span>
-            <div className="h-[1px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent flex-1"></div>
-          </div>
+        {/* Password */}
+        <div className="flex flex-col gap-[6px]">
+          <label className="text-sm text-[#9fb3a4]">Password</label>
+          <input
+            type="password"
+            placeholder="********"
+            value={password}
+            disabled={isLoading}
+            onChange={(e) => setPassword(e.target.value)}
+            className="
+              h-[46px]
+              px-[14px] py-[12px]
+              rounded-[10px]
+              bg-transparent
+              border
+              text-[#e4ece8]
+              outline-none
+              focus:ring-2
+              indent-[2px]
+            "
+            style={{
+              borderColor: "rgba(230, 217, 162, 0.35)",
+            }}
+          />
+        </div>
 
-          <button
+        {/* Button */}
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="
+            mt-[8px]
+            h-[46px]
+            rounded-[15px]
+            font-semibold
+            tracking-[1px]
+            text-[#1a1a14]
+            transition
+            hover:scale-[1.03]
+          "
+          style={{
+            background:
+              "linear-gradient(to right, #e6d9a2, #b8ad7d, #8f845a)",
+            boxShadow: `
+              0 0 10px rgba(230, 217, 162, 0.35),
+              0 0 22px rgba(90, 110, 95, 0.35)
+            `,
+          }}
+        >
+          {isLoading ? "SIGNING IN..." : "SIGN IN"}
+        </button>
+
+        <div className="flex items-center gap-4 my-1">
+  <div className="h-[1px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent flex-1"></div>
+  <span className="text-purple-300/40 text-[10px] font-bold tracking-widest uppercase">
+    OR
+  </span>
+  <div className="h-[1px] bg-gradient-to-r from-transparent via-purple-500/30 to-transparent flex-1"></div>
+</div>
+
+
+<button
             type="button"
             onClick={() => loginWithGoogle()}
             disabled={isLoading}
@@ -221,22 +239,30 @@ export default function SignInForm() {
             Google
           </button>
 
-          <div className="mt-4 text-center text-sm flex flex-col gap-3">
-            <Link
-              to="/forgot-password"
-              className="text-purple-300/50 hover:text-purple-200 transition-colors hover:drop-shadow-[0_0_8px_rgba(232,121,249,0.5)]"
-            >
-              Forgot Password?
-            </Link>
-            <p className="text-purple-200/40">
-              Create New Account{" "}
-              <Link to="/signup" className="text-blue-700 font-medium hover:text-fuchsia-300 hover:underline decoration-fuchsia-500/30">
-                Sign up
-              </Link>
-            </p>
-          </div>
-        </form>
+
+
+        {/* Links */}
+        <div className="mt-[10px] text-center text-[14px] flex flex-col gap-[6px] items-center">
+          <Link
+            to="/forgot-password"
+            className="text-[#b8ad7d] underline hover:text-[#e6d9a2] transition"
+          >
+            Forgot Password?
+          </Link>
+
+          <Link
+            to="/signup"
+            className="text-[#b8ad7d] underline hover:text-[#e6d9a2] transition"
+          >
+            Create New Account
+          </Link>
+        </div>
       </div>
-    </div>
+    </form>
+  </div>
+</div>
+
   );
 }
+
+     

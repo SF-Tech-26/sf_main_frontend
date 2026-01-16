@@ -195,7 +195,7 @@ function MerchPage({ onViewCart, onAdd, onToast, cartCount }) {
 
             {/* Title */}
             <div className="text-center mt-4">
-                <h1 className="text-3xl md:text-5xl font-bold animate-text-shimmer whitespace-nowrap">SPRING FEST</h1>
+                <h1 className="text-3xl md:text-5xl font-bold whitespace-nowrap">SPRING FEST</h1>
                 <h2 className="mt-4 text-xl md:text-3xl text-cyan-300 md:text-orange-300 whitespace-nowrap">
                     OFFICIAL MERCH
                 </h2>
