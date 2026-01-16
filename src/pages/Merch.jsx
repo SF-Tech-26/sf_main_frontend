@@ -203,7 +203,7 @@ function MerchPage({ onViewCart, onAdd, onToast, cartCount }) {
 
             {/* Products */}
             <div className="mt-8 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 
-                            gap-6 md:gap-8 justify-items-center w-full max-w-7xl mx-auto">
+                            gap-6 md:gap-8 justify-items-center w-[95%] max-w-5xl mx-auto">
                 {PRODUCTS.map((p) => (
                     <ProductCard key={p.id} product={p} onAdd={onAdd} onToast={onToast} />
                 ))}
@@ -216,6 +216,14 @@ function MerchPage({ onViewCart, onAdd, onToast, cartCount }) {
 
 function ProductCard({ product, onAdd, onToast }) {
     const [size, setSize] = useState(null);
+    const setS = (s)=>{
+        if(size ===s){
+            setSize(null);
+        }
+        else{
+            setSize(s);
+        }
+    }
 
     const handleAdd = () => {
         if (!size) {
@@ -261,7 +269,7 @@ function ProductCard({ product, onAdd, onToast }) {
                 {SIZES.map((s) => (
                     <button
                         key={s}
-                        onClick={() => setSize(s)}
+                        onClick={() => setS(s)}
                         className={`size-btn ${size === s ? "active" : ""}`}
                     >
                         {s}
@@ -303,9 +311,10 @@ function CartPage({ cart, onBack, onQtyChange }) {
             </h1>
 
             {/* Header */}
-            <div className="grid grid-cols-4 md:grid-cols-5
+            <div className="grid grid-cols-5 md:grid-cols-5
                             px-1 md:px-3 mb-4 text-xs md:text-sm uppercase font-bold tracking-wider">
-                <span className="md:text-center">Product</span>
+                <span className="md:text-center">Merch</span>
+                <span className="md:text-center">Name</span>
                 <span className="text-center">Size</span>
                 <span className="text-center hidden md:block">Price</span>
                 <span className="text-center">Qty</span>
@@ -319,7 +328,7 @@ function CartPage({ cart, onBack, onQtyChange }) {
                     return (
                         <div
                             key={key}
-                            className="grid grid-cols-4 md:grid-cols-5
+                            className="grid grid-cols-5 md:grid-cols-5
                                items-center text-xs md:text-sm
                                px-1 py-4 md:px-3 md:py-3 mb-3
                                bg-blue-900/40 backdrop-blur-md
@@ -331,6 +340,16 @@ function CartPage({ cart, onBack, onQtyChange }) {
                                md:shadow-none
                                rounded-xl"
                         >
+                            <img
+                                    src={product.image}
+                                    alt={product.name}
+                                    className="w-auto h-[50px] max-h-[160px] md:max-h-[220px] max-w-none
+                                            scale-[1.0]
+                                            object-contain
+                                            brightness-110 contrast-130
+                                            transition-transform duration-500"
+                                    style={{scale:0.5}}
+                                />
                             <div className="text-center truncate">
                                 <span className="text-sm md:hidden">{liveProduct.shortName}</span>
                                 <span className="text-base hidden md:block">{liveProduct.name}</span>

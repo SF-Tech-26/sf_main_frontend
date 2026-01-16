@@ -109,14 +109,15 @@ const StaggeredMenu = ({
                         {logoUrl && <img src={logoUrl} alt="Logo" className="h-10 w-auto" />}
                     </div>
 
-                    <div className="relative z-10 w-full h-full flex flex-col items-center justify-start pt-[35vh] pointer-events-none">
+                    <div className="relative z-10 w-full h-full flex flex-col items-center justify-start pt-[25vh] pointer-events-none">
                         <motion.div
-                            className="pointer-events-auto w-[90%] max-w-[600px] flex flex-col items-center justify-center px-8"
+                            className="pointer-events-auto w-[90%] max-w-[600px] flex flex-col items-center justify-center px-8 re"
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={isOpen ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
                             transition={{ duration: 0.5, ease: "easeOut" }}
                             onClick={(e) => e.stopPropagation()}
                         >
+                            <div className='h-auto mb-0'>
                             <motion.ul
                                 variants={containerVariants}
                                 className="flex flex-col items-center justify-center gap-4 md:gap-6 list-none p-0 m-0 w-full"
@@ -182,9 +183,11 @@ const StaggeredMenu = ({
                                                 </Link>
                                             )}
                                         </motion.li>
+                                        
                                     );
                                 })}
                             </motion.ul>
+                            </div>
 
                             <motion.button
                                 onClick={() => setIsOpen(false)}
@@ -204,13 +207,13 @@ const StaggeredMenu = ({
                                         delay: 1.6 + (items.length * 0.1) + 0.3
                                     }
                                 }}
-                                className="-mt-4 p-0 border-none bg-transparent transition-transform hover:scale-110 active:scale-95"
+                                className="mt-[5px] mb-0 max-w-50px p-0 border-none bg-transparent transition-transform hover:scale-110 active:scale-95"
                                 aria-label="Back to Page"
                             >
                                 <img
                                     src={BackToPageImg}
                                     alt="Back to Page"
-                                    className="h-8 w-auto md:h-9 opacity-80 hover:opacity-100 transition-opacity"
+                                    className="h-[50px]  w-[150px] opacity-80 hover:opacity-100 transition-opacity"
                                 />
                             </motion.button>
                         </motion.div>
