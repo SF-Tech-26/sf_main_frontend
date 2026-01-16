@@ -37,7 +37,7 @@ const HomePage = ({ backgroundImage }) => {
     }
 
     if (paymentData.checkIn >= paymentData.checkOut) {
-        toast.error("Check-out date must be after Check-in date");
+        toast.warning("Check-out date must be after Check-in date");
         return;
     }
     
