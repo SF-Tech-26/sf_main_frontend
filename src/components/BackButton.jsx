@@ -8,6 +8,20 @@ const BackButton = ({
   const location = useLocation();
 
   const handleClick = () => {
+    if (location.pathname === '/register'){
+      navigate("/");
+      return;
+    }
+    if (location.pathname === '/profile'){
+      navigate("/");
+      return;
+    }
+
+    
+    if (location.pathname === '/report'){
+      navigate("/");
+      return;
+    }
     if (onClick) {
       onClick();
     } else {

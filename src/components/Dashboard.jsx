@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useAuth } from "../context/authContext"; // ADD THIS IMPORT
 import bg from "../assets/dashBG.webp";
 import mobileBg from "../assets/mobile.webp";
 import maleAvatar from "../assets/male2 face.webp";
@@ -73,6 +74,8 @@ function LanternButton({ title, icon, path, glowColor, isMobile }) {
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { logout } = useAuth(); // GET LOGOUT FROM CONTEXT
+  
   const [userInfo, setUserInfo] = useState({
     name: "",
     sfId: "",
@@ -117,8 +120,9 @@ export default function Dashboard() {
 
   const avatar = userInfo.gender === "F" ? femaleAvatar : maleAvatar;
 
+  // UPDATED LOGOUT HANDLER
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    logout(); // Use context logout to clear all auth state
     navigate("/");
   };
 
