@@ -4,17 +4,18 @@ import { useLocation } from 'react-router-dom';
 
 export default function Navbar() {
   const location = useLocation();
+    const isLoggedIn = !!localStorage.getItem('token')
 
   const menuItems = [
     { label: 'Home', ariaLabel: 'Go to home page', link: '/' },
     { label: 'Events', ariaLabel: 'View events', link: '/events' },
     { label: 'Gallery', ariaLabel: 'View gallery', link: '/gallery' },
     { label: 'Aftermovie', ariaLabel: 'Watch aftermovie', link: '/aftermovie' },
-    { label: 'Accommodation', ariaLabel: 'Accommodation details', link: '/accommodation' },
+    { label: 'Accommodation', ariaLabel: 'Accommodation details', link: isLoggedIn ? '/contingent':'/accommodation' },
     { label: 'Merch', ariaLabel: 'Buy merchandise', link: '/merch' },
     { label: 'FAQ', ariaLabel: 'Frequently Asked Questions', link: '/faq' },
-    { label: 'SPONSORS', ariaLabel: 'SPONSORS', link: 'https://sponsors.springfest.in/',target: "_blank"},
-    { label: 'OUR TEAM', ariaLabel: 'OUR TEAM', link: 'https://teams.springfest.in/',target: "_blank" },
+    { label: 'SPONSORS', ariaLabel: 'SPONSORS', link: 'https://sponsors.springfest.in/',target: "_blank",rel: 'noopener noreferrer'},
+    { label: 'OUR TEAM', ariaLabel: 'OUR TEAM', link: 'https://teams.springfest.in/',target: "_blank",rel: 'noopener noreferrer' },
   ];
 
   return (

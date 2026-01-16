@@ -484,7 +484,7 @@ function Contingent() {
                     warning
                   </span>
 
-                  <h2 className="text-5xl text-white font-['Jolly_Lodger'] mb-4 tracking-widest">
+                  <h2 className="text-3xl text-white font-['Jolly_Lodger'] mb-4 tracking-widest">
                     leave Contingent?
                   </h2>
 
@@ -558,7 +558,7 @@ function Contingent() {
                 onClick={() => setShowPaymentModal(false)}
               >
                 <div
-                  className="w-full max-w-md p-8 rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] relative popup-anim backdrop-blur-xl bg-[#1a1a1a]/95"
+                  className="w-full max-w-md p-8 max-h-[425px] overflow-auto md:h-auto rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] relative popup-anim backdrop-blur-xl bg-[#1a1a1a]/95"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <button
@@ -635,7 +635,7 @@ function Contingent() {
                         placeholder="10 digit mobile number"
                         value={paymentData.emergencyNumber}
                         onChange={(e) => setPaymentData({ ...paymentData, emergencyNumber: e.target.value.replace(/\D/g, '') })}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors placeholder:text-gray-600" />
+                        className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors placeholder:text-gray-600" />
                     </div>
 
                     <button
@@ -656,7 +656,7 @@ function Contingent() {
                 onClick={() => setShowContingentPayModal(false)}
               >
                 <div
-                  className="w-full max-w-md p-8 rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] relative popup-anim backdrop-blur-xl bg-[#1a1a1a]/95"
+                  className="w-full max-w-md max-h-[425px] md:h-auto overflow-auto p-8 rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] relative popup-anim backdrop-blur-xl bg-[#1a1a1a]/95"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <button
@@ -739,7 +739,7 @@ function Contingent() {
                         placeholder="10 digit mobile number"
                         value={contingentPayData.emergencyNumber}
                         onChange={(e) => setContingentPayData({ ...contingentPayData, emergencyNumber: e.target.value.replace(/\D/g, '') })}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors placeholder:text-gray-600" />
+                        className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors placeholder:text-gray-600" />
                     </div>
 
                     <button
@@ -770,7 +770,7 @@ function Contingent() {
                     <span className="material-symbols-outlined">close</span>
                   </button>
 
-                  <h2 className="text-5xl text-white text-center font-['Jolly_Lodger'] mb-6 tracking-widest">
+                  <h2 className="text-3xl text-white text-center font-['Jolly_Lodger'] mb-6 tracking-widest">
                     Add Member
                   </h2>
 
@@ -783,7 +783,7 @@ function Contingent() {
                         value={newMemberSfId}
                         onChange={(e) => setNewMemberSfId(e.target.value)}
                         placeholder="SF00XXX"
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
+                        className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
                     </div>
 
                     <div>
@@ -794,7 +794,7 @@ function Contingent() {
                         value={newMemberEmail}
                         onChange={(e) => setNewMemberEmail(e.target.value)}
                         placeholder="member@email.com"
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
+                        className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
                     </div>
 
                     <button
@@ -896,7 +896,7 @@ function Contingent() {
                   ))}
                 </div>
 
-                <div className={(myUserId === data.leaderId) ? "grid grid-cols-1 m-[70px] sm:grid-cols-2 gap-4 w-full max-w-[600px] mx-auto" : "grid grid-cols-1 gap-4 w-[250px] mx-auto"}>
+                <div className={(myUserId === data.leaderId) ? "grid grid-cols-1 mb-[70px] md:mb-[60px] sm:grid-cols-2 gap-4 w-full max-w-[600px] mx-auto" : "grid grid-cols-1 gap-4 w-[250px] mx-auto"}>
                   <button
                     disabled={isDeleting}
                     className={`cursor-pointer h-[60px] bg-red-950 backdrop-blur-md border border-white/10 rounded-xl text-white font-sans font-bold text-lg tracking-wider hover:bg-red-900 transition-all ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}

@@ -25,18 +25,10 @@ export default function VerticalPillNav({
             {items.map((item, index) => {
                 const isActive = index === activeIndex;
                 const isHovered = index === hoveredIndex;
+                const isExternal = item.target === '_blank';
 
-                return (
-                    <Link
-                        key={item.label}
-                        to={item.link}
-                        onMouseEnter={() => setHoveredIndex(index)}
-                        onMouseLeave={() => setHoveredIndex(null)}
-                        className="relative px-4 py-3 rounded-xl transition-colors duration-300 no-underline group"
-                        style={{
-                            color: isActive ? pillTextColor : "rgba(255, 255, 255, 0.6)",
-                        }}
-                    >
+                const linkContent = (
+                    <>
                         {/* Background Pill - Active */}
                         {isActive && (
                             <motion.div
@@ -65,6 +57,34 @@ export default function VerticalPillNav({
                         {isActive && (
                             <div className="absolute inset-0 rounded-xl shadow-[0_0_20px_rgba(56,189,248,0.3)] pointer-events-none" />
                         )}
+                    </>
+                );
+
+                const commonProps = {
+                    key: item.label,
+                    onMouseEnter: () => setHoveredIndex(index),
+                    onMouseLeave: () => setHoveredIndex(null),
+                    className: "relative px-4 py-3 rounded-xl transition-colors duration-300 no-underline group",
+                    style: {
+                        color: isActive ? pillTextColor : "rgba(255, 255, 255, 0.6)",
+                    }
+                };
+
+                return isExternal ? (
+                    <a
+        {...commonProps}
+        href={item.link}
+        target={item.target}
+        rel={item.rel}
+    >
+        {linkContent}
+    </a>
+                ) : (
+                    <Link
+                        {...commonProps}
+                        to={item.link}
+                    >
+                        {linkContent}
                     </Link>
                 );
             })}

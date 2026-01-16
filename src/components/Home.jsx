@@ -112,7 +112,7 @@ const HomePage = ({ backgroundImage }) => {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md p-8 rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.6)] relative popup-anim backdrop-blur-md bg-black/10"
+            className="w-full max-w-md p-8 max-h-[425px] md:h-auto overflow-auto rounded-3xl border border-white/20 shadow-[0_0_50px_rgba(0,0,0,0.6)] relative popup-anim backdrop-blur-md bg-black/10"
           >
             <button
               onClick={() => setShowPaymentModal(false)}
@@ -188,7 +188,7 @@ const HomePage = ({ backgroundImage }) => {
                   placeholder="123-456-7890"
                   value={paymentData.emergencyNumber}
                   onChange={(e) => setPaymentData({ ...paymentData, emergencyNumber: e.target.value.replace(/\D/g, '') })}
-                  className="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-purple-500 transition-colors placeholder:text-gray-500"
+                  className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-purple-500 transition-colors placeholder:text-gray-500"
                 />
               </div>
 
