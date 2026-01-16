@@ -1,101 +1,23 @@
 ﻿import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { getAllEvents, getEventsByGenre } from '../services/eventService';
-import { useAuth } from '../context/authContext';
+import { getEventsByGenre } from '../services/eventService';
 import RegistrationForm from '../components/events/RegistrationForm';
 import eventsDesktopBg from '../assets/eventsdesktopbg.webp';
 import eventsMobileBg from '../assets/eventsmobilebg.webp';
-import centrifugeBg from '../assets/centrifugebg.webp';
-import GlassSurface from '../components/GlassSurface';
 import PillNav from '../components/PillNav';
 import logo from '../assets/sf_logo.webp';
 
-// Import individual event images from eventImages folder
-import nrityakalaImg from '../assets/eventImages/Nrityakala.webp';
+// Import mobile event images (used for both desktop and mobile views)
+// Dance events
 import nrityakalaMobile from '../assets/EventImg/dance/Nrityakala.webp';
-import pictureTaleImg from '../assets/eventImages/a picture tale.webp';
-import pictureTaleMobile from '../assets/EventImg/film-fest/APictureTale.webp';
-import banterBoutImg from '../assets/eventImages/banter bout.webp';
-import banterBoutMobile from '../assets/EventImg/humor-fest/BanterBout.webp';
-import brainDImg from '../assets/eventImages/brain d.webp';
-import brainDMobile from '../assets/EventImg/fine-arts/Bran-D.webp';
-import centrifugeImg from '../assets/eventImages/centrifuge.webp';
 import centrifugeMobile from '../assets/EventImg/dance/Centrifuge.webp';
-import dumbCImg from '../assets/eventImages/dumb c.webp';
-import dumbCMobile from '../assets/EventImg/literary/DumbC.webp';
-import dumbstuckImg from '../assets/eventImages/dumbstuck.webp';
-import faceCanvasImg from '../assets/eventImages/face canvas.webp';
-import faceCanvasMobile from '../assets/EventImg/fine-arts/FaceCanvas.webp';
-import frenzyFabricImg from '../assets/eventImages/frenzy fabric.webp';
-import frenzyFabricMobile from '../assets/EventImg/fine-arts/frenzy fabric.webp';
-import hilarityEnsuesImg from '../assets/eventImages/hilarity esues.webp';
-import hilarityEnsuesMobile from '../assets/EventImg/humor-fest/HilarityEnsues.webp';
-import iMeMyselfImg from '../assets/eventImages/i me myself.webp';
-import lightsCameraImg from '../assets/eventImages/lights camera sf.webp';
-import lightsCameraMobile from '../assets/EventImg/film-fest/LightsCameraSF.webp';
-import motionTalesImg from '../assets/eventImages/motion tales.webp';
-import motionTalesMobile from '../assets/EventImg/film-fest/MotionTales.webp';
-import nationalDebateImg from '../assets/eventImages/national level debate.webp';
-import nationalDebateMobile from '../assets/EventImg/literary/NationalLevelDebate.webp';
-import paintItImg from '../assets/eventImages/paint it.webp';
-import paintItMobile from '../assets/EventImg/fine-arts/PaintIt.webp';
-import poetrySlamImg from '../assets/eventImages/poetry slam.webp';
-import quizEventImg from '../assets/eventImages/quiz.webp';
-import rampmaniaImg from '../assets/eventImages/rampmania.webp';
-import rangmanchImg from '../assets/eventImages/rangmanch.webp';
-import rangoliImg from '../assets/eventImages/rangoli.webp';
-import rangoliMobile from '../assets/EventImg/fine-arts/Rangoli.webp';
-import shakeALegImg from '../assets/eventImages/shake a leg.webp';
 import shakeALegMobile from '../assets/EventImg/dance/ShakeALeg.webp';
-import shopaholicImg from '../assets/eventImages/shopaholic.webp';
-import sketchItImg from '../assets/eventImages/sketch it.webp';
-import spentImg from '../assets/eventImages/spent.webp';
-//import spentMobile from '../assets/EventImg/Quiz/SpEnt.webp';
-import shuffleSoloImg from '../assets/eventImages/shuffle solo.webp?url';
 import shuffleSoloMobile from '../assets/EventImg/dance/Shuffle Solo.webp';
-import shuffleTeamImg from '../assets/eventImages/shuffle team.webp?url';
 import shuffleTeamMobile from '../assets/EventImg/dance/Shuffle team.webp';
-import twoForTangoImg from '../assets/eventImages/two for tango.webp';
-import penImg from '../assets/eventImages/A Mighty Pen.webp';
-import penMobile from '../assets/EventImg/literary/AMightyPen.webp';
-import jumbleImg from '../assets/eventImages/jumble the good word.webp';
-import jumbleMobile from '../assets/EventImg/literary/JumbleTheGoodWord.webp';
-import chefImg from '../assets/eventImages/chef.webp';
-import chefMobile from '../assets/EventImg/culinary-arts/ChefsCorner.webp';
-import spentMobile from '../assets/EventImg/Quiz/SpEnt.webp';
-import biztechMobile from '../assets/EventImg/Quiz/BIZTECH.webp';
-import cinemaniaMobile from '../assets/EventImg/Quiz/Cinemania.webp';
-import mbtMobile from '../assets/EventImg/Quiz/MaryBucknelTrophy(MBT).webp';
-import otkaunMobile from '../assets/EventImg/Quiz/otkaun quiz.webp';
-
-import impromptuMobile from '../assets/EventImg/literary/Impromptu.webp';
-import indiaCallingMobile from '../assets/EventImg/literary/IndiaCalling.webp';
-import tellATaleMobile from '../assets/EventImg/literary/TellaTale.webp';
-
-import junkArtMobile from '../assets/EventImg/fine-arts/JunkArt.webp';
-import soapaholicMobile from '../assets/EventImg/fine-arts/Soapaholic.webp';
-import fingerdabMobile from '../assets/EventImg/fine-arts/FingerDab.webp';
-import sketchItMobile from '../assets/EventImg/fine-arts/SketchIt.webp';
-
-import mrandmsMobile from '../assets/EventImg/fashion/MrandMsSPRINGFEST.webp';
-import navyataMobile from '../assets/EventImg/fashion/Navyata.webp';
-import panacheMobile from '../assets/EventImg/fashion/Panache.webp';
-import peekawhoMobile from '../assets/EventImg/fashion/PeekAWho.webp';
-import sargamMobile from '../assets/EventImg/music/Sargam (1).webp';
-
-
-
-// Restored Missing Desktop Imports
-import sfIdolImg from '../assets/eventImages/sf idol.webp';
-import canYouDuetImg from '../assets/eventImages/can you duet.webp';
-import retrowaveImg from '../assets/eventImages/retrowave.webp';
-import wildfireImg from '../assets/eventImages/wildfire.webp';
-import lakesideImg from '../assets/eventImages/lakeside dreams.webp';
-import sfmImg from '../assets/eventImages/SFm.webp';
-
-// Restored Missing Mobile Imports
 import twoForTangoMobile from '../assets/EventImg/dance/TwoForATango (1).webp';
+
+// Music events
 import sfIdolMobile from '../assets/EventImg/music/SFidol.webp';
 import canYouDuetMobile from '../assets/EventImg/music/can you duet.webp';
 import retrowaveMobile from '../assets/EventImg/music/Retrowave.webp';
@@ -103,15 +25,62 @@ import beatItMobile from '../assets/EventImg/music/BeatIT.webp';
 import rapmaniaMobile from '../assets/EventImg/music/Rapmania.webp';
 import wildfireMobile from '../assets/EventImg/music/Wildfire.webp';
 import lakesideMobile from '../assets/EventImg/music/LakesideDreamsGroup.webp';
+import sargamMobile from '../assets/EventImg/music/Sargam (1).webp';
+
+// Dramatics events
 import rangmanchMobile from '../assets/EventImg/dramatics/Rangmanch.webp';
 import iMeMyselfMobile from '../assets/EventImg/dramatics/iMeMyself.webp';
 import dumbstruckMobile from '../assets/EventImg/dramatics/Dumbstruck.webp';
 import nukkadMobile from '../assets/EventImg/dramatics/Nukkad.webp';
-import sfmMobile from '../assets/EventImg/film-fest/SFM.webp';
+
+// Literary events
+import banterBoutMobile from '../assets/EventImg/humor-fest/BanterBout.webp';
 import poetrySlamMobile from '../assets/EventImg/literary/EnglishPoetrySlam (1).webp';
+import nationalDebateMobile from '../assets/EventImg/literary/NationalLevelDebate.webp';
+import spentMobile from '../assets/EventImg/Quiz/SpEnt.webp';
+import penMobile from '../assets/EventImg/literary/AMightyPen.webp';
+import jumbleMobile from '../assets/EventImg/literary/JumbleTheGoodWord.webp';
+import dumbCMobile from '../assets/EventImg/literary/DumbC.webp';
+import impromptuMobile from '../assets/EventImg/literary/Impromptu.webp';
+import indiaCallingMobile from '../assets/EventImg/literary/IndiaCalling.webp';
+import tellATaleMobile from '../assets/EventImg/literary/TellaTale.webp';
+
+// Film Fest events
+import pictureTaleMobile from '../assets/EventImg/film-fest/APictureTale.webp';
+import lightsCameraMobile from '../assets/EventImg/film-fest/LightsCameraSF.webp';
+import motionTalesMobile from '../assets/EventImg/film-fest/MotionTales.webp';
+import sfmMobile from '../assets/EventImg/film-fest/SFM.webp';
+
+// Fine Arts events
+import brainDMobile from '../assets/EventImg/fine-arts/Bran-D.webp';
+import faceCanvasMobile from '../assets/EventImg/fine-arts/FaceCanvas.webp';
+import paintItMobile from '../assets/EventImg/fine-arts/PaintIt.webp';
+import sketchItMobile from '../assets/EventImg/fine-arts/SketchIt.webp';
+import fingerdabMobile from '../assets/EventImg/fine-arts/FingerDab.webp';
+import rangoliMobile from '../assets/EventImg/fine-arts/Rangoli.webp';
+import frenzyFabricMobile from '../assets/EventImg/fine-arts/frenzy fabric.webp';
+import junkArtMobile from '../assets/EventImg/fine-arts/JunkArt.webp';
+import soapaholicMobile from '../assets/EventImg/fine-arts/Soapaholic.webp';
+
+// Humor Fest events
+import hilarityEnsuesMobile from '../assets/EventImg/humor-fest/HilarityEnsues.webp';
+
+// Fashion events
+import mrandmsMobile from '../assets/EventImg/fashion/MrandMsSPRINGFEST.webp';
+import navyataMobile from '../assets/EventImg/fashion/Navyata.webp';
+import panacheMobile from '../assets/EventImg/fashion/Panache.webp';
+import peekawhoMobile from '../assets/EventImg/fashion/PeekAWho.webp';
+
+// Quiz events
+import biztechMobile from '../assets/EventImg/Quiz/BIZTECH.webp';
+import cinemaniaMobile from '../assets/EventImg/Quiz/Cinemania.webp';
+import mbtMobile from '../assets/EventImg/Quiz/MaryBucknelTrophy(MBT).webp';
+import otkaunMobile from '../assets/EventImg/Quiz/otkaun quiz.webp';
+
+// Culinary Arts events
+import chefMobile from '../assets/EventImg/culinary-arts/ChefsCorner.webp';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEvents } from '../context/eventContext';
 
 const slugToGenre = {
     'dance': 'Dance',
@@ -127,91 +96,56 @@ const slugToGenre = {
     'game-fest': 'Game Fest',
 };
 
-// Event data mapping for grimoire display
-// Event data mapping - removed image references, only metadata
+// Event metadata mapping for genre display
 const eventData = {
     'dance': {
         icon: 'auto_awesome_motion',
         title: 'Rhythmic Rituals',
-        name: 'Rhythmic',
         description: 'Witness ancient movements and modern interpretations that transcend the ordinary.'
     },
     'music': {
         icon: 'music_note',
         title: 'Sonic Incantations',
-        name: 'Sonic',
         description: 'Experience a symphony of sounds that range from ethereal whispers to thunderous crescendos.'
     },
     'dramatics': {
         icon: 'theater_comedy',
         title: 'Theatrical Visions',
-        name: 'Drama',
         description: 'Step into realms of imagination where tales of old and new are brought to life.'
     },
     'literary': {
         icon: 'history_edu',
         title: 'Ancient Lore',
-        name: 'Scrolls',
         description: 'Delve into the sacred texts and forgotten verses where words hold power.'
     },
     'filmfest': {
         icon: 'movie_filter',
         title: 'Cinematic Spells',
-        name: 'Glyphs',
-        description: 'Gaze upon moving images that transport you to distant lands and fantastical futures.'
-    },
-    'film-fest': {
-        icon: 'movie_filter',
-        title: 'Cinematic Spells',
-        name: 'Glyphs',
         description: 'Gaze upon moving images that transport you to distant lands and fantastical futures.'
     },
     'quiz': {
         icon: 'science',
         title: 'Riddles of Knowledge',
-        name: 'Potions',
         description: 'Test your intellect and unravel the mysteries posed by our master riddlers.'
     },
     'finearts': {
         icon: 'brush',
         title: 'Alchemy of Art',
-        name: 'Alchemy',
         description: 'Behold creations that transmute the ordinary into the extraordinary.'
-    },
-    'fine-arts': {
-        icon: 'brush',
-        title: 'Alchemy of Art',
-        name: 'Alchemy',
-        description: 'Behold creations that transmute the ordinary into the extraordinary.'
-    },
-    'humour': {
-        icon: 'mood',
-        title: 'Festive Revelry',
-        name: 'Humour Fest',
-        description: 'Embrace the lighter side of existence with performances that ignite joyful spirits.'
-    },
-    'humor-fest': {
-        icon: 'mood',
-        title: 'Festive Revelry',
-        name: 'Humour Fest',
-        description: 'Embrace the lighter side of existence with performances that ignite joyful spirits.'
     },
     'humorfest': {
         icon: 'mood',
         title: 'Festive Revelry',
-        name: 'Humour Fest',
         description: 'Embrace the lighter side of existence with performances that ignite joyful spirits.'
     },
     'fashion': {
         icon: 'checkroom',
         title: 'Runway Elegance',
-        name: 'Fashion',
         description: 'Style the runway and showcase creativity through fashion and design.'
     },
     'culinaryarts': {
         icon: 'restaurant',
         title: 'Culinary Mastery',
-        name: 'Culinary Arts',
         description: 'Master the kitchen and compete in cooking and food presentation.'
     }
 };
@@ -239,15 +173,10 @@ const EtherealBackground = () => {
         </div>
     );
 };
-// ...
-// Inside SubEventsPage component:
-// ...
-
 
 const SubEventsPage = () => {
     const { genre: genreSlug } = useParams();
     const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
 
     const [events, setEvents] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
@@ -303,11 +232,6 @@ const SubEventsPage = () => {
         })),
         [events, selectedEvent?.id, handleEventClick]
     );
-
-
-
-
-
     const handleRegisterClick = () => {
         setShowRegistration(true);
     };
@@ -328,100 +252,91 @@ const SubEventsPage = () => {
         });
     };
 
-    // Event name to image mapping with variations
+    // Event name to image mapping (using mobile images for all views)
     const eventImageMap = {
         // Dance events
-        'nrityakala': { desktop: nrityakalaImg, mobile: nrityakalaMobile },
-        'shakealeg': { desktop: shakeALegImg, mobile: shakeALegMobile },
-        'twoforatango': { desktop: twoForTangoImg, mobile: twoForTangoMobile },
-        'shufflesolo': { desktop: shuffleSoloImg, mobile: shuffleSoloMobile },
-        'shuffle - team': { desktop: shuffleTeamImg, mobile: shuffleTeamMobile },
-        'suffle-solo': { desktop: shuffleSoloImg, mobile: shuffleSoloMobile },
-        'suffle-team': { desktop: shuffleTeamImg, mobile: shuffleTeamMobile },
-        'Centrifuge': { desktop: centrifugeImg, mobile: centrifugeMobile },
+        'nrityakala': nrityakalaMobile,
+        'shakealeg': shakeALegMobile,
+        'twoforatango': twoForTangoMobile,
+        'shufflesolo': shuffleSoloMobile,
+        'shuffle - team': shuffleTeamMobile,
+        'suffle-solo': shuffleSoloMobile,
+        'suffle-team': shuffleTeamMobile,
+        'centrifuge': centrifugeMobile,
 
         // Music events
-        'sfidol': { desktop: sfIdolImg, mobile: sfIdolMobile },
-        'canyouduet': { desktop: canYouDuetImg, mobile: canYouDuetMobile },
-        'retrowave': { desktop: retrowaveImg, mobile: retrowaveMobile },
-        'beatit': { desktop: null, mobile: beatItMobile },
-        'beatdrop': { desktop: null, mobile: beatItMobile },
-        'rapmania': { desktop: null, mobile: rapmaniaMobile },
-        'wildfire': { desktop: wildfireImg, mobile: wildfireMobile },
-        'lakesidedreams': { desktop: lakesideImg, mobile: lakesideMobile },
-        'Sargam': { desktop: lakesideImg, mobile: sargamMobile },
+        'sfidol': sfIdolMobile,
+        'canyouduet': canYouDuetMobile,
+        'retrowave': retrowaveMobile,
+        'beatit': beatItMobile,
+        'beatdrop': beatItMobile,
+        'rapmania': rapmaniaMobile,
+        'wildfire': wildfireMobile,
+        'lakesidedreams': lakesideMobile,
+        'sargam': sargamMobile,
 
         // Dramatics events
-        'rangmanch': { desktop: rangmanchImg, mobile: rangmanchMobile },
-        'imemyself': { desktop: iMeMyselfImg, mobile: iMeMyselfMobile },
-        'dumbstruck': { desktop: dumbstuckImg, mobile: dumbstruckMobile },
-        'nukkad': { desktop: null, mobile: nukkadMobile },
+        'rangmanch': rangmanchMobile,
+        'imemyself': iMeMyselfMobile,
+        'dumbstruck': dumbstruckMobile,
+        'nukkad': nukkadMobile,
 
         // Literary events
-        'banterbout': { desktop: banterBoutImg, mobile: banterBoutMobile },
-        'poetryslam': { desktop: poetrySlamImg, mobile: poetrySlamMobile },
-        'nationalleveldebate': { desktop: nationalDebateImg, mobile: nationalDebateMobile },
-        'spent': { desktop: spentImg, mobile: spentMobile },
-        'amightypen': { desktop: penImg, mobile: penMobile },
-        'jumblethegoodword': { desktop: jumbleImg, mobile: jumbleMobile },
-        'dumbc': { desktop: dumbCImg, mobile: dumbCMobile },
+        'banterbout': banterBoutMobile,
+        'poetryslam': poetrySlamMobile,
+        'nationalleveldebate': nationalDebateMobile,
+        'spent': spentMobile,
+        'amightypen': penMobile,
+        'jumblethegoodword': jumbleMobile,
+        'dumbc': dumbCMobile,
 
         // Film Fest events
-        'apicturetale': { desktop: pictureTaleImg, mobile: pictureTaleMobile },
-        'lightscamerasf': { desktop: lightsCameraImg, mobile: lightsCameraMobile },
-        'motiontales': { desktop: motionTalesImg, mobile: motionTalesMobile },
-        'sfm': { desktop: sfmImg, mobile: sfmMobile },
+        'apicturetale': pictureTaleMobile,
+        'lightscamerasf': lightsCameraMobile,
+        'motiontales': motionTalesMobile,
+        'sfm': sfmMobile,
 
         // Fine Arts events
-        'brand': { desktop: brainDImg, mobile: brainDMobile },
-        'quiz': { desktop: quizEventImg, mobile: null },
-        'facecanvas': { desktop: faceCanvasImg, mobile: faceCanvasMobile },
-        'paintit': { desktop: paintItImg, mobile: paintItMobile },
-        'Sketch It': { desktop: sketchItImg, mobile: sketchItMobile },
-        'finger dab': { desktop: null, mobile: fingerdabMobile },
-        'rangoli': { desktop: rangoliImg, mobile: rangoliMobile },
-        'frenzyfabric': { desktop: frenzyFabricImg, mobile: frenzyFabricMobile },
+        'brand': brainDMobile,
+        'facecanvas': faceCanvasMobile,
+        'paintit': paintItMobile,
+        'sketchit': sketchItMobile,
+        'fingerdab': fingerdabMobile,
+        'rangoli': rangoliMobile,
+        'frenzyfabric': frenzyFabricMobile,
 
         // Humor Fest events
-        'hilarityensues': { desktop: hilarityEnsuesImg, mobile: hilarityEnsuesMobile },
+        'hilarityensues': hilarityEnsuesMobile,
 
-        // Fashion events
-        'rampmania': { desktop: rampmaniaImg, mobile: null },
-        'shopaholic': { desktop: shopaholicImg, mobile: null },
 
         // Literary events (more)
-        'impromptu': { desktop: null, mobile: impromptuMobile },
-        'indiacalling': { desktop: null, mobile: indiaCallingMobile },
-        'tellatale': { desktop: null, mobile: tellATaleMobile },
+        'impromptu': impromptuMobile,
+        'indiacalling': indiaCallingMobile,
+        'tellatale': tellATaleMobile,
 
         // Fine Arts events (more)
-        'junkart': { desktop: null, mobile: junkArtMobile },
-        'soapaholic': { desktop: null, mobile: soapaholicMobile },
+        'junkart': junkArtMobile,
+        'soapaholic': soapaholicMobile,
 
         // Fashion events (more)
-        'mrandmsspringfest': { desktop: null, mobile: mrandmsMobile },
-        'navyata': { desktop: null, mobile: navyataMobile },
-        'panache': { desktop: null, mobile: panacheMobile },
-        'peekawho': { desktop: null, mobile: peekawhoMobile },
+        'mrandmsspringfest': mrandmsMobile,
+        'navyata': navyataMobile,
+        'panache': panacheMobile,
+        'peekawho': peekawhoMobile,
 
         // Quiz events (more)
-        'biztech': { desktop: null, mobile: biztechMobile },
-        'cinemania': { desktop: null, mobile: cinemaniaMobile },
-        'Mary Bucknel Trophy(MBT)': { desktop: null, mobile: mbtMobile },
-        'mbt': { desktop: null, mobile: mbtMobile },
-        'Otakon Quest': { desktop: null, mobile: otkaunMobile },
+        'biztech': biztechMobile,
+        'cinemania': cinemaniaMobile,
+        'marybuckneltrophymbt': mbtMobile,
+        'mbt': mbtMobile,
+        'otakonquest': otkaunMobile,
 
         // Culinary Arts
-        "chefscorner": { desktop: chefImg, mobile: chefMobile },
+        'chefscorner': chefMobile,
     };
 
-    // Fallback images - different sets for desktop and mobile
+    // Fallback images for events without specific mapping
     const fallbackImages = [
-        nrityakalaImg, rangmanchImg, shakeALegImg,
-        retrowaveImg, lakesideImg, quizEventImg, shuffleTeamImg
-    ];
-
-    const mobileFallbackImages = [
         nrityakalaMobile, rangmanchMobile, shakeALegMobile,
         centrifugeMobile, lakesideMobile, pictureTaleMobile, brainDMobile
     ];
@@ -434,34 +349,16 @@ const SubEventsPage = () => {
 
         // Get event-specific image from eventImageMap
         const eventKey = normalize(event.name);
-        const eventImageData = eventImageMap[eventKey];
+        let finalImage = eventImageMap[eventKey] || null;
 
-        // Pick between desktop and mobile image
-        let finalImage = null;
-        if (eventImageData) {
-            if (typeof eventImageData === 'object' && (eventImageData.desktop || eventImageData.mobile)) {
-                if (isMobile) {
-                    finalImage = eventImageData.mobile || eventImageData.desktop;
-                } else {
-                    finalImage = eventImageData.desktop || eventImageData.mobile;
-                }
-            } else {
-                finalImage = eventImageData;
-            }
-        }
-
-        // Use fallback from eventImages if no specific match
+        // Use fallback from event poster if no specific match
         if (!finalImage && event.poster) {
             finalImage = event.poster;
         }
         if (!finalImage) {
             // Use hash to consistently pick a fallback image
             const hash = event.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-            if (isMobile) {
-                finalImage = mobileFallbackImages[hash % mobileFallbackImages.length];
-            } else {
-                finalImage = fallbackImages[hash % fallbackImages.length];
-            }
+            finalImage = fallbackImages[hash % fallbackImages.length];
         }
 
         return {
@@ -473,11 +370,6 @@ const SubEventsPage = () => {
             genre: event.genre,
             id: event.id
         };
-    };
-
-    const getGenreIcon = (genre) => {
-        const genreKey = genre.toLowerCase().replace(/\s+/g, '');
-        return eventData[genreKey]?.icon || 'category';
     };
 
     if (isLoading) {
@@ -508,7 +400,6 @@ const SubEventsPage = () => {
     }
 
     const currentEvent = selectedEvent;
-    const isCentrifuge = currentEvent?.name?.toLowerCase().includes('centrifuge');
 
     return (
         <div className="font-body bg-background-dark text-slate-200 min-h-screen lg:h-screen relative overflow-y-auto lg:overflow-hidden selection:bg-deep-amber selection:text-white transition-colors duration-300 dark:bg-background-dark dark:text-slate-200">
@@ -531,21 +422,9 @@ const SubEventsPage = () => {
                     </h1>
                 </header>
 
-                {/* PillNav for Subevent Navigation with Scroll Indicators */}
+                {/* PillNav for Subevent Navigation */}
                 {events.length > 1 && (
                     <div className="mb-4 md:mb-6 w-full relative">
-                        {/* Left Scroll Indicator - Only on small screens when scrolling is needed */}
-                        {/* {events.length > 3 && isMobile && (
-                            <span
-                                className="material-icons text-cyan-300 absolute -left-4 sm:left-2 top-1/2 -translate-y-1/2 z-[100] pointer-events-none"
-                                style={{
-                                    fontSize: '36px',
-                                    animation: 'slideLeft 2s ease-in-out infinite'
-                                }}
-                            >
-                                chevron_left
-                            </span>
-                        )} */}
 
                         {/* Right Scroll Indicator - Only on small screens when scrolling is needed */}
                         {events.length > 3 && isMobile && (
@@ -681,7 +560,7 @@ const SubEventsPage = () => {
                                                         border: '1px solid rgba(245, 158, 11, 0.3)'
                                                     }}
                                                 >
-                                                    {currentEvent.min_participation}-{currentEvent.max_participation} members
+                                                    {(currentEvent.max_participation !== 1) ? `${currentEvent.min_participation}-${currentEvent.max_participation}members` : `${currentEvent.max_participation} member`}
                                                 </span>
                                             </div>
 
@@ -786,51 +665,7 @@ const SubEventsPage = () => {
                     border-radius: 3px;
                 }
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                    background: rgba(14, 165, 233, 0.8); /* Sky-500 equivalent */
-                }
-
-                /* Mobile/Horizontal scrollbar */
-                .codex-container-horizontal::-webkit-scrollbar {
-                    height: 4px;
-                }
-                .codex-container-horizontal::-webkit-scrollbar-track {
-                    background: rgba(255, 255, 255, 0.05);
-                }
-                .codex-container-horizontal::-webkit-scrollbar-thumb {
-                    background: rgba(56, 189, 248, 0.5);
-                    border-radius: 2px;
-                }
-
-                /* Responsive Event Image Container */
-                .event-image-container {
-                    width: 100%;
-                    margin: 0;
-                }
-                .event-image-container img {
-                    height: auto !important; /* Force auto height on mobile to respect aspect ratio */
-                }
-
-                @media (min-width: 1024px) {
-                    .event-image-container {
-                        width: clamp(200px, 30vw, 300px);
-                        margin: 1.5rem;
-                    }
-                    .event-image-container img {
-                        height: 100% !important;
-                        object-fit: contain;
-                    }
-                }
-
-                /* Scroll Indicator Animations */
-                @keyframes slideLeft {
-                    0%, 100% {
-                        transform: translateX(0);
-                        opacity: 0.6;
-                    }
-                    50% {
-                        transform: translateX(-5px);
-                        opacity: 1;
-                    }
+                    background: rgba(14, 165, 233, 0.8);
                 }
 
                 @keyframes slideRight {
@@ -849,15 +684,3 @@ const SubEventsPage = () => {
 };
 
 export default SubEventsPage;
-
-
-
-
-
-
-
-
-
-
-
-
