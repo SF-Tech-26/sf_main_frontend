@@ -23,6 +23,7 @@ import Gallery from './pages/Gallery';
 import Merch from './pages/Merch';
 import Navbar from './components/Navbar';
 import ForgotPassword from './pages/ForgetPassword.jsx';
+import { ToastContainer } from 'react-toastify';
 // import Profile from './pages/Profile';
 
 
@@ -70,6 +71,17 @@ function App() {
           {/* Homepage Route */}
           <Route path="/" element={<HomePage />} />
         </Routes>
+        <ToastContainer
+              position="top-center"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark" />
       </EventProvider>
     </AuthProvider>
   );

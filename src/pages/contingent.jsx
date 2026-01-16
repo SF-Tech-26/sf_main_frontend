@@ -385,17 +385,7 @@ function Contingent() {
   //     };
 
   return (
-      <><ToastContainer
-      position="top-center"
-      autoClose={3000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="dark" /><div
+      <><div
         className="min-h-screen flex flex-col flex-1 items-center justify-center bg-center bg-no-repeat bg-cover"
         style={{ backgroundImage: `url(${contin})`, backgroundAttachment: "fixed", backgroundPosition: "center" }}
       >
@@ -448,12 +438,12 @@ function Contingent() {
                 lock_person
               </span>
 
-              <h2 className="text-6xl text-white font-['Jolly_Lodger'] mb-4 tracking-widest">
+              <h2 className="text-6xl text-white font-['Cinzel_Decorative'] mb-4 tracking-widest">
                 Sign In
               </h2>
 
-              <p className="text-gray-400 text-xl font-sans mb-8 leading-relaxed">
-                You must be part of our realm to manage a contingent. Please sign in to continue your journey.
+              <p className="text-gray-400 text-xl font-['Cinzel_Decorative'] mb-8 leading-relaxed">
+                You must be part of Spring fest to manage a contingent. Please sign in to continue.
               </p>
 
               <div className="flex flex-col gap-4">
@@ -484,11 +474,11 @@ function Contingent() {
                     warning
                   </span>
 
-                  <h2 className="text-3xl text-white font-['Jolly_Lodger'] mb-4 tracking-widest">
+                  <h2 className="text-3xl text-white font-['Cinzel_Decorative'] mb-4 tracking-widest">
                     leave Contingent?
                   </h2>
 
-                  <p className="text-gray-400 text-xl font-sans mb-8 leading-relaxed">
+                  <p className="text-gray-400 text-xl font-['Cinzel_Decorative'] mb-8 leading-relaxed">
                     Are you sure you want to leave your contingent?
                   </p>
 
@@ -526,10 +516,10 @@ function Contingent() {
                     <span className="material-symbols-outlined">close</span>
                   </button>
 
-                  <h2 className="text-5xl text-white font-['Jolly_Lodger'] mb-2 tracking-widest">
+                  <h2 className="text-5xl text-white font-['Cinzel_Decorative'] mb-2 tracking-widest">
                     Bar-Code
                   </h2>
-                  <p className="text-gray-400 font-['Jolly_Lodger'] text-[2rem] mb-6">
+                  <p className="text-gray-400 font-['Cinzel_Decorative'] text-[2rem] mb-6">
                     {data.contingent_name}
                   </p>
 
@@ -568,17 +558,17 @@ function Contingent() {
                     <span className="material-symbols-outlined">close</span>
                   </button>
 
-                  <h2 className="text-3xl text-white font-['Jolly_Lodger'] mb-1 tracking-widest">
+                  <h2 className="text-3xl text-white font-['Cinzel_Decorative'] mb-1 tracking-widest">
                     Make Payment
                   </h2>
-                  <p className="text-gray-400 font-sans text-lg mb-6 border-b border-white/10 pb-4">
+                  <p className="text-gray-400 font-['Cinzel_Decorative'] text-lg mb-6 border-b border-white/10 pb-4">
                     Total: <span className="text-green-500 font-bold">₹2449</span>
                   </p>
 
                   <form onSubmit={handlePaymentSubmit} className="flex flex-col gap-5">
 
                     <div>
-                      <label className="block text-gray-300 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">
+                      <label className="block text-gray-300 font-['Cinzel_Decorative'] text-2xl mb-1 ml-1">
                         Check-In
                       </label>
                       <div className="relative">
@@ -586,7 +576,7 @@ function Contingent() {
                           required
                           value={paymentData.checkIn}
                           onChange={(e) => setPaymentData({ ...paymentData, checkIn: e.target.value })}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer"
+                          className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer font-['Cinzel_Decorative']"
                         >
                           <option value="" disabled>Select Check-in</option>
                           <option value="2026-01-22">22-01-2026</option>
@@ -601,7 +591,7 @@ function Contingent() {
                     </div>
 
                     <div>
-                      <label className="block text-gray-300 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">
+                      <label className="block text-gray-300 font-['Cinzel_Decorative'] text-2xl mb-1 ml-1">
                         Check-Out
                       </label>
                       <div className="relative">
@@ -609,7 +599,7 @@ function Contingent() {
                           required
                           value={paymentData.checkOut}
                           onChange={(e) => setPaymentData({ ...paymentData, checkOut: e.target.value })}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer"
+                          className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer font-['Cinzel_Decorative']"
                         >
                           <option value="" disabled>Select Check-out</option>
                           <option value="2026-01-23">23-01-2026</option>
@@ -624,7 +614,7 @@ function Contingent() {
                     </div>
 
                     <div>
-                      <label className="block text-gray-300 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">
+                      <label className="block text-gray-300 font-['Cinzel_Decorative'] text-2xl mb-1 ml-1">
                         Emergency Number
                       </label>
                       <input
@@ -635,7 +625,7 @@ function Contingent() {
                         placeholder="10 digit mobile number"
                         value={paymentData.emergencyNumber}
                         onChange={(e) => setPaymentData({ ...paymentData, emergencyNumber: e.target.value.replace(/\D/g, '') })}
-                        className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors placeholder:text-gray-600" />
+                        className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors placeholder:text-gray-600 font-['Cinzel_Decorative']" />
                     </div>
 
                     <button
@@ -666,15 +656,15 @@ function Contingent() {
                     <span className="material-symbols-outlined">close</span>
                   </button>
 
-                  <h2 className="text-2xl text-white font-['Jolly_Lodger'] mb-1 tracking-widest">
+                  <h2 className="text-2xl text-white font-['Cinzel_Decorative'] mb-1 tracking-widest">
                     Contingent Payment
                   </h2>
 
                   <div className="flex justify-between items-end border-b border-white/10 pb-4 mb-6">
-                    <p className="text-gray-400 font-sans text-lg">
+                    <p className="text-gray-400 font-['Cinzel_Decorative'] text-lg">
                       Paying for <span className="text-white font-bold">{member.length}</span> members
                     </p>
-                    <p className="text-3xl text-green-500 font-['Jolly_Lodger'] tracking-wider">
+                    <p className="text-3xl text-green-500 font-['Cinzel_Decorative'] tracking-wider">
                       ₹{totalAmount}
                     </p>
                   </div>
@@ -682,7 +672,7 @@ function Contingent() {
                   <form onSubmit={handleContingentPaySubmit} className="flex flex-col gap-5">
 
                     <div>
-                      <label className="block text-gray-300 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">
+                      <label className="block text-gray-300 font-['Cinzel_Decorative'] text-2xl mb-1 ml-1">
                         Check-In
                       </label>
                       <div className="relative">
@@ -690,7 +680,7 @@ function Contingent() {
                           required
                           value={contingentPayData.checkIn}
                           onChange={(e) => setContingentPayData({ ...contingentPayData, checkIn: e.target.value })}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer"
+                          className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer font-['Cinzel_Decorative']"
                         >
                           <option value="" disabled>Select Check-in</option>
                           <option value="2026-01-22">22-01-2026</option>
@@ -705,7 +695,7 @@ function Contingent() {
                     </div>
 
                     <div>
-                      <label className="block text-gray-300 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">
+                      <label className="block text-gray-300 font-['Cinzel_Decorative'] text-2xl mb-1 ml-1">
                         Check-Out
                       </label>
                       <div className="relative">
@@ -713,7 +703,7 @@ function Contingent() {
                           required
                           value={contingentPayData.checkOut}
                           onChange={(e) => setContingentPayData({ ...contingentPayData, checkOut: e.target.value })}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer"
+                          className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none outline-none focus:border-white/40 transition-colors cursor-pointer font-['Cinzel_Decorative']"
                         >
                           <option value="" disabled>Select Check-out</option>
                           <option value="2026-01-23">23-01-2026</option>
@@ -728,7 +718,7 @@ function Contingent() {
                     </div>
 
                     <div>
-                      <label className="block text-gray-300 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">
+                      <label className="block text-gray-300 font-['Cinzel_Decorative'] text-2xl mb-1 ml-1">
                         Emergency Number
                       </label>
                       <input
@@ -739,7 +729,7 @@ function Contingent() {
                         placeholder="10 digit mobile number"
                         value={contingentPayData.emergencyNumber}
                         onChange={(e) => setContingentPayData({ ...contingentPayData, emergencyNumber: e.target.value.replace(/\D/g, '') })}
-                        className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors placeholder:text-gray-600" />
+                        className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors placeholder:text-gray-600 font-['Cinzel_Decorative']" />
                     </div>
 
                     <button
@@ -770,31 +760,31 @@ function Contingent() {
                     <span className="material-symbols-outlined">close</span>
                   </button>
 
-                  <h2 className="text-3xl text-white text-center font-['Jolly_Lodger'] mb-6 tracking-widest">
+                  <h2 className="text-3xl text-white text-center font-['Cinzel_Decorative'] mb-6 tracking-widest">
                     Add Member
                   </h2>
 
                   <form onSubmit={AddMember} className="flex flex-col gap-5">
                     <div>
-                      <label className="block text-gray-400 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">SF ID</label>
+                      <label className="block text-gray-400 font-['Cinzel_Decorative'] text-2xl mb-1 ml-1">SF ID</label>
                       <input
                         type="text"
                         required
                         value={newMemberSfId}
                         onChange={(e) => setNewMemberSfId(e.target.value)}
                         placeholder="SF00XXX"
-                        className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
+                        className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors font-['Cinzel_Decorative']" />
                     </div>
 
                     <div>
-                      <label className="block text-gray-400 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">Email Address</label>
+                      <label className="block text-gray-400 font-['Cinzel_Decorative'] text-2xl mb-1 ml-1">Email Address</label>
                       <input
                         type="email"
                         required
                         value={newMemberEmail}
                         onChange={(e) => setNewMemberEmail(e.target.value)}
                         placeholder="member@email.com"
-                        className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
+                        className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors font-['Cinzel_Decorative']" />
                     </div>
 
                     <button
@@ -810,7 +800,7 @@ function Contingent() {
             )}
 
             <div
-              className="h-[100px] top-0 w-full flex items-center justify-center font-['Jolly_Lodger'] text-white text-5xl sm:text-7xl "
+              className="h-[100px] top-0 w-full flex items-center justify-center font-['Cinzel_Decorative'] text-white text-5xl sm:text-7xl "
             >
               Contingent
             </div>
@@ -818,7 +808,7 @@ function Contingent() {
             <div className="h-[550px] overflow-auto w-[95%] sm:w-[60%] max-w-[800px] backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl relative p-6 mx-auto popup-anim bg-[#121212]/80">
 
 
-              <h2 className="text-4xl sm:text-6xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-0 mb-2">
+              <h2 className="text-4xl sm:text-6xl text-white text-center tracking-wider font-['Cinzel_Decorative'] mt-0 mb-2">
                 {data.contingent_name}
               </h2>
 
@@ -841,22 +831,22 @@ function Contingent() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="bg-white/5 p-4 rounded-2xl border border-white/5 text-center">
-                    <p className="font-['Jolly_Lodger'] text-gray-400 text-3xl opacity-70">Contingent ID</p>
-                    <p className="font-['Jolly_Lodger'] text-white text-2xl tracking-widest text-purple-400">{data.id}</p>
+                    <p className="font-['Cinzel_Decorative'] text-gray-400 text-3xl opacity-70">Contingent ID</p>
+                    <p className="font-['Cinzel_Decorative'] text-white text-2xl tracking-widest text-purple-400">{data.id}</p>
                   </div>
                   <div className="bg-white/5 p-4 rounded-2xl border border-white/5 text-center">
-                    <p className="font-['Jolly_Lodger'] text-gray-400 text-3xl opacity-70">Contingent Code</p>
-                    <p className="font-['Jolly_Lodger'] text-white text-2xl tracking-widest text-purple-400">{data.code}</p>
+                    <p className="font-['Cinzel_Decorative'] text-gray-400 text-3xl opacity-70">Contingent Code</p>
+                    <p className="font-['Cinzel_Decorative'] text-white text-2xl tracking-widest text-purple-400">{data.code}</p>
                   </div>
                 </div>
                 <div className="bg-white/5 p-4 rounded-2xl border border-white/5 text-center">
-                  <p className="font-['Jolly_Lodger'] text-gray-400 text-3xl opacity-70">Barcode</p>
+                  <p className="font-['Cinzel_Decorative'] text-gray-400 text-3xl opacity-70">Barcode</p>
                   <div className=" justify-items-center">
                     <button
                       onClick={() => setShowBarcodeModal(true)}
                       className="cursor-pointer group relative flex flex-col items-center justify-center w-full max-w-[200px] transition-all duration-300 active:scale-95 bg-green-950 hover:bg-green-900 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-white/20 shadow-lg hover:shadow-green-900/20"
                     >
-                      <p className="font-['Jolly_Lodger'] text-white text-2xl tracking-widest transition-all">
+                      <p className="font-['Cinzel_Decorative'] text-white text-2xl tracking-widest transition-all">
                         {data.id || "N/A"}
                       </p>
                       <span className="text-[10px] text-white/60 uppercase mt-2 tracking-tighter font-sans font-bold">
@@ -866,7 +856,7 @@ function Contingent() {
                   </div>
                 </div>
                 <div className="bg-white/5 p-4 rounded-2xl border border-white/5 text-center">
-                  <p className="font-['Jolly_Lodger'] text-gray-400 text-3xl opacity-70"
+                  <p className="font-['Cinzel_Decorative'] text-gray-400 text-3xl opacity-70"
                   >Members</p>
                 </div>
 
@@ -876,7 +866,7 @@ function Contingent() {
                       key={index}
                       className="bg-black/40 backdrop-blur-lg border border-white/5 p-4 rounded-xl flex items-center justify-between"
                     >
-                      <span className="text-white font-['Jolly_Lodger'] text-xl">
+                      <span className="text-white font-['Cinzel_Decorative'] text-xl">
                         <div className="text-4xl text-white flex items-center gap-2">
                           {m.name}
                         </div>
@@ -920,7 +910,7 @@ function Contingent() {
 
 
             <div className="text-center mt-[50px] pb-2 sm:pb-2">
-              <h1 className="font-['Jolly_Lodger'] text-5xl sm:text-6xl md:text-7xl text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+              <h1 className="font-['Cinzel_Decorative'] text-5xl sm:text-6xl md:text-7xl text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
                 Contingent
               </h1>
             </div>
@@ -937,7 +927,7 @@ function Contingent() {
                     <img src={icon1} />
                   </div>
                   <div className="flex flex-col items-center sm:items-center">
-                    <h2 className="font-['Jolly_Lodger'] text-3xl sm:text-4xl text-gray-300 group-hover:text-white text-center transition-colors duration-300">
+                    <h2 className="font-['Cinzel_Decorative'] text-3xl sm:text-4xl text-gray-300 group-hover:text-white text-center transition-colors duration-300">
                       Join Contingent
                     </h2>
                   </div>
@@ -955,7 +945,7 @@ function Contingent() {
                     <img src={icon2} />
                   </div>
                   <div className="flex flex-col items-center sm:items-center">
-                    <h2 className="font-['Jolly_Lodger'] text-3xl sm:text-4xl text-gray-300 group-hover:text-white text-center transition-colors duration-300">
+                    <h2 className="font-['Cinzel_Decorative'] text-3xl sm:text-4xl text-gray-300 group-hover:text-white text-center transition-colors duration-300">
                       Create Contingent
                     </h2>
                   </div>
@@ -968,10 +958,10 @@ function Contingent() {
         {!conti && !CreateOn && joinOn &&
           <>
             <div className="h-[150px] mt-[50px] w-full max-w-[350px] rounded-2xl shadow-xl "
-              style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Jolly Lodger', color: "white", fontSize: '4rem' }}>
+              style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Cinzel Decorative', color: "white", fontSize: '4rem' }}>
               Contingent</div>
             <div className="h-auto w-[80%] sm:w-[73%] max-w-[600.25px] backdrop-blur-xl bg-[#121212]/50 border border-white/10 rounded-2xl shadow-2xl justify-items-center relative popup-anim">
-              <h2 className="text-4xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-5">
+              <h2 className="text-4xl text-white text-center tracking-wider font-['Cinzel_Decorative'] mt-5">
                 Join Contingents
               </h2>
 
@@ -979,22 +969,22 @@ function Contingent() {
 
                 <div className="flex flex-col gap-4">
                   <div>
-                    <label className="block text-3xl text-gray-400 mb-1 ml-1 text-center font-['Jolly_Lodger']">Contingent ID</label>
+                    <label className="block text-3xl text-gray-400 mb-1 ml-1 text-center font-['Cinzel_Decorative']">Contingent ID</label>
                     <input
                       type="text"
                       placeholder="Your Contingent ID..."
                       onChange={(e) => setJoinId(e.target.value)}
                       value={joinId}
-                      className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
+                      className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors font-['Cinzel_Decorative']" />
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-center font-['Jolly_lodger'] text-3xl mb-1 ml-1">Contingent Code</label>
+                    <label className="block text-gray-400 text-center font-['Cinzel_Decorative'] text-3xl mb-1 ml-1">Contingent Code</label>
                     <input
                       type="text"
                       placeholder="Your Contingent Code"
                       onChange={(e) => setJoinCode(e.target.value)}
                       value={joinCode}
-                      className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
+                      className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors font-['Cinzel_Decorative']" />
                   </div>
 
                 </div>
@@ -1014,10 +1004,10 @@ function Contingent() {
         {!conti && CreateOn && !joinOn &&
           <>
             <div className="h-[150px] w-full mt-[50px] max-w-[350px] rounded-2xl shadow-xl "
-              style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Jolly Lodger', color: "white", fontSize: '4rem' }}>
+              style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Cinzel Decorative', color: "white", fontSize: '4rem' }}>
               Contingent</div>
             <div className="h-auto w-[80%] sm:w-[73%] max-w-[600.25px] backdrop-blur-xl bg-[#121212]/50 border border-white/10 rounded-2xl shadow-2xl justify-items-center relative popup-anim">
-              <h2 className="text-5xl text-white text-center tracking-wider font-['Jolly_Lodger'] mt-5">
+              <h2 className="text-5xl text-white text-center tracking-wider font-['Cinzel_Decorative'] mt-5">
                 Create A Contingents
               </h2>
 
@@ -1025,14 +1015,14 @@ function Contingent() {
 
                 <div className="flex flex-col gap-4">
                   <div>
-                    <label className="block text-3xl text-gray-400 mb-1 ml-1 text-center font-['Jolly_Lodger']">Contingent Name</label>
+                    <label className="block text-3xl text-gray-400 mb-1 ml-1 text-center font-['Cinzel_Decorative']">Contingent Name</label>
                     <input
                       type="text"
                       placeholder="Your Contingent Name..."
                       value={newContingentName}
                       onChange={(e) => setNewContingentName(e.target.value)}
                       required
-                      className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors" />
+                      className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors font-['Cinzel_Decorative']" />
                   </div>
 
                 </div>

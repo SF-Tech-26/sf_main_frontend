@@ -11,7 +11,7 @@ export default function Navbar() {
     { label: 'Events', ariaLabel: 'View events', link: '/events' },
     { label: 'Gallery', ariaLabel: 'View gallery', link: '/gallery' },
     { label: 'Aftermovie', ariaLabel: 'Watch aftermovie', link: '/aftermovie' },
-    { label: 'Accommodation', ariaLabel: 'Accommodation details', link: isLoggedIn ? '/contingent':'/accommodation' },
+    { label: 'Accommodation', ariaLabel: 'Accommodation details', link: '/contingent' },
     { label: 'Merch', ariaLabel: 'Buy merchandise', link: '/merch' },
     { label: 'FAQ', ariaLabel: 'Frequently Asked Questions', link: '/faq' },
     { label: 'SPONSORS', ariaLabel: 'SPONSORS', link: 'https://sponsors.springfest.in/',target: "_blank",rel: 'noopener noreferrer'},

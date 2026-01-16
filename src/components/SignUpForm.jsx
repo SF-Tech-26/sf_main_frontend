@@ -61,102 +61,241 @@ export default function SignUpForm() {
   };
 
   // Updated background to white/15
-  const inputClass = `
-    h-[50px] w-full px-4 rounded-xl 
-    bg-white/15 border border-purple-500/20
-    text-purple-50 placeholder-purple-300/30 outline-none transition-all duration-300
-    focus:border-purple-400/60 focus:bg-white/20 focus:shadow-[0_0_20px_rgba(168,85,247,0.15)]
-    disabled:opacity-50
-  `;
+const inputClass = `
+  h-[52px] w-full px-2 rounded-[16px]
+  bg-transparent
+  border
+  text-[#d6d2b8]
+  placeholder-[#7f846f]
+  outline-none
+  transition-all
+`;
 
-  const labelClass = "text-xs font-semibold text-purple-200/60 uppercase tracking-widest ml-1 drop-shadow-sm";
 
-  return (
-    <div className=" w-[90%] flex justify-center py-10 relative overflow-hidden">
-      {/* Decorative ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+const labelClass =
+  "text-sm text-[#a7ad98] mb-1";
 
-      <div
-        className="relative w-[450px] max-w-[95%] max-h-[85vh] flex flex-col rounded-[24px] border border-purple-500/20 backdrop-blur-xl text-gray-200 shadow-2xl bg-black/70 overflow-y-auto scrollbar-hide"
-        style={{ padding: "40px 32px" }}
+return (
+
+
+    <div
+      className="
+        relative
+        w-[320px]
+        max-w-[80%]
+        max-h-[65vh]
+        flex flex-col
+        rounded-[48px]
+        border
+        backdrop-blur-xl
+        text-[#d6d2b8]
+        overflow-y-auto scrollbar-hide
+      "
+       
+style={{
+  padding: "25px 25px",
+  background: "rgba(10,14,11,0.92)",
+  borderRadius: "36px",
+
+  /* Inner stroke */
+  border: "1px solid rgba(214,210,184,0.35)",
+
+  /* Depth + glow */
+  boxShadow: `
+    inset 0 0 0 1px rgba(214,210,184,0.12),
+    0 0 18px rgba(214,210,184,0.25),
+    0 0 80px rgba(0,0,0,0.9)
+  `,
+}}
+
+    >
+      <h1
+        className="text-center font-bold tracking-wider mb-6"
+        style={{
+          fontSize: "34px",
+          color: "#e7e2b6",
+          textShadow: "0 0 18px rgba(231,226,182,0.6)",
+        }}
       >
-        <h1 className="text-center font-bold tracking-tight mb-[30px] bg-clip-text text-transparent bg-gradient-to-r from-black via-indigo-700 to-blue-950 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)] text-[30px]">
-          Sign Up
-        </h1>
+        SIGN UP
+      </h1>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          {error && (
-            <div className="bg-red-500/10 border border-red-500/30 text-red-300 px-4 py-2 rounded-xl text-xs text-center shadow-[0_0_10px_rgba(239,68,68,0.2)]">
-              {error}
-            </div>
-          )}
-
-          <div className="flex flex-col gap-6">
-            {/* Identity */}
-            <section className="flex flex-col gap-4">
-              <h2 className="text-[10px] font-bold text-purple-400/60 uppercase tracking-[0.2em] border-b border-purple-500/10 pb-1">Identity</h2>
-              <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Full Name</label>
-                <input className={inputClass} name="name" value={formData.name} onChange={handleChange} placeholder="Name" />
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Email</label>
-                <input className={inputClass} type="email" name="email" value={formData.email} onChange={handleChange} placeholder="user@guild.com" />
-              </div>
-            </section>
-
-            {/* Vitals */}
-            <section className="flex flex-col gap-4">
-              <h2 className="text-[10px] font-bold text-purple-400/60 uppercase tracking-[0.2em] border-b border-purple-500/10 pb-1">Vital Info</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}>Mobile</label>
-                  <input className={inputClass} name="mobile" value={formData.mobile} onChange={handleChange} placeholder="1234567890" />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <label className={labelClass}>DOB</label>
-                  <input className={inputClass} type="date" name="dob" value={formData.dob} onChange={handleChange} />
-                </div>
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <label className={labelClass}>Gender</label>
-                <select className={inputClass} name="gender" value={formData.gender} onChange={handleChange}>
-                  <option value="" className="bg-indigo-950">Select</option>
-                  <option value="M" className="bg-indigo-950">Male</option>
-                  <option value="F" className="bg-indigo-950">Female</option>
-                  <option value="O" className="bg-indigo-950">Other</option>
-                </select>
-              </div>
-            </section>
-
-            {/* Security */}
-            <section className="flex flex-col gap-4">
-              <h2 className="text-[10px] font-bold text-purple-400/60 uppercase tracking-[0.2em] border-b border-purple-500/10 pb-1">Security</h2>
-              <input className={inputClass} type="password" name="password" value={formData.password} onChange={handleChange} placeholder="Password" />
-              <input className={inputClass} type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} placeholder="Confirm Password" />
-            </section>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+        {error && (
+          <div className="bg-red-900/30 border border-red-700/50 text-red-200 px-4 py-2 rounded-lg text-sm text-center">
+            {error}
           </div>
+        )}
 
-          <div className="flex justify-center scale-90">
-            <ReCAPTCHA ref={recaptchaRef} sitekey={RECAPTCHA_SITE_KEY} theme="dark" />
-          </div>
+        <label className={labelClass}>Full Name *</label>
+        <input
+          className={inputClass}
+          style={{ borderColor: "rgba(214,210,184,0.35)" }}
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="Enter your full name"
+        />
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="h-[50px] rounded-xl font-bold text-white bg-gradient-to-r from-indigo-950 to-blue-900 hover:from-blue-700 hover:to-indigo-800 transition-all duration-300 shadow-[0_0_20px_rgba(139,92,246,0.3)] border border-white/10"
-          >
-            {isLoading ? "CREATING..." : "CREATE ACCOUNT"}
-          </button>
+        <label className={labelClass}>Email *</label>
+        <input
+          className={inputClass}
+          style={{ borderColor: "rgba(214,210,184,0.35)" }}
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="your.email@example.com"
+        />
 
-          <p className="text-center text-sm text-purple-200/40">
-            Already registered?{" "}
-            <Link to="/signin" className="text-blue-700 font-medium hover:text-fuchsia-300 hover:underline">
-              Sign In
-            </Link>
-          </p>
-        </form>
-      </div>
+        <label className={labelClass}>Password *</label>
+        <input
+          className={inputClass}
+          style={{ borderColor: "rgba(214,210,184,0.35)" }}
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Min 8 characters"
+        />
+
+        <label className={labelClass}>Confirm Password *</label>
+        <input
+          className={inputClass}
+          style={{ borderColor: "rgba(214,210,184,0.35)" }}
+          type="password"
+          name="confirmPassword"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          placeholder="Re-enter password"
+        />
+
+        <label className={labelClass}>Gender *</label>
+        <select
+          className={inputClass}
+          style={{ borderColor: "rgba(214,210,184,0.35)" }}
+          name="gender"
+          value={formData.gender}
+          onChange={handleChange}
+        >
+          <option value="">Select Gender</option>
+          <option value="M">Male</option>
+          <option value="F">Female</option>
+          <option value="O">Other</option>
+        </select>
+
+        <label className={labelClass}>Date of Birth *</label>
+        <input
+          className={inputClass}
+          style={{ borderColor: "rgba(214,210,184,0.35)" }}
+          type="date"
+          name="dob"
+          value={formData.dob}
+          onChange={handleChange}
+        />
+
+        <label className={labelClass}>Mobile Number *</label>
+        <input
+          className={inputClass}
+          style={{ borderColor: "rgba(214,210,184,0.35)" }}
+          name="mobile"
+          value={formData.mobile}
+          onChange={handleChange}
+          placeholder="10-digit mobile number"
+        />
+
+        <label className={labelClass}>Year of Passing *</label>
+        <input
+          className={inputClass}
+          style={{ borderColor: "rgba(214,210,184,0.35)" }}
+          name="yop"
+          value={formData.yop}
+          onChange={handleChange}
+          placeholder="e.g., 2027"
+        />
+
+        <label className={labelClass}>College / University *</label>
+        <input
+          className={inputClass}
+          style={{ borderColor: "rgba(214,210,184,0.35)" }}
+          name="college"
+          value={formData.college}
+          onChange={handleChange}
+          placeholder="Your institution name"
+        />
+
+        <label className={labelClass}>State *</label>
+        <input
+          className={inputClass}
+          style={{ borderColor: "rgba(214,210,184,0.35)" }}
+          name="state"
+          value={formData.state}
+          onChange={handleChange}
+          placeholder="Select State"
+        />
+
+        <label className={labelClass}>City *</label>
+        <input
+          className={inputClass}
+          style={{ borderColor: "rgba(214,210,184,0.35)" }}
+          name="city"
+          value={formData.city}
+          onChange={handleChange}
+          placeholder="Select City"
+        />
+
+        <label className={labelClass}>Security Question *</label>
+        <input
+          className={inputClass}
+          style={{ borderColor: "rgba(214,210,184,0.35)" }}
+          name="security_question"
+          value={formData.security_question}
+          onChange={handleChange}
+          placeholder="e.g., What is your favorite color?"
+        />
+
+        <label className={labelClass}>Security Answer *</label>
+        <input
+          className={inputClass}
+          style={{ borderColor: "rgba(214,210,184,0.35)" }}
+          name="security_answer"
+          value={formData.security_answer}
+          onChange={handleChange}
+          placeholder="Enter Answer"
+        />
+
+        <div className="flex justify-center scale-90">
+          <ReCAPTCHA ref={recaptchaRef} sitekey={RECAPTCHA_SITE_KEY} theme="dark" />
+        </div>
+
+       <button
+  type="submit"
+  disabled={isLoading}
+  className="h-[43px] rounded-[15px] font-semibold tracking-wider text-[#1a1a12]"
+ style={{
+            background:
+              "linear-gradient(to right, #e6d9a2, #b8ad7d, #8f845a)",
+            boxShadow: `
+              0 0 10px rgba(230, 217, 162, 0.35),
+              0 0 22px rgba(90, 110, 95, 0.35)
+            `,
+          }}
+>
+
+          {isLoading ? "CREATING..." : "SIGN UP"}
+        </button>
+
+        <p className="text-center text-sm text-[#9e9a7a]">
+          Already registered?{" "}
+          <Link to="/signin" className="underline">
+            Sign In
+          </Link>
+        </p>
+      </form>
     </div>
-  );
+
+);
+
+
+
 }

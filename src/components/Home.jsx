@@ -37,7 +37,7 @@ const HomePage = ({ backgroundImage }) => {
     }
 
     if (paymentData.checkIn >= paymentData.checkOut) {
-        toast.warning("Check-out date must be after Check-in date");
+        toast.error("Check-out date must be after Check-in date");
         return;
     }
     
@@ -204,7 +204,7 @@ const HomePage = ({ backgroundImage }) => {
 
       {/* --- MAIN CONTENT --- */}
       <div
-        className="h-[100vh] w-screen bg-center bg-cover relative overflow-hidden flex flex-col items-center justify-center"
+        className="h-[100vh] w-screen bg-center bg-cover relative overflow-hidden flex flex-col items-center justify-center m-0 p-0"
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
         <div className="absolute inset-0 bg-black/30 z-0" />
