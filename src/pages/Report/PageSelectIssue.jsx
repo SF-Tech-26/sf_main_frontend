@@ -20,11 +20,11 @@ const PageSelectIssue = ({ complaints, setPage, onCancel }) => {
             const value = e.target.value;
             if (value === "registered") setPage("registered");
             if (value === "others") setPage("others");
-          }}
+          }}   
           value=""
         >
           <option value="">Select Issue Category</option>
-          <option value="registered">Registered Events</option>
+          <option value="registered">Registered Events</option> 
           <option value="others">Others</option>
         </select>
       </div>
