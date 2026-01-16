@@ -62,7 +62,7 @@ import penMobile from '../assets/EventImg/literary/AMightyPen.webp';
 import jumbleImg from '../assets/eventImages/jumble the good word.webp';
 import jumbleMobile from '../assets/EventImg/literary/JumbleTheGoodWord.webp';
 import chefImg from '../assets/eventImages/chef.webp';
-import chefMobile from '../assets/EventImg/culinary-arts/Chef\'sCorner.webp';
+import chefMobile from '../assets/EventImg/culinary-arts/ChefsCorner.webp';
 import spentMobile from '../assets/EventImg/Quiz/SpEnt.webp';
 import biztechMobile from '../assets/EventImg/Quiz/BIZTECH.webp';
 import cinemaniaMobile from '../assets/EventImg/Quiz/Cinemania.webp';
