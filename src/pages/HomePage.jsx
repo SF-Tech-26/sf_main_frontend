@@ -4,7 +4,7 @@ import bgImage from "../assets/images/homeBg.webp";
 export default function HomePage() {
   return (
     <div
-      className="h-screen w-full flex items-center justify-center overflow-hidden"
+      className="h-100vh w-full flex items-center justify-center overflow-hidden"
       style={{
         backgroundImage: `url(${bgImage})`,
         backgroundSize: "cover",

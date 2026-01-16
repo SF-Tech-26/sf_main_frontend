@@ -146,7 +146,6 @@ const HomePage = ({ backgroundImage }) => {
                     <option value="2026-01-23">23-01-2026</option>
                     <option value="2026-01-24">24-01-2026</option>
                     <option value="2026-01-25">25-01-2026</option>
-                    <option value="2026-01-26">26-01-2026</option>
                   </select>
                   <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400 pointer-events-none">expand_more</span>
                 </div>
@@ -169,7 +168,6 @@ const HomePage = ({ backgroundImage }) => {
                     <option value="2026-01-24">24-01-2026</option>
                     <option value="2026-01-25">25-01-2026</option>
                     <option value="2026-01-26">26-01-2026</option>
-                    <option value="2026-01-27">27-01-2026</option>
                   </select>
                   <span className="material-symbols-outlined absolute right-3 top-3 text-gray-400 pointer-events-none">expand_more</span>
                 </div>
@@ -206,7 +204,7 @@ const HomePage = ({ backgroundImage }) => {
 
       {/* --- MAIN CONTENT --- */}
       <div
-        className="h-screen w-screen bg-center bg-cover relative overflow-hidden flex flex-col items-center justify-center"
+        className="h-[100vh] w-screen bg-center bg-cover relative overflow-hidden flex flex-col items-center justify-center"
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
         <div className="absolute inset-0 bg-black/30 z-0" />
@@ -247,7 +245,7 @@ const HomePage = ({ backgroundImage }) => {
           </motion.div>
 
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-[16px] translate-y-[120px]">
-            <div className="min-h-screen w-full flex items-center justify-center">
+            <div className="min-h-auto w-full flex items-center justify-center">
               
               {!isAuthenticated ? (
                 <div className="mt-50">

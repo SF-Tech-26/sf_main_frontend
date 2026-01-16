@@ -72,30 +72,32 @@ export default function SignInForm() {
   return (
     <div className="w-full flex justify-center py-10 relative overflow-hidden">
       {/* Decorative ambient glow behind the card */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-purple-600/30 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] bg-purple-600/30 rounded-full blur-[100px] pointer-events-none"></div>
 
       <div
         className="
           relative
-          w-[380px] max-w-[95%]
-          min-h-[450px]
+          w-[95%]
+          max-w-[400px]
+          max-h-[550px]
           flex flex-col
           rounded-[24px]
           border border-purple-500/20
           backdrop-blur-xl
           text-gray-200
+          overflow-auto
           shadow-2xl
-          bg-black/30
+          bg-black/70
         "
         style={{
           // Deep magical gradient background
           // Mystical purple glow shadow
-          boxShadow: "0 25px 50px -12px rgba(88, 28, 135, 0.25), inset 0 0 0 1px rgba(255, 255, 255, 0.05)",
+          
           padding: "48px 32px",
         }}
       >
         <h1
-          className="text-center font-bold tracking-tight mb-[30px] bg-clip-text text-transparent bg-gradient-to-r from-purple-200 via-pink-200 to-purple-200 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]"
+          className="text-center font-bold tracking-tight mb-[30px] bg-clip-text text-transparent bg-gradient-to-r from-black via-indigo-700 to-blue-950 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]"
           style={{
             fontSize: "30px",
             letterSpacing: "-0.5px",
@@ -118,7 +120,7 @@ export default function SignInForm() {
             <input
               type="email"
               value={email}
-              placeholder="mage@guild.com"
+              placeholder="user@guild.com"
               onChange={(e) => setEmail(e.target.value)}
               disabled={isLoading}
               className="
@@ -176,8 +178,8 @@ export default function SignInForm() {
               rounded-xl
               font-bold
               text-white
-              bg-gradient-to-r from-violet-600 to-fuchsia-600
-              hover:from-violet-500 hover:to-fuchsia-500
+              bg-gradient-to-r from-indigo-950 to-blue-900
+              hover:from-blue-700 hover:to-indigo-800
               active:scale-[0.98]
               transition-all
               duration-300
@@ -227,8 +229,8 @@ export default function SignInForm() {
               Forgot Password?
             </Link>
             <p className="text-purple-200/40">
-              New to the guild?{" "}
-              <Link to="/signup" className="text-fuchsia-400 font-medium hover:text-fuchsia-300 hover:underline decoration-fuchsia-500/30">
+              Create New Account{" "}
+              <Link to="/signup" className="text-blue-700 font-medium hover:text-fuchsia-300 hover:underline decoration-fuchsia-500/30">
                 Sign up
               </Link>
             </p>

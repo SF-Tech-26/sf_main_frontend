@@ -1,10 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 
 const BackButton = ({ 
   className = '',
   onClick = null 
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleClick = () => {
     if (onClick) {
@@ -13,6 +14,9 @@ const BackButton = ({
       navigate(-1);
     }
   };
+  if (location.pathname === '/') {
+    return null;
+  }
 
   return (
     <button 

@@ -228,16 +228,16 @@ export default function ForgotPassword() {
       }}
     >
       {/* Ambient Glow Background behind card */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-purple-600/15 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-purple-600/0 rounded-full blur-[100px] pointer-events-none"></div>
 
       <div style={{ transform: "translateY(clamp(40px, 10vh, 120px))" }} className="relative z-10">
         <div className="w-full flex justify-center">
           <div
             className="
-              w-[350px] max-w-[90%] min-h-[420px] flex flex-col
+              w-[95%] min-h-[420px] flex flex-col
               rounded-[24px] border border-purple-500/20 backdrop-blur-xl
               text-gray-200
-              bg-black/30
+              bg-black/70
             "
             style={{
               
@@ -247,7 +247,7 @@ export default function ForgotPassword() {
             <h1
               className="
                 text-center font-bold tracking-wider mb-[26px]
-                bg-clip-text text-transparent bg-gradient-to-r from-purple-200 via-pink-200 to-purple-200
+                bg-clip-text text-transparent bg-gradient-to-r from-black via-blue-800 to-indigo-950
                 drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]
               "
               style={{
@@ -288,8 +288,8 @@ export default function ForgotPassword() {
                   className="
                     mt-[8px] h-[46px] rounded-xl font-semibold tracking-[1px]
                     text-white
-                    bg-gradient-to-r from-violet-600 to-fuchsia-600
-                    hover:from-violet-500 hover:to-fuchsia-500
+                    bg-gradient-to-r from-blue-800 to-indigo-950
+                    bg-gradient-to-r from-blue-700 to-indigo-900
                     hover:scale-[1.03] transition-all duration-300
                     shadow-[0_0_20px_rgba(139,92,246,0.3)]
                     hover:shadow-[0_0_30px_rgba(192,38,211,0.5)]
@@ -357,8 +357,8 @@ export default function ForgotPassword() {
                   className="
                     mt-[8px] h-[46px] rounded-xl font-semibold tracking-[1px]
                     text-white
-                    bg-gradient-to-r from-violet-600 to-fuchsia-600
-                    hover:from-violet-500 hover:to-fuchsia-500
+                    bg-gradient-to-r from-blue-800 to-indigo-950
+                    hover:from-blue-700 hover:to-indigo-800
                     hover:scale-[1.03] transition-all duration-300
                     shadow-[0_0_20px_rgba(139,92,246,0.3)]
                     hover:shadow-[0_0_30px_rgba(192,38,211,0.5)]
