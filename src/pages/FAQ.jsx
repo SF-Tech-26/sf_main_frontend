@@ -141,14 +141,7 @@ export default function FAQ() {
   return (
     <div className="faq-page">
       <div className="faq-container">
-        <motion.div
-          className="faq-header"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1 className="faq-title">FAQ</h1>
-        </motion.div>
+          <h1 className="faq-title fixed top-0 left-[43vw]">FAQ</h1>
 
         <div className="faq-categories">
           {faqData.map((cat, idx) => (
@@ -240,13 +233,12 @@ export default function FAQ() {
           letter-spacing: 3px;
           background: linear-gradient(to right,
             #fff 20%,
-            #7dd3fc 50%,
+            #fff 50%,
             #fff 80%);
           background-size: 200% auto;
           color: transparent;
           -webkit-background-clip: text;
           background-clip: text;
-          animation: shimmer 3s linear infinite;
           text-shadow: none;
         }
 

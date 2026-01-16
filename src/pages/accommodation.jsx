@@ -369,7 +369,7 @@ const rules = [
 
                     {activeTab === "MAP" && (
                         <div className="map-wrapper">
-                            <h2 className="map-title">IIT KHARAGPUR CAMPUS</h2>
+                            <h2 className="map-title ">IIT KHARAGPUR CAMPUS</h2>
                             <iframe
                                 title="IIT Kharagpur Map"
                                 src="https://www.google.com/maps?q=Indian+Institute+of+Technology+Kharagpur&output=embed"
