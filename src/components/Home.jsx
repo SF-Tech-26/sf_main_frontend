@@ -209,7 +209,7 @@ const HomePage = ({ backgroundImage }) => {
       >
         <div className="absolute inset-0 bg-black/30 z-0" />
 
-        <nav className="absolute top-6 left-0 right-0 px-6 flex justify-between items-start z-20 w-full">
+        <nav className="absolute top-2 left-0 right-0 px-6 flex justify-between items-start z-20 w-full">
           <motion.div
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
