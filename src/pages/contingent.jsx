@@ -443,7 +443,7 @@ function Contingent() {
               </h2>
 
               <p className="text-gray-400 text-xl font-['Cinzel_Decorative'] mb-8 leading-relaxed">
-                You must be part of our realm to manage a contingent. Please sign in to continue your journey.
+                You must be part of Spring fest to manage a contingent. Please sign in to continue.
               </p>
 
               <div className="flex flex-col gap-4">
