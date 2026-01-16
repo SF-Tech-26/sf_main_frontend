@@ -76,7 +76,7 @@ import tellATaleMobile from '../assets/EventImg/literary/TellaTale.webp';
 import junkArtMobile from '../assets/EventImg/fine-arts/JunkArt.webp';
 import soapaholicMobile from '../assets/EventImg/fine-arts/Soapaholic.webp';
 import fingerdabMobile from '../assets/EventImg/fine-arts/FingerDab.webp';
-import sketchItMobile from '../assets/EventImg/fine-arts/Sketchit.webp';
+import sketchItMobile from '../assets/EventImg/fine-arts/SketchIt.webp';
 
 import mrandmsMobile from '../assets/EventImg/fashion/MrandMsSPRINGFEST.webp';
 import navyataMobile from '../assets/EventImg/fashion/Navyata.webp';
