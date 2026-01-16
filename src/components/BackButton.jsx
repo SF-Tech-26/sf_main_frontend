@@ -16,6 +16,8 @@ const BackButton = ({
       navigate("/");
       return;
     }
+
+    
     if (location.pathname === '/report'){
       navigate("/");
       return;
