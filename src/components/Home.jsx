@@ -204,7 +204,7 @@ const HomePage = ({ backgroundImage }) => {
 
       {/* --- MAIN CONTENT --- */}
       <div
-        className="h-[100vh] w-screen bg-center bg-cover fixed inset-0 overflow-hidden flex flex-col items-center justify-center m-0 p-0"
+        className="fixed top-0 left-0 w-full h-full bg-center bg-cover overflow-hidden"
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
         <div className="absolute inset-0 bg-black/30 z-0" />
@@ -230,7 +230,7 @@ const HomePage = ({ backgroundImage }) => {
           </motion.div>
         </nav>
 
-        <main className="relative z-10 flex flex-col items-center text-center px-4">
+        <main className="relative z-10 flex flex-col items-center text-center px-4 h-full justify-center">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -244,11 +244,11 @@ const HomePage = ({ backgroundImage }) => {
             />
           </motion.div>
 
-          <div className="flex flex-col items-center justify-center gap-[16px] mt-[40px]">
+          <div className="flex flex-col items-center justify-center gap-[16px]">
             <div className="min-h-auto w-full flex items-center justify-center">
               
               {!isAuthenticated ? (
-                <div className="mt-50">
+                <div>
                 <Link
                   to="/signin"
                   className="inline-flex items-center justify-center w-[160px] h-[48px] text-[16px] font-semibold tracking-[0.18em] uppercase text-[#e8dcc4] bg-gradient-to-b from-[#3b3a35] to-[#1a1916] border border-[#6e6a5f] rounded-[10px] shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:from-[#4a483f] hover:to-[#23211c] hover:shadow-[0_14px_40px_rgba(0,0,0,0.8)] active:scale-[0.97] transition-all duration-300 ease-out no-underline"
@@ -257,7 +257,7 @@ const HomePage = ({ backgroundImage }) => {
                 </Link>
                 </div>
               ) : (
-               <div className="flex flex-col gap-6 mt-35">
+               <div className="flex flex-col gap-6">
 
 
                   <Link
