@@ -204,7 +204,7 @@ const HomePage = ({ backgroundImage }) => {
 
       {/* --- MAIN CONTENT --- */}
       <div
-        className="h-[100vh] w-screen bg-center bg-cover relative overflow-hidden flex flex-col items-center justify-center m-0 p-0"
+        className="h-[100vh] w-screen bg-center bg-cover fixed inset-0 overflow-hidden flex flex-col items-center justify-center m-0 p-0"
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
         <div className="absolute inset-0 bg-black/30 z-0" />
@@ -244,7 +244,7 @@ const HomePage = ({ backgroundImage }) => {
             />
           </motion.div>
 
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-[16px] translate-y-[120px]">
+          <div className="flex flex-col items-center justify-center gap-[16px] mt-[40px]">
             <div className="min-h-auto w-full flex items-center justify-center">
               
               {!isAuthenticated ? (
