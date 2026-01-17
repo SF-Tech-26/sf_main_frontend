@@ -21,10 +21,18 @@ html,
 body,
 #root {
     width: 100%;
-    min-height: 100vh;
+    min-height: 100dvh; /* Use dynamic viewport height for mobile */
     background: black;
     overflow-x: hidden;
     /* 🔒 Prevent mobile screen movement */
+}
+
+/* Utility class for pages that should not scroll */
+.fixed-viewport {
+    height: 100dvh;
+    overflow: hidden;
+    position: fixed;
+    inset: 0;
 }
 
 body {
