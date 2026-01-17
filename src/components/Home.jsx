@@ -121,17 +121,17 @@ const HomePage = ({ backgroundImage }) => {
               <span className="material-symbols-outlined">close</span>
             </button>
 
-            <h2 className="text-3xl text-white font-['Jolly_Lodger'] mb-1 tracking-widest">
+            <h2 className="text-2xl text-white font-['Cinzel_Decorative'] mb-1 tracking-widest">
               Make Payment
             </h2>
-            <p className="text-gray-300 font-sans text-lg mb-6 border-b border-white/10 pb-4">
+            <p className="text-gray-300 font-sans text-1xl mb-6 border-b border-white/10 pb-4">
               Total: <span className="text-green-400 font-bold">₹2449</span>
             </p>
 
             <form onSubmit={handlePaymentSubmit} className="flex flex-col gap-5">
               {/* Check In */}
               <div>
-                <label className="block text-gray-200 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">
+                <label className="block text-gray-200 font-['Cinzel_Decorative'] text-1xl mb-1 ml-1">
                   Check-In
                 </label>
                 <div className="relative">
@@ -153,7 +153,7 @@ const HomePage = ({ backgroundImage }) => {
 
               {/* Check Out */}
               <div>
-                <label className="block text-gray-200 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">
+                <label className="block text-gray-200 font-['Cinzel_Decorative'] text-1xl mb-1 ml-1">
                   Check-Out
                 </label>
                 <div className="relative">
@@ -193,7 +193,7 @@ const HomePage = ({ backgroundImage }) => {
               <button
                 type="submit"
                 disabled={isPaying}
-                className="mt-2 cursor-pointer w-full py-3 text-3xl text-white font-['Jolly_Lodger'] tracking-widest bg-green-700/80 border border-green-500/50 rounded-xl hover:bg-green-600 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="mt-2 cursor-pointer w-full py-3 text-1xl text-white font-['Cinzel_Decorative'] tracking-widest bg-green-700/80 border border-green-500/50 rounded-xl hover:bg-green-600 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isPaying ? "Processing..." : "Make Payment"}
               </button>

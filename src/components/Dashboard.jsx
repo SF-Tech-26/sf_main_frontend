@@ -15,7 +15,7 @@ function LanternButton({ title, icon, path, glowColor, isMobile }) {
   return (
     <div
       onClick={() => navigate(path)}
-      className={`flex flex-col items-center cursor-pointer group ${isMobile ? "m-2" : "m-10"}`}
+      className={`fixed-viewport flex flex-col items-center cursor-pointer group ${isMobile ? "m-2" : "m-10"}`}
     >
       {/* Lantern Glow */}
       <div className={`relative flex justify-center items-center ${isMobile ? "mb-1" : "mb-4"}`}>
