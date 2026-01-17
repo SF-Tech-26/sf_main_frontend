@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
 
 // Backgrounds
 import bgDesktop from "../assets/merchbg.webp";
@@ -8,39 +8,151 @@ import bgMobile from "../assets/merchPHONE.webp";
 import Yellowhoodie from "../assets/Yellowhoodie.webp";
 import Bluehoodie from "../assets/Bluehoodie.webp";
 import Orangehoodie from "../assets/Orangehoodie.webp";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { AuthContext } from "@/context/authContext";
+
+const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID; 
 
 /* PRODUCTS */
 const PRODUCTS = [
     {
-        id: "rm-hoodie",
+        id: 1,
         name: "RINGMASTER HOODIE",
         shortName: "RGM",
         price: 1299,
         image: Yellowhoodie,
+        category: "hoodie"
     },
     {
-        id: "nw-hoodie",
+        id: 2,
         name: "Nightwalker Hoodie",
         shortName: "NGW",
         price: 1299,
         image: Bluehoodie,
+        category: "hoodie"
     },
     {
-        id: "kr-hoodie",
+        id: 3,
         name: "KARMA ROLLS HOODIE",
         shortName: "KRM",
         price: 1299,
         image: Orangehoodie,
+        category: "hoodie"
     },
 ];
 
 const SIZES = ["XS", "S", "M", "L", "XL"];
 
 export default function Merch() {
+    const { token } = useContext(AuthContext);
     const [bg, setBg] = useState(bgDesktop);
     const [page, setPage] = useState("merch");
     const [cart, setCart] = useState({});
-    const [toast, setToast] = useState(null);
+    const [toastState, setToastState] = useState(null);
+    
+    // Payment modal states
+    const [merchFormData, setMerchForm] = useState({
+        name: "",
+        email: "",
+        emergencyNumber: ""
+    });
+    const [isPaying, setIsPaying] = useState(false);
+    const [merchsubtotal, setmarchsubtotal] = useState(0);
+    const [showModal, setShowModal] = useState(false);
+
+    // Helper function to format cart for API
+    const formatCartForAPI = (cartObject) => {
+        return Object.entries(cartObject).map(([key, item],index) => ({
+            token : token,
+            id: index +1,
+            category: item.product.category,
+            count: item.qty,
+            price: item.product.price,
+            size: item.size,
+            title: item.product.name,
+            total: item.product.price * item.qty
+        }));
+    };
+
+    // Payment handler
+    const handleCheckoutPayment = async (e) => {
+        e.preventDefault();
+        if (!merchFormData.emergencyNumber || !merchFormData.email || !merchFormData.name) {
+            toast.warning("Please fill all fields");
+            return;
+        }
+        if (!window.Razorpay) {
+            toast.error("Please check your internet connection or reload the page.");
+            return;
+        }
+        setIsPaying(true);
+        
+        // Format cart data for API
+        const formattedCart = formatCartForAPI(cart);
+        console.log(formattedCart);
+        
+        try {
+            const response = await axios.post("https://masterapi.springfest.in/api/merch/payment/initiate", {
+                token :token,
+                origin: 0,
+                emergency_number: merchFormData.emergencyNumber,
+                address: "collect",
+                name: merchFormData.name,
+                email: merchFormData.email,
+                cart: formattedCart, // Send formatted cart array
+                tax: 0,
+                subtotal: merchsubtotal,
+                grandtotal: merchsubtotal,
+            });
+            
+            if (response.data.code === 0) {
+                const orderData = response.data.data;
+
+                // Step 2: Open Razorpay
+                const options = {
+                    key: RAZORPAY_KEY_ID,
+                    amount: orderData.amount,
+                    currency: "INR",
+                    name: "Spring Fest 2026",
+                    description: orderData.receipt,
+                    order_id: orderData.id,
+                    callback_url: "/merch",
+                    prefill: {
+                        SF_Transaction_id: orderData.receipt,
+                    },
+                    theme: {
+                        color: "#3399cc"
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            toast.info("Payment cancelled");
+                            setIsPaying(false);
+                        }
+                    }
+                };
+                const rzp1 = new window.Razorpay(options);
+                rzp1.on('payment.failed', function (response) {
+                    toast.error(response.error.description || "Payment Failed");
+                    setIsPaying(false);
+                });
+                rzp1.open();
+                setIsPaying(false);
+            } else {
+                toast.error(response.data.message || "Failed to initiate payment");
+                setIsPaying(false);
+            }
+        } catch (error) {
+            console.error("Payment error:", error);
+            toast.error(error.response?.data?.message || "Payment failed");
+            setIsPaying(false);
+        }
+        setShowModal(false);
+    };
+
+    const merchPaymentModal = () => {
+        setShowModal(true);
+    };
 
     // Dynamic Background Switcher
     useEffect(() => {
@@ -73,7 +185,7 @@ export default function Merch() {
             },
         }));
 
-        setToast({
+        setToastState({
             id: Date.now(),
             message: `${product.name} (${size}) added to cart`,
         });
@@ -81,17 +193,17 @@ export default function Merch() {
 
     // Helper to trigger warning toast
     const showToast = (msg) => {
-        setToast({
+        setToastState({
             id: Date.now(),
             message: msg
         });
     };
 
     useEffect(() => {
-        if (!toast) return;
-        const t = setTimeout(() => setToast(null), 1200);
+        if (!toastState) return;
+        const t = setTimeout(() => setToastState(null), 1200);
         return () => clearTimeout(t);
-    }, [toast]);
+    }, [toastState]);
 
     const updateQty = (key, delta) => {
         setCart((prev) => {
@@ -137,11 +249,75 @@ export default function Merch() {
                     cart={cart}
                     onBack={() => setPage("merch")}
                     onQtyChange={updateQty}
+                    onCheckout={merchPaymentModal}
+                    setSubtotal={setmarchsubtotal}
                 />
             )}
 
+            {/* CHECKOUT MODAL */}
+            {showModal && (
+                <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999] p-4">
+                    <div className="bg-gradient-to-b from-blue-900/95 to-purple-950/95 md:from-purple-900/95 md:to-purple-950/95 p-6 rounded-2xl max-w-md w-full border-2 border-cyan-400/55 md:border-orange-400/55 shadow-[0_0_30px_rgba(34,211,238,0.6)] md:shadow-[0_0_30px_rgba(251,146,60,0.6)]">
+                        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center text-[#f5e9dc]" style={{ fontFamily: '"Cinzel Decorative", serif' }}>
+                            Checkout Details
+                        </h2>
+                        <form onSubmit={handleCheckoutPayment} className="space-y-4">
+                            <input
+                                type="text"
+                                placeholder="Full Name"
+                                value={merchFormData.name}
+                                onChange={(e) => setMerchForm({ ...merchFormData, name: e.target.value })}
+                                className="w-full p-3 rounded-lg bg-black/40 text-[#f5e9dc] border border-cyan-400/50 md:border-orange-400/50 focus:border-cyan-400 md:focus:border-orange-400 outline-none placeholder:text-gray-400"
+                                required
+                            />
+
+                            <input
+                                type="email"
+                                placeholder="Email Address"
+                                value={merchFormData.email}
+                                onChange={(e) => setMerchForm({ ...merchFormData, email: e.target.value })}
+                                className="w-full p-3 rounded-lg bg-black/40 text-[#f5e9dc] border border-cyan-400/50 md:border-orange-400/50 focus:border-cyan-400 md:focus:border-orange-400 outline-none placeholder:text-gray-400"
+                                required
+                            />
+
+                            <input
+                                type="tel"
+                                placeholder="Emergency Contact Number"
+                                value={merchFormData.emergencyNumber}
+                                onChange={(e) => setMerchForm({ ...merchFormData, emergencyNumber: e.target.value })}
+                                className="w-full p-3 rounded-lg bg-black/40 text-[#f5e9dc] border border-cyan-400/50 md:border-orange-400/50 focus:border-cyan-400 md:focus:border-orange-400 outline-none placeholder:text-gray-400"
+                                required
+                            />
+
+                            <div className="pt-4 border-t border-cyan-400/30 md:border-orange-400/30">
+                                <p className="text-gray-300 text-sm mb-2">Total Amount:</p>
+                                <p className="text-3xl font-bold text-cyan-300 md:text-orange-300">₹ {merchsubtotal}</p>
+                            </div>
+
+                            <div className="flex gap-3 pt-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowModal(false)}
+                                    className="flex-1 py-3 border-2 border-red-500 text-red-400 rounded-lg hover:bg-red-500/10 transition font-bold"
+                                    disabled={isPaying}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={isPaying}
+                                    className="flex-1 py-3 bg-gradient-to-r from-cyan-400 to-blue-400 md:from-orange-400 md:to-orange-300 text-black rounded-lg hover:shadow-[0_0_22px_rgba(34,211,238,0.9)] md:hover:shadow-[0_0_22px_rgba(255,160,0,0.9)] transition font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {isPaying ? "Processing..." : "Pay Now"}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
             {/* 🔮 PURPLE TOAST */}
-            {toast && (
+            {toastState && (
                 <div className="fixed top-5 left-1/2 -translate-x-1/2
                                 px-6 py-3 rounded-xl text-sm font-semibold
                                 bg-gradient-to-r from-orange-500 to-amber-500
@@ -149,7 +325,7 @@ export default function Merch() {
                                 shadow-[0_0_30px_rgba(249,115,22,0.6)]
                                 z-[9999]"
                     style={{ fontFamily: '"Space Grotesk", sans-serif' }}>
-                    {toast.message}
+                    {toastState.message}
                 </div>
             )}
         </div>
@@ -212,15 +388,15 @@ function MerchPage({ onViewCart, onAdd, onToast, cartCount }) {
     );
 }
 
-/* ---------------- PRODUCT CARD (NEW) ---------------- */
+/* ---------------- PRODUCT CARD ---------------- */
 
 function ProductCard({ product, onAdd, onToast }) {
     const [size, setSize] = useState(null);
-    const setS = (s)=>{
-        if(size ===s){
+    const setS = (s) => {
+        if (size === s) {
             setSize(null);
         }
-        else{
+        else {
             setSize(s);
         }
     }
@@ -296,13 +472,17 @@ function ProductCard({ product, onAdd, onToast }) {
 
 /* ---------------- CART PAGE ---------------- */
 
-function CartPage({ cart, onBack, onQtyChange }) {
+function CartPage({ cart, onBack, onQtyChange, onCheckout, setSubtotal }) {
     const items = Object.entries(cart);
 
     const subtotal = items.reduce(
         (sum, [_, item]) => sum + item.product.price * item.qty,
         0
     );
+    
+    useEffect(() => {
+        setSubtotal(subtotal);
+    }, [subtotal, setSubtotal])
 
     return (
         <div className="max-w-6xl mx-auto pt-12 overflow-x-hidden">
@@ -330,7 +510,7 @@ function CartPage({ cart, onBack, onQtyChange }) {
                             key={key}
                             className="grid grid-cols-5 md:grid-cols-5
                                items-center text-xs md:text-sm
-                               px-1 py-4 md:px-3 md:py-3 mb-3
+                               px-1  md:px-3 md:py-3 
                                bg-blue-900/40 backdrop-blur-md
                                md:bg-purple-900/70 md:backdrop-blur-none
                                border border-cyan-500/30
@@ -338,18 +518,19 @@ function CartPage({ cart, onBack, onQtyChange }) {
                                text-[#f5e9dc]
                                shadow-[0_4px_20px_rgba(0,0,0,0.3)]
                                md:shadow-none
-                               rounded-xl"
+                               rounded-xl
+                               h-[100px]"
                         >
                             <img
-                                    src={product.image}
-                                    alt={product.name}
-                                    className="w-auto h-[50px] max-h-[160px] md:max-h-[220px] max-w-none
-                                            scale-[1.0]
-                                            object-contain
-                                            brightness-110 contrast-130
-                                            transition-transform duration-500"
-                                    style={{scale:0.5}}
-                                />
+                                src={product.image}
+                                alt={product.name}
+                                className="w-auto h-[50px] max-h-[160px] md:max-h-[220px] max-w-none
+                                        scale-[1.0]
+                                        object-contain
+                                        brightness-110 contrast-130
+                                        transition-transform duration-500"
+                                style={{ scale: 0.5 }}
+                            />
                             <div className="text-center truncate">
                                 <span className="text-sm md:hidden">{liveProduct.shortName}</span>
                                 <span className="text-base hidden md:block">{liveProduct.name}</span>
@@ -415,6 +596,7 @@ function CartPage({ cart, onBack, onQtyChange }) {
                         </button>
 
                         <button
+                            onClick={onCheckout}
                             className="w-full md:w-auto px-3 py-2 md:px-6 md:py-3 rounded-lg text-black
                                        bg-gradient-to-r from-cyan-400 to-blue-400
                                        md:from-orange-400 md:to-orange-300

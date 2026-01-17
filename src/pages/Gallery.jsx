@@ -50,7 +50,7 @@ const Gallery = () => {
                 {/* HEADER */}
                 <div className="px-4 sm:px-6 md:px-8 pt-20 md:pt-[110px] pb-0 animate-gallery-float">
                     <h1
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl tracking-[0.3em] text-white text-center font-bold uppercase animate-spherical-shimmer"
+                        className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl tracking-[0.3em] text-white text-center font-bold uppercase"
                         style={{ fontFamily: "'Cinzel Decorative', cursive" }}
                     >
                         KINETIC MEMORIES

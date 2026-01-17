@@ -5,7 +5,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import Barcode from 'react-barcode';
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthContext } from "../context/authContext.jsx";
 import { Crown } from "lucide-react";
@@ -100,9 +100,10 @@ function Contingent() {
     }
     
     if (!window.Razorpay) {
-        toast.error("Payment SDK not loaded. Check your internet connection or reload the page.");
+        toast.error("Please check your internet connection or reload the page.");
         return;
     }
+    
 
     setIsPaying(true);
     try {
