@@ -801,7 +801,7 @@ function Contingent() {
             )}
 
             <div
-              className="h-[100px] top-0 w-full flex items-center justify-center font-['Cinzel_Decorative'] text-white text-5xl sm:text-7xl "
+              className="h-[100px] top-0 w-full flex items-center justify-center font-['Cinzel_Decorative'] text-white text-3xl sm:text-7xl "
             >
               Contingent
             </div>
@@ -911,7 +911,7 @@ function Contingent() {
 
 
             <div className="text-center mt-[50px] pb-2 sm:pb-2">
-              <h1 className="font-['Cinzel_Decorative'] text-5xl sm:text-6xl md:text-7xl text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+              <h1 className="font-['Cinzel_Decorative'] text-3xl sm:text-6xl md:text-7xl text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
                 Contingent
               </h1>
             </div>
@@ -928,7 +928,7 @@ function Contingent() {
                     <img src={icon1} />
                   </div>
                   <div className="flex flex-col items-center sm:items-center">
-                    <h2 className="font-['Cinzel_Decorative'] text-3xl sm:text-4xl text-gray-300 group-hover:text-white text-center transition-colors duration-300">
+                    <h2 className="font-['Cinzel_Decorative'] text-1xl sm:text-4xl text-gray-300 group-hover:text-white text-center transition-colors duration-300">
                       Join Contingent
                     </h2>
                   </div>
@@ -946,7 +946,7 @@ function Contingent() {
                     <img src={icon2} />
                   </div>
                   <div className="flex flex-col items-center sm:items-center">
-                    <h2 className="font-['Cinzel_Decorative'] text-3xl sm:text-4xl text-gray-300 group-hover:text-white text-center transition-colors duration-300">
+                    <h2 className="font-['Cinzel_Decorative'] text-1xl sm:text-4xl text-gray-300 group-hover:text-white text-center transition-colors duration-300">
                       Create Contingent
                     </h2>
                   </div>
@@ -959,10 +959,10 @@ function Contingent() {
         {!conti && !CreateOn && joinOn &&
           <>
             <div className="h-[150px] mt-[50px] w-full max-w-[350px] rounded-2xl shadow-xl "
-              style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Cinzel Decorative', color: "white", fontSize: '4rem' }}>
+              style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Cinzel Decorative', color: "white", fontSize: '2rem' }}>
               Contingent</div>
             <div className="h-auto w-[80%] sm:w-[73%] max-w-[600.25px] backdrop-blur-xl bg-[#121212]/50 border border-white/10 rounded-2xl shadow-2xl justify-items-center relative popup-anim">
-              <h2 className="text-4xl text-white text-center tracking-wider font-['Cinzel_Decorative'] mt-5">
+              <h2 className="text-1xl text-white text-center tracking-wider font-['Cinzel_Decorative'] mt-5">
                 Join Contingents
               </h2>
 
@@ -970,7 +970,7 @@ function Contingent() {
 
                 <div className="flex flex-col gap-4">
                   <div>
-                    <label className="block text-3xl text-gray-400 mb-1 ml-1 text-center font-['Cinzel_Decorative']">Contingent ID</label>
+                    <label className="block text-1xl text-gray-400 mb-1 ml-1 text-center font-['Cinzel_Decorative']">Contingent ID</label>
                     <input
                       type="text"
                       placeholder="Your Contingent ID..."
@@ -979,7 +979,7 @@ function Contingent() {
                       className="w-full bg-white/15 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-white/40 transition-colors font-['Cinzel_Decorative']" />
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-center font-['Cinzel_Decorative'] text-3xl mb-1 ml-1">Contingent Code</label>
+                    <label className="block text-gray-400 text-center font-['Cinzel_Decorative'] text-1xl mb-1 ml-1">Contingent Code</label>
                     <input
                       type="text"
                       placeholder="Your Contingent Code"
@@ -1005,10 +1005,10 @@ function Contingent() {
         {!conti && CreateOn && !joinOn &&
           <>
             <div className="h-[150px] w-full mt-[50px] max-w-[350px] rounded-2xl shadow-xl "
-              style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Cinzel Decorative', color: "white", fontSize: '4rem' }}>
+              style={{ display: "inline-flex", justifyContent: 'center', alignItems: 'center', fontFamily: 'Cinzel Decorative', color: "white", fontSize: '2rem' }}>
               Contingent</div>
             <div className="h-auto w-[80%] sm:w-[73%] max-w-[600.25px] backdrop-blur-xl bg-[#121212]/50 border border-white/10 rounded-2xl shadow-2xl justify-items-center relative popup-anim">
-              <h2 className="text-5xl text-white text-center tracking-wider font-['Cinzel_Decorative'] mt-5">
+              <h2 className="text-1xl text-white text-center tracking-wider font-['Cinzel_Decorative'] mt-5">
                 Create A Contingents
               </h2>
 
@@ -1016,7 +1016,7 @@ function Contingent() {
 
                 <div className="flex flex-col gap-4">
                   <div>
-                    <label className="block text-3xl text-gray-400 mb-1 ml-1 text-center font-['Cinzel_Decorative']">Contingent Name</label>
+                    <label className="block text-1xl text-gray-400 mb-1 ml-1 text-center font-['Cinzel_Decorative']">Contingent Name</label>
                     <input
                       type="text"
                       placeholder="Your Contingent Name..."
