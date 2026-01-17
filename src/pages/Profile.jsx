@@ -189,11 +189,9 @@ const Profile = () => {
                   <label className="block text-cyan-400/70 text-xs uppercase tracking-wider mb-2 font-semibold">
                     Payment Status
                   </label>
-                  <p className={`text-base sm:text-lg font-bold ${userData?.payment_status === 1 ? 'text-green-400' :
-                      userData?.payment_status === 0 ? 'text-yellow-400' :
-                        'text-red-400'
+                  <p className={`text-base sm:text-lg font-bold ${userData?.payment_status === 1 ? 'text-green-400' : 'text-red-400'
                     }`}>
-                    {userData?.payment_status === 1 ? 'Completed' : userData?.payment_status === 0 ? 'Pending' : 'N/A'}
+                    {userData?.payment_status === 1 ? 'Paid' : userData?.payment_status === 0 ? 'Not Paid' : 'N/A'}
                   </p>
                 </div>
 

@@ -127,7 +127,7 @@ const Report = ({ onClose }) => {
           </button>
 
           {/* Content Container - Scrollable */}
-          <div className="relative z-10 p-4 sm:p-8 flex flex-col overflow-y-auto custom-scrollbar">
+          <div className="relative z-10 pt-10 p-4 sm:p-8 flex flex-col h-[75vh] max-h-[900px] overflow-y-auto custom-scrollbar">
             <h1 className="text-2xl sm:text-3xl font-bold text-center text-white mb-6 tracking-wide drop-shadow-[0_2px_8px_rgba(6,182,212,0.5)]">
               Report Issue
             </h1>

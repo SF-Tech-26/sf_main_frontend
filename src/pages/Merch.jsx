@@ -64,7 +64,6 @@ export default function Merch() {
     // Helper function to format cart for API
     const formatCartForAPI = (cartObject) => {
         return Object.entries(cartObject).map(([key, item],index) => ({
-            token : token,
             id: index +1,
             category: item.product.category,
             count: item.qty,

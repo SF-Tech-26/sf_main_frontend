@@ -16,9 +16,9 @@ const GroupEventsList = ({
       {/* Section Header */}
       <div className="bg-black/80 backdrop-blur-2xl px-4 sm:px-6 py-3 sm:py-4 border-b border-blue-500/30 sticky top-0 z-10">
         <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white flex items-center gap-2">
-          <Moon className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
+         
           Group Events
-          <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-300 animate-pulse" />
+         
         </h2>
       </div>
 
