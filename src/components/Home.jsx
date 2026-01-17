@@ -14,6 +14,8 @@ const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID;
 
 const HomePage = ({ backgroundImage }) => {
   const { isAuthenticated, user, token } = useAuth();
+ 
+   const isPaid = user?.payment_status === 1;  
   
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   
@@ -26,7 +28,7 @@ const HomePage = ({ backgroundImage }) => {
   const [isPaying, setIsPaying] = useState(false);
   const [paymentDateError, setPaymentDateError] = useState("");
   
-  const isPaid = user?.isPaid || false;
+  // const isPaid = user?.isPaid || false;
 
   // Check date validity for payment
   useEffect(() => {
@@ -292,12 +294,10 @@ const HomePage = ({ backgroundImage }) => {
                   >
                     DASHBOARD
                   </Link>
-
-                  {!isPaid && (
-                    <button
-  onClick={() => setShowPaymentModal(true)}
-  className="
-    cursor-pointer
+<button
+  onClick={!isPaid ? () => setShowPaymentModal(true) : undefined}
+  disabled={isPaid}
+  className={`
     inline-flex items-center justify-center
     w-[180px] h-[50px]
     text-[15px]
@@ -307,22 +307,22 @@ const HomePage = ({ backgroundImage }) => {
     text-[#ffffff]
 
     bg-gradient-to-b
-    from-[#6fd08c]
-    to-[#1f5f3a]
+    ${isPaid ? "from-[#4b6b5a] to-[#2e4037]" : "from-[#6fd08c] to-[#1f5f3a]"}
 
     border border-[#7be3a0]
     rounded-[10px]
 
     shadow-[0_10px_30px_rgba(0,0,0,0.4)]
-    hover:shadow-[0_14px_40px_rgba(0,0,0,0.6)]
-
     transition-all duration-300
-  "
+    ${isPaid ? "opacity-70 cursor-not-allowed" : ""}
+  `}
 >
-  PAY NOW
+  {isPaid ? "PAID" : "PAY NOW"}
 </button>
 
-                  )}
+
+
+
                 </div>
               )}
 
