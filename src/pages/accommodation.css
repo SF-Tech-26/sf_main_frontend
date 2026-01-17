@@ -149,10 +149,10 @@
     overflow-y: auto;
     width: 50%;
     padding: 0;
-    color: #d4d4d4;
+    color: #9e7878;
     font-family: 'Montserrat', sans-serif;
     white-space: pre-line;
-    font-weight: 500;
+    font-weight: 900;
     letter-spacing: 0.5px;
 }
 
@@ -167,7 +167,7 @@
     padding: 0;
     color: #ffffff;
     font-size: 1.4rem;
-    font-weight: 600;
+    font-weight: normal;
     white-space: pre-line;
     font-family: 'Open Sans', sans-serif;
 }
@@ -303,7 +303,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgba(0, 0, 0, 0.3);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -314,8 +314,8 @@
 
 .acco-modal-content {
     background: repeating-linear-gradient(45deg,
-            rgba(255, 255, 255, 0.03) 0px,
-            rgba(255, 255, 255, 0.03) 2px,
+            rgba(255, 255, 255, 0.8) 0px,
+            rgba(255, 255, 255, 0.8) 2px,
             transparent 2px,
             transparent 4px),
         repeating-linear-gradient(-45deg,
@@ -323,10 +323,8 @@
             rgba(255, 255, 255, 0.03) 2px,
             transparent 2px,
             transparent 4px),
-        linear-gradient(135deg,
-            rgba(255, 255, 255, 0.1) 0%,
-            rgba(255, 255, 255, 0.05) 50%,
-            rgba(255, 255, 255, 0.1) 100%);
+        ;
+    background-color: #000;
 
     border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 0;
@@ -351,7 +349,9 @@
 }
 
 .acco-modal-content h2 {
-    font-family: 'Creepster', cursive;
+    margin-top: 15px;
+    font-family: cursive;
+    font-weight: bolder;
     color: #8a0303;
     font-size: clamp(1.5rem, 4vw, 2.2rem);
     margin-bottom: 0;
@@ -393,15 +393,15 @@
     line-height: 1.6;
     white-space: pre-line;
     color: #ffffff;
-    font-weight: 600;
+    font-weight:normal;
     text-align: center;
     padding: 0;
 }
 
 /* Close Icon Button */
 .acco-close-modal-btn {
-    position: absolute;
-    top: 15px;
+    position: fixed;
+    top: 0px;
     right: 20px;
     background: transparent;
     border: none;
@@ -485,7 +485,7 @@
     }
 
     .acco-close-modal-btn {
-        top: 10px;
+        top: -8px;
         right: 10px;
     }
 }
@@ -610,12 +610,14 @@
     }
 
     .acco-m-con .acco-head {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
+        font-weight: 800;
     }
 
     .acco-m-con .acco-p {
-        font-size: 1.3rem;
+        font-size: 1.0rem;
         width: 60%;
+        font-weight: 300;
     }
 
     .acco-nav-btn span {

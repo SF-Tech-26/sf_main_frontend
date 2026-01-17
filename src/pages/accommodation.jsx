@@ -22,7 +22,7 @@ function Accommodation() {
   {
     id: 4,
     heading: "REGISTRATION CHARGES",
-    content: "Registration Charges at Spring Fest, IIT Kharagpur, is charged ₹2449 INR only- per head for 3 Days and 4 Nights package with 3 pronites passes, complimentary accommodation and SF Kit. From 22 January 2026 08:00 A.M. to 27 January 2026 10:00 A.M"
+    content: "Registration Charges at Spring Fest, IIT Kharagpur, is charged ₹2449 INR only- per head for 3 Days and 4 Nights package with 3 pronites passes, complimentary accommodation and SF Kit. From 22 January 2026 08:00 A.M. to 26 January 2026 10:00 A.M"
   },
   {
     id: 5,
@@ -218,7 +218,7 @@ const rules = [
   {
     id: 19,
     heading: "\n",
-    content: "All rooms have to be vacated by 25th January 2026 strictly by 2pm."
+    content: "All rooms have to be vacated by 26th January 2026 strictly by 2pm."
   }
 ];
 

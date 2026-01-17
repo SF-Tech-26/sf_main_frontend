@@ -83,6 +83,20 @@ function Contingent() {
     emergencyNumber: ""
   });
   const [isPaying, setIsPaying] = useState(false);
+  const [paymentDateError, setPaymentDateError] = useState("");
+
+  // Check date validity for individual payment
+  useEffect(() => {
+    if (paymentData.checkIn && paymentData.checkOut) {
+      if (paymentData.checkIn >= paymentData.checkOut) {
+        setPaymentDateError("Check-out date must be after Check-in date");
+      } else {
+        setPaymentDateError("");
+      }
+    } else {
+      setPaymentDateError("");
+    }
+  }, [paymentData.checkIn, paymentData.checkOut]);
 
   // ---------------------------------------------------------
   // HANDLER: Individual Payment
@@ -170,6 +184,20 @@ function Contingent() {
     emergencyNumber: ""
   });
   const [isContingentPaying, setIsContingentPaying] = useState(false);
+  const [contingentDateError, setContingentDateError] = useState("");
+
+  // Check date validity for contingent payment
+  useEffect(() => {
+    if (contingentPayData.checkIn && contingentPayData.checkOut) {
+      if (contingentPayData.checkIn >= contingentPayData.checkOut) {
+        setContingentDateError("Check-out date must be after Check-in date");
+      } else {
+        setContingentDateError("");
+      }
+    } else {
+      setContingentDateError("");
+    }
+  }, [contingentPayData.checkIn, contingentPayData.checkOut]);
 
   const totalAmount = member.length * 2449;
 
@@ -614,6 +642,17 @@ function Contingent() {
                       </div>
                     </div>
 
+                    {paymentDateError && (
+                      <div className="bg-red-900/20 border border-red-500/50 rounded-lg px-4 py-3 flex items-center gap-3">
+                        <span className="material-symbols-outlined text-red-400 text-xl">
+                          error
+                        </span>
+                        <p className="text-red-300 font-['Cinzel_Decorative'] text-sm">
+                          {paymentDateError}
+                        </p>
+                      </div>
+                    )}
+
                     <div>
                       <label className="block text-gray-300 font-['Cinzel_Decorative'] text-2xl mb-1 ml-1">
                         Emergency Number
@@ -631,7 +670,7 @@ function Contingent() {
 
                     <button
                       type="submit"
-                      disabled={isPaying}
+                      disabled={isPaying || paymentDateError}
                       className="mt-2 cursor-pointer w-full py-3 text-xl text-white font-sans font-bold tracking-widest bg-green-950 border border-green-900/50 rounded-xl hover:bg-green-900 hover:shadow-[0_0_20px_rgba(20,83,45,0.4)] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isPaying ? "PROCESSING..." : "MAKE PAYMENT"}
@@ -718,6 +757,17 @@ function Contingent() {
                       </div>
                     </div>
 
+                    {contingentDateError && (
+                      <div className="bg-red-900/20 border border-red-500/50 rounded-lg px-4 py-3 flex items-center gap-3">
+                        <span className="material-symbols-outlined text-red-400 text-xl">
+                          error
+                        </span>
+                        <p className="text-red-300 font-['Cinzel_Decorative'] text-sm">
+                          {contingentDateError}
+                        </p>
+                      </div>
+                    )}
+
                     <div>
                       <label className="block text-gray-300 font-['Cinzel_Decorative'] text-2xl mb-1 ml-1">
                         Emergency Number
@@ -735,7 +785,7 @@ function Contingent() {
 
                     <button
                       type="submit"
-                      disabled={isContingentPaying}
+                      disabled={isContingentPaying || contingentDateError}
                       className="mt-2 cursor-pointer w-full py-3 text-xl text-white font-sans font-bold tracking-widest bg-green-950 border border-green-900/50 rounded-xl hover:bg-green-900 hover:shadow-[0_0_20px_rgba(20,83,45,0.4)] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isContingentPaying ? "PROCESSING..." : "MAKE PAYMENT"}

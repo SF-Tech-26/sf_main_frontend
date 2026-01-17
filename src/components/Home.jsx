@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
@@ -24,8 +24,22 @@ const HomePage = ({ backgroundImage }) => {
   });
   
   const [isPaying, setIsPaying] = useState(false);
+  const [paymentDateError, setPaymentDateError] = useState("");
   
   const isPaid = user?.isPaid || false;
+
+  // Check date validity for payment
+  useEffect(() => {
+    if (paymentData.checkIn && paymentData.checkOut) {
+      if (paymentData.checkIn >= paymentData.checkOut) {
+        setPaymentDateError("Check-out date must be after Check-in date");
+      } else {
+        setPaymentDateError("");
+      }
+    } else {
+      setPaymentDateError("");
+    }
+  }, [paymentData.checkIn, paymentData.checkOut]);
 
   const handlePaymentSubmit = async (e) => {
     e.preventDefault();
@@ -173,6 +187,18 @@ const HomePage = ({ backgroundImage }) => {
                 </div>
               </div>
 
+              {/* Date Error Message */}
+              {paymentDateError && (
+                <div className="bg-red-900/20 border border-red-500/50 rounded-lg px-4 py-3 flex items-center gap-3">
+                  <span className="material-symbols-outlined text-red-400 text-xl">
+                    error
+                  </span>
+                  <p className="text-red-300 font-['Cinzel_Decorative'] text-sm">
+                    {paymentDateError}
+                  </p>
+                </div>
+              )}
+
               {/* Emergency Number */}
               <div>
                 <label className="block text-gray-200 font-['Jolly_Lodger'] text-2xl mb-1 ml-1">
@@ -192,7 +218,7 @@ const HomePage = ({ backgroundImage }) => {
 
               <button
                 type="submit"
-                disabled={isPaying}
+                disabled={isPaying || paymentDateError}
                 className="mt-2 cursor-pointer w-full py-3 text-1xl text-white font-['Cinzel_Decorative'] tracking-widest bg-green-700/80 border border-green-500/50 rounded-xl hover:bg-green-600 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isPaying ? "Processing..." : "Make Payment"}
